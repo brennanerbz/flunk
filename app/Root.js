@@ -1,7 +1,7 @@
 /* eslint-env browser */
 /* global process */
 
-// ------- PARENT: client.js ---//
+// ------- PARENT: CLIENT.JS ---//
 
 import React from 'react';
 import { Router } from 'react-router';
@@ -37,4 +37,4 @@ export default class Root extends React.Component {
 }
 
 
-// ------ CHILD: /routes/app ----//
+// ------ CHILD: /ROUTES/INDEX.JS ----//

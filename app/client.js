@@ -14,8 +14,8 @@ const history = (process.env.NODE_ENV === 'production')
   : createHashHistory()
 
 ReactDOM.render(
-	<Root {...{ history } } />,
+	<Root {...{ history }} />,
 	document.getElementById('app')
 );
 
-// ----- CHILD: /ROOTJAZZ ----//
+// ----- CHILD: /ROOT ----//

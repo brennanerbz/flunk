@@ -1,6 +1,6 @@
 import 'babel/polyfill';
 import express from 'express';
-import cookieParser from 'cookieParser';
+import cookieParser from 'cookie-parser';
 import _ from 'lodash';
 import path from 'path';
 import fs from 'fs';

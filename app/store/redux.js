@@ -22,7 +22,7 @@ export function createRedux(initialState) {
 	if (module.hot) {
 	  const nextReducer = require('../reducers');
 	  module.hot.accept('../reducers',
-	    () => { store.replaceReducer(nextReducer); });
+	  () => { store.replaceReducer(nextReducer); });
 	}
 
 	return store;

@@ -29,6 +29,7 @@ const templateSource = fs.readFileSync(templatePath, {
 const template = _.template(templateSource);
 
 app.use((req, res, next) => {
+	// TODO: fix this for production
 	const location = createLocation(req.path, req.query);
 	const token = req.cookies.token;
 	const store = createRedux({ auth: { token }});

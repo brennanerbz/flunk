@@ -14,9 +14,9 @@ export default class App extends Component {
 	render() {
 		return(
 			<div>
-				<h1>App</h1>
+				<Link to="/"><h1>Acuit</h1></Link>
+				<Link to="/posts"><h1>Posts</h1></Link>
 				{this.props.children}
-				<Link to={`/`}>Home</Link>
 			</div>
 		);
 	}

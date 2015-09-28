@@ -3,21 +3,21 @@ import { Route } from 'react-router';
 import App from './App';
 import Home from './Home'
 import Create from './Create';
-// import SignupRoute from './SignupRoute';
-// import LoginRoute from './LoginRoute';
-// import ProfileRoute from './ProfileRoute';
-// import NotFound from '../components/NotFound';
-// import redirectBackAfter from '../utils/redirectBackAfter';
+
+import * as Posts from './Posts';
+
 import fillStore from '../utils/fillStore';
-// import DashboardRoute from './DashboardRoute';
-// import * as Posts from './Posts';
+
 
 const routes = (
   <Route component={App}>
     <Route path="/" component={Home}/>
-    <Route path="/create" component={Create}/>  
+    <Route path="/create" component={Create}/>
+    <Route path="/posts" component={Posts.List}/>
   </Route>
 );
+
+//TODO: Add the routes for Posts
 
 function walk(routes, cb) {
   cb(routes);

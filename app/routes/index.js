@@ -5,6 +5,7 @@ import Home from './Home'
 import Create from './Create';
 
 import * as Posts from './Posts';
+import * as Comments from './Comments';
 
 import fillStore from '../utils/fillStore';
 
@@ -14,6 +15,9 @@ const routes = (
     <Route path="/" component={Home}/>
     <Route path="/create" component={Create}/>
     <Route path="/posts" component={Posts.List}/>
+    <Route path="/posts/:id" component={Posts.View}/>
+    <Route path="/comments" component={Comments.List}/>
+    <Route path="/comments/:id" component={Comments.View}/>
   </Route>
 );
 

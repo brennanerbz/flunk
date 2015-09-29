@@ -16,6 +16,7 @@ export default class App extends Component {
 			<div>
 				<Link to="/"><h1>Acuit</h1></Link>
 				<Link to="/posts"><h1>Posts</h1></Link>
+				<Link to="/comments"><h1>Comments</h1></Link>
 				{this.props.children}
 			</div>
 		);

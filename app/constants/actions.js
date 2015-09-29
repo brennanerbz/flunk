@@ -9,4 +9,13 @@ export default keyMirror({
 	FETCH_POST: null,
 	FETCH_POST_SUCCESS: null,
 	FETCH_POST_FAILURE: null,
+
+	FETCH_COMMENTS: null,
+	FETCH_COMMENTS_SUCCESS: null,
+	FETCH_COMMENTS_FAILURE: null,
+
+	FETCH_COMMENT: null,
+	FETCH_COMMENT_SUCCESS: null,
+	FETCH_COMMENT_FAILURE: null,
+
 });

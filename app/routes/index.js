@@ -1,27 +1,17 @@
 import React from 'react';
 import { Route } from 'react-router';
-import FlunkApp from './App';
-import Home from './Home'
-import Create from './Create';
 
-import * as Posts from './Posts';
-import * as Comments from './Comments';
+/* Routes */
+import FlunkApp from './App';
+import LandingPage from './LandingPage/LandingPage';
 
 import fillStore from '../utils/fillStore';
 
-
 const routes = (
   <Route component={FlunkApp}>
-    <Route path="/" component={Home}/>
-    <Route path="/create" component={Create}/>
-    <Route path="/posts" component={Posts.List}/>
-    <Route path="/posts/:id" component={Posts.View}/>
-    <Route path="/comments" component={Comments.List}/>
-    <Route path="/comments/:id" component={Comments.View}/>
+    <Route path="/" component={LandingPage}/>
   </Route>
 );
-
-//TODO: Add the routes for Posts
 
 function walk(routes, cb) {
   cb(routes);
@@ -32,6 +22,7 @@ function walk(routes, cb) {
   return routes;
 }
 
+/* Parent: ../Root.js */
 export default (store, client) => {
   return walk(Route.createRouteFromReactElement(routes), route => {
     route.onEnter = (nextState, transition) => {

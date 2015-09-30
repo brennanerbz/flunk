@@ -7,6 +7,8 @@ import ReactDOM from 'react-dom';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import createHashHistory from 'history/lib/createHashHistory';
 
+import createHistory from 'history';
+
 import Root from './Root';
 
 const history = (process.env.NODE_ENV === 'production')
@@ -14,8 +16,8 @@ const history = (process.env.NODE_ENV === 'production')
   : createHashHistory()
 
 ReactDOM.render(
-	<Root {...{ history }} />,
+	<Root />,
 	document.getElementById('app')
 );
 
-// ----- CHILD: /ROOT ----//
+/* Child: ./Root.js */

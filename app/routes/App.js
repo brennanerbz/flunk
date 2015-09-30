@@ -14,9 +14,7 @@ export default class FlunkApp extends Component {
 	render() {
 		return(
 			<div>
-				<Link to="/"><h1>Acuit</h1></Link>
-				<Link to="/posts"><h1>Posts</h1></Link>
-				<Link to="/comments"><h1>Comments</h1></Link>
+				<nav><h1>Nav</h1></nav>
 				{this.props.children}
 			</div>
 		);

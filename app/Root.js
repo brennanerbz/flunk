@@ -1,7 +1,7 @@
 /* eslint-env browser */
 /* global process */
 
-// ------- PARENT: CLIENT.JS ---//
+/* Parent: ./client.js */
 
 import React from 'react';
 import { Router } from 'react-router';
@@ -10,6 +10,13 @@ import cookie from './utils/cookie';
 import routes from './routes';
 import { routerStateChange } from './actions/router';
 import { createRedux } from './store/redux';
+
+import createHistory from 'history/lib/createHashHistory'
+
+// Opt-out of persistent state, not recommended. Keeps clean URLS. If performance is issue, use _key. 
+let history = createHistory({
+  queryKey: false
+})
 
 const store = createRedux((process.env.NODE_ENV === 'production')
   ? window.__INITIAL_STATE__
@@ -24,7 +31,7 @@ export default class Root extends React.Component {
     return (
       <Provider store={store}>
         <Router
-          history={this.props.history}
+          history={history}
           routes={routes(store, true)}
 
           onUpdate={() => {
@@ -36,5 +43,4 @@ export default class Root extends React.Component {
   }
 }
 
-
-// ------ CHILD: /ROUTES/INDEX.JS ----//
+/* Child: ./routes/index.js */

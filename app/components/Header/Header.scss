@@ -1,0 +1,129 @@
+
+.header {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    background: #FFF none repeat scroll 0% 0%;
+    color: rgba(0, 0, 0, 0.3);
+    font-family: "";
+    letter-spacing: -0.02em;
+    font-weight: 400;
+    font-style: normal;
+    box-sizing: border-box;
+    transition: background-color 200ms ease 0s, color 200ms ease 0s, transform 200ms ease 0s;
+    z-index: 500;
+    .header-block {
+		position: relative;
+		z-index: 500;
+		width: 100%;
+		.button-inline {
+			font-size: 14px;
+		}
+    }
+    .header-right {
+    	transition-property: transform;
+    	transition-timing-function: cubic-bezier(0, 0, 0, 0.995);
+    	transition-duration: 150ms;
+    }
+
+    .site-logo {
+    	position: relative;
+    	display: inline-block;
+    	padding-top: 19px;
+    	padding-left: 14px;
+    	padding-right: 14px;
+    	z-index: 700;
+    	border: 0px none;  
+    	cursor: pointer;  	
+    }
+    .site-icon {
+    	width: 85px;
+    }
+    .search-icon {
+    	width: 17px;
+    	height: 17px;
+    }
+    .input-button-group {
+    	line-height: 42px;
+    	margin: 10px;
+    	display: inline-block;
+    	white-space: nowrap;
+    	vertical-align: top;
+    	width: 35%;
+    }  
+    :global .button-primary {
+    	border: 1px solid #A9D8B2;
+    	color: #57AD68;
+    	transition: border 0.1s ease-in-out;
+    	&:hover {
+    		border: 1px solid #73BD82;
+    		color: #5C9C68;
+    	}
+    }
+    .create-set-button {
+    	text-decoration: none;
+    	font-size: 15px;
+    }
+     
+    .button .svg-icon {
+    	vertical-align: middle;
+    	color: #85898D;
+    }
+    .predictive-search .button {
+    	margin: -1px -45px 0px 8px;
+    }
+    .predictive-search .button + .search-input {
+    	display: inline-block;
+    	vertical-align: middle;
+    	padding-left: 36px;
+    	height: 37px;
+    }
+    .iconisInNav {
+		border: none;
+    }
+    .text-input {
+    	font-size: 16px;	
+    }  
+    ::-webkit-input-placeholder {
+       color: #B2B2B2;
+    }
+
+    :-moz-placeholder { /* Firefox 18- */
+       color: #B2B2B2;  
+    }
+
+    ::-moz-placeholder {  /* Firefox 19+ */
+       color: #B2B2B2;  
+    }
+
+    :-ms-input-placeholder {  
+       color: #B2B2B2;  
+    } 
+
+}
+
+.header-bordered {
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.15);
+}
+
+.header-top {
+	top: 0px;
+	height: 65px;
+	position: absolute;
+}
+
+.input-button-group {
+	position: relative;
+	.search-input {
+		width: 100%;
+		box-sizing: border-box;
+	}
+	.input-rounded {
+		border-radius: 999em;
+	}
+}
+
+    
+
+
+

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-export default class HomeFeed extends Component {
+export default class LandingPage extends Component {
 	static propTypes = {
 		
 	}
@@ -8,7 +8,7 @@ export default class HomeFeed extends Component {
 	render() {
 		return(
 			<div>
-				<h1>Home</h1>
+				
 			</div>
 		);
 	}

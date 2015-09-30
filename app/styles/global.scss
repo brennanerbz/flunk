@@ -1,0 +1,102 @@
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Roboto:400,300|Lato:400,300);
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Lato", Helvetica, sans-serif;
+}
+
+:global .container {
+	clear: both;
+	margin: 0px auto;
+	max-width: 1300px;
+}
+
+:global .float-left {
+	float: left!important;
+}
+
+:global .float-right {
+	float: right!important
+}
+
+// Buttons
+:global .button {
+	display: inline-block;
+	position: relative;
+	height: 37px;
+	padding: 0px 16px;
+	color: rgba(0, 0, 0, 0.44);
+	background: transparent none repeat scroll 0% 0%;
+	font-size: 14px;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	vertical-align: bottom;
+	white-space: nowrap;
+	-moz-user-select: none;
+	box-sizing: border-box;
+	border-radius: 999em;
+	font-family: "Lato";
+	letter-spacing: -0.02em;
+	font-weight: 400;
+	font-style: normal;
+	text-rendering: optimizelegibility;
+	-moz-osx-font-smoothing: grayscale;
+	font-feature-settings: "liga";
+	line-height: 35px;
+}
+:global .button-link {
+	border-radius: 0px;
+	box-shadow: none;
+	height: auto;
+	line-height: inherit;
+	border-width: 0px;
+	padding: 0px;
+	vertical-align: baseline;
+	color: rgba(0, 0, 0, 0.3);
+	white-space: normal;
+}
+:global .button-inline {
+	margin: 0px 6px;
+	vertical-align: middle;
+}
+:global .button-with-icon {
+	transition: background-color 100ms ease 0s, border-color 100ms ease 0s, color 100ms ease 0s, fill 100ms ease 0s;
+	line-height: normal;
+}
+:global .text-input {
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	padding: 0px 15px;
+	height: 35px;
+	width: 55%;
+	font-size: 14px;
+	outline: medium none;
+	background: #FFF none repeat scroll 0% 0%;
+	box-sizing: border-box;
+	border-radius: 4px;
+	font-family: "Lato";
+	letter-spacing: -0.02em;
+	font-weight: 400;
+	font-style: normal;
+	color: black;
+	line-height: normal;
+	-webkit-transition: 0.1s ease-in-out;
+	transition: 0.1s ease-in-out;
+	&:hover {
+		border: 1px solid rgba(0, 0, 0, 0.23);
+		-moz-transition:  0.1 ease-in-out;
+		transition: 0.1 ease-in-out;
+	}	
+}
+
+
+
+
+
+
+
+

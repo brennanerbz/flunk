@@ -1,7 +1,7 @@
 {
-  "name": "acuitroutes",
-  "version": "1.0.0",
-  "description": "Attempting to solve routing.",
+  "name": "Flunk App",
+  "version": "0.0.1",
+  "description": "Attempting to get nav working",
   "main": "index.js",
   "scripts": {
     "precommit": "npm test",

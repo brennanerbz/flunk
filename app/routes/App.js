@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 @connect(state => ({
 	router: state.router
 }))
-export default class App extends Component {
+export default class FlunkApp extends Component {
 	static propTypes = {
 		children: PropTypes.element.isRequired
 	}

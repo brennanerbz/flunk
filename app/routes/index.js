@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router';
-import App from './App';
+import FlunkApp from './App';
 import Home from './Home'
 import Create from './Create';
 
@@ -11,7 +11,7 @@ import fillStore from '../utils/fillStore';
 
 
 const routes = (
-  <Route component={App}>
+  <Route component={FlunkApp}>
     <Route path="/" component={Home}/>
     <Route path="/create" component={Create}/>
     <Route path="/posts" component={Posts.List}/>

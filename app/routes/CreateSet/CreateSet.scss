@@ -1,0 +1,464 @@
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Roboto:400,300|Lato:400,300);
+
+/*Top level structure
+*/
+
+.CreateSetPage * {
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	/*color: #444444;*/
+}
+
+
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.CreateSetPage {
+	margin-top: 75px;
+}
+
+/*Header*/
+.CreateSetHeader {
+	background: #fff none repeat scroll 0% 0%;
+	overflow: visible;
+	padding: 0px;
+	position: relative;
+	
+}
+.CreateSetHeader-wrapper {
+	border-radius: 4px;
+	color: black;
+	padding-bottom: 20px;
+	position: relative;
+	z-index: 101;
+	display: table-cell;
+	/*width: 64%;*/
+}
+
+/*.CreateSetHeader-section-title .CreateSetHeader-textarea {
+	font-size: 3em;
+}
+.CreateSetHeader-section-purpose .CreateSetHeader-textarea {
+	font-size: 1.5em;
+}*/
+
+/*Header text*/
+.CreateSetHeader-textarea {
+	background: #FFF none repeat scroll 0% 0%;
+	cursor: text;
+	margin-top: 8px;
+	/*padding: 12px 0px;*/
+	position: relative;
+	z-index: 1;
+	padding: 0;
+}
+
+.CreateSetHeader-section-title .CreateSetHeader-textarea .AutoExpandTextArea {
+	font-size: 3em;
+}
+
+.CreateSetHeader-section-purpose .CreateSetHeader-textarea .AutoExpandTextArea {
+	font-size: 1.5em;
+}
+
+
+/*Section*/
+.CreateSetHeader-section-title {
+    position: relative;
+    width: 100%;
+    /*line-height: 20px;*/
+    font-family: 'Noto sans';
+    font-weight: 700;
+    /*font-size: 20px;*/
+}
+.CreateSetHeader-section-purpose {
+	font-family: 'Roboto';
+	font-weight: 300;
+}
+
+
+/*Container
+*/
+.CreateSetPage-container.container {
+	padding: 0 0 46px;
+	background: none repeat scroll 0% 0%;
+}
+.CreateSetPage .container {
+	max-width: 1150px;
+	padding-left: 50px;
+	padding-right: 50px;
+}
+
+.container {
+	clear: both!important;
+	margin: 0 auto!important;
+}
+
+
+/*List*/
+
+.CreateSetPage-list {
+	padding-top: 10px;
+	padding-bottom: 66px;
+	position: relative;
+}
+
+/*Term Row & Content */
+
+.TermRow .TermRow-operations {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: -30px;
+    width: 50px;
+}
+
+
+.TermRow {
+	position: relative;
+	overflow: visible;
+}
+
+.TermRow .TermRow-counter {
+    color: #555;
+    display: block!important;
+    font: 14px/16px "Helvetica Neue",arial,sans-serif;
+    height: 16px!important;
+    left: -45px!important;
+    position: absolute!important;
+    text-align: center;
+    top: 16px!important;
+    -moz-user-select: none;
+    width: 50px!important;
+    text-decoration: none;
+}
+
+.TermRow .TermRow-control {
+	display: block;
+	height: 16px;
+	width: 16px;
+	position: absolute;
+	right: 0;
+	top: 9px;
+	color: #666;
+	text-decoration: none;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+
+.TermRow .TermRow-control:hover {
+	color: black;
+}
+
+.TermContent {
+	font-family: 'Noto sans';
+	font-size: 16px;
+	border: 1px solid #DFDFDF;
+	/*outline: 1px solid #DFDFDF;*/
+	/*-webkit-box-shadow: inset 10px 10px 0px -9px rgba(230,230,230,1);
+	-moz-box-shadow: inset 10px 10px 0px -9px rgba(230,230,230,1);
+	box-shadow: inset 10px 10px 0px -9px rgba(230,230,230,1);*/
+	margin-bottom: 10px;
+	z-index: 99;
+}
+.TermContent:hover {
+	border: 1px solid #B9B9B9;
+}
+
+/*Add classes when focused*/
+.TermContent-focus {
+	font-family: 'Noto sans';
+	font-size: 16px;
+	border: 1px solid #498DFF;
+	outline: none;
+	margin-bottom: 10px;
+}
+.TermContent-side.word-side-focus {
+	border-right: 1px solid blue;
+	outline: none;
+}
+
+
+/*Continue...*/
+
+.TermContent-wrap {
+	display: table;
+	min-height: 46px;
+	table-layout: fixed;
+	position: relative;
+	width: 100%;
+}
+.TermContent-side {
+	cursor: text;
+	display: table-cell;
+	vertical-align: top;
+	position: relative;
+	padding: 8px 10px;
+}
+.TermContent-side.word-side {
+	border-right: 1px solid black;
+	border-right: 1px solid #DFDFDF;
+	width: 45%;
+}
+.TermContent-side.def-side {
+	width: 55%;
+}
+
+/*Word & Def side area*/
+
+.WordSide {
+	margin-right: 15px;
+}
+
+.WordSide-textarea, .DefSide-textarea {
+	width: 100%;
+	vertical-align: top;
+}
+
+.AutoExpandTextArea {
+	position: relative;
+}
+.AutoExpandTextArea-wrapper {
+	position: relative;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+}
+.AutoExpandTextArea-textarea {
+	height: 100%;
+	width: 100%;
+	display: block;
+	outline: none;
+	overflow: hidden;
+	resize: none;
+	border: none;
+}
+.Autocomplete-textarea {
+	width: 100%;
+}
+.Autocomplete-textarea textarea {
+	height: 100%;
+	width: 100%;
+	display: block;
+	outline: none;
+	overflow: hidden;
+	resize: none;
+	border: none;
+}
+
+.AutoExpandTextArea-textarea, .AutoExpandTextArea-sizer {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+/*Icon styles*/
+.icon-cursor {
+	cursor: pointer;
+	color: #616161;
+	margin-top: 10px;
+	margin-left: -5px;
+}
+.icon-cursor:hover {
+	color: #444;
+}
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+
+/*Hr break*/
+hr.CreateSetBreak { 
+	border: 0; 
+	height: 0; 
+	border-top: 1px solid rgba(0, 0, 0, 0.1); 
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+}
+
+/*Button group*/
+.CreateSetHeader-wrapper-buttongroup {
+	display: table-cell;
+	width: 45%;
+	padding-bottom: 20px;
+	position: relative;
+	z-index: 101;
+}
+.Float-right {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    bottom: 20;
+}
+.Button-set {
+	line-height: 44px;
+	display: inline-block;
+	white-space: nowrap;
+	vertical-align: top;
+}
+.Button-set .button {
+	margin-right: 8px;
+	vertical-align: middle;
+}
+.button {
+	display: inline-block;
+	position: relative;
+	height: 37px;
+	padding: 0 16px;
+	color: rgba(0, 0, 0, 0.44);
+	background: transparent none repeat scroll 0% 0%;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	font-size: 14px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 999em;
+	letter-spacing: -0.01em;
+	font-weight: 300;
+	font-family: 'Roboto';
+}
+
+.button {
+	line-height: 35px;
+}
+.button-primary {
+	border: 1px solid #A9D8B2;
+	color: #57AD68;
+}
+.button:hover {
+	border: 1px solid rgba(0, 0, 0, 0.30);
+	color: rgba(0, 0, 0, 0.55);
+}
+.button-primary:hover {
+	border: 1px solid #73BD82;
+	color: #5C9C68;
+}
+.button-circle {
+	width: 37px;
+	text-align: center;
+	padding: 0;
+}
+
+.button .icon {
+	line-height: 100%;
+}
+.button .icon-more {
+	color: rgba(0, 0, 0, 0.15);
+}
+.button .icon-more:hover {
+	color: rgba(0, 0, 0, 0.44);
+}
+
+
+/*Table headers*/
+.row-labels .TermContent{
+	padding-bottom: 0;
+	cursor: default!important;
+	border: none;
+	outline: none;
+	font-family: 'Lato';
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+}
+.row-labels .TermContent .TermContent-side.word-side {
+	border-right: none
+}
+
+.row-labels .TermContent-side {
+	padding: 0;
+}
+.row-labels .TermContent .TermContent-side {
+	color: #666666!important;
+}
+
+
+/*Placeholder color*/
+
+::-webkit-input-placeholder {
+  color: #B2B2B2;
+  opacity: 0.5;
+  -webkit-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:-moz-placeholder {
+  color: #B2B2B2;
+  opacity: 0.5;
+  -moz-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+::-moz-placeholder {
+  color: #B2B2B2;
+  opacity: 0.5;
+  -moz-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:-ms-input-placeholder {  
+  color: #B2B2B2;
+  opacity: 0.5;
+  -ms-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+
+
+
+/*Placeholder hover darken*/
+
+::-webkit-input-placeholder {
+    color: #B2B2B2;
+}
+textarea:hover::-webkit-input-placeholder {
+    opacity: 0.8;
+    -webkit-transition: opacity 0.05 ease-in-out;
+ 	transition: opacity 0.05 ease-in-out;
+}
+
+
+:moz-placeholder {
+	color: #B2B2B2;
+}
+::moz-placeholder {
+	color: #B2B2B2;
+}
+:hover:-moz-placeholder {
+  opacity: 0.8;
+  -moz-transition: opacity 0.1 ease-in-out;
+  transition: opacity 0.1 ease-in-out;
+}
+:hover::-moz-placeholder {
+  opacity: 0.8;
+  -moz-transition: opacity 0.1 ease-in-out;
+  transition: opacity 0.1 ease-in-out;
+}
+
+
+
+:ms-input-placeholder {
+	color: #B2B2B2;
+}
+textarea:hover:ms-input-placeholder {
+	opacity: 0.8;
+    -ms-transition: opacity 0.1 ease-in-out;
+ 	transition: opacity 0.1 ease-in-out;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

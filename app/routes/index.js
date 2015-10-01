@@ -4,12 +4,14 @@ import { Route } from 'react-router';
 /* Routes */
 import FlunkApp from './App';
 import LandingPage from './LandingPage/LandingPage';
+import CreateSet from './CreateSet/CreateSet';
 
 import fillStore from '../utils/fillStore';
 
 const routes = (
-  <Route path="/" component={FlunkApp}>
-    <Route path="/landing" component={LandingPage}/>
+  <Route component={FlunkApp}>
+    <Route path="/" component={LandingPage}/>
+    <Route path="/create-set" component={CreateSet}/>
   </Route>
 );
 

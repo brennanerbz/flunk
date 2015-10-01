@@ -66,7 +66,7 @@ export default class CreateSetHeader extends Component {
 			<div className="CreateSetHeader"> 
 	          <div className="container CreateSetHeader-container">
 	            <div className="CreateSetHeader-wrapper">
-	              <Avatar/>
+	              <Avatar is_create_set={true}/>
 	              <CreateSetTitle	              	
 	              	autoFocus={true}
 	              	indexForTab={1}

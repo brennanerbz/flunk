@@ -1,11 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
+
 export default class SearchBox extends Component {
 	static propTypes = {
 	}
 
+	componentDidUpdate = () => {
+		console.log(this.props.loc.pathname)
+	}
+
 	render() {
+		const { loc } = this.props;
 		const searchIcon = require('../assets/SearchIcon.png');
 		return(
 			<div className="input-button-group predictive-search">
@@ -15,9 +21,11 @@ export default class SearchBox extends Component {
 				<input className="text-input search-input input-rounded"
 					   placeholder="Search"
 				/>
-				<Link className="button button-primary create-set-button" to="/createset">
-					Create a study set					
-				</Link>
+				{ String(loc.pathname) !== '/createset' &&
+					<Link className="button button-primary create-set-button" to="/createset">
+						Create a study set					
+					</Link>
+				}				
 			</div>
 		);
 	}

@@ -41,7 +41,7 @@ export default class DefSide extends Component {
 
 	autoFocus = () => {
 		const { term } = this.props;
-		this.refs['autocomplete' + term.id].focus()
+		this.refs['autocomplete' + term.id].focusSide()
 	}
 
 	render() {

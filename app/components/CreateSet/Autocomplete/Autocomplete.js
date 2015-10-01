@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import scrollIntoView from 'dom-scroll-into-view';
 // const ReactDOM = require('react-dom');
 import autosize from 'autosize';

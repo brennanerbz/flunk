@@ -21,7 +21,6 @@ export default class CreateSetPage extends Component {
 	render() {
 		return(
 			<div className="CreateSetPage">
-			  <Link to="/profile">Profile</Link>
 			  <CreateSetHeader/>                 
 			  <div className="container CreateSetPage-container">
 			    <div className="CreateSetPage-list">

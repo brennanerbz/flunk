@@ -55,6 +55,9 @@ body {
 		-moz-transition:  0.1 ease-in-out;
 		transition: 0.1 ease-in-out;
 	}
+	&:focus {
+		outline: none;
+	}
 }
 :global .button-primary {
 	border: 1px solid #A9D8B2;

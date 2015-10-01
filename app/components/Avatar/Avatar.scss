@@ -6,6 +6,12 @@
 	text-overflow: ellipsis;
 	line-height: normal;
 }
+.inline-avatar {
+	display: table-cell;
+}
+.avatar-table {
+	display: table;
+}
 
 .avatar-img {
 	display: inline-block;
@@ -23,10 +29,38 @@
 	}
 } 
 
-.avatar-inline {
-	display: table-cell;
-}
+
 
 .CreateSetHeader-wrapper .button.button-borderless {
 	padding: 0
 }
+
+.inline-profile {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 14px;
+	line-height: 1.4;
+	padding-left: 10px;
+	font-family: 'Lato';
+	letter-spacing: -0.01em; 
+}
+
+.link-profile {
+	color: #57AD68;
+	text-decoration: none;
+	&:hover {
+		color: #4D995C;
+	}
+}
+.profile-supplemental {
+	display: block;
+	color: #D2D2D2;
+	font-size: 12px;
+	line-height: 1.1;
+}
+
+
+
+
+
+

@@ -8,8 +8,8 @@ import LandingPage from './LandingPage/LandingPage';
 import fillStore from '../utils/fillStore';
 
 const routes = (
-  <Route component={FlunkApp}>
-    <Route path="/" component={LandingPage}/>
+  <Route path="/" component={FlunkApp}>
+    <Route path="/landing" component={LandingPage}/>
   </Route>
 );
 

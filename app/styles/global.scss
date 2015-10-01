@@ -48,6 +48,13 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	font-feature-settings: "liga";
 	line-height: 35px;
+	-webkit-transition: 0.1s ease-in-out;
+	transition: 0.1s ease-in-out;
+	&:hover {
+		border: 1px solid rgba(0, 0, 0, 0.23);
+		-moz-transition:  0.1 ease-in-out;
+		transition: 0.1 ease-in-out;
+	}
 }
 :global .button-link {
 	border-radius: 0px;
@@ -90,10 +97,55 @@ body {
 		border: 1px solid rgba(0, 0, 0, 0.23);
 		-moz-transition:  0.1 ease-in-out;
 		transition: 0.1 ease-in-out;
+	}
+	&:focus {
+		border: 1px solid #498DFF;
 	}	
 }
 
+.button-group {
+	.button {
+		margin-right: -5px;
+		vertical-align: middle;
+	}
+	.button-circle {
+		padding: 0px;
+		width: 37px;
+		text-align: center;
+	}
+	.button-borderless {
+		border: none;
+	}	
+}
 
+// Avatar image
+.avatar {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: normal;
+}
+
+.avatar-img {
+	display: inline-block;
+	vertical-align: middle;
+	border-radius: 50%;
+	height: 36px;
+	width: 36px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	-webkit-transition: border 0.1s ease-in-out;
+	transition: border 0.1s ease-in-out;
+	&:hover {
+		border: 1px solid rgba(0, 0, 0, 0.23);
+		-moz-transition:  0.1 ease-in-out;
+		transition: 0.1 ease-in-out;
+	}
+} 
+
+:global .main-app {
+	margin-top: 200px;
+}
 
 
 

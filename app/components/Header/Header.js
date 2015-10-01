@@ -2,14 +2,18 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 const styles = require('./Header.scss');
 
+import Notifications from './Notifications/Notifications';
+import SearchBox from './SearchBox/SearchBox';
+import Avatar from '../Avatar/Avatar';
+
 export default class Header extends Component {
 	static propTypes = {
 		
 	}
 
 	render() {
-		const logo = require('./FlunkLogo.png');
-		const searchIcon = require('./SearchIcon.png');
+		const logo = require('./assets/FlunkLogo.png');
+	
 		return(
 			<nav className="header header-bordered header-top">
 				<div className="container">
@@ -19,20 +23,12 @@ export default class Header extends Component {
 								<img className="site-icon" src={logo} />
 							</a>
 						</Link>
-						<div className="input-button-group predictive-search">
-							<button className="button button-inline button-with-icon iconisInNav">
-								<img className="search-icon svg-icon" src={searchIcon}></img>
-							</button>
-							<input className="text-input search-input input-rounded"
-								   placeholder="Search"
-							/>
-							<a className="button button-primary create-set-button">
-							Create a study set
-							</a>
-						</div>
+						<SearchBox/>
 					</div>
 					<div className="header-block header-right float-right">
 						<div className="button-group">
+							<Notifications/>
+							<Avatar/>
 						</div>
 					</div>
 				</div>

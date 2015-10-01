@@ -19,7 +19,7 @@ export default class FlunkApp extends Component {
 	render() {
 		return(
 			<div>
-				<Header/>
+				<Header/>											
 				{this.props.children}
 			</div>
 		);

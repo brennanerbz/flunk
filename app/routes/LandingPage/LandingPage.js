@@ -7,8 +7,8 @@ export default class LandingPage extends Component {
 
 	render() {
 		return(
-			<div>
-				
+			<div className="container main-app">
+				<h1>Hey, I'm the landing page.</h1>
 			</div>
 		);
 	}

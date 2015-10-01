@@ -56,6 +56,15 @@ body {
 		transition: 0.1 ease-in-out;
 	}
 }
+:global .button-primary {
+	border: 1px solid #A9D8B2;
+	color: #57AD68;
+	&:hover {
+		border: 1px solid #73BD82;
+		color: #5C9C68;
+	}
+}
+
 :global .button-link {
 	border-radius: 0px;
 	box-shadow: none;
@@ -103,7 +112,7 @@ body {
 	}	
 }
 
-.button-group {
+:global .button-group {
 	.button {
 		margin-right: -5px;
 		vertical-align: middle;
@@ -118,33 +127,26 @@ body {
 	}	
 }
 
-// Avatar image
-.avatar {
-	display: block;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	line-height: normal;
+.button.button-borderless {
+	border: none;
 }
 
-.avatar-img {
-	display: inline-block;
-	vertical-align: middle;
-	border-radius: 50%;
-	height: 36px;
-	width: 36px;
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	-webkit-transition: border 0.1s ease-in-out;
-	transition: border 0.1s ease-in-out;
+.button-borderless {
 	&:hover {
-		border: 1px solid rgba(0, 0, 0, 0.23);
-		-moz-transition:  0.1 ease-in-out;
-		transition: 0.1 ease-in-out;
+		border: none
 	}
-} 
+}
+
 
 :global .main-app {
 	margin-top: 200px;
+}
+
+:global .link {
+	cursor: pointer;
+	&:hover {
+		text-decoration: none;
+	}
 }
 
 

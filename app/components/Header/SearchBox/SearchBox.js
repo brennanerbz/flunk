@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 
 export default class SearchBox extends Component {
 	static propTypes = {
@@ -14,9 +15,9 @@ export default class SearchBox extends Component {
 				<input className="text-input search-input input-rounded"
 					   placeholder="Search"
 				/>
-				<a className="button button-primary create-set-button">
-				Create a study set
-				</a>
+				<Link className="button button-primary create-set-button" to="/createset">
+					Create a study set					
+				</Link>
 			</div>
 		);
 	}

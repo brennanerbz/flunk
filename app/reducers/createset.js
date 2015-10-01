@@ -1,7 +1,4 @@
 import {
-	CREATE_SET,
-	DELETE_SET,
-
 	SAVE_SET,
 
 	SAVE_TITLE,
@@ -14,7 +11,7 @@ import {
 	FLIP_ACTIVESIDE,
 	ACTIVATE_ROW,
 
-	SET_MOUSE_POST,
+	SET_MOUSE_POS,
 	RESIZE,
 	SCROLL
 	
@@ -23,7 +20,7 @@ import {
 import _ from 'lodash';
 import assign from 'lodash/object/assign';
 
-const initialState = {
+const createState = {
   activeContext: true,
   activeRow: 0,
   mousePos: 0,
@@ -47,7 +44,7 @@ const initialState = {
     ]
 };
 
-export default function terms(state = initialState, action) {
+export default function createset(state = createState, action) {
   switch (action.type) {
 
     case ADD_ROW:

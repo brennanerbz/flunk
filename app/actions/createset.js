@@ -1,7 +1,4 @@
 import {
-	CREATE_SET,
-	DELETE_SET,
-
 	SAVE_SET,
 
 	SAVE_TITLE,
@@ -14,12 +11,11 @@ import {
 	FLIP_ACTIVESIDE,
 	ACTIVATE_ROW,
 
-	SET_MOUSE_POST,
+	SET_MOUSE_POS,
 	RESIZE,
 	SCROLL
 	
 } from '../constants/createset';
-
 
 
 export function addRow() {

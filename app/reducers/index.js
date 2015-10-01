@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
 import createset from './createset';
-import router from './router';
+import { routerStateReducer } from 'redux-router';
 
-export default combineReducers({
+const reducers = combineReducers({	
 	createset,
-	router
+	router: routerStateReducer
 });
+
+export default reducers;

@@ -1,29 +1,43 @@
-/* eslint-env commonjs */
-/* global process */
-
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
-import { ROUTER_STATE_CHANGE } from '../constants/actions';
-import reducer from '../reducers';
 
-export function createRedux(initialState) {
-	const middleware = [thunk];
-	if (process.env.NODE_ENV !== 'production') {
-		middleware.push(createLogger({
-			collapsed: true,
-			predicate: (getState, action) => !(action.type === ROUTER_STATE_CHANGE)
-		}))
-	}
+import { reduxReactRouter, 
+		 routerStateReducer, 
+		 ReduxRouter } from 'redux-router';
 
-	const finalStore = applyMiddleware(...middleware)(createStore);
-	const store = finalStore(reducer, initialState);
+import createHistory from 'history/lib/createBrowserHistory';
+import routes from '../routes';
+import reducers from '../reducers';
 
-	if (module.hot) {
-	  const nextReducer = require('../reducers');
-	  module.hot.accept('../reducers',
-	  () => { store.replaceReducer(nextReducer); });
-	}
+let middleware = [thunk];
+var store = compose(	
+	applyMiddleware.apply(null, middleware),
+	reduxReactRouter({
+		createHistory
+	})	
+)(createStore)(reducers);
 
-	return store;
-}
+export default store;
+
+
+// export function createRedux(initialState) {
+// 	const middleware = [thunk];
+// 	if (process.env.NODE_ENV !== 'production') {
+// 		middleware.push(createLogger({
+// 			collapsed: true,
+// 			predicate: (getState, action) => !(action.type === ROUTER_STATE_CHANGE)
+// 		}))
+// 	}
+
+// 	const finalStore = applyMiddleware(...middleware)(createStore);
+// 	const store = finalStore(reducer, initialState);
+
+// 	if (module.hot) {
+// 	  const nextReducer = require('../reducers');
+// 	  module.hot.accept('../reducers',
+// 	  () => { store.replaceReducer(nextReducer); });
+// 	}
+
+// 	return store;
+// }

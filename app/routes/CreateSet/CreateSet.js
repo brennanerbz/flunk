@@ -1,11 +1,16 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import classnames from 'classnames'; 
+import { connect } from 'react-redux';
 const styles = require('./CreateSet.scss');
 
-import TermRows from '../../components/TermRows/TermRows';
-import CreateSetHeader from '../../components/CreateSetHeader/CreateSetHeader';
+import TermRows from '../../components/CreateSet/TermRows/TermRows';
+import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSetHeader';
 
 export default class CreateSetPage extends Component {
+	constructor(props, context) {
+		super(props, context)
+	}
 	static propTypes = {
 		
 	}
@@ -16,6 +21,7 @@ export default class CreateSetPage extends Component {
 	render() {
 		return(
 			<div className="CreateSetPage">
+			  <Link to="/profile">Profile</Link>
 			  <CreateSetHeader/>                 
 			  <div className="container CreateSetPage-container">
 			    <div className="CreateSetPage-list">

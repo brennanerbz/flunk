@@ -1,0 +1,32 @@
+// Avatar image
+.avatar {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: normal;
+}
+
+.avatar-img {
+	display: inline-block;
+	vertical-align: middle;
+	border-radius: 100%;
+	height: 36px;
+	width: 36px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	-webkit-transition: border 0.1s ease-in-out;
+	transition: border 0.1s ease-in-out;
+	&:hover {
+		border: 1px solid rgba(0, 0, 0, 0.23);
+		-moz-transition:  0.1 ease-in-out;
+		transition: 0.1 ease-in-out;
+	}
+} 
+
+.avatar-inline {
+	display: table-cell;
+}
+
+.CreateSetHeader-wrapper .button.button-borderless {
+	padding: 0
+}

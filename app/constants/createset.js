@@ -1,9 +1,6 @@
 import keyMirror from 'key-mirror';
 
 export default keyMirror({
-	CREATE_SET: null,
-	DELETE_SET: null,
-
 	SAVE_SET: null,
 
 	SAVE_TITLE: null,
@@ -16,7 +13,7 @@ export default keyMirror({
 	FLIP_ACTIVESIDE: null,
 	ACTIVATE_ROW: null,
 
-	SET_MOUSE_POST: null,
+	SET_MOUSE_POS: null,
 	RESIZE: null,
 	SCROLL: null
 });

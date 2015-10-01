@@ -34,7 +34,7 @@
     	display: inline-block;
     	padding-top: 19px;
     	padding-left: 14px;
-    	padding-right: 14px;
+    	padding-right: 0px;
     	z-index: 700;
     	border: 0px none;  
     	cursor: pointer;  	
@@ -47,7 +47,7 @@
     	height: 17px;
     }
     .button-group, .input-button-group {
-    	line-height: 42px;
+    	line-height: 40px;
     	margin: 10px;
     	display: inline-block;
     	white-space: nowrap;
@@ -93,11 +93,11 @@
        color: #B2B2B2;
     }
 
-    :-moz-placeholder { /* Firefox 18- */
+    :-moz-placeholder { 
        color: #B2B2B2;  
     }
 
-    ::-moz-placeholder {  /* Firefox 19+ */
+    ::-moz-placeholder { 
        color: #B2B2B2;  
     }
 

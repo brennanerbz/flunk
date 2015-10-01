@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Roboto:400,300|Lato:400,300);
 
-/*Top level structure
-*/
+// /*Top level structure
+// */
 
 .CreateSetPage * {
 -webkit-box-sizing: border-box;
@@ -19,10 +19,11 @@
 }
 
 .CreateSetPage {
-	margin-top: 75px;
+	margin-top: 100px;
+	min-width: 790px;
 }
 
-/*Header*/
+// /*Header*/
 .CreateSetHeader {
 	background: #fff none repeat scroll 0% 0%;
 	overflow: visible;
@@ -40,19 +41,19 @@
 	/*width: 64%;*/
 }
 
-/*.CreateSetHeader-section-title .CreateSetHeader-textarea {
-	font-size: 3em;
-}
-.CreateSetHeader-section-purpose .CreateSetHeader-textarea {
-	font-size: 1.5em;
-}*/
+// /*.CreateSetHeader-section-title .CreateSetHeader-textarea {
+// 	font-size: 3em;
+// }
+// .CreateSetHeader-section-purpose .CreateSetHeader-textarea {
+// 	font-size: 1.5em;
+// }*/
 
-/*Header text*/
+// /*Header text*/
 .CreateSetHeader-textarea {
 	background: #FFF none repeat scroll 0% 0%;
 	cursor: text;
 	margin-top: 8px;
-	/*padding: 12px 0px;*/
+	// /*padding: 12px 0px;*/
 	position: relative;
 	z-index: 1;
 	padding: 0;
@@ -67,14 +68,14 @@
 }
 
 
-/*Section*/
+// /*Section*/
 .CreateSetHeader-section-title {
     position: relative;
     width: 100%;
-    /*line-height: 20px;*/
+    // /*line-height: 20px;*/
     font-family: 'Noto sans';
     font-weight: 700;
-    /*font-size: 20px;*/
+    // /*font-size: 20px;*/
 }
 .CreateSetHeader-section-purpose {
 	font-family: 'Roboto';
@@ -82,8 +83,8 @@
 }
 
 
-/*Container
-*/
+// /*Container
+// */
 .CreateSetPage-container.container {
 	padding: 0 0 46px;
 	background: none repeat scroll 0% 0%;
@@ -100,7 +101,7 @@
 }
 
 
-/*List*/
+// /*List*/
 
 .CreateSetPage-list {
 	padding-top: 10px;
@@ -108,7 +109,7 @@
 	position: relative;
 }
 
-/*Term Row & Content */
+// /*Term Row & Content */
 
 .TermRow .TermRow-operations {
     position: absolute;
@@ -160,10 +161,10 @@
 	font-family: 'Noto sans';
 	font-size: 16px;
 	border: 1px solid #DFDFDF;
-	/*outline: 1px solid #DFDFDF;*/
-	/*-webkit-box-shadow: inset 10px 10px 0px -9px rgba(230,230,230,1);
-	-moz-box-shadow: inset 10px 10px 0px -9px rgba(230,230,230,1);
-	box-shadow: inset 10px 10px 0px -9px rgba(230,230,230,1);*/
+	// /*outline: 1px solid #DFDFDF;*/
+	// /*-webkit-box-shadow: inset 10px 10px 0px -9px rgba(230,230,230,1);
+	// -moz-box-shadow: inset 10px 10px 0px -9px rgba(230,230,230,1);
+	// box-shadow: inset 10px 10px 0px -9px rgba(230,230,230,1);*/
 	margin-bottom: 10px;
 	z-index: 99;
 }
@@ -171,7 +172,7 @@
 	border: 1px solid #B9B9B9;
 }
 
-/*Add classes when focused*/
+// /*Add classes when focused*/
 .TermContent-focus {
 	font-family: 'Noto sans';
 	font-size: 16px;
@@ -185,7 +186,7 @@
 }
 
 
-/*Continue...*/
+// /*Continue...*/
 
 .TermContent-wrap {
 	display: table;
@@ -210,7 +211,7 @@
 	width: 55%;
 }
 
-/*Word & Def side area*/
+// /*Word & Def side area*/
 
 .WordSide {
 	margin-right: 15px;
@@ -258,7 +259,7 @@
 	word-wrap: break-word;
 }
 
-/*Icon styles*/
+// /*Icon styles*/
 .icon-cursor {
 	cursor: pointer;
 	color: #616161;
@@ -271,7 +272,7 @@
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }
 
-/*Hr break*/
+// /*Hr break*/
 hr.CreateSetBreak { 
 	border: 0; 
 	height: 0; 
@@ -279,7 +280,7 @@ hr.CreateSetBreak {
 	border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
 }
 
-/*Button group*/
+// /*Button group*/
 .CreateSetHeader-wrapper-buttongroup {
 	display: table-cell;
 	width: 45%;
@@ -287,11 +288,11 @@ hr.CreateSetBreak {
 	position: relative;
 	z-index: 101;
 }
-.Float-right {
+.push-right {
     display: inline-block;
     position: absolute;
     right: 0;
-    bottom: 20;
+    bottom: 10px;
 }
 .Button-set {
 	line-height: 44px;
@@ -303,38 +304,24 @@ hr.CreateSetBreak {
 	margin-right: 8px;
 	vertical-align: middle;
 }
-.button {
-	display: inline-block;
-	position: relative;
-	height: 37px;
-	padding: 0 16px;
-	color: rgba(0, 0, 0, 0.44);
-	background: transparent none repeat scroll 0% 0%;
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	font-size: 14px;
-	text-align: center;
-	cursor: pointer;
-	border-radius: 999em;
-	letter-spacing: -0.01em;
-	font-weight: 300;
-	font-family: 'Roboto';
-}
+// .button {
+// 	display: inline-block;
+// 	position: relative;
+// 	height: 37px;
+// 	padding: 0 16px;
+// 	color: rgba(0, 0, 0, 0.44);
+// 	background: transparent none repeat scroll 0% 0%;
+// 	border: 1px solid rgba(0, 0, 0, 0.15);
+// 	font-size: 14px;
+// 	text-align: center;
+// 	cursor: pointer;
+// 	border-radius: 999em;
+// 	letter-spacing: -0.01em;
+// 	font-weight: 300;
+// 	font-family: 'Roboto';
+// }
 
-.button {
-	line-height: 35px;
-}
-.button-primary {
-	border: 1px solid #A9D8B2;
-	color: #57AD68;
-}
-.button:hover {
-	border: 1px solid rgba(0, 0, 0, 0.30);
-	color: rgba(0, 0, 0, 0.55);
-}
-.button-primary:hover {
-	border: 1px solid #73BD82;
-	color: #5C9C68;
-}
+
 .button-circle {
 	width: 37px;
 	text-align: center;
@@ -342,7 +329,7 @@ hr.CreateSetBreak {
 }
 
 .button .icon {
-	line-height: 100%;
+	line-height: 36px;
 }
 .button .icon-more {
 	color: rgba(0, 0, 0, 0.15);
@@ -352,7 +339,7 @@ hr.CreateSetBreak {
 }
 
 
-/*Table headers*/
+// /*Table headers*/
 .row-labels .TermContent{
 	padding-bottom: 0;
 	cursor: default!important;
@@ -375,7 +362,7 @@ hr.CreateSetBreak {
 }
 
 
-/*Placeholder color*/
+// /*Placeholder color*/
 
 ::-webkit-input-placeholder {
   color: #B2B2B2;
@@ -404,7 +391,7 @@ hr.CreateSetBreak {
 
 
 
-/*Placeholder hover darken*/
+// /*Placeholder hover darken*/
 
 ::-webkit-input-placeholder {
     color: #B2B2B2;

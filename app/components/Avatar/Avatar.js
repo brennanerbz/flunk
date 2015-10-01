@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+const styles = require('./Avatar.scss');
 
 export default class Avatar extends Component {
 	static propTypes = {

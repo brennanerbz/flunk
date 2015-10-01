@@ -30,9 +30,12 @@ export default class CreateSetHeader extends Component {
 		hasFocusedInput: PropTypes.bool
 	}
 
-	state = {
-		title: '',
-		purpose: ''
+	constructor(props) {
+		super(props);
+		this.state = {
+			title: '',
+			purpose: ''
+		}
 	}
 
 	handleTitleChange = (e) => {

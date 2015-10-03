@@ -18,17 +18,7 @@ export default class LandingPage extends Component {
 	render() {
 		return(
 			<div className={styles}>
-				<h1>Hey, I'm the landing page.</h1>
-				<h1>Hey, I'm the landing page.</h1>
-				<h1>Hey, I'm the landing page.</h1>
-				<h1>Hey, I'm the landing page.</h1>
-				<Link to="/profile/">Profile</Link>
-				<h1>Hey, I'm the landing page.</h1>
-				<h1>Hey, I'm the landing page.</h1>
-				<h1>Hey, I'm the landing page.</h1>
-				<h1>Hey, I'm the landing page.</h1>
-				<h1>Hey, I'm the landing page.</h1>
-
+				
 			</div>
 		);
 	}

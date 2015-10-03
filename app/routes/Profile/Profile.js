@@ -8,15 +8,7 @@ export default class Profile extends Component {
 	render() {
 		return(
 			<div>
-				<h1>PROFILE</h1>
-				<h1>PROFILE</h1>
-				<h1>PROFILE</h1>
-				<h1>PROFILE</h1>
-				<Link to="/latest">Latest</Link>
-				<h1>PROFILE</h1>
-				<h1>PROFILE</h1>
-				<h1>PROFILE</h1>
-				<h1>PROFILE</h1>
+				
 			</div>
 		);
 	}

@@ -20,12 +20,7 @@ export default class SearchBox extends Component {
 				</button>
 				<input className="text-input search-input input-rounded"
 					   placeholder="Search"
-				/>
-				{ String(loc.pathname) !== '/createset' &&
-					<Link className="button button-primary create-set-button" to="/createset">
-						Create a study set					
-					</Link>
-				}				
+				/>							
 			</div>
 		);
 	}

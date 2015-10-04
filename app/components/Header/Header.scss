@@ -68,20 +68,25 @@
     .create-set-button {
     	text-decoration: none;
     	font-size: 15px;
+        margin-right: 10px!important;
     }
      
     .button .svg-icon {
     	vertical-align: middle;
     	color: #85898D;
     }
-    .predictive-search .button {
-    	margin: -1px -45px 1px 8px;
-    }
-    .predictive-search .button + .search-input {
-    	display: inline-block;
-    	vertical-align: middle;
-    	padding-left: 36px;
-    	height: 37px;
+    .predictive-search {
+        min-width: 365px;
+        .button {
+            margin: -1px -45px 1px 8px;
+            + .search-input {
+                display: inline-block;
+                vertical-align: middle;
+                padding-left: 36px;
+                height: 37px;
+            }
+        }
+
     }
     .iconisInNav {
 		border: none!important;

@@ -45,8 +45,9 @@ export default class TermRows extends Component {
 
 	componentDidMount = () => {
 	  window.addEventListener('resize', this.handleResize);
-	  window.addEventListener('scroll', this.handleScroll);
+	  window.addEventListener('scroll', this.handleScroll);	  
 	}
+
 	componentWillUnmount = () => {
 	  window.removeEventListener('resize', this.handleResize)
 	  window.removeEventListener('scroll', this.handleScroll);
@@ -87,13 +88,12 @@ export default class TermRows extends Component {
 	render() {
 	  //---Props
 	  const { terms: terms, activeRow, addRow } = this.props;
-	  //--- Calculation props    
+	  //--- Calculation props 
 
 	  const length = terms.length;
 		return(
-			<div className="TermRows"
-	         onBlur={this.deactivateRow}
-	    >
+		<div className="TermRows"
+	         onBlur={this.deactivateRow}>
 	      <div className="TermRow">
 	        <div className="TermRow-content row-labels">
 	          <div className="TermContent">
@@ -125,14 +125,14 @@ export default class TermRows extends Component {
 	                  {...this.props}
 	                />
 	              )
-	            })
-	          
+	            })	          
 	        }
 	        <i className={classnames("material-icons md-36", "icon-cursor")}
 	           ref="addButton"
-	           onClick={() => addRow()}>
+	           onClick={() => addRow()}	           
+	           title="Add a row">
 	          add_circle_outline
-	        </i>
+	        </i>	        
 	      </div>
 		);
 	}

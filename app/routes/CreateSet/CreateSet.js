@@ -16,7 +16,7 @@ export default class CreateSetPage extends Component {
 	}
 	static contextTypes = {
 		
-	}
+	}	
 
 	render() {
 		return(

@@ -20,11 +20,10 @@ export default class Header extends Component {
 
 	render() {
 		const logo = require('./assets/FlunkLogo.png'),
-		{ loc } = this.props,
-		path = loc.pathname;
+		{ loc } = this.props;
 		return(
 			<div>				
-				<nav className={classnames({'header-bordered': String(path) !== '/createset'},
+				<nav className={classnames({'header-bordered': String(loc.pathname) !== '/createset'},
 										    'header header-top')}>
 					<div className="container">
 						<div className="header-block header-left float-left">
@@ -35,7 +34,12 @@ export default class Header extends Component {
 						</div>
 						<div className="header-block header-right float-right">
 							<div className="button-group">
-								<Notifications/>
+								{ String(loc.pathname) !== '/createset' &&
+									<Link className="button button-primary create-set-button" to="/createset">
+										Create a study set					
+									</Link>
+								}
+								<Notifications {...this.props}/>
 								<Avatar/>
 							</div>
 						</div>

@@ -7,6 +7,7 @@ import { pushState } from 'redux-router';
 const styles = require('../styles/global.scss');
 /* Components */
 import Header from '../components/Header/Header';
+import SideNav from '../components/SideNav/SideNav';
 
 @connect(
 	state => ({ router: state.router }),
@@ -20,9 +21,11 @@ export default class FlunkApp extends Component {
 	}
 
 	render() {
+	const route = this.props.router.location.pathname;	
 		return(
 			<div>
 				<Header/>
+				{route !== '/createset' && <SideNav/>}
 				{this.props.children}
 			</div>
 		);

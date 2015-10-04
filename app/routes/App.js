@@ -19,13 +19,12 @@ export default class FlunkApp extends Component {
 		dispatch: PropTypes.func,
 		error: PropTypes.string
 	}
-
 	render() {
 	const route = this.props.router.location.pathname;	
 		return(
 			<div>
 				<Header/>
-				{route !== '/createset' && <SideNav/>}
+				{route !== '/createset' && <SideNav {...this.props}/>}
 				{this.props.children}
 			</div>
 		);

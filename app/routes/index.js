@@ -4,6 +4,7 @@ import { Route, IndexRoute } from 'react-router';
 /* Routes */
 import FlunkApp from './App';
 import LandingPage from './LandingPage/LandingPage';
+import Home from './Home/Home';
 import CreateSet from './CreateSet/CreateSet';
 import Profile from './Profile/Profile';
 
@@ -11,7 +12,7 @@ import fillStore from '../utils/fillStore';
 
 let routes = (
   <Route component={FlunkApp}>
-    <Route path="/" component={LandingPage} />
+    <Route path="/" component={Home} />
     <Route path="profile" component={Profile} />
     <Route path="createset" component={CreateSet} />
   </Route>

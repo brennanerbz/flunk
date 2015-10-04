@@ -1,5 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Roboto:400,300|Lato:400,300);
 
+@font-face {
+  font-family: 'Calibri';
+  src: url('../../calibri_bold.ttf') format('truetype'); 
+}
+
 * {
   box-sizing: border-box;
 }
@@ -225,6 +230,56 @@ body {
 	z-index: 999999999;
 }
 
+// Main content // 
+.main_content {
+	position: absolute;
+	width: 75%;
+	float: left;
+	margin-left: 260px;
+	margin-top: 90px;
+}
+.page_header {
+	font-family: 'Calibri';
+	font-size: 26px;
+	color: #555459;
+	opacity: 0.95;
+	cursor: pointer;
+	&:hover {
+		opacity: 1;
+		// text-decoration: underline;
+	}
+}
+
+@media screen and (max-width: 860px) {
+	.remove_small {
+		display: none;
+	}
+}
+
+.supplemental {
+	padding-left: 30px;
+}
+
+.clear_both {
+	clear: both;
+}
+
+.copy_only {
+	display: inline-block;
+    vertical-align: baseline;
+    width: 1;
+    height: 0;
+    background-size: 0;
+    background-repeat: no-repeat;
+    text-indent: -9999px;
+    font-size: 0;
+    float: left;
+    text-rendering: auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 
 

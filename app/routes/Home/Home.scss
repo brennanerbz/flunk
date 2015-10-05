@@ -1,7 +1,7 @@
 .home_container {
 	.day_divider {
 		// margin-right: -.125rem;
-		margin: 1rem -18px 1rem -1.5rem;
+		margin: 0 -18px 1rem -1.5rem;
 		padding: .5rem 18px .5rem 1.5rem;
 		line-height: 1.2rem;
 		font-size: 1rem;
@@ -12,6 +12,7 @@
 		cursor: default;
 		clear: both;
 		position: relative;
+		min-width: 460px;
 		hr {
 			position: absolute;
 			border-top: 1px solid #DDD;
@@ -29,38 +30,48 @@
 
 		}		
 	}
-	.set_table {
-		border-collapse: collapse !important;
+	.table {
 		background: transparent!important;		
 		cursor: pointer;
-		width: 100%;		
+		width: 100%;
+		max-width: 100%;	
 		th, td {
-	    padding: 0.75rem;
+	    padding: 0.5rem;
 	    line-height: 2.5;
 	    vertical-align: top;
 	    border-top: none;
+	    white-space: nowrap;
+	    width: 1%;	    
 		}
+		
 	    tr.set_item_row {
-	    	float: left;
+	    	display: block;
+	    	// float: left;
 	    	width:100%;
 	    	background: transparent!important;
 	    	border-style: solid;
 	    	background: #fff;
 	    	position: relative;
-	    	overflow: hidden;
+	    	// overflow: hidden;
 	    	padding: 0.25rem;
 	    	border: 1px solid transparent!important;
 	    	border-radius: .25rem!important;
 	    	-webkit-border-radius: 7px;
-	    	-moz-border-radius: 7px;			
+	    	-moz-border-radius: 7px;	
 	    	&:hover {
 	    		background-color: #fff;
 	    		border-color: rgba(0,0,0,.1)!important;
+	    		// box-shadow: 0 0 3pt 2pt red;
 	    	}
 	    }		
 		td { 
 			font-family: "Roboto";
 			color: #383F45;						
+		}
+		.row_icon {
+			position: absolute;
+			top: 0;
+			left: 0;
 		}
 		.home_set_icon {
 			opacity: 0.2;
@@ -68,10 +79,41 @@
 		}
 		a {
 			color: #0063C3;
+			margin-left: 45px;
 		}
 		.set_author, .date_last_studied {
 			opacity: 0.6;
 		}
+		.actions {
+			position: absolute;
+			top: -2px;
+			right: 26px;
+			padding: 0;
+			width: auto;
+			border-top-right-radius: 0;
+		    border-bottom-right-radius: 0;
+		    border-bottom-left-radius: 1rem;
+		    border-top-left-radius: 1rem;
+		    background-clip: padding-box;
+		    width: 42px;
+		    opacity: 0;
+		    -webkit-transition: opacity 50ms ease-in-out .05s;
+		    -moz-transition: opacity 50ms ease-in-out .05s;
+		    transition: opacity 50ms ease-in-out .05s;
+		    text-align: center;
+		    z-index: 10;
+		    &.active {		    	
+		    	opacity: 1;		    	
+		    }
+		}
 	}
 }
+
+
+
+
+
+
+
+
 

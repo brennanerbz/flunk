@@ -11,9 +11,12 @@ export default class SideNav extends Component {
 	}
 
 	componentDidMount = () => {
-		$('.sidenav').height($(window).height() - 50);
-		window.addEventListener('resize',
-		 					  $('.sidenav').height($(window).height() - 50))		
+		$('.sidenav').height($(window).height() - 50)
+		window.addEventListener('resize', this.resizeSideNav);
+	}
+
+	resizeSideNav = () => {
+		$('.sidenav').height($(window).height() - 50)
 	}
 
 	render() {

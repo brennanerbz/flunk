@@ -27,11 +27,11 @@ export default class Main extends Component {
 					</span>
 				</div>
 				<ul className="sidenav_list">
-					<li className="sidenav_setitem">
+					<li className="sidenav_setitem active">
 						<a className="sidenav_setitem_name">
 							<span className="overflow_ellipsis">
 								<span className="prefix_icon">
-									<img src={home_icon} className="set_icon"/>
+									<img src={home_icon_active} className="set_icon"/>
 								</span>
 								Home
 							</span>

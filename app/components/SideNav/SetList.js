@@ -9,10 +9,11 @@ export default class SetList extends Component {
 	componentDidMount = () => {
 		$(this.refs['set_header']).tooltip({
 			delay: { show: 400, hide: 50},
-			template: '<div class="tooltip tooltip-side" role="tooltip"><div class="tooltip-arrow-left"></div><div class="tooltip-inner"></div></div>'
+			template: '<div class="tooltip tooltip-side side_tool" role="tooltip"><div class="tooltip-arrow-left"></div><div class="tooltip-inner"></div></div>'
 		});
 		$(this.refs['set_action']).tooltip({
-			delay: { show: 400, hide: 50}
+			delay: { show: 400, hide: 50},
+			template: '<div class="tooltip side_tool" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
 		})
 	}
 
@@ -51,11 +52,11 @@ export default class SetList extends Component {
 							</span>
 						</a>
 					</li>
-					<li className="sidenav_setitem active">
+					<li className="sidenav_setitem">
 						<a className="sidenav_setitem_name">
 							<span className="overflow_ellipsis">
 								<span className="prefix_icon">
-									<img src={set_icon_active} className="set_icon"/>
+									<img src={set_icon} className="set_icon"/>
 								</span>
 								computerscience101
 							</span>

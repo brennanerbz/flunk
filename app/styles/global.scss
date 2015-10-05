@@ -129,6 +129,56 @@ ul {
 	}	
 }
 
+.btn_square {
+	-webkit-font-smoothing: antialiased;
+	line-height: 1.2rem;
+	text-decoration: none;
+	cursor: pointer;
+	border: none;
+	border-radius: 0.25rem;
+	position: relative;
+	text-align: center;
+	margin: 0;
+	margin-right: 3px;
+	white-space: nowrap;
+	padding: 8px 14px 9px;
+	font-size: 15px;
+	&:after {
+		position: absolute;
+		content: '';
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		border-radius: .25rem;
+	}
+	&:focus {
+		
+	}
+}
+.btn_icon {
+	width: 30px;
+	height: 28px;
+	padding: 0;
+	padding-bottom: 4px;
+	.icon {
+		height: 17.5px;
+	}
+	.icon_awksize {
+		height: 3.5px;
+	}
+}
+.btn_outline {
+	background: #fff;
+	color: #555459!important;	
+	&:after {
+		border: 1px solid #C7CACD;
+	}
+}
+button:focus, input[type="button"]:focus {
+    outline: none;
+}
+
 :global .button-group {
 	.button {
 		margin-right: -5px;
@@ -166,6 +216,7 @@ ul {
 	}
 }
 
+// Tooltips
 .tooltip{
 	font-family: "Lato";
     position:absolute;
@@ -261,14 +312,16 @@ ul {
 	}
 }
 
+// Supplemental third col
+.supplemental {
+	padding-left: 30px;
+	margin: 20px -18px -1rem 0.5rem;
+}
+
 @media screen and (max-width: 860px) {
 	.remove_small {
 		display: none;
 	}
-}
-
-.supplemental {
-	padding-left: 30px;
 }
 
 .clear_both {
@@ -292,114 +345,8 @@ ul {
     user-select: none;
 }
 
-.btn_square {
-	-webkit-font-smoothing: antialiased;
-	line-height: 1.2rem;
-	text-decoration: none;
-	cursor: pointer;
-	border: none;
-	border-radius: 0.25rem;
-	position: relative;
-	text-align: center;
-	margin: 0;
-	margin-right: 3px;
-	white-space: nowrap;
-	padding: 8px 14px 9px;
-	font-size: 15px;
-	&:after {
-		position: absolute;
-		content: '';
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		border-radius: .25rem;
-	}
-}
-.btn_icon {
-	width: 30px;
-	height: 28px;
-	padding: 0;
-	padding-bottom: 4px;
-	.icon {
-		height: 17.5px;
-	}
-	.icon_awksize {
-		height: 3.5px;
-	}
-}
-.btn_outline {
-	background: #fff;
-	color: #555459!important;	
-	&:after {
-		border: 1px solid #C7CACD;
-	}
-}
-button:focus, input[type="button"]:focus {
-    outline: none;
-}
 
-// Activity Feed List Item :global 
 
-.activity_item {
-	display: table;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	line-height: normal;
-	color: #555459;
-	.link {
-		color: #0063C3;
-	}
-	.activity_action {
-		display: table-cell;
-		.activity_icon {
-			display: inline-block;
-			vertical-align: middle;
-			height: 18px;
-			opacity: 0.7;
-			-webkit-transition: opacity 0.05s ease-in-out;
-			transition: opacity 0.05s ease-in-out;
-			&:hover {
-				opacity: 0.7;
-			}
-		}
-	}
-	.activity_message {
-		display: table-cell;
-		vertical-align: middle;
-		font-size: 14px;
-		line-height: 1.4;
-		padding-left: 10px;
-		font-family: "Slack-Lato";
-		.message_content {			
-			opacity: 0.9;
-			width: 90%;
-		}
-		.message_datetime {
-			display: block;
-			opacity: 0.3;
-			font-size: 12px;
-			line-height: 1.9;
-		}
-	}
-}
-
-.section_header {
-	border-top: 1px solid #ddd;
-	padding-top: 10px;
-	padding-bottom: 20px;
-	.header_icon {
-		height: 18px;
-		opacity: 0.6;
-		&:hover {
-			opacity: 0.9;
-		}
-	}
-	.section_header_label {
-		opacity: 0.6;
-		padding-left: 10px;
-	}
-}
 
 
 

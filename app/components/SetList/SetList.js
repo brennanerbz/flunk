@@ -1,10 +1,49 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
+import moment from 'moment';
 const styles = require('./SetList.scss');
+
+import SetListItem from './SetListItem';
+
+class DayDivider extends Component {
+	render() {
+		const last_studied = this.props.set.last_studied;
+		const time_ago = moment(last_studied).fromNow()
+		return (
+			<div className="day_divider">
+				<hr className="separator"/>
+				<i className="copy_only"/>
+				<div className="day_divider_label">
+					{time_ago}
+				</div>
+			</div>
+		);
+	}
+}
 
 export default class SetList extends Component {
 	static propTypes = {
 		
+	}
+
+	state = {
+		sets: [
+			{
+				name: 'Intro to psychology',
+				author: 'Brennan Erbeznik',
+				last_studied: "2015-10-02 13:34:05.7000"
+			},
+			{
+				name: 'Cognitive Science',
+				author: 'Nathan Lomeli',
+				last_studied: "2015-09-25 13:34:05.7000"
+			},
+			{
+				name: 'Cognitive Science',
+				author: 'Nathan Lomeli',
+				last_studied: "2015-10-01 13:34:05.7000"
+			}
+		]
 	}
 
 	componentDidMount = () => {
@@ -13,66 +52,33 @@ export default class SetList extends Component {
 		})
 	}
 
-	render() {
-		const set_icon = require('../../assets/set_icon.png'),
-			  share_icon = require('../../assets/share_icon.png'),
-			  more_icon = require('../../assets/more_icon.png');
+	renderSets = () => {
+		let sets = this.state.sets;
+		sets.sort((set1, set2) => {
+			return (moment(set1.last_studied).isBefore(set2.last_studied)) ? 1 : -1
+		})
+		let rows = [];
+		let last_date = null;
+		sets.forEach(set => {
+			const last_string = moment(set.last_studied).fromNow();
+			if (last_string !== last_date) {
+				rows.push(<DayDivider set={set} key={set.last_studied}/>)
+			}
+			rows.push(<SetListItem set={set} />);
+			last_date = moment(set.last_studied).fromNow();
+		});
+		return rows;
+	}
+
+	render() {			
 		return(
-			<div>
-				<div className="day_divider">
-					<hr className="separator"/>
-					<i className="copy_only"/>
-					<div className="day_divider_label">
-						Last studied
-					</div>
-				</div>
+			<div>				
 				<div className="sets_container">
-			      	<div className="row set_row">	
-				        <div className="col-sm-1 col-md-1 set_col row_icon">
-				        	<img className="home_set_icon active" src={set_icon}/>
-				        </div>
-				        <div className="col-sm-5 col-md-5 set_col set_name">
-				        	<span className="overflow_ellipsis"><a>Intro to biology</a></span>
-				        </div>
-				        <div className="col-sm-3 col-md-3 set_col set_author">
-				        	<span className="overflow_ellipsis">by Brennan Erbeznik</span>
-				        </div>
-				        <div className="col-sm-2 col-md-2 set_col date_last_studied">
-				        	<span className="overflow_ellipsis">1 hour ago</span>
-				        </div>
-				        <div className={classnames('actions')}>
-				        	<button data-toggle="tooltip" title="Share" className="btn_icon btn_outline btn_square">
-				        		<img className="icon" src={share_icon}/>
-				        	</button>
-				        	<button data-toggle="tooltip" title="More" className="btn_icon btn_outline btn_square">
-				        		<img className="icon_awksize" src={more_icon}/>
-				        	</button>
-				        </div>
-				    </div>
-				    <div className="row set_row">	
-				        <div className="col-sm-1 col-md-1 set_col row_icon">
-				        	<img className="home_set_icon active" src={set_icon}/>
-				        </div>
-				        <div className="col-sm-5 col-md-5 set_col set_name">
-				        	<span className="overflow_ellipsis"><a>Computer Science 101</a></span>
-				        </div>
-				        <div className="col-sm-3 col-md-3 set_col set_author">
-				        	<span className="overflow_ellipsis">by Nathan Lomeli</span>
-				        </div>
-				        <div className="col-sm-2 col-md-2 set_col date_last_studied">
-				        	<span className="overflow_ellipsis">7 hours ago</span>
-				        </div>
-				        <div className={classnames('actions')}>
-				        	<button data-toggle="tooltip" title="Share" className="btn_icon btn_outline btn_square">
-				        		<img className="icon" src={share_icon}/>
-				        	</button>
-				        	<button data-toggle="tooltip" title="More" className="btn_icon btn_outline btn_square">
-				        		<img className="icon_awksize" src={more_icon}/>
-				        	</button>
-				        </div>
-				    </div>         			 				  				  
+					{this.renderSets()}
 				</div>
 			</div>
 		);
 	}
 }
+
+

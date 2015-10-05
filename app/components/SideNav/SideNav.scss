@@ -1,5 +1,6 @@
 
 .sidenav {
+	font-family: "Slack-Lato";
 	top: 60px;
 	width: 220px;
 	float: left;
@@ -16,7 +17,7 @@
 		margin: 0 1.5rem .4rem;
 		text-align: left;
 		font-size: 0.8rem;
-		font-family: "Lato";
+		font-family: "Slack-Lato";
 		font-weight: 700;
 		line-height: 15px;
 		opacity: 0.6;
@@ -50,7 +51,7 @@
 		.user_name {
 			font-size: 0.875rem;
 			font-weight: 400;
-			font-family: "Lato";
+			font-family: "Slack-Lato";
 			opacity: 0.6;
 			line-height: 1.0625rem;
 			padding: 0 .25rem 0 0.2rem;
@@ -74,7 +75,7 @@
 		-o-transition: opacity 50ms;
 		transition: opacity 50ms;	
 		.new_set_icon {
-			height: 20px;
+			height: 18px;
 		}
 		&:hover {
 			opacity: 0.8;
@@ -88,7 +89,7 @@
 		width: 204px;
 		li {
 			font-size: 15.5px;
-			letter-spacing: 0.015rem;
+			// letter-spacing: 0.015rem;
 			font-weight: 400;
 			line-height: 1.5rem;
 			height: 1.5rem;
@@ -116,6 +117,12 @@
 			    	margin-right: 0.5rem;
 			    	img {
 			    		height: 16px;
+			    		margin-bottom: 3px;
+
+			    	}
+			    	.home_icon {
+			    		height: 15px;
+			    		margin-right: -2px;
 			    	}
 			    }
 			    &:hover {

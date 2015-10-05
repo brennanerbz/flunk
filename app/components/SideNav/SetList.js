@@ -48,7 +48,7 @@ export default class SetList extends Component {
 								<span className="prefix_icon">
 									<img src={set_icon} className="set_icon"/>
 								</span>
-								introtobiology
+								intro to biology
 							</span>
 						</a>
 					</li>
@@ -58,7 +58,7 @@ export default class SetList extends Component {
 								<span className="prefix_icon">
 									<img src={set_icon} className="set_icon"/>
 								</span>
-								computerscience101
+								computer science 101
 							</span>
 						</a>
 					</li>

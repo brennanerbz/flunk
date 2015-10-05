@@ -4,6 +4,10 @@
   font-family: 'Calibri';
   src: url('../../calibri_bold.ttf') format('truetype'); 
 }
+@font-face {
+	font-family: 'Slack-Lato';
+	src: url('../../Lato-Regular.ttf') format('truetype'); 
+}
 
 * {
   box-sizing: border-box;
@@ -158,7 +162,6 @@ body {
 }
 
 .tooltip{
-	// width: 60%;
 	font-family: "Lato";
     position:absolute;
     z-index:1020;
@@ -243,7 +246,7 @@ body {
 }
 .page_header {
 	font-family: 'Calibri';
-	font-size: 26px;
+	font-size: 29px;
 	color: #555459;
 	opacity: 0.95;
 	cursor: pointer;
@@ -326,6 +329,9 @@ body {
 	&:after {
 		border: 1px solid #C7CACD;
 	}
+}
+button:focus, input[type="button"]:focus {
+    outline: none;
 }
 
 

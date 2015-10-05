@@ -31,7 +31,7 @@ export default class Main extends Component {
 						<a className="sidenav_setitem_name">
 							<span className="overflow_ellipsis">
 								<span className="prefix_icon">
-									<img src={home_icon_active} className="set_icon"/>
+									<img src={home_icon_active} className="set_icon  home_icon"/>
 								</span>
 								Home
 							</span>

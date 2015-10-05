@@ -50,38 +50,40 @@ export default class Home extends Component {
 				  	</div>
 				  	<i className="copy_only"/>
 				  </div>
-				  <table className="table">
-				    <tbody>
-				      <tr className="set_item_row"
-				      	  onMouseOver={this.setActiveRow}
-				      	  onMouseLeave={this.removeActiveRow}>
-				        <td className="row_icon"><img className="home_set_icon active" src={set_icon}/></td>
-				        <td className="set_name"><a>Intro to psychology</a></td>
-				        <td className="set_author">by Nathan Lomeli</td>
-				        <td className="date_last_studied">1 hour ago</td>
-				        <td className={classnames('actions', {'active': this.state.active_set_row === 1})}>
-				        	<button data-toggle="tooltip" title="Share" className="btn_icon btn_outline btn_square">
-				        		<img className="icon" src={share_icon}/>
-				        	</button>
-				        	<button data-toggle="tooltip" title="More" className="btn_icon btn_outline btn_square">
-				        		<img className="icon_awksize" src={more_icon}/>
-				        	</button>
-				        </td>      
-				      </tr>
-				      <tr className="set_item_row">
-				        <td className="row_icon"><img className="home_set_icon" src={set_icon}/></td>
-				        <td className="set_name"><a>Intro to psychology</a></td>
-				        <td className="set_author">by Nathan Lomeli</td>
-				        <td className="date_last_studied">1 hour ago</td>
-				        <td className={classnames('actions', {'active': this.state.active_set_row === 2})}>
-				        	<button className="btn_icon btn_outline btn_square">A</button>
-				        </td> 	        
-				      </tr>					      
-				    </tbody>
-				  </table>				  
+				  <div className="sets_container">
+				      	<div className="row set_row"
+				      	  	 onMouseOver={this.setActiveRow}
+				      	  	 onMouseLeave={this.removeActiveRow}>	
+
+					        <div className="col-md-1 set_col row_icon">
+					        	<img className="home_set_icon active" src={set_icon}/>
+					        </div>
+
+					        <div className="col-md-4 set_col set_name">
+					        	<span className="overflow_ellipsis"><a>Intro to biology</a></span>
+					        </div>
+
+					        <div className="col-md-3 set_col set_author">
+					        	<span className="overflow_ellipsis">by Brennan Erbeznik</span>
+					        </div>
+
+					        <div className="col-md-2 set_col date_last_studied">
+					        	<span className="overflow_ellipsis">1 hour ago</span>
+					        </div>
+
+					        <div className={classnames('actions', {'active': this.state.active_set_row === 1})}>
+					        	<button data-toggle="tooltip" title="Share" className="btn_icon btn_outline btn_square">
+					        		<img className="icon" src={share_icon}/>
+					        	</button>
+					        	<button data-toggle="tooltip" title="More" className="btn_icon btn_outline btn_square">
+					        		<img className="icon_awksize" src={more_icon}/>
+					        	</button>
+					        </div>
+					    </div>      			 
 				  </div>
-				  <div className="supplemental col-md-3 remove_small">.col-xs-6 .col-md-4</div>
-				</div>				
+				  <div className="home_feed supplemental col-md-3 remove_small">.col-xs-6 .col-md-4</div>
+				</div>	
+				</div>			
 			</div>
 		);
 	}

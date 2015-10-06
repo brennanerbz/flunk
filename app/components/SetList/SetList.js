@@ -2,8 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import moment from 'moment';
 import assign from 'lodash/object/assign';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 const styles = require('./SetList.scss');
+
+import * as actionCreators from '../../actions/learnset';
 
 import SetListItem from './SetListItem';
 
@@ -22,80 +26,27 @@ class DayDivider extends Component {
 	}
 }
 
+
+@connect(state => ({
+	sets: state.sets.list.map(id => state.sets.items[id])
+	}),
+	dispatch => ({
+		...bindActionCreators({
+		  ...actionCreators
+		}, dispatch)
+	})
+)
 export default class SetList extends Component {
 	static propTypes = {
 		
 	}
 
 	state = {
-		sets: [
-			{	id: 1,
-				name: 'An Introduction to Computer Science',
-				author: 'Brennan Erbeznik',
-				last_studied: "2015-10-02 13:34:05.7000"
-			},
-			{
-				id: 2,
-				name: 'Functional Programming',
-				author: 'Nathan Lomeli',
-				last_studied: "2015-09-25 13:34:05.7000"
-			},
-			{
-				id: 3,
-				name: 'React.js Essentials',
-				author: 'Benjamin Franklin',
-				last_studied: "2015-08-01 13:34:05.7000"
-			},
-			{
-				id: 4,
-				name: 'Redux & React basics',
-				author: 'Larry Page',
-				last_studied: "2015-10-01 13:34:05.7000"
-			},
-			{
-				id: 6,
-				name: 'React for designers',
-				author: 'Nathan Lomeli',
-				last_studied: "2015-10-05 09:34:05.7000"
-			},
-			{
-				id: 7,
-				name: 'Javascript in Analogies',
-				author: 'Benjamin Franklin',
-				last_studied: "2015-08-01 13:34:05.7000"
-			},
-			{
-				id: 8,
-				name: 'Flux Architecture',
-				author: 'Alex Wyllie',
-				last_studied: "2015-08-05 13:34:05.7000"
-			},
-			{
-				id: 9,
-				name: 'Biology Chapter 8 Vocab',
-				author: 'Nathan Lomeli',
-				last_studied: "2015-08-20 09:34:05.7000"
-			},
-			{
-				id: 10,
-				name: 'React Facebook Tutorial',
-				author: 'Alex Wyllie',
-				last_studied: "2015-10-02 13:34:05.7000"
-			},
-			{
-				id: 11,
-				name: 'Flux Basics',
-				author: 'Alex Wyllie',
-				last_studied: "2015-10-03 13:34:05.7000"
-			},
-			{
-				id: 12,
-				name: 'Behavioral Genetics',
-				author: 'Alex Wyllie',
-				last_studied: "2015-10-04 13:34:05.7000"
-			}
-		], 
 		activeRow: 0
+	}
+
+	componentDidMount() {
+		this.props.loadSets()
 	}
 
 	setActiveRow = (id) => {
@@ -129,12 +80,12 @@ export default class SetList extends Component {
 		sorted_sets.forEach((set, i) => {
 			if (set.time_ago !== last_time_ago) {
 				rows.push(<DayDivider set={set} 
-					                  key={String(set.laststudied) + String(i)}/>)
+					                  key={'day' + i}/>)
 			}
 			rows.push(<SetListItem set={set}
 								   setActiveRow={this.setActiveRow}
 								   activeRow={this.state.activeRow}
-								   key={String(set.last_studied) + String(i)}/>)
+								   key={set.id}/>)
 			last_time_ago = set.time_ago;
 		})
 		return rows;
@@ -142,7 +93,7 @@ export default class SetList extends Component {
 
 
 	render() {	
-		let sets = this.state.sets;
+		let sets = this.props.sets;
 		sets.sort((set1, set2) => {
 			return (moment(set1.last_studied).isBefore(set2.last_studied)) ? 1 : -1
 		})		

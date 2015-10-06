@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import moment from 'moment';
+import { Link } from 'react-router';
 
 export default class SetListItem extends Component {
 	static propTypes = {
@@ -29,6 +30,7 @@ export default class SetListItem extends Component {
 			  { set } = this.props;
 		const last_studied = moment(set.last_studied).fromNow();
 		return(
+			
 	      	<div className="row set_row"
 	      	     onMouseOver={this.handleMouseOver}
 	      	     onMouseLeave={this.handleMouseLeave}>	
@@ -36,7 +38,7 @@ export default class SetListItem extends Component {
 		        	<img className="home_set_icon active" src={set_icon}/>
 		        </div>
 		        <div className="col-sm-6 col-md-6 col-lg-7 set_col set_name">
-		        	<span className="overflow_ellipsis"><a>{set.name}</a></span>
+		        	<span className="overflow_ellipsis"><Link className="link" to={`/learn/${set.id}`}>{set.name}</Link></span>
 		        </div>
 		        <div className="col-sm-5 col-md-5 col-lg-3 set_col set_author">
 		        	<span className="overflow_ellipsis">

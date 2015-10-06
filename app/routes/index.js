@@ -16,7 +16,7 @@ let routes = (
     <Route path="/" component={Home} />
     <Route path="profile" component={Profile} />
     <Route path="createset" component={CreateSet} />
-    <Route path="learn" component={Learn}/>
+    <Route path="learn/:id" component={Learn}/>
   </Route>
 );
 

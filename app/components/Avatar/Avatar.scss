@@ -59,6 +59,16 @@
 	line-height: 1.1;
 }
 
+.user_name {
+	color: #555549;
+	opacity: 0.6;
+	margin-left: 10px;
+	&:hover {
+		color: #555459;
+		opacity: 1;
+	}
+}
+
 
 
 

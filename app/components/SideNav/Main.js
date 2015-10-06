@@ -14,18 +14,12 @@ export default class Main extends Component {
 		settings_icon = require('../../assets/settings_icon.png'),
 		settings_icon_active = require('../../assets/settings_icon_white.png');
 		return(
-			<div className="sidenav_main">
+			<div className="sidenav_main">				
 				<h2 className="sidenav_header">
 					<span className="sidenav_header_label">
 					Main
 					</span>
-				</h2>
-				<div className="sidenav_profile_info">
-					<i className="side_icon active_icon"></i>
-					<span className="user_name">
-					Brennan Erbeznik
-					</span>
-				</div>
+				</h2>				
 				<ul className="sidenav_list">
 					<li className="sidenav_setitem active">
 						<a className="sidenav_setitem_name">
@@ -62,3 +56,12 @@ export default class Main extends Component {
 		);
 	}
 }
+
+
+// -- Include supplemental user_name 
+// <div className="sidenav_profile_info">
+// 	<i className="side_icon active_icon"></i>
+// 	<span className="user_name">
+// 	Brennan Erbeznik
+// 	</span>
+// </div>

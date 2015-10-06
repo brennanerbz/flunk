@@ -16,7 +16,8 @@ export default class Avatar extends Component {
 				{'inline-avatar': is_create_set}
 				)}>
 				<a className="link">
-				<img src="https://cdn-images-1.medium.com/fit/c/72/72/0*Un7eHMAQh62QX1LO.jpg" className="avatar-img"/>
+					<img src="https://cdn-images-1.medium.com/fit/c/72/72/0*Un7eHMAQh62QX1LO.jpg" className="avatar-img"/>
+					{ !is_create_set && <span className="user_name">Brennan</span> }
 				</a>
 			</div>
 			</button>

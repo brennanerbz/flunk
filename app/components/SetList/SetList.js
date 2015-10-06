@@ -30,51 +30,69 @@ export default class SetList extends Component {
 	state = {
 		sets: [
 			{	id: 1,
-				name: 'Intro to psychology',
+				name: 'An Introduction to Computer Science',
 				author: 'Brennan Erbeznik',
 				last_studied: "2015-10-02 13:34:05.7000"
 			},
 			{
 				id: 2,
-				name: 'Cognitive Science',
+				name: 'Functional Programming',
 				author: 'Nathan Lomeli',
 				last_studied: "2015-09-25 13:34:05.7000"
 			},
 			{
 				id: 3,
-				name: 'American History',
+				name: 'React.js Essentials',
 				author: 'Benjamin Franklin',
 				last_studied: "2015-08-01 13:34:05.7000"
 			},
 			{
 				id: 4,
-				name: 'Computer Science 101',
+				name: 'Redux & React basics',
 				author: 'Larry Page',
-				last_studied: "2015-10-05 13:34:05.7000"
+				last_studied: "2015-10-01 13:34:05.7000"
 			},
 			{
-				id: 5,
-				name: 'Intro to biology',
+				id: 6,
+				name: 'React for designers',
 				author: 'Nathan Lomeli',
 				last_studied: "2015-10-05 09:34:05.7000"
 			},
 			{
-				id: 3,
-				name: 'American History',
+				id: 7,
+				name: 'Javascript in Analogies',
 				author: 'Benjamin Franklin',
 				last_studied: "2015-08-01 13:34:05.7000"
 			},
 			{
-				id: 4,
-				name: 'Computer Science 101',
-				author: 'Larry Page',
+				id: 8,
+				name: 'Flux Architecture',
+				author: 'Alex Wyllie',
 				last_studied: "2015-08-05 13:34:05.7000"
 			},
 			{
-				id: 5,
-				name: 'Intro to biology',
+				id: 9,
+				name: 'Biology Chapter 8 Vocab',
 				author: 'Nathan Lomeli',
 				last_studied: "2015-08-20 09:34:05.7000"
+			},
+			{
+				id: 10,
+				name: 'React Facebook Tutorial',
+				author: 'Alex Wyllie',
+				last_studied: "2015-10-02 13:34:05.7000"
+			},
+			{
+				id: 11,
+				name: 'Flux Basics',
+				author: 'Alex Wyllie',
+				last_studied: "2015-10-03 13:34:05.7000"
+			},
+			{
+				id: 12,
+				name: 'Behavioral Genetics',
+				author: 'Alex Wyllie',
+				last_studied: "2015-10-04 13:34:05.7000"
 			}
 		], 
 		activeRow: 0

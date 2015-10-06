@@ -19,16 +19,17 @@ export default class Home extends Component {
 					<h1 className="page_header">Home</h1>
 				</div>
 				<div className="row">
-					<div className="col-sm-12 col-md-7 col-lg-9">					
+					<div className="col-sm-12 col-md-12 col-lg-12">					
 						<SetList />
-					</div>
-					<div className="supplemental col-md-4 col-lg-3 remove_small">
-						<ActivityList />
-						<OnlineUserList />
-					</div>	
+					</div>					
 				</div>	
 			</div>
 		);
 	}
 }
 
+// -- Supplemental activity feed 
+// <div className="supplemental col-md-4 col-lg-3 remove_small">
+// 	<ActivityList />
+// 	<OnlineUserList />
+// </div>	

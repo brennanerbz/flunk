@@ -88,6 +88,11 @@
         }
 
     }
+    @media screen and (max-width: 850px) {
+        .predictive-search {
+            min-width: 305px!important;
+        }
+    }
     .iconisInNav {
 		border: none!important;
     }

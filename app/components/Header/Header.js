@@ -40,7 +40,7 @@ export default class Header extends Component {
 									</Link>
 								}
 								<Notifications {...this.props}/>
-								<Avatar/>
+								<Avatar/>								
 							</div>
 						</div>
 					</div>

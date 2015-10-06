@@ -76,6 +76,7 @@
 		opacity: 0.6;
 	}
 	.set_author {
+		float: right;
 		&:hover {
 			opacity: 1;
 			.link_name {

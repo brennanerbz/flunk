@@ -35,15 +35,12 @@ export default class SetListItem extends Component {
 		        <div className="col-sm-1 col-md-1 set_col row_icon">
 		        	<img className="home_set_icon active" src={set_icon}/>
 		        </div>
-		        <div className="col-sm-5 col-md-5 set_col set_name">
+		        <div className="col-sm-6 col-md-6 col-lg-7 set_col set_name">
 		        	<span className="overflow_ellipsis"><a>{set.name}</a></span>
 		        </div>
-		        <div className="col-sm-3 col-md-3 set_col set_author">
+		        <div className="col-sm-5 col-md-5 col-lg-3 set_col set_author">
 		        	<span className="overflow_ellipsis">by <span className="link_name">{set.author}</span></span>
-		        </div>
-		        <div className="col-sm-2 col-md-2 set_col date_last_studied">
-		        	<span className="overflow_ellipsis">{last_studied}</span>
-		        </div>
+		        </div>		        
 		        <div className={classnames('actions', {'active': set.id === this.props.activeRow})}>
 		        	<button data-toggle="tooltip" title="Share" className="btn_icon btn_outline btn_square">
 		        		<img className="share_icon icon" src={share_icon}/>
@@ -56,3 +53,8 @@ export default class SetListItem extends Component {
 		);
 	}
 }
+
+// // -- DateTime 
+// <div className="col-sm-2 col-md-2 set_col date_last_studied">
+// 	<span className="overflow_ellipsis">{last_studied}</span>
+// </div>

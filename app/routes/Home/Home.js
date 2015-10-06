@@ -19,7 +19,7 @@ export default class Home extends Component {
 					<h1 className="page_header">Home</h1>
 				</div>
 				<div className="row">
-					<div className="col-sm-12 col-md-12 col-lg-12">					
+					<div className="col-sm-12 col-md-11 col-lg-12">					
 						<SetList />
 					</div>					
 				</div>	

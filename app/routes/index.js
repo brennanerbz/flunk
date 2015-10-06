@@ -7,6 +7,7 @@ import LandingPage from './LandingPage/LandingPage';
 import Home from './Home/Home';
 import CreateSet from './CreateSet/CreateSet';
 import Profile from './Profile/Profile';
+import Learn from './Learn/Learn';
 
 import fillStore from '../utils/fillStore';
 
@@ -15,6 +16,7 @@ let routes = (
     <Route path="/" component={Home} />
     <Route path="profile" component={Profile} />
     <Route path="createset" component={CreateSet} />
+    <Route path="learn" component={Learn}/>
   </Route>
 );
 

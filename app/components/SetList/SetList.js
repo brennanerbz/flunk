@@ -126,15 +126,15 @@ export default class SetList extends Component {
 		})
 		let rows = [];
 		let last_time_ago = null;
-		sorted_sets.forEach(set => {
+		sorted_sets.forEach((set, i) => {
 			if (set.time_ago !== last_time_ago) {
 				rows.push(<DayDivider set={set} 
-					                  key={set.time_ago}/>)
+					                  key={String(set.laststudied) + String(i)}/>)
 			}
 			rows.push(<SetListItem set={set}
 								   setActiveRow={this.setActiveRow}
 								   activeRow={this.state.activeRow}
-								   key={set.last_studied}/>)
+								   key={String(set.last_studied) + String(i)}/>)
 			last_time_ago = set.time_ago;
 		})
 		return rows;

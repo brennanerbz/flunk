@@ -39,7 +39,7 @@ export default class SetListItem extends Component {
 		        	<span className="overflow_ellipsis"><a>{set.name}</a></span>
 		        </div>
 		        <div className="col-sm-3 col-md-3 set_col set_author">
-		        	<span className="overflow_ellipsis">by {set.author}</span>
+		        	<span className="overflow_ellipsis">by <span className="link_name">{set.author}</span></span>
 		        </div>
 		        <div className="col-sm-2 col-md-2 set_col date_last_studied">
 		        	<span className="overflow_ellipsis">{last_studied}</span>

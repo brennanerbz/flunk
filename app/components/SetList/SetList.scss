@@ -75,6 +75,14 @@
 	.set_author, .date_last_studied {
 		opacity: 0.6;
 	}
+	.set_author {
+		&:hover {
+			opacity: 1;
+			.link_name {
+				text-decoration: underline;
+			}
+		}
+	}
 	.date_last_studied {
 		text-align: right;
 		padding-right: 30px;

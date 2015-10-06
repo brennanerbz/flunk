@@ -221,9 +221,16 @@ button:focus, input[type="button"]:focus {
 :global .link {
 	cursor: pointer;
 	&:hover {
-		text-decoration: none;
+		
 	}
 }
+// :global .link_name {
+// 	text-decoration: none;
+// 	&:hover {
+// 		opacity: 1;
+// 		color: #4D995C;
+// 	}
+// }
 
 // Tooltips
 .tooltip{

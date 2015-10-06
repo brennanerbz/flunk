@@ -1,3 +1,15 @@
+.online_item {
+	padding-bottom: 0.75rem;
+	cursor: pointer;
+	&:hover {
+		.online_user_pic {
+			opacity: 1;
+		}
+	}
+}
+.activity_item_container{
+	padding: 0.5rem 0;
+}
 .activity_item {
 	display: table;
 	overflow: hidden;
@@ -15,10 +27,7 @@
 			height: 18px;
 			opacity: 0.7;
 			-webkit-transition: opacity 0.05s ease-in-out;
-			transition: opacity 0.05s ease-in-out;
-			&:hover {
-				opacity: 0.7;
-			}
+			transition: opacity 0.05s ease-in-out;			
 		}
 		.online_user_pic {
 			border-radius: 100%;
@@ -27,12 +36,12 @@
 			height: 21px;
 			opacity: 0.7;
 			-webkit-transition: opacity 0.05s ease-in-out;
-			transition: opacity 0.05s ease-in-out;
-			&:hover {
-				opacity: 0.7;
-			}
+			transition: opacity 0.05s ease-in-out;						
 		}
-	}
+		.active {
+			opacity: 1;
+		}	
+	}	
 	.activity_message {
 		display: table-cell;
 		vertical-align: middle;
@@ -69,7 +78,7 @@
 .section_header {
 	border-top: 1px solid #ddd;
 	padding-top: 10px;
-	padding-bottom: 20px;
+	padding-bottom: 15px;
 	.header_icon {
 		height: 18px;
 		opacity: 0.6;

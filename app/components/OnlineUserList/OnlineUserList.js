@@ -1,8 +1,24 @@
 import React, { Component, PropTypes } from 'react';
+import classnames from 'classnames';
 require('../ActivityList/ActivityList.scss');
+
+import OnlineUserItem from './OnlineUserItem';
 
 export default class OnlineUserList extends Component {
 	static propTypes = {
+	}	
+
+	state = {
+		users: [
+			{
+				name: 'Brennan Erbeznik',
+				picurl: 'https://cdn-images-1.medium.com/fit/c/72/72/0*Un7eHMAQh62QX1LO.jpg'
+			},
+			{
+				name: 'Nathan Lomeli',
+				picurl: 'https://avatars.slack-edge.com/2015-08-28/9855976224_ff492a41db7e6350f43a_48.jpg'
+			}
+		]
 	}
 
 	render() {
@@ -14,19 +30,9 @@ export default class OnlineUserList extends Component {
 					<span className="section_header_label">Online</span>
 				</div>
 				<ul className="activity_list">
-					<li>
-						<span className="activity_item">
-							<div className="activity_action">
-								<a><img src="https://cdn-images-1.medium.com/fit/c/72/72/0*Un7eHMAQh62QX1LO.jpg" className="online_user_pic"/></a>
-							</div>
-							<div className="activity_message">
-								<div className="message_content activity_user">
-								Nathan Lomeli
-								<i className="online_icon"></i>
-								</div>
-							</div>
-						</span>
-					</li>
+					{
+						this.state.users.map(user => <OnlineUserItem user={user}/>)
+					}
 				</ul>
 			</div>
 		);

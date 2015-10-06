@@ -6,6 +6,22 @@ export default class SetListItem extends Component {
 	static propTypes = {
 	}
 
+
+	componentDidMount = () => {
+		$("[data-toggle='tooltip']").tooltip({
+			delay: { show: 400, hide: 50}
+		})
+	}
+
+	handleMouseOver = () => {
+		const { set, setActiveRow  } = this.props;
+		setActiveRow(set.id)
+	}
+	handleMouseLeave = () => {
+		const { setActiveRow  } = this.props;
+		setActiveRow(0)
+	}
+
 	render() {
 		const set_icon = require('../../assets/set_icon.png'),
 			  share_icon = require('../../assets/share_icon.png'),
@@ -13,7 +29,9 @@ export default class SetListItem extends Component {
 			  { set } = this.props;
 		const last_studied = moment(set.last_studied).fromNow();
 		return(
-	      	<div className="row set_row">	
+	      	<div className="row set_row"
+	      	     onMouseOver={this.handleMouseOver}
+	      	     onMouseLeave={this.handleMouseLeave}>	
 		        <div className="col-sm-1 col-md-1 set_col row_icon">
 		        	<img className="home_set_icon active" src={set_icon}/>
 		        </div>
@@ -26,12 +44,12 @@ export default class SetListItem extends Component {
 		        <div className="col-sm-2 col-md-2 set_col date_last_studied">
 		        	<span className="overflow_ellipsis">{last_studied}</span>
 		        </div>
-		        <div className={classnames('actions')}>
+		        <div className={classnames('actions', {'active': set.id === this.props.activeRow})}>
 		        	<button data-toggle="tooltip" title="Share" className="btn_icon btn_outline btn_square">
-		        		<img className="icon" src={share_icon}/>
+		        		<img className="share_icon icon" src={share_icon}/>
 		        	</button>
 		        	<button data-toggle="tooltip" title="More" className="btn_icon btn_outline btn_square">
-		        		<img className="icon_awksize" src={more_icon}/>
+		        		<img className="icon icon_awksize" src={more_icon}/>
 		        	</button>
 		        </div>
 		    </div>

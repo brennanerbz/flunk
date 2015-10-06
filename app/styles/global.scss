@@ -142,7 +142,12 @@ ul {
 	margin-right: 3px;
 	white-space: nowrap;
 	padding: 8px 14px 9px;
-	font-size: 15px;
+	font-size: 15px;	
+	&:hover {
+		.icon {
+			opacity: 1;
+		}
+	}
 	&:after {
 		position: absolute;
 		content: '';
@@ -152,8 +157,8 @@ ul {
 		left: 0;
 		border-radius: .25rem;
 	}
-	&:focus {
-		
+	&:active {
+		box-shadow: inset 0px 1px 3px 0px rgba(81,79,79,0.50);
 	}
 }
 .btn_icon {
@@ -163,6 +168,10 @@ ul {
 	padding-bottom: 4px;
 	.icon {
 		height: 17.5px;
+		opacity: 0.8;
+		&:hover {
+			opacity: 1;
+		}
 	}
 	.icon_awksize {
 		height: 3.5px;

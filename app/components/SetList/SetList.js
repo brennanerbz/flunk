@@ -29,39 +29,44 @@ export default class SetList extends Component {
 
 	state = {
 		sets: [
-			{
+			{	id: 1,
 				name: 'Intro to psychology',
 				author: 'Brennan Erbeznik',
 				last_studied: "2015-10-02 13:34:05.7000"
 			},
 			{
+				id: 2,
 				name: 'Cognitive Science',
 				author: 'Nathan Lomeli',
 				last_studied: "2015-09-25 13:34:05.7000"
 			},
 			{
+				id: 3,
 				name: 'American History',
 				author: 'Benjamin Franklin',
-				last_studied: "2015-10-01 13:34:05.7000"
+				last_studied: "2015-08-01 13:34:05.7000"
 			},
 			{
+				id: 4,
 				name: 'Computer Science 101',
 				author: 'Larry Page',
 				last_studied: "2015-10-05 13:34:05.7000"
 			},
 			{
+				id: 5,
 				name: 'Intro to biology',
 				author: 'Nathan Lomeli',
 				last_studied: "2015-10-05 09:34:05.7000"
 			}
-		]
+		], 
+		activeRow: 0
 	}
 
-	componentDidMount = () => {
-		$("[data-toggle='tooltip']").tooltip({
-			delay: { show: 400, hide: 50}
-		})
-	}
+	setActiveRow = (id) => {
+		this.setState({
+			activeRow: id
+		});
+	}	
 
 	renderSets = (sets) => {		
 		var sorted_sets = sets.map((set) => {
@@ -87,9 +92,13 @@ export default class SetList extends Component {
 		let last_time_ago = null;
 		sorted_sets.forEach(set => {
 			if (set.time_ago !== last_time_ago) {
-				rows.push(<DayDivider set={set} key={set.time_ago}/>)
+				rows.push(<DayDivider set={set} 
+					                  key={set.time_ago}/>)
 			}
-			rows.push(<SetListItem set={set} key={set.last_studied}/>)
+			rows.push(<SetListItem set={set}
+								   setActiveRow={this.setActiveRow}
+								   activeRow={this.state.activeRow}
+								   key={set.last_studied}/>)
 			last_time_ago = set.time_ago;
 		})
 		return rows;

@@ -92,13 +92,13 @@
 	    border-top-left-radius: 1rem;
 	    background-clip: padding-box;
 	    opacity: 0;
-	    -webkit-transition: opacity 50ms ease-in-out .05s;
-	    -moz-transition: opacity 50ms ease-in-out .05s;
-	    transition: opacity 50ms ease-in-out .05s;
+	    -webkit-transition: opacity 25ms ease-in-out .025s;
+	    -moz-transition: opacity 25ms ease-in-out .025s;
+	    transition: opacity 25ms ease-in-out .025s;
 	    text-align: center;
 	    z-index: 10;
 	    &.active {		    	
-	    	opacity: 0;		    	
+	    	opacity: 1;		    	
 	    }
 	}
 }

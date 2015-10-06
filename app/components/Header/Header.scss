@@ -1,6 +1,7 @@
 
 .header {
     display: block;
+    position: fixed;
     width: 100%;
     font-size: 14px;
     background: #FFF none repeat scroll 0% 0%;
@@ -124,7 +125,7 @@
 .header-top {
 	top: 0px;
 	height: 65px;
-	position: absolute;
+	position: fixed;
 }
 
 .input-button-group {

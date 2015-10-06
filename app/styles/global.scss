@@ -318,10 +318,11 @@ button:focus, input[type="button"]:focus {
 }
 .page_header {
 	font-family: 'Calibri';
-	font-size: 29px;
+	font-size: 26px;
 	color: #555459;
 	opacity: 0.95;
 	cursor: pointer;
+	margin-bottom: 0;
 	&:hover {
 		opacity: 1;
 		// text-decoration: underline;
@@ -331,7 +332,7 @@ button:focus, input[type="button"]:focus {
 // Supplemental third col
 .supplemental {
 	padding-left: 30px;
-	margin: 20px -18px -1rem 0.5rem;
+	margin: 25px -18px -1rem 0.5rem;
 }
 
 @media screen and (max-width: 860px) {

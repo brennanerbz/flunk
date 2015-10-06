@@ -57,6 +57,24 @@ export default class SetList extends Component {
 				name: 'Intro to biology',
 				author: 'Nathan Lomeli',
 				last_studied: "2015-10-05 09:34:05.7000"
+			},
+			{
+				id: 3,
+				name: 'American History',
+				author: 'Benjamin Franklin',
+				last_studied: "2015-08-01 13:34:05.7000"
+			},
+			{
+				id: 4,
+				name: 'Computer Science 101',
+				author: 'Larry Page',
+				last_studied: "2015-08-05 13:34:05.7000"
+			},
+			{
+				id: 5,
+				name: 'Intro to biology',
+				author: 'Nathan Lomeli',
+				last_studied: "2015-08-20 09:34:05.7000"
 			}
 		], 
 		activeRow: 0

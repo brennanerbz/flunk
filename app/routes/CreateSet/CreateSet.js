@@ -20,9 +20,9 @@ export default class CreateSetPage extends Component {
 
 	render() {
 		return(
-			<div className="CreateSetPage">
+			<div className="CreateSetPage no_sidenav_container">
 			  <CreateSetHeader/>                 
-			  <div className="container CreateSetPage-container">
+			  <div className="container">
 			    <div className="CreateSetPage-list">
 			      <TermRows/>
 			    </div>

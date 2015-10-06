@@ -11,7 +11,8 @@ import Avatar from '../Avatar/Avatar';
 
 
 @connect(state => ({
-	loc: state.router.location
+	loc: state.router.location,
+	sets: state.sets.items
 }))
 export default class Header extends Component {
 	static propTypes = {
@@ -20,19 +21,26 @@ export default class Header extends Component {
 
 	render() {
 		const logo = require('./assets/FlunkLogo.png'),
-		{ loc } = this.props;
+			  { loc, sets } = this.props;
+		let id = loc.pathname.replace(/\D/g,''),
+			set = sets[id];
 		return(
 			<div>				
 				<nav className={classnames({'header-bordered': String(loc.pathname) !== '/createset'},
 										    'header header-top')}>
 					<div className="container">
-						<div className="header-block header-left float-left">
+						<span className="header-block header-left float-left">
 							<Link className="site-logo" to="/">						
 									<img className="site-icon" src={logo} />
 							</Link>
-							<SearchBox {...this.props}/>
-						</div>
-						<div className="header-block header-right float-right">
+							<SearchBox {...this.props}/>							
+						</span>
+						{ set && loc.pathname.indexOf('/learn') !== -1 ? 
+						<span className="set_name_wrapper">
+							<h1 className="set_name">{set.name}</h1>
+						</span> 
+						: null } 
+						<span className="header-block header-right">
 							<div className="button-group">
 								{ String(loc.pathname) !== '/createset' &&
 									<Link className="button button-primary create-set-button" to="/createset">
@@ -42,7 +50,7 @@ export default class Header extends Component {
 								<Notifications {...this.props}/>
 								<Avatar/>								
 							</div>
-						</div>
+						</span>
 					</div>
 				</nav>
 			</div>

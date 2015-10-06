@@ -1,6 +1,6 @@
 
 .header {
-    display: block;
+    // display: block;
     position: fixed;
     width: 100%;
     font-size: 14px;
@@ -19,6 +19,7 @@
     .header-block {
 		position: relative;
 		z-index: 500;
+        // display: inline-block;
 		// width: 100%;
 		.button-inline {
 			font-size: 14px;
@@ -40,6 +41,22 @@
     	border: 0px none;  
     	cursor: pointer;  	
     }
+    .set_name_wrapper {
+        display: inline-block;
+        position: relative;
+        padding-top: 19px;
+        padding-left: 14px;
+        padding-right: 0px;
+        z-index: 700;
+        border: 0px none;  
+        cursor: pointer;
+       .set_name {
+           font-family: "Calibri";
+           font-size: 21px;
+           opacity: 1;
+           color: #555549;
+       } 
+    }    
     .site-icon {
     	width: 85px;
     }

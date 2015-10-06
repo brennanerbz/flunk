@@ -53,7 +53,7 @@ export default class SetList extends Component {
 				</h2>
 				<ul className="sidenav_list">
 					{
-						sets.map(set => <SideNavSetListItem set={set} />)
+						sets.map(set => <SideNavSetListItem set={set} key={set.id} />)
 					}					
 					<Link to="/createset" className="sidenav_create list_more">Create a study set...</Link>
 				</ul>

@@ -30,14 +30,11 @@ export default class Learn extends Component {
 	render() {
 		const { set } = this.props;
 		return(
-			<div className="main_content">
+			<div className="no_sidenav_container">
 				{ set ?
 
 				( 
-				<div>
-					<div className="page_header_wrapper">
-						<h1 className="page_header">{set.name}</h1>
-					</div> 
+				<div className="">					
 					<LearnCard />
 					<LearnInput />
 					<LearnHelp />

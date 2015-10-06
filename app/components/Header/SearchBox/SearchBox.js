@@ -20,7 +20,7 @@ export default class SearchBox extends Component {
 				</button>
 				<input className="text-input search-input input-rounded"
 					   placeholder="Search"
-				/>							
+				/>										
 			</div>
 		);
 	}

@@ -1,9 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import moment from 'moment';
 
 // @connect (state => state.user.sets, state.router.location)
+
+import SideNavSetListItem from './SideNavSetListItem';
+
+@connect(state => ({
+	sets: state.sets.list.map(id => state.sets.items[id])
+}))
 export default class SetList extends Component {
 	static propTypes = {
+		sets: PropTypes.array
 	}
 
 	componentDidMount = () => {
@@ -18,10 +27,11 @@ export default class SetList extends Component {
 	}
 
 	render() {
-		const add_circle_icon = require('../../assets/add_circle_icon.png'),
-			  set_icon = require('../../assets/set_icon.png'),
-			  set_icon_active = require('../../assets/set_icon_white.png');
-			 
+		const { sets } = this.props,
+			  add_circle_icon = require('../../assets/add_circle_icon.png');
+		sets.sort((set1, set2) => {
+			return (moment(set1.last_studied).isBefore(set2.last_studied)) ? 1 : -1
+		})
 		return(
 			<div className="sidenav_sets_wrapper">
 				<Link to="/createset">
@@ -42,46 +52,9 @@ export default class SetList extends Component {
 					</span>
 				</h2>
 				<ul className="sidenav_list">
-					<li className="sidenav_setitem">
-						<a className="sidenav_setitem_name">
-							<span className="overflow_ellipsis">
-								<span className="prefix_icon">
-									<img src={set_icon} className="set_icon"/>
-								</span>
-								react for designers
-							</span>
-						</a>
-					</li>
-					<li className="sidenav_setitem">
-						<a className="sidenav_setitem_name">
-							<span className="overflow_ellipsis">
-								<span className="prefix_icon">
-									<img src={set_icon} className="set_icon"/>
-								</span>
-								behavioral genetics
-							</span>
-						</a>
-					</li>
-					<li className="sidenav_setitem">
-						<a className="sidenav_setitem_name">
-							<span className="overflow_ellipsis">
-								<span className="prefix_icon">
-									<img src={set_icon} className="set_icon"/>
-								</span>
-								flux basics
-							</span>
-						</a>
-					</li>
-					<li className="sidenav_setitem">
-						<a className="sidenav_setitem_name">
-							<span className="overflow_ellipsis">
-								<span className="prefix_icon">
-									<img src={set_icon} className="set_icon"/>
-								</span>
-								react fb
-							</span>
-						</a>
-					</li>
+					{
+						sets.map(set => <SideNavSetListItem set={set} />)
+					}					
 					<Link to="/createset" className="sidenav_create list_more">Create a study set...</Link>
 				</ul>
 			</div>

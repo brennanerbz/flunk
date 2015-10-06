@@ -1,6 +1,6 @@
 import {
 	LOAD_SETS,
-	LOAD_SET
+	FETCH_SET
 } from '../constants/learnset';
 
 export function loadSets() {
@@ -9,8 +9,9 @@ export function loadSets() {
 	}
 }
 
-export function fetchSet() {
-	return { 
-		type: LOAD_SET 
+export function fetchSet(id) {
+	return {
+		type: FETCH_SET,
+		id
 	}
 }

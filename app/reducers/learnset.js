@@ -1,6 +1,6 @@
 import {
 	LOAD_SETS,
-	LOAD_SET
+	FETCH_SET
 } from '../constants/learnset';
 
 const sets_state = {
@@ -31,21 +31,20 @@ const sets_state = {
 	]
 };
 
-export default function sets(state = { list: [], items: {} }, action) {
+export default function sets(state = { list: [], items: {}, set: {} }, action) {
 	switch(action.type) {
 		case LOAD_SETS:
 			const list = sets_state.set_list.map(set => set.id)
 			const items = {}
 			sets_state.set_list.forEach(set => { items[set.id] = set})
-			return { list, items }
-		case LOAD_SET:
+			return { list, items }	
+		case FETCH_SET:
+			const set = state.items[action.id];
 			return {
-				items: {
-					...state.items,
-					[action.set.id]: action.set
-				},
-				list: state.list
-			}
+				list: state.list,
+				items: state.items,
+				set
+			}		
 		default:
 			return state;
 	}

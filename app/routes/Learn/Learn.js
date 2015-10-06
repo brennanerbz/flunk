@@ -4,8 +4,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../../actions/learnset';
 
+import LearnCard from '../../components/LearnCard/LearnCard';
+import LearnInput from '../../components/LearnInput/LearnInput';
+import LearnHelp from '../../components/LearnHelp/LearnHelp';
+
 @connect(state => ({
-	sets: state.sets.items
+	set: state.sets.set
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -16,20 +20,33 @@ import * as actionCreators from '../../actions/learnset';
 export default class Learn extends Component {
 	static propTypes = {
 		params: PropTypes.object,
-		sets: PropTypes.array
+		sets: PropTypes.object
 	}
 
 	componentDidMount() {
-		this.props.loadSet()
+		this.props.fetchSet(this.props.params.id)
 	}
 
 	render() {
-		const set = this.props.sets[this.props.params.id]
+		const { set } = this.props;
 		return(
 			<div className="main_content">
-				{ set
-				? <h1>{set.name}</h1>
-				: null }						
+				{ set ?
+
+				( 
+				<div>
+					<div className="page_header_wrapper">
+						<h1 className="page_header">{set.name}</h1>
+					</div> 
+					<LearnCard />
+					<LearnInput />
+					<LearnHelp />
+				</div>
+
+				)
+
+				: null }	
+
 			</div>
 		);
 	}

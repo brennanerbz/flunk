@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import Main from './Main';
-import SetList from './SetList';
+import SideNavSetList from './SideNavSetList';
 require('./SideNav.scss');
 
 export default class SideNav extends Component {
@@ -23,7 +23,7 @@ export default class SideNav extends Component {
 		return(
 			<div className="sidenav">
 					<Main/>	
-					<SetList/>
+					<SideNavSetList/>
 					<div className="clear_both"></div>
 			</div>
 		);

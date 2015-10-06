@@ -14,7 +14,7 @@ export default class Root extends React.Component {
   render() {
     return (
       <Provider store={store}>      
-        <ReduxRouter routes={routes(store,true)}/>          
+        <ReduxRouter routes={routes(store, true)}/>          
       </Provider>
     );
   }

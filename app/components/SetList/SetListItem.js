@@ -23,6 +23,12 @@ export default class SetListItem extends Component {
 		setActiveRow(0)
 	}
 
+	callLoad(e) {
+		e.preventDefault()
+		const { set, load } = this.props;
+		load(set.id)
+	}
+
 	render() {
 		const set_icon = require('../../assets/set_icon.png'),
 			  share_icon = require('../../assets/share_icon.png'),
@@ -38,7 +44,11 @@ export default class SetListItem extends Component {
 		        	<img className="home_set_icon active" src={set_icon}/>
 		        </div>
 		        <div className="col-sm-6 col-md-6 col-lg-7 set_col set_name">
-		        	<span className="overflow_ellipsis"><Link className="link" to={`/learn/${set.id}`}>{set.name}</Link></span>
+		        	<span className="overflow_ellipsis">
+		        		<Link className="link" 
+		        			  to={`/learn/${set.id}`}
+		        			  onMouseEnter={::this.callLoad}>{set.name}</Link>
+		        	</span>
 		        </div>
 		        <div className="col-sm-5 col-md-5 col-lg-3 set_col set_author">
 		        	<span className="overflow_ellipsis">

@@ -11,7 +11,7 @@ import Learn from './Learn/Learn';
 
 import fillStore from '../utils/fillStore';
 
-let routes = (
+const routes = (
   <Route component={FlunkApp}>
     <Route path="/" component={Home} />
     <Route path="profile" component={Profile} />
@@ -34,7 +34,6 @@ export default (store, client) => {
   return walk(Route.createRouteFromReactElement(routes), route => {
     route.onEnter = (nextState, transition) => {
       // const loggedIn = !!store.getState().auth.token;
-
       // if (route.requireAuth && !loggedIn) {
       //   transition.to(...redirectBackAfter('/login', nextState));
       if (client) {

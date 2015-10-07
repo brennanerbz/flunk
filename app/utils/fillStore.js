@@ -3,7 +3,8 @@ export default function(redux, nextState, components) {
 		Component = Component && Component.WrappedComponent || Component;
 
 		if (!Component || !Component.fillStore) { return; }
-
+		console.log(Component.fillStore(redux, nextState))
+		
 		await Component.fillStore(redux, nextState);
 	}));
 }

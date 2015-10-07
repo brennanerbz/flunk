@@ -48,7 +48,7 @@ export default function sets(state = init_state, action) {
 			console.log(action.sequences)
 			return {
 				...state,
-				sequences: action.sequences
+				sequences: action.raw_seqs
 			}
 		case GET_SEQUENCES_FAILURE:
 		default:

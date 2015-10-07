@@ -27,22 +27,24 @@ export function fetchSet(id) {
 	}
 }
 
-export function getSequences(set_id) {
+// Need to get the sequences for a given user/set
+// Need to get the queues associated with that sequence
+// Need to get the trials for each queue
+
+export function getSequences(user_id, set_id, mode, diff) {
 	return async(dispatch) => {
 		try {
-			let sequences = (await axios.get(`${flunk_api_url}/sequences?user_id=1&set_id=${set_id}`)).data
-			sequences['sequences'].forEach(sequence => {
-				console.log(sequence['completion'])
-			})
-			if (sequences['sequences'].length === 0) { 
+			let seqs = (await axios.get(`${flunk_api_url}/sequences?user_id=1&set_id=${set_id}`)).data
+			let raw_seqs = seqs['sequences'].filter(seq => seq.completion == 'None')
+			if (raw_seqs.length == 0) {
 				await axios.post(`${flunk_api_url}/sequences/`, {
-					user_id: Number(1),
-					set_id: Number(set_id),
-					mode: 'learn',
-					difficulty: 'mc'
-				}).then(response => { console.log(response)}).catch(response => console.log(response))
+					user_id: user_id,
+					set_id: set_id,
+					mode: mode,
+					difficulty: diff
+				}).then(res => { raw_seqs = res }).catch(res => console.log(res))
 			}
-			dispatch({ type: GET_SEQUENCES_SUCCESS, sequences })
+			dispatch({ type: GET_SEQUENCES_SUCCESS, raw_seqs})
 		} catch (err) {
 			dispatch({
 				type: GET_SEQUENCES_FAILURE,
@@ -52,6 +54,19 @@ export function getSequences(set_id) {
 	}
 }
 
+
+// function getUserAccount() {
+//   return axios.get('/user/12345');
+// }
+
+// function getUserPermissions() {
+//   return axios.get('/user/12345/permissions');
+// }
+
+// axios.all([getUserAccount(), getUserPermissions()])
+//   .then(axios.spread(function (acct, perms) {
+//     // Both requests are now complete
+//   }));
 
 
 

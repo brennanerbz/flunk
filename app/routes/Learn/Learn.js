@@ -11,7 +11,8 @@ import LearnInput from '../../components/LearnInput/LearnInput';
 import LearnHelp from '../../components/LearnHelp/LearnHelp';
 
 @connect(state => ({
-	set: state.sets.set
+	set: state.sets.set,
+	sequences: state.sets.sequences
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -26,19 +27,18 @@ export default class Learn extends Component {
 	}
 
 	componentDidMount() {
-		this.props.fetchSet(this.props.params.id)		
-		this.props.getSequences(this.props.params.id)
+		this.props.fetchSet(this.props.params.id)				
 	}
 
 	render() {
-		const { set } = this.props;
+		const { set, sequences } = this.props;
 		return(
 			<div className="no_sidenav_container learn_container">
 				{ set ?
 
 				( 
 				<div className="">					
-					<LearnCard />
+					<LearnCard {...this.props} />
 					<LearnInput />
 					<LearnHelp />
 				</div>

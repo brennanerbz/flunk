@@ -8,7 +8,7 @@ import moment from 'moment';
 import SideNavSetListItem from './SideNavSetListItem';
 
 @connect(state => ({
-	sets: state.sets.list.map(id => state.sets.items[id])
+	sets: state.sets.set_list.map(id => state.sets.set_items[id])
 }))
 export default class SetList extends Component {
 	static propTypes = {

@@ -1,51 +1,79 @@
 import {
 	LOAD_SETS,
-	FETCH_SET
+	FETCH_SET,
+	GET_SEQUENCES_SUCCESS,
+	GET_SEQUENCES_FAILURE
 } from '../constants/learnset';
 
-const sets_state = {
-	set_list: [
-		{	id: 0,
+let init_state = {
+	set_list: [],
+	set_items: {},
+	set: {},
+	sets: [
+		{	id: 1,
 			name: 'An Introduction to Computer Science',
 			author: 'Brennan Erbeznik',
 			last_studied: "2015-10-02 13:27:05.7000"
 		},
 		{
-			id: 1,
+			id: 2,
 			name: 'Functional Programming',
 			author: 'Nathan Lomeli',
 			last_studied: "2015-09-25 17:34:05.7000"
-		},
-		{
-			id: 2,
-			name: 'React.js Essentials',
-			author: 'Benjamin Franklin',
-			last_studied: "2015-08-01 09:34:05.7000"
-		},
-		{
-			id: 3,
-			name: 'Redux & React basics',
-			author: 'Larry Page',
-			last_studied: "2015-10-01 11:34:05.7000"
-		}		
-	]
+		}	
+	],
+	sequences: []
 };
 
-export default function sets(state = { list: [], items: {}, set: {} }, action) {
+
+export default function sets(state = init_state, action) {
 	switch(action.type) {
 		case LOAD_SETS:
-			const list = sets_state.set_list.map(set => set.id)
-			const items = {}
-			sets_state.set_list.forEach(set => { items[set.id] = set})
-			return { list, items }	
-		case FETCH_SET:
-			const set = state.items[action.id];
+			const sets_obj = {};
+			state.sets.forEach(set => { sets_obj[set.id] = set })
 			return {
-				list: state.list,
-				items: state.items,
-				set
-			}		
+				...state,
+				set_list: state.sets.map(set => set.id),
+				set_items: sets_obj
+			}
+			
+		case FETCH_SET:
+			const set = state.set_items[action.id];
+			return {
+				...state,
+				set: set
+			}
+
+		case GET_SEQUENCES_SUCCESS:
+			console.log(action.sequences)
+			return {
+				...state,
+				sequences: action.sequences
+			}
+		case GET_SEQUENCES_FAILURE:
 		default:
 			return state;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

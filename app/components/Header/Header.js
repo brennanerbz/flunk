@@ -12,7 +12,7 @@ import Avatar from '../Avatar/Avatar';
 
 @connect(state => ({
 	loc: state.router.location,
-	sets: state.sets.items
+	sets: state.sets.set_items
 }))
 export default class Header extends Component {
 	static propTypes = {
@@ -26,8 +26,11 @@ export default class Header extends Component {
 			set = sets[id];
 		return(
 			<div>				
-				<nav className={classnames({'header-bordered': String(loc.pathname) !== '/createset'},
-										    'header header-top')}>
+				<nav className={
+					classnames({'header-bordered': 
+							    loc.pathname.indexOf('/learn') !== -1 || loc.pathname == '/createset' ? false
+							    : true },
+								'header header-top')}>
 					<div className="container">
 						<span className="header-block header-left float-left">
 							<Link className="site-logo" to="/">						
@@ -36,18 +39,23 @@ export default class Header extends Component {
 							<SearchBox {...this.props}/>							
 						</span>
 						{ set && loc.pathname.indexOf('/learn') !== -1 ? 
-						<span className="set_name_wrapper">
+						<span className="set_name_wrapper overflow_ellipsis">
 							<h1 className="set_name">{set.name}</h1>
 						</span> 
 						: null } 
 						<span className="header-block header-right">
 							<div className="button-group">
-								{ String(loc.pathname) !== '/createset' &&
-									<Link className="button button-primary create-set-button" to="/createset">
-										Create a study set					
-									</Link>
+								{  
+									loc.pathname.indexOf('/learn') !== -1 || loc.pathname == '/createset'
+									? null 									
+									: 
+									<span>
+										<Link className="button button-primary create-set-button" to="/createset">
+											Create a study set					
+										</Link>	
+										<Notifications {...this.props}/>	
+									</span>						
 								}
-								<Notifications {...this.props}/>
 								<Avatar/>								
 							</div>
 						</span>

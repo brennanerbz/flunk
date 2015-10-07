@@ -1,0 +1,60 @@
+.form-control {
+	border-left: none!important;
+	border-radius: 0 6px 6px 0;
+	border: 1px solid #E0E0E0;
+	height: 42px;
+	&:focus {
+		border: 1px solid #D8D8D8;
+	}
+}
+
+.btn {
+	background-color: #fff;
+	color: #555549;
+	border: 1px solid #E0E0E0;
+	height: 42px;
+}
+ 
+.help_btn {
+	&:focus {
+		outline: none;
+		border: px solid #D8D8D8;
+	}
+	&:hover {
+		background: #56B68B;
+		color: #fff;
+		border-color: #56B68B; 
+	}
+
+	&:active {
+		outline: none!important;
+	}
+}
+
+.input-group-btn {
+	&:focus {
+		outline: none;
+	}	
+	&:active {
+		outline: none;
+	}
+}
+
+.form-control::-webkit-input-placeholder {
+   color: #B2B2B2;
+}
+
+.form-control:-moz-placeholder { /* Firefox 18- */
+   color: #B2B2B2;  
+}
+
+.form-control::-moz-placeholder {  /* Firefox 19+ */
+   color: #B2B2B2;  
+}
+
+.form-control:-ms-input-placeholder {  
+   color: #B2B2B2;  
+}
+
+
+

@@ -35,7 +35,7 @@ ul {
 	padding-left: 50px;
 	padding-right: 50px;
 	clear: both!important;
-	margin: 6rem auto!important;
+	margin: 5rem auto!important;
 }
 
 :global .float-left {
@@ -371,6 +371,79 @@ button:focus, input[type="button"]:focus {
     -ms-user-select: none;
     user-select: none;
 }
+
+
+
+// /*Placeholder color*/
+
+::-webkit-input-placeholder {
+  color: #B2B2B2;
+  opacity: 0.5;
+  -webkit-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:-moz-placeholder {
+  color: #B2B2B2;
+  opacity: 0.5;
+  -moz-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+::-moz-placeholder {
+  color: #B2B2B2;
+  opacity: 0.5;
+  -moz-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+:-ms-input-placeholder {  
+  color: #B2B2B2;
+  opacity: 0.5;
+  -ms-transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.35s ease-in-out;
+}
+
+
+
+// /*Placeholder hover darken*/
+
+::-webkit-input-placeholder {
+    color: #B2B2B2;
+}
+textarea:hover::-webkit-input-placeholder {
+    opacity: 0.8;
+    -webkit-transition: opacity 0.05 ease-in-out;
+ 	transition: opacity 0.05 ease-in-out;
+}
+
+
+:moz-placeholder {
+	color: #B2B2B2;
+}
+::moz-placeholder {
+	color: #B2B2B2;
+}
+:hover:-moz-placeholder {
+  opacity: 0.8;
+  -moz-transition: opacity 0.1 ease-in-out;
+  transition: opacity 0.1 ease-in-out;
+}
+:hover::-moz-placeholder {
+  opacity: 0.8;
+  -moz-transition: opacity 0.1 ease-in-out;
+  transition: opacity 0.1 ease-in-out;
+}
+
+
+
+:ms-input-placeholder {
+	color: #B2B2B2;
+}
+textarea:hover:ms-input-placeholder {
+	opacity: 0.8;
+    -ms-transition: opacity 0.1 ease-in-out;
+ 	transition: opacity 0.1 ease-in-out;
+}
+
+
 
 
 

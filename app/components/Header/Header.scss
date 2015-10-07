@@ -29,6 +29,8 @@
     	transition-property: transform;
     	transition-timing-function: cubic-bezier(0, 0, 0, 0.995);
     	transition-duration: 150ms;
+        position: absolute;
+        right: 1.25rem;
     }
 
     .site-logo {
@@ -43,19 +45,32 @@
     }
     .set_name_wrapper {
         display: inline-block;
-        position: relative;
+        position: absolute;
         padding-top: 19px;
         padding-left: 14px;
         padding-right: 0px;
         z-index: 700;
         border: 0px none;  
         cursor: pointer;
+        opacity: 0.85;
+        &:hover {
+            opacity: 1;
+        }
        .set_name {
            font-family: "Calibri";
            font-size: 21px;
-           opacity: 1;
            color: #555549;
        } 
+       .diff_control {
+            width: 30px;
+            height: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,.1);
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+            position: relative;
+            color: #67686e;
+            background: #fff;
+       }
     }    
     .site-icon {
     	width: 85px;

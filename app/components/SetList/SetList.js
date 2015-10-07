@@ -28,7 +28,7 @@ class DayDivider extends Component {
 
 
 @connect(state => ({
-	sets: state.sets.list.map(id => state.sets.items[id])
+	sets: state.sets.set_list.map(id => state.sets.set_items[id])
 	}),
 	dispatch => ({
 		...bindActionCreators({

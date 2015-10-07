@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+require('./LearnInput.scss')
 
 export default class LearnInput extends Component {
 	static propTypes = {
@@ -6,7 +7,11 @@ export default class LearnInput extends Component {
 
 	render() {
 		return(
-			<div>
+			<div className="input-group">
+			    <span className="input-group-btn">
+			    	<button className="btn help_btn" type="button">?</button>
+			    </span>
+			    <input autoFocus={true} type="text" className="form-control"/>
 			</div>
 		);
 	}

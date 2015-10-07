@@ -1,0 +1,16 @@
+.augmentations {
+	margin-top: 1rem;
+}
+
+.list-group-item {
+	padding: 1rem 1.25rem;
+}
+
+.list-group-item:first-child {
+	border: none;
+}
+
+.list-group-item:not(:first-child) {
+	border: none!important;
+	border-top: .0625rem solid #ddd!important;
+}

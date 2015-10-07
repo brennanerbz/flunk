@@ -12,7 +12,7 @@ import LearnHelp from '../../components/LearnHelp/LearnHelp';
 
 @connect(state => ({
 	set: state.sets.set,
-	sequences: state.sets.sequences
+	sequence: state.sets.sequence
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -31,7 +31,7 @@ export default class Learn extends Component {
 	}
 
 	render() {
-		const { set, sequences } = this.props;
+		const { set, sequence } = this.props;
 		return(
 			<div className="no_sidenav_container learn_container">
 				{ set ?

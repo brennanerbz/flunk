@@ -22,7 +22,7 @@ let init_state = {
 			last_studied: "2015-09-25 17:34:05.7000"
 		}	
 	],
-	sequences: []
+	sequence: {}
 };
 
 
@@ -45,10 +45,9 @@ export default function sets(state = init_state, action) {
 			}
 
 		case GET_SEQUENCES_SUCCESS:
-			console.log(action.sequences)
 			return {
 				...state,
-				sequences: action.raw_seqs
+				sequence: action.curr_seq
 			}
 		case GET_SEQUENCES_FAILURE:
 		default:

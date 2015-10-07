@@ -12,6 +12,7 @@ import {
 } from '../constants/learnset';
 
 import axios from 'axios';
+import moment from 'moment';
 const flunk_api_url = 'http://127.0.0.1:5000/webapi/v1.0';
 
 export function loadSets() {
@@ -36,7 +37,7 @@ export function getSequences(user_id, set_id, mode, diff) {
 		try {
 			let seqs = (await axios.get(`${flunk_api_url}/sequences?user_id=1&set_id=${set_id}`)).data
 			let raw_seqs = seqs['sequences'].filter(seq => seq.completion == 'None')
-			if (raw_seqs.length == 0) {
+			if (raw_seqs.length === 0) {
 				await axios.post(`${flunk_api_url}/sequences/`, {
 					user_id: user_id,
 					set_id: set_id,
@@ -44,7 +45,13 @@ export function getSequences(user_id, set_id, mode, diff) {
 					difficulty: diff
 				}).then(res => { raw_seqs = res }).catch(res => console.log(res))
 			}
-			dispatch({ type: GET_SEQUENCES_SUCCESS, raw_seqs})
+
+			raw_seqs.sort((seq1, seq2) => {
+				return (moment(seq1.creation).isBefore(seq2.creation)) ? 1 : -1
+			})
+			let curr_seq = raw_seqs[0]
+			dispatch({ type: GET_SEQUENCES_SUCCESS, curr_seq})
+
 		} catch (err) {
 			dispatch({
 				type: GET_SEQUENCES_FAILURE,

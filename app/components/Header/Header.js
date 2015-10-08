@@ -13,7 +13,8 @@ import Avatar from '../Avatar/Avatar';
 @connect(state => ({
 	loc: state.router.location,
 	sets: state.sets.set_items,
-	isFetching: state.sets.isFetching
+	isFetching: state.sets.isFetching,
+	is_fetching_seq: state.learn.is_fetching_seq
 }))
 export default class Header extends Component {
 	static propTypes = {
@@ -29,7 +30,7 @@ export default class Header extends Component {
 
 	render() {
 		const logo = require('./assets/FlunkLogo.png'),
-			  { loc, sets, isFetching } = this.props;
+			  { loc, sets, isFetching, is_fetching_seq} = this.props;
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
 		return(
@@ -40,7 +41,7 @@ export default class Header extends Component {
 							    : true },
 								'header header-top')}>
 					{ 
-						isFetching 
+						isFetching || is_fetching_seq
 						? ::this.renderFetchProgress()
 						: null
 					}

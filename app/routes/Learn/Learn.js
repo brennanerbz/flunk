@@ -12,7 +12,8 @@ import LearnHelp from '../../components/LearnHelp/LearnHelp';
 
 @connect(state => ({
 	curr_seq: state.learn.curr_seq,
-	is_fetching_seq: state.learn.is_fetching_seq
+	is_fetching_seq: state.learn.is_fetching_seq,
+	sets: state.sets.set_items
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -26,13 +27,16 @@ export default class Learn extends Component {
 	}
 
 	componentWillMount() {
-		const { fetchSeqs, params, curr_seq } = this.props;
-		fetchSeqs(1, 1, 'learn', 'mc')
+		const { fetchSeqs, params, curr_seq, sets } = this.props;
+		const set = sets[params.id]
+		if (Object.getOwnPropertyNames(curr_seq).length === 0 || curr_seq == null) {  
+			fetchSeqs(set['creator_id'], set['id'], 'learn', 'mc')
+		}
 	}
 
 	componentWillUnmount() {
 		const { clearSeq } = this.props;
-		// clearSeq()
+		clearSeq()
 	}
 
 	render() {

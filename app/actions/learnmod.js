@@ -29,7 +29,7 @@ export function fetchSeqs(user_id, set_id, mode, diff) {
 					difficulty: diff
 				}).then(res => undone_seqs = res).catch(res => console.log(res))
 			}
-			dispatch(receiveSeqs(undone_seqs))
+			dispatch(receiveSeqs(undone_seqs, dispatch))
 		} catch (err) {
 			dispatch({
 				type: RECEIVE_SEQS_FAILURE,
@@ -38,11 +38,12 @@ export function fetchSeqs(user_id, set_id, mode, diff) {
 		}
 	}
 }
-function receiveSeqs(data) {
+function receiveSeqs(data, dispatch) {
 	let sorted_seqs = data.sort((seq1, seq2) => {
 		return moment((seq1.creation).isBefore(seq2.creation)) ? 1 : -1
 	})
 	let curr_seq = sorted_seqs[0];
+	if (!curr_seq['queue_list']) { dispatch(fetchQs(curr_seq['id'])) }
 	return {
 		type: RECEIVE_SEQS_SUCCESS,
 		curr_seq: curr_seq
@@ -51,6 +52,47 @@ function receiveSeqs(data) {
 export function clearSeq() {
 	return {
 		type: CLEAR_SEQ
+	}
+}
+
+
+// * Learn Mod: Queues * //
+export const REQUEST_QS = 'REQUEST_QS';
+export const RECEIVE_QS_SUCCESS = 'RECEIVE_QS_SUCCESS';
+export const RECEIVE_QS_FAILURE = 'RECEIVE_QS_FAILURE';
+export const CLEAR_Q = 'CLEAR_Q';
+
+function requestQs() {
+	return {
+		type: REQUEST_QS
+	}
+}
+export function fetchQs(id) {
+	return async(dispatch, getState) => {
+		dispatch(requestQs())
+		try {
+			let qs = ( await axios.get(`${api_url}/sequences/${id}/queues`)).data			
+			dispatch(receiveQs(qs)(getState))		
+		} catch(err) {
+			dispatch({
+				type: RECEIVE_QS_FAILURE,
+				error: Error('Check the \'fetchQs\' method Unknown error.')
+			})
+		}
+	}
+}
+function receiveQs(data) {
+	return (getState) => {
+		console.log("----ID " + getState().learn.seqs.curr_seq['id'])
+		return {
+			type: RECEIVE_QS_SUCCESS,
+			qs: data['queues']
+		}
+	}
+}
+export function clearQ() {
+	return {
+		type: CLEAR_Q
 	}
 }
 

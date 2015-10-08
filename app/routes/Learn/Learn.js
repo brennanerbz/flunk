@@ -26,8 +26,11 @@ export default class Learn extends Component {
 		sets: PropTypes.object
 	}
 
-	componentDidMount() {
-		this.props.fetchSet(this.props.params.id)				
+	componentWillMount() {
+		const { sequence } = this.props;
+		this.props.fetchSet(this.props.params.id)
+		this.props.getQueues(sequence.id)
+		// call the queues/trials to hydrate the children components				
 	}
 
 	render() {

@@ -47,13 +47,13 @@ export default class SetListItem extends Component {
 		        	<span className="overflow_ellipsis">
 		        		<Link className="link" 
 		        			  to={`/learn/${set.id}`}
-		        			  onMouseEnter={::this.callLoad}>{set.name}</Link>
+		        			  onMouseEnter={::this.callLoad}>{set.title}</Link>
 		        	</span>
 		        </div>
 		        <div className="col-sm-5 col-md-5 col-lg-3 set_col set_author">
 		        	<span className="overflow_ellipsis">
 		        		
-		        		by <span className="link_name">{set.author}</span>
+		        		by <span className="link_name">{set.creator_id}</span>
 		        	</span>
 		        </div>		        
 		        <div className={classnames('actions', {'active': set.id === this.props.activeRow})}>

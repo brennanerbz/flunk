@@ -28,7 +28,8 @@ class DayDivider extends Component {
 
 
 @connect(state => ({
-	sets: state.sets.set_list.map(id => state.sets.set_items[id])
+	sets: state.sets.set_list.map(id => state.sets.set_items[id]),
+	isFetching: state.sets.isFetching
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -45,8 +46,8 @@ export default class SetList extends Component {
 		activeRow: 0
 	}
 
-	componentDidMount() {
-		this.props.loadSets()
+	componentWillMount() {
+		this.props.fetchSets()
 	}
 
 	setActiveRow = (id) => {
@@ -56,7 +57,7 @@ export default class SetList extends Component {
 	}	
 
 	handleLoad(id) {
-		this.props.getSequences(1, id, 'learn', 'mc')
+		this.props.getSequence(1, id, 'learn', 'mc')
 	}
 
 	renderSets = (sets) => {		
@@ -87,7 +88,7 @@ export default class SetList extends Component {
 					                  key={'day' + i}/>)
 			}
 			rows.push(<SetListItem set={set}
-				                   load={::this.handleLoad}								   
+				                   load={::this.handleLoad}							   
 								   setActiveRow={this.setActiveRow}
 								   activeRow={this.state.activeRow}
 								   key={set.id}/>)
@@ -98,18 +99,27 @@ export default class SetList extends Component {
 
 
 	render() {	
-		let sets = this.props.sets;
+		const { sets, isFetching } = this.props;
 		sets.sort((set1, set2) => {
 			return (moment(set1.last_studied).isBefore(set2.last_studied)) ? 1 : -1
 		})		
 		return(
 			<div>				
 				<div className="sets_container">
-					{this.renderSets(sets)}
+					{
+						isFetching 
+
+						? null
+
+						: this.renderSets(sets)
+					}
 				</div>
 			</div>
 		);
 	}
 }
+
+
+
 
 

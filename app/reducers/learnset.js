@@ -1,55 +1,33 @@
-import {
-	LOAD_SETS,
-	FETCH_SET,
-	GET_SEQUENCES_SUCCESS,
-	GET_SEQUENCES_FAILURE
-} from '../constants/learnset';
+import assign from 'lodash/object/assign';
+
+import setactions from '../actions/learnset';
 
 let init_state = {
+	isFetching: false,
 	set_list: [],
 	set_items: {},
-	set: {},
-	sets: [
-		{	id: 1,
-			name: 'An Introduction to Computer Science',
-			author: 'Brennan Erbeznik',
-			last_studied: "2015-10-02 13:27:05.7000"
-		},
-		{
-			id: 2,
-			name: 'Functional Programming',
-			author: 'Nathan Lomeli',
-			last_studied: "2015-09-25 17:34:05.7000"
-		}	
-	],
-	sequence: {}
+	sets: []
 };
 
 
 export default function sets(state = init_state, action) {
 	switch(action.type) {
-		case LOAD_SETS:
+		case (setactions.REQUEST_SETS):
+			return {
+				...state,
+				isFetching: true
+			}
+		case (setactions.RECEIVE_SETS_SUCCESS):
 			const sets_obj = {};
-			state.sets.forEach(set => { sets_obj[set.id] = set })
+			action.sets.forEach(set => { sets_obj[set.id] = set })
 			return {
 				...state,
-				set_list: state.sets.map(set => set.id),
-				set_items: sets_obj
+				isFetching: false,
+				set_list: action.sets.map(set => set.id),
+				set_items: sets_obj,
+				sets: action.sets
 			}
-			
-		case FETCH_SET:
-			const set = state.set_items[action.id];
-			return {
-				...state,
-				set: set
-			}
-
-		case GET_SEQUENCES_SUCCESS:
-			return {
-				...state,
-				sequence: action.curr_seq
-			}
-		case GET_SEQUENCES_FAILURE:
+		case (setactions.RECEIVE_SETS_FAILURE):
 		default:
 			return state;
 	}

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actionCreators from '../../actions/learnset';
+import * as actionCreators from '../../actions/learnmod';
 
 require('./Learn.scss');
 
@@ -11,8 +11,8 @@ import LearnInput from '../../components/LearnInput/LearnInput';
 import LearnHelp from '../../components/LearnHelp/LearnHelp';
 
 @connect(state => ({
-	set: state.sets.set,
-	sequence: state.sets.sequence
+	curr_seq: state.learn.curr_seq,
+	is_fetching_seq: state.learn.is_fetching_seq
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -22,34 +22,32 @@ import LearnHelp from '../../components/LearnHelp/LearnHelp';
 )
 export default class Learn extends Component {
 	static propTypes = {
-		params: PropTypes.object,
-		sets: PropTypes.object
+		params: PropTypes.object
 	}
 
 	componentWillMount() {
-		const { sequence } = this.props;
-		this.props.fetchSet(this.props.params.id)
-		this.props.getQueues(sequence.id)
-		// call the queues/trials to hydrate the children components				
+		const { fetchSeqs, params, curr_seq } = this.props;
+		fetchSeqs(1, 1, 'learn', 'mc')
+	}
+
+	componentWillUnmount() {
+		const { clearSeq } = this.props;
+		// clearSeq()
 	}
 
 	render() {
-		const { set, sequence } = this.props;
+		const { curr_seq, is_fetching_seq } = this.props;
 		return(
 			<div className="no_sidenav_container learn_container">
-				{ set ?
-
-				( 
-				<div className="">					
-					<LearnCard {...this.props} />
-					<LearnInput />
-					<LearnHelp />
-				</div>
-
-				)
-
-				: null }	
-
+				{ 
+					is_fetching_seq && !curr_seq
+					?  <p>Loading...</p>
+					: <div className="">					
+						<LearnCard {...this.props} />
+						<LearnInput />
+						<LearnHelp />
+					  </div>
+				}
 			</div>
 		);
 	}

@@ -1,6 +1,10 @@
 import assign from 'lodash/object/assign';
 
-import setactions from '../actions/learnset';
+import {
+	REQUEST_SETS,
+	RECEIVE_SETS_SUCCESS,
+	RECEIVE_SETS_FAILURE
+} from '../actions/usersets';
 
 let init_state = {
 	isFetching: false,
@@ -9,15 +13,14 @@ let init_state = {
 	sets: []
 };
 
-
 export default function sets(state = init_state, action) {
 	switch(action.type) {
-		case (setactions.REQUEST_SETS):
+		case (REQUEST_SETS):
 			return {
 				...state,
 				isFetching: true
 			}
-		case (setactions.RECEIVE_SETS_SUCCESS):
+		case (RECEIVE_SETS_SUCCESS):
 			const sets_obj = {};
 			action.sets.forEach(set => { sets_obj[set.id] = set })
 			return {
@@ -27,7 +30,7 @@ export default function sets(state = init_state, action) {
 				set_items: sets_obj,
 				sets: action.sets
 			}
-		case (setactions.RECEIVE_SETS_FAILURE):
+		case (RECEIVE_SETS_FAILURE):
 		default:
 			return state;
 	}

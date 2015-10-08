@@ -2,47 +2,72 @@ import axios from 'axios';
 import moment from 'moment';
 import keyMirror from 'key-mirror';
 
-const flunk_api_url = 'http://127.0.0.1:5000/webapi/v1.0';
+const api_url = 'http://127.0.0.1:5000/webapi/v1.0';
 
-// * Sets * // 
-var setactions = keyMirror({
-	REQUEST_SETS: null,
-	RECEIVE_SETS_SUCCESS: null,
-	RECEIVE_SETS_FAILURE: null
-});
-export default setactions;
+// * Learn Mod: Sequences * //
+export const REQUEST_SEQS = 'REQUEST_SEQS';
+export const RECEIVE_SEQS_SUCCESS = 'RECEIVE_SEQS_SUCCESS';
+export const RECEIVE_SEQS_FAILURE = 'RECEIVE_SEQS_FAILURE';
+export const CLEAR_SEQ = 'CLEAR_SEQ';
 
-function requestSets() {
+function requestSeqs() {
 	return {
-		type: setactions.REQUEST_SETS
+		type: REQUEST_SEQS
 	}
 }
-
-export function fetchSets() {
+export function fetchSeqs(user_id, set_id, mode, diff) {
 	return async(dispatch) => {
-		dispatch(requestSets());
+		dispatch(requestSeqs())
 		try {
-			let data = ( await axios.get(`${flunk_api_url}/sets`) ).data
-			dispatch(receiveSets(data['sets']))
+			let seqs = ( await axios.get(`${api_url}/sequences?user_id=${user_id}&set_id=${set_id}`)).data
+			let undone_seqs = seqs['sequences'].filter(seq => seq.completion == 'None')
+			if (undone_seqs.length === 0) {
+				await axios.post(`${api_url}/sequences`, {
+					user_id: user_id,
+					set_id: set_id,
+					mode: mode,
+					difficulty: diff
+				}).then(res => undone_seqs = res).catch(res => console.log(res))
+			}
+			dispatch(receiveSeqs(undone_seqs))
 		} catch (err) {
 			dispatch({
-				type: setactions.RECEIVE_SETS_FAILURE,
-				error: Error('Can\'t fetch sets')
+				type: RECEIVE_SEQS_FAILURE,
+				error: Error('Can\'t fetch seqs...')
 			})
 		}
 	}
 }
-
-function receiveSets(data) {
-	console.log(data)
+function receiveSeqs(data) {
+	let sorted_seqs = data.sort((seq1, seq2) => {
+		return moment((seq1.creation).isBefore(seq2.creation)) ? 1 : -1
+	})
+	let curr_seq = sorted_seqs[0];
 	return {
-		type: setactions.RECEIVE_SETS_SUCCESS,
-		sets: data
+		type: RECEIVE_SEQS_SUCCESS,
+		curr_seq: curr_seq
+	}
+}
+export function clearSeq() {
+	return {
+		type: CLEAR_SEQ
 	}
 }
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // export function loadSets() {
 // 	return {
 // 		type: LOAD_SETS

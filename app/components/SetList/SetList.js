@@ -7,24 +7,9 @@ import { bindActionCreators } from 'redux';
 
 const styles = require('./SetList.scss');
 
-import * as actionCreators from '../../actions/learnset';
+import * as actionCreators from '../../actions/usersets';
 
 import SetListItem from './SetListItem';
-
-class DayDivider extends Component { 
-	render() {
-		const set = this.props.set;		
-		return (
-			<div className="day_divider">
-				<hr className="separator"/>
-				<i className="copy_only"/>
-					<div className="day_divider_label">
-						{set.time_ago}
-					</div> 
-			</div>
-		);
-	}
-}
 
 
 @connect(state => ({
@@ -56,10 +41,6 @@ export default class SetList extends Component {
 		});
 	}	
 
-	handleLoad(id) {
-		this.props.getSequence(1, id, 'learn', 'mc')
-	}
-
 	renderSets = (sets) => {		
 		var sorted_sets = sets.map((set) => {
 		    const date = moment(set['last_studied']);
@@ -87,8 +68,7 @@ export default class SetList extends Component {
 				rows.push(<DayDivider set={set} 
 					                  key={'day' + i}/>)
 			}
-			rows.push(<SetListItem set={set}
-				                   load={::this.handleLoad}							   
+			rows.push(<SetListItem set={set}							   
 								   setActiveRow={this.setActiveRow}
 								   activeRow={this.state.activeRow}
 								   key={set.id}/>)
@@ -114,6 +94,21 @@ export default class SetList extends Component {
 						: this.renderSets(sets)
 					}
 				</div>
+			</div>
+		);
+	}
+}
+
+class DayDivider extends Component { 
+	render() {
+		const set = this.props.set;		
+		return (
+			<div className="day_divider">
+				<hr className="separator"/>
+				<i className="copy_only"/>
+					<div className="day_divider_label">
+						{set.time_ago}
+					</div> 
 			</div>
 		);
 	}

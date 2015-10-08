@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux';
+
+// * Learn Mod: Sequences * //
 import {
 	REQUEST_SEQS,
 	RECEIVE_SEQS_SUCCESS,
@@ -6,14 +8,12 @@ import {
 	CLEAR_SEQ
 } from '../actions/learnmod';
 
-let init_learn_state = { 
+let init_seqs = { 
 	is_fetching_seq: false,
-	is_fetching_qs: false,
-	curr_seq: {},
-	qs: []
+	curr_seq: {}
 }
 
-function seqs(state = init_learn_state, action) {
+function seqs(state = init_seqs, action) {
 	switch(action.type) {
 		case REQUEST_SEQS:
 			return {
@@ -37,6 +37,8 @@ function seqs(state = init_learn_state, action) {
 	}
 }
 
+
+// * Learn Mod: Queues * //
 import {
 	REQUEST_QS,
 	RECEIVE_QS_SUCCESS,
@@ -44,13 +46,24 @@ import {
 	CLEAR_Q
 } from '../actions/learnmod';
 
-function qs(state = init_learn_state, action) {
+let init_qs = {
+	is_fetching_qs: false,
+	qs: []
+}
+function qs(state = init_qs, action) {
 	switch(action.type) {
 		case REQUEST_QS:
-			return state;
-		case RECEIVE_QS_SUCCESS:	
-			console.log("ERROR PRONE")
-			return state;
+			return {
+				...state,
+				is_fetching_qs: true
+			}
+		case RECEIVE_QS_SUCCESS:
+			console.log("%c" + action.qs, 'color: green; font-weight: bold')	
+			return {
+				...state,
+				is_fetching_qs: false,
+				qs: action.qs
+			}
 		default:
 			return state;
 	}

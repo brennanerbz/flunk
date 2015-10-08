@@ -10,14 +10,15 @@ export default class LearnCard extends Component {
 	// subscribe to the queues/trials state
 
 	render() {
-		const { curr_seq } = this.props;
+		const { curr_seq, qs } = this.props;
 		return(
 			<div className="card">
 				<div className="card-header">
 				    &nbsp;
 				</div>
 				<div className="card-block">
-					<p className="card-text">{curr_seq.mode}</p>					
+					<p className="card-text">{"Seq mode:" + curr_seq.mode}</p>
+					<p className="card-text">{"Queues:" + qs}</p>
 				</div>
 			</div>
 		);

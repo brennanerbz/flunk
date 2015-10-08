@@ -83,7 +83,7 @@ export function fetchQs(id) {
 }
 function receiveQs(data) {
 	return (getState) => {
-		console.log("----ID " + getState().learn.seqs.curr_seq['id'])
+		console.log("%cID:" + getState().learn.seqs.curr_seq['id'], 'color: green; font-weight: bold;')
 		return {
 			type: RECEIVE_QS_SUCCESS,
 			qs: data['queues']

@@ -14,6 +14,8 @@ import LearnHelp from '../../components/LearnHelp/LearnHelp';
 @connect(state => ({
 	curr_seq: state.learn.seqs.curr_seq,
 	is_fetching_seq: state.learn.seqs.is_fetching_seq,
+	qs: state.learn.qs.qs,
+	is_fetching_qs: state.learn.qs.is_fetching_qs,
 	sets: state.sets.set_items
 	}),
 	dispatch => ({
@@ -44,11 +46,11 @@ export default class Learn extends Component {
 	}
 
 	render() {
-		const { curr_seq, is_fetching_seq } = this.props;
+		const { curr_seq, is_fetching_seq, is_fetching_qs, qs } = this.props;
 		return(
 			<div className="no_sidenav_container learn_container">
 				{ 
-					is_fetching_seq && !curr_seq
+					(is_fetching_seq && !curr_seq ) || (is_fetching_qs && !qs)
 					?  <p>Loading...</p>
 					: <div className="">					
 						<LearnCard {...this.props} />

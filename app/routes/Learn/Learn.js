@@ -28,10 +28,19 @@ export default class Learn extends Component {
 		params: PropTypes.object
 	}
 
+	// static fillStore(redux, props) {
+	// 	return redux.dispatch(loadLearnMode(props.params.id))
+	// }
+
 	componentWillMount() {
 		const { loadLearnMode, params, sets} = this.props;
 		const set = sets[params.id];
 		loadLearnMode(set)
+	}
+
+	componentWillUnmount() {
+		const { clearTrial } = this.props;
+		clearTrial()
 	}
 
 	render() {

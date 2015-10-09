@@ -115,8 +115,8 @@ function trials(state = init_trials, action) {
 		case CLEAR_TRIAL:
 			return {
 				...state,
-				trials: null,
-				latest_trial: null
+				trials: [],
+				latest_trial: {}
 			}
 		case RECEIVE_TRIALS_FAILURE:
 		default:

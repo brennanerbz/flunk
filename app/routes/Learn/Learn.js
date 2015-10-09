@@ -13,6 +13,7 @@ import LearnHelp from '../../components/LearnHelp/LearnHelp';
 
 @connect(state => ({
 	is_fetching_trials: state.learn.trials.is_fetching_trials,
+	latest_trial: state.learn.trials.latest_trial,
 	sets: state.sets.set_items
 	}),
 	dispatch => ({
@@ -33,35 +34,18 @@ export default class Learn extends Component {
 		fetchSeqs(set['creator_id'], set['id'], 'learn', 'mc')
 	}
 
-	renderLearn() {
-		return (
-			<div className="no_sidenav_container learn_container">
-				<div className="">					
-					<LearnCard {...this.props} loading={false} />
-					<LearnInput />
-					<LearnHelp />
-			  	</div>
-			</div>
-		);
-	}
-
-	renderLoad() {
-		return (
-			<div className="no_sidenav_container learn_container">
-				<div className="">					
-					<LearnCard loading={true}/>
-					<LearnInput />
-			  	</div>
-			</div>
-		);
-	}
-
 	render() {
-		const { is_fetching_trials } = this.props;
+		const { is_fetching_trials, latest_trial } = this.props;
 		return(
-			!is_fetching_trials
-			? ::this.renderLearn()
-			: ::this.renderLoad()
+			!is_fetching_trials && typeof latest_trial !== 'undefined'
+			? <div className="no_sidenav_container learn_container">
+				<div>
+					<LearnCard {...this.props} loading={false}/>
+					<LearnInput/>
+					<LearnHelp/>
+				</div>
+			  </div> 
+			: null
 		);
 	}
 }

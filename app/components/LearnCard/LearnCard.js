@@ -2,9 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 require('./LearnCard.scss');
 
-@connect(state => ({
-	latest_trial: state.learn.trials.latest_trial
-}))
 export default class LearnCard extends Component {
 	static propTypes = {
 		
@@ -28,24 +25,23 @@ export default class LearnCard extends Component {
 			cue: ''
 		});
 	}
-
-	renderCue() {
-		return(
-			<div className="card">
-				<div className="card-header">
-				&nbsp;
-				</div>
-				<div className="card-block">
-					<p className="card-text">{this.state.cue}</p>
-				</div>
-			</div>
-		);
-	}
  
 	render() {
+		const { loading } = this.props;
 		return(
 			<div>
-				{::this.renderCue()}
+				{
+					!loading
+					? 	<div className="card">
+							<div className="card-header">
+							&nbsp;
+							</div>
+							<div className="card-block">
+								<p className="card-text">{this.state.cue}</p>
+							</div>
+						</div>
+					: null
+				}
 			</div>
 		);
 	}

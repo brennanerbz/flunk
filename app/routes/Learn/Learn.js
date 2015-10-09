@@ -12,10 +12,7 @@ import LearnInput from '../../components/LearnInput/LearnInput';
 import LearnHelp from '../../components/LearnHelp/LearnHelp';
 
 @connect(state => ({
-	curr_seq: state.learn.seqs.curr_seq,
-	is_fetching_seq: state.learn.seqs.is_fetching_seq,
-	qs: state.learn.qs.qs,
-	is_fetching_qs: state.learn.qs.is_fetching_qs,
+	is_fetching_trials: state.learn.trials.is_fetching_trials,
 	sets: state.sets.set_items
 	}),
 	dispatch => ({
@@ -31,34 +28,44 @@ export default class Learn extends Component {
 	}
 
 	componentWillMount() {
-		const { fetchSeqs, fetchSets, params, curr_seq, sets} = this.props;
-		if (Object.getOwnPropertyNames(sets).length === 0 || sets == null ) { fetchSets() }
+		const { fetchSeqs, params, sets} = this.props;
 		const set = sets[params.id];
-		if (Object.getOwnPropertyNames(curr_seq).length === 0 || curr_seq == null) {
-			fetchSeqs(set['creator_id'], set['id'], 'learn', 'mc')
-		}
-		
+		fetchSeqs(set['creator_id'], set['id'], 'learn', 'mc')
 	}
 
-	componentWillUnmount() {
-		const { clearSeq } = this.props;
-		clearSeq()
-	}
-
-	render() {
-		const { curr_seq, is_fetching_seq, is_fetching_qs, qs } = this.props;
-		return(
+	renderLearn() {
+		return (
 			<div className="no_sidenav_container learn_container">
-				{ 
-					(is_fetching_seq && !curr_seq ) || (is_fetching_qs && !qs)
-					?  <p>Loading...</p>
-					: <div className="">					
-						<LearnCard {...this.props} />
-						<LearnInput />
-						<LearnHelp />
-					  </div>
-				}
+				<div className="">					
+					<LearnCard {...this.props} loading={false} />
+					<LearnInput />
+					<LearnHelp />
+			  	</div>
 			</div>
 		);
 	}
+
+	renderLoad() {
+		return (
+			<div className="no_sidenav_container learn_container">
+				<div className="">					
+					<LearnCard loading={true}/>
+					<LearnInput />
+			  	</div>
+			</div>
+		);
+	}
+
+	render() {
+		const { is_fetching_trials } = this.props;
+		return(
+			!is_fetching_trials
+			? ::this.renderLearn()
+			: ::this.renderLoad()
+		);
+	}
 }
+
+
+
+

@@ -43,9 +43,9 @@ export default class SetList extends Component {
 
 	renderSets = (sets) => {		
 		var sorted_sets = sets.map((set) => {
-		    const date = moment(set['last_studied']);
+		    const date = moment(set['doc']);
 		    const today = moment();
-		    const date_month = moment(set['last_studied']).format('MMMM');
+		    const date_month = moment(set['doc']).format('MMMM');
 		    const today_month = moment().format('MMMM');
 		    let diff = today.diff(date, 'days');
 
@@ -81,7 +81,7 @@ export default class SetList extends Component {
 	render() {	
 		const { sets, isFetching } = this.props;
 		sets.sort((set1, set2) => {
-			return (moment(set1.last_studied).isBefore(set2.last_studied)) ? 1 : -1
+			return (moment(set1.doc).isBefore(set2.doc)) ? 1 : -1
 		})		
 		return(
 			<div>				

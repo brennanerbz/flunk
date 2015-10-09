@@ -29,7 +29,7 @@ function seqs(state = init_seqs, action) {
 		case CLEAR_SEQ:
 			return {
 				...state,
-				curr_seq: {}
+				curr_seq: null
 			}
 		case RECEIVE_SEQS_FAILURE:
 		default:
@@ -37,12 +37,12 @@ function seqs(state = init_seqs, action) {
 	}
 }
 
-
 // * Learn Mod: Queues * //
 import {
 	REQUEST_QS,
 	RECEIVE_QS_SUCCESS,
 	RECEIVE_QS_FAILURE,
+	SET_CURR_Q,
 	CLEAR_Q
 } from '../actions/learnmod';
 
@@ -58,19 +58,81 @@ function qs(state = init_qs, action) {
 				is_fetching_qs: true
 			}
 		case RECEIVE_QS_SUCCESS:
-			console.log("%c" + action.qs, 'color: green; font-weight: bold')	
+			// console.log("%c" + action.qs, 'color: green; font-weight: bold')	
 			return {
 				...state,
 				is_fetching_qs: false,
-				qs: action.qs
+				qs: action.qs,
+				curr_seq: action.curr_seq,
+				curr_p: action.curr_seq['position']
 			}
+		case SET_CURR_Q:
+			const cq = state.qs.filter(q => q.order == state.curr_p)
+			console.log('%c' + cq, 'color: green, font-weight: bold')
+			return {
+				...state,
+				curr_q: cq[0]
+			}
+		case CLEAR_Q:
+			return {
+				...state,
+				qs: null
+			}
+		case RECEIVE_QS_FAILURE:
 		default:
 			return state;
 	}
 }
 
+// * Learn Mod: Trials * //
+
+import {
+	REQUEST_TRIALS,
+	RECEIVE_TRIALS_SUCCESS,
+	RECEIVE_TRIALS_FAILURE,
+	CLEAR_TRIAL
+} from '../actions/learnmod';
+
+let init_trials = {
+	is_fetching_trials: false
+}
+function trials(state = init_trials, action) {
+	switch(action.type) {
+		case REQUEST_TRIALS:
+			return {
+				...state,
+				is_fetching_trials: true
+			}
+		case RECEIVE_TRIALS_SUCCESS:
+			return {
+				...state,
+				is_fetching_trials: false,
+				trials: action.trials,
+				latest_trial: action.latest_trial
+			}
+		case CLEAR_TRIAL:
+			return {
+				...state,
+				trials: null,
+				latest_trial: null
+			}
+		case RECEIVE_TRIALS_FAILURE:
+		default:
+			return state;
+	}
+}
+
+
 const learn = combineReducers({
 	seqs,
-	qs
+	qs,
+	trials
 })
 export default learn;
+
+
+
+
+
+
+

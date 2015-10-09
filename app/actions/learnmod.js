@@ -22,14 +22,15 @@ export function fetchSeqs(user_id, set_id, mode, diff) {
 			let seqs = ( await axios.get(`${api_url}/sequences?user_id=${user_id}&set_id=${set_id}`)).data
 			let undone_seqs = seqs['sequences'].filter(seq => seq.completion == 'None')
 			if (undone_seqs.length === 0) {
-				await axios.post(`${api_url}/sequences`, {
+				await axios.post(`${api_url}/sequences/`, {
 					user_id: user_id,
 					set_id: set_id,
 					mode: mode,
 					difficulty: diff
 				}).then(res => undone_seqs = res).catch(res => console.log(res))
 			}
-			dispatch(receiveSeqs(undone_seqs, dispatch))
+			dispatch(receiveSeqs(undone_seqs))
+			dispatch(fetchQs())
 		} catch (err) {
 			dispatch({
 				type: RECEIVE_SEQS_FAILURE,
@@ -38,12 +39,11 @@ export function fetchSeqs(user_id, set_id, mode, diff) {
 		}
 	}
 }
-function receiveSeqs(data, dispatch) {
+function receiveSeqs(data) {
 	let sorted_seqs = data.sort((seq1, seq2) => {
 		return moment((seq1.creation).isBefore(seq2.creation)) ? 1 : -1
 	})
-	let curr_seq = sorted_seqs[0];
-	if (!curr_seq['queue_list']) { dispatch(fetchQs(curr_seq['id'])) }
+	let curr_seq = sorted_seqs[0];	
 	return {
 		type: RECEIVE_SEQS_SUCCESS,
 		curr_seq: curr_seq
@@ -60,6 +60,7 @@ export function clearSeq() {
 export const REQUEST_QS = 'REQUEST_QS';
 export const RECEIVE_QS_SUCCESS = 'RECEIVE_QS_SUCCESS';
 export const RECEIVE_QS_FAILURE = 'RECEIVE_QS_FAILURE';
+export const SET_CURR_Q = 'SET_CURR_Q';
 export const CLEAR_Q = 'CLEAR_Q';
 
 function requestQs() {
@@ -67,27 +68,43 @@ function requestQs() {
 		type: REQUEST_QS
 	}
 }
+
 export function fetchQs(id) {
 	return async(dispatch, getState) => {
+		const curr = getState().learn.seqs.curr_seq
 		dispatch(requestQs())
-		try {
-			let qs = ( await axios.get(`${api_url}/sequences/${id}/queues`)).data			
-			dispatch(receiveQs(qs)(getState))		
-		} catch(err) {
-			dispatch({
-				type: RECEIVE_QS_FAILURE,
-				error: Error('Check the \'fetchQs\' method Unknown error.')
-			})
+		if (typeof curr !== 'undefined') {			
+			try {
+				let qs = ( await axios.get(`${api_url}/sequences/${curr['id']}/queues`)).data		
+				dispatch(receiveQs(qs)(getState))
+				dispatch(setCurrQ())
+				dispatch(fetchTrials())		
+			} catch(err) {
+				dispatch({
+					type: RECEIVE_QS_FAILURE,
+					error: Error('Check the \'fetchQs\' method Unknown error.')
+				})
+			}
+		} else {
+			setTimeout(() => {
+				dispatch(fetchQs())
+			}, 50)
 		}
 	}
 }
 function receiveQs(data) {
 	return (getState) => {
-		console.log("%cID:" + getState().learn.seqs.curr_seq['id'], 'color: green; font-weight: bold;')
+		const curr_seq = getState().learn.seqs.curr_seq
 		return {
 			type: RECEIVE_QS_SUCCESS,
-			qs: data['queues']
+			qs: data['queues'],
+			curr_seq: curr_seq
 		}
+	}
+}
+function setCurrQ() {
+	return {
+		type: SET_CURR_Q
 	}
 }
 export function clearQ() {
@@ -97,6 +114,61 @@ export function clearQ() {
 }
 
 
+// * Learn Mod: Queues * //
+export const REQUEST_TRIALS = 'REQUEST_TRIALS';
+export const RECEIVE_TRIALS_SUCCESS = 'RECEIVE_TRIALS_SUCCESS';
+export const RECEIVE_TRIALS_FAILURE = 'RECEIVE_TRIALS_FAILURE';
+export const CLEAR_TRIAL = 'CLEAR_TRIALS';
+
+function requestTrials() {
+	return {
+		type: REQUEST_TRIALS
+	}
+}
+export function fetchTrials() {
+	return async(dispatch, getState) => {
+		const curr_q = getState().learn.qs.curr_q;
+		const curr_seq = getState().learn.seqs.curr_seq;
+		dispatch(requestTrials())
+		if (typeof curr_q !== 'undefined' || typeof curr_seq !== 'undefined') {
+			try {				
+				let trials = ( await axios.get(`${api_url}/queues/${curr_q.id}/trials`) ).data
+				let raw_trials = trials['trials'];
+				if (raw_trials.length === 0) {
+					console.log('%czero, color:green')
+					await axios.post(`${api_url}/trials/`, {
+					 	user_id: curr_seq['user_id'],
+					 	set_id: curr_seq['set_id'],
+					 	item_id: curr_q['item_id'],
+					 	queue_id: curr_q['id'],
+					 	difficulty: 'recall'
+					}).then(res => raw_trials = res).catch(res => console.log(res))
+				}
+				dispatch(receiveTrials(raw_trials))			
+			} catch(err) {
+				dispatch({
+					type: RECEIVE_TRIALS_FAILURE,
+					error: Error('See fetchTrials')
+				})
+			}
+		} else {
+			dispatch(fetchTrials())
+		}
+	}
+}
+
+function receiveTrials(data) {
+	return {
+		type: RECEIVE_TRIALS_SUCCESS,
+		trials: data,
+		latest_trial: data.slice(-1)[0]
+	}
+}
+export function clearTrial() {
+	return {
+		type: CLEAR_TRIAL
+	}
+}
 
 
 

@@ -30,7 +30,7 @@ export default class SetList extends Component {
 		const { sets } = this.props,
 			  add_circle_icon = require('../../assets/add_circle_icon.png');
 		sets.sort((set1, set2) => {
-			return (moment(set1.last_studied).isBefore(set2.last_studied)) ? 1 : -1
+			return (moment(set1.doc).isBefore(set2.doc)) ? 1 : -1
 		})
 		return(
 			<div className="sidenav_sets_wrapper">

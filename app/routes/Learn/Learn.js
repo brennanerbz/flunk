@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actionCreators from '../../actions/learnset';
+import * as learnactions from '../../actions/learnmod';
+import * as setactions from '../../actions/usersets';
 
 require('./Learn.scss');
 
@@ -11,43 +12,52 @@ import LearnInput from '../../components/LearnInput/LearnInput';
 import LearnHelp from '../../components/LearnHelp/LearnHelp';
 
 @connect(state => ({
-	set: state.sets.set,
-	sequence: state.sets.sequence
+	is_fetching_trials: state.learn.trials.is_fetching_trials,
+	latest_trial: state.learn.trials.latest_trial,
+	sets: state.sets.set_items
 	}),
 	dispatch => ({
 		...bindActionCreators({
-			...actionCreators
+			...learnactions,
+			...setactions
 		}, dispatch)
 	})
 )
 export default class Learn extends Component {
 	static propTypes = {
-		params: PropTypes.object,
-		sets: PropTypes.object
+		params: PropTypes.object
 	}
 
-	componentDidMount() {
-		this.props.fetchSet(this.props.params.id)				
+	// static fillStore(redux, props) {
+	// 	return redux.dispatch(loadLearnMode(props.params.id))
+	// }
+
+	componentWillMount() {
+		const { loadLearnMode, params, sets} = this.props;
+		const set = sets[params.id];
+		loadLearnMode(set)
+	}
+
+	componentWillUnmount() {
+		const { clearTrial } = this.props;
+		clearTrial()
 	}
 
 	render() {
-		const { set, sequence } = this.props;
-		return(
+		return (
 			<div className="no_sidenav_container learn_container">
-				{ set ?
-
-				( 
-				<div className="">					
-					<LearnCard {...this.props} />
-					<LearnInput />
-					<LearnHelp />
+				<div>
+					<LearnCard latest_trial={this.props.latest_trial}/>
+					<LearnInput/>
+					<LearnHelp/>
 				</div>
-
-				)
-
-				: null }	
-
-			</div>
+			 </div> 
 		);
 	}
 }
+
+
+// Always render the card, and then decide to render the cue in the component below
+
+
+

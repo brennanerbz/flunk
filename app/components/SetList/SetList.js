@@ -7,28 +7,14 @@ import { bindActionCreators } from 'redux';
 
 const styles = require('./SetList.scss');
 
-import * as actionCreators from '../../actions/learnset';
+import * as actionCreators from '../../actions/usersets';
 
 import SetListItem from './SetListItem';
 
-class DayDivider extends Component { 
-	render() {
-		const set = this.props.set;		
-		return (
-			<div className="day_divider">
-				<hr className="separator"/>
-				<i className="copy_only"/>
-					<div className="day_divider_label">
-						{set.time_ago}
-					</div> 
-			</div>
-		);
-	}
-}
-
 
 @connect(state => ({
-	sets: state.sets.set_list.map(id => state.sets.set_items[id])
+	sets: state.sets.set_list.map(id => state.sets.set_items[id]),
+	isFetching: state.sets.isFetching
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -45,8 +31,8 @@ export default class SetList extends Component {
 		activeRow: 0
 	}
 
-	componentDidMount() {
-		this.props.loadSets()
+	componentWillMount() {
+		this.props.fetchSets()
 	}
 
 	setActiveRow = (id) => {
@@ -55,15 +41,11 @@ export default class SetList extends Component {
 		});
 	}	
 
-	handleLoad(id) {
-		this.props.getSequences(1, id, 'learn', 'mc')
-	}
-
 	renderSets = (sets) => {		
 		var sorted_sets = sets.map((set) => {
-		    const date = moment(set['last_studied']);
+		    const date = moment(set['doc']);
 		    const today = moment();
-		    const date_month = moment(set['last_studied']).format('MMMM');
+		    const date_month = moment(set['doc']).format('MMMM');
 		    const today_month = moment().format('MMMM');
 		    let diff = today.diff(date, 'days');
 
@@ -86,8 +68,7 @@ export default class SetList extends Component {
 				rows.push(<DayDivider set={set} 
 					                  key={'day' + i}/>)
 			}
-			rows.push(<SetListItem set={set}
-				                   load={::this.handleLoad}								   
+			rows.push(<SetListItem set={set}							   
 								   setActiveRow={this.setActiveRow}
 								   activeRow={this.state.activeRow}
 								   key={set.id}/>)
@@ -98,18 +79,42 @@ export default class SetList extends Component {
 
 
 	render() {	
-		let sets = this.props.sets;
+		const { sets, isFetching } = this.props;
 		sets.sort((set1, set2) => {
-			return (moment(set1.last_studied).isBefore(set2.last_studied)) ? 1 : -1
+			return (moment(set1.doc).isBefore(set2.doc)) ? 1 : -1
 		})		
 		return(
 			<div>				
 				<div className="sets_container">
-					{this.renderSets(sets)}
+					{
+						isFetching 
+
+						? null
+
+						: this.renderSets(sets)
+					}
 				</div>
 			</div>
 		);
 	}
 }
+
+class DayDivider extends Component { 
+	render() {
+		const set = this.props.set;		
+		return (
+			<div className="day_divider">
+				<hr className="separator"/>
+				<i className="copy_only"/>
+					<div className="day_divider_label">
+						{set.time_ago}
+					</div> 
+			</div>
+		);
+	}
+}
+
+
+
 
 

@@ -8,7 +8,7 @@ export default class SideNavSetListItem extends Component {
 
 	render() {
 		const { set } = this.props,
-			set_name = set.name.toLowerCase(),
+			set_name = set.title.toLowerCase(),
 			set_icon = require('../../assets/set_icon.png'),
 			set_icon_active = require('../../assets/set_icon_white.png');
 

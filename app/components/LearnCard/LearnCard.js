@@ -1,24 +1,32 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 require('./LearnCard.scss');
 
 export default class LearnCard extends Component {
 	static propTypes = {
-		sequence: PropTypes.object
+		
 	}
-
 	render() {
-		const { sequence } = this.props;
 		return(
-			<div className="card">
-				<div className="card-header">
-				    &nbsp;
-				</div>
-				<div className="card-block">
-					<p className="card-text">{sequence.mode}</p>
+			<div>
+			 	<div className="card">
+					<div className="card-header">
+					&nbsp;
+					</div>
+					<div className="card-block">
+						<p className="card-text">
+						{	
+							typeof this.props.latest_trial['cue'] == 'undefined'
+							? null
+							: this.props.latest_trial['cue']
+						}
+						</p>
+					</div>
 				</div>
 			</div>
 		);
 	}
 }
+
 
 // <h4 className="card-title">Card title</h4>

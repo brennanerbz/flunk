@@ -47,7 +47,7 @@ export default class Learn extends Component {
 		return (
 			<div className="no_sidenav_container learn_container">
 				<div>
-					<LearnCard cue={this.props.latest_trial['cue']} {...this.props}/>
+					<LearnCard latest_trial={this.props.latest_trial}/>
 					<LearnInput/>
 					<LearnHelp/>
 				</div>

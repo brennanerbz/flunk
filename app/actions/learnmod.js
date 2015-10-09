@@ -4,6 +4,14 @@ import keyMirror from 'key-mirror';
 
 const api_url = 'http://127.0.0.1:5000/webapi/v1.0';
 
+export function loadLearnMode(set) {
+	return (dispatch, getState) => {
+		const seqs = new Promise ((resolve, reject) => {
+			dispatch(fetchSeqs(set['creator_id'], set['id'], 'learn', 'mc'))
+		})
+	}	
+}
+
 // * Learn Mod: Sequences * //
 export const REQUEST_SEQS = 'REQUEST_SEQS';
 export const RECEIVE_SEQS_SUCCESS = 'RECEIVE_SEQS_SUCCESS';
@@ -29,8 +37,7 @@ export function fetchSeqs(user_id, set_id, mode, diff) {
 					difficulty: diff
 				}).then(res => undone_seqs = res).catch(res => console.log(res))
 			}
-			dispatch(receiveSeqs(undone_seqs))
-			dispatch(fetchQs())
+			dispatch(receiveSeqs(undone_seqs)(dispatch))			
 		} catch (err) {
 			dispatch({
 				type: RECEIVE_SEQS_FAILURE,
@@ -40,21 +47,27 @@ export function fetchSeqs(user_id, set_id, mode, diff) {
 	}
 }
 function receiveSeqs(data) {
-	let sorted_seqs = data.sort((seq1, seq2) => {
-		return moment((seq1.creation).isBefore(seq2.creation)) ? 1 : -1
-	})
-	let curr_seq = sorted_seqs[0];	
-	return {
-		type: RECEIVE_SEQS_SUCCESS,
-		curr_seq: curr_seq
+	return (dispatch) => {
+		let sorted_seqs = data.sort((seq1, seq2) => {
+			return moment((seq1.creation).isBefore(seq2.creation)) ? 1 : -1
+		})
+		let curr_seq = sorted_seqs[0];	
+		const success = new Promise((res, rej) => {
+			dispatch({
+				type: RECEIVE_SEQS_SUCCESS,
+				curr_seq: curr_seq
+			})
+		}).then(
+			dispatch(fetchQs())
+		)
 	}
 }
+
 export function clearSeq() {
 	return {
 		type: CLEAR_SEQ
 	}
 }
-
 
 // * Learn Mod: Queues * //
 export const REQUEST_QS = 'REQUEST_QS';
@@ -69,16 +82,14 @@ function requestQs() {
 	}
 }
 
-export function fetchQs(id) {
+export function fetchQs() {
 	return async(dispatch, getState) => {
 		const curr = getState().learn.seqs.curr_seq
 		dispatch(requestQs())
 		if (typeof curr !== 'undefined') {			
 			try {
 				let qs = ( await axios.get(`${api_url}/sequences/${curr['id']}/queues`)).data		
-				dispatch(receiveQs(qs)(getState))
-				dispatch(setCurrQ())
-				dispatch(fetchTrials())		
+				dispatch(receiveQs(qs)(dispatch, getState))
 			} catch(err) {
 				dispatch({
 					type: RECEIVE_QS_FAILURE,
@@ -93,15 +104,22 @@ export function fetchQs(id) {
 	}
 }
 function receiveQs(data) {
-	return (getState) => {
+	return (dispatch, getState) => {
 		const curr_seq = getState().learn.seqs.curr_seq
-		return {
-			type: RECEIVE_QS_SUCCESS,
-			qs: data['queues'],
-			curr_seq: curr_seq
-		}
+		const success = new Promise((res, rej) => {
+			dispatch({
+				type: RECEIVE_QS_SUCCESS,
+				qs: data['queues'],
+				curr_seq: curr_seq
+			})
+		}).then(
+			dispatch(setCurrQ())
+		).then(
+			dispatch(fetchTrials())
+		)
 	}
 }
+
 function setCurrQ() {
 	return {
 		type: SET_CURR_Q
@@ -124,7 +142,7 @@ function requestTrials() {
 	return {
 		type: REQUEST_TRIALS
 	}
-}
+} 
 export function fetchTrials() {
 	return async(dispatch, getState) => {
 		const curr_q = getState().learn.qs.curr_q;

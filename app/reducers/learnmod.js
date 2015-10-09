@@ -94,7 +94,9 @@ import {
 } from '../actions/learnmod';
 
 let init_trials = {
-	is_fetching_trials: false
+	is_fetching_trials: false,
+	trials: [],
+	latest_trial: {}
 }
 function trials(state = init_trials, action) {
 	switch(action.type) {

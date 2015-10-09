@@ -29,27 +29,26 @@ export default class Learn extends Component {
 	}
 
 	componentWillMount() {
-		const { fetchSeqs, params, sets} = this.props;
+		const { loadLearnMode, params, sets} = this.props;
 		const set = sets[params.id];
-		fetchSeqs(set['creator_id'], set['id'], 'learn', 'mc')
+		loadLearnMode(set)
 	}
 
 	render() {
-		const { is_fetching_trials, latest_trial } = this.props;
-		return(
-			!is_fetching_trials && typeof latest_trial !== 'undefined'
-			? <div className="no_sidenav_container learn_container">
+		return (
+			<div className="no_sidenav_container learn_container">
 				<div>
-					<LearnCard {...this.props} loading={false}/>
+					<LearnCard cue={this.props.latest_trial['cue']} {...this.props}/>
 					<LearnInput/>
 					<LearnHelp/>
 				</div>
-			  </div> 
-			: null
+			 </div> 
 		);
 	}
 }
 
+
+// Always render the card, and then decide to render the cue in the component below
 
 
 

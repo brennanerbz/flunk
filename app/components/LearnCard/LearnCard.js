@@ -6,42 +6,23 @@ export default class LearnCard extends Component {
 	static propTypes = {
 		
 	}
-
-	state = {
-		cue: ''
-	}
-
-	componentDidMount() {
-		const { latest_trial } = this.props;
-		if (typeof latest_trial['cue'] !== 'undefined') {
-			this.setState({
-				cue: latest_trial['cue']
-			});
-		}
-	}
-
-	componentWillUnmount() {
-		this.setState({
-			cue: ''
-		});
-	}
- 
 	render() {
-		const { loading } = this.props;
 		return(
 			<div>
-				{
-					!loading
-					? 	<div className="card">
-							<div className="card-header">
-							&nbsp;
-							</div>
-							<div className="card-block">
-								<p className="card-text">{this.state.cue}</p>
-							</div>
-						</div>
-					: null
-				}
+			 	<div className="card">
+					<div className="card-header">
+					&nbsp;
+					</div>
+					<div className="card-block">
+						<p className="card-text">
+						{	
+							typeof this.props.latest_trial == 'undefined'
+							? 'Loading...'
+							: this.props.cue
+						}
+						</p>
+					</div>
+				</div>
 			</div>
 		);
 	}

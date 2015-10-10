@@ -6,9 +6,7 @@ const api_url = 'http://127.0.0.1:5000/webapi/v1.0';
 
 export function loadLearnMode(set) {
 	return (dispatch, getState) => {
-		const seqs = new Promise ((resolve, reject) => {
-			dispatch(fetchSeqs(set['creator_id'], set['id'], 'learn', 'mc'))
-		})
+		dispatch(fetchSeqs(set['creator_id'], set['id'], 'learn', 'mc'))		
 	}	
 }
 
@@ -41,7 +39,7 @@ export function fetchSeqs(user_id, set_id, mode, diff) {
 		} catch (err) {
 			dispatch({
 				type: RECEIVE_SEQS_FAILURE,
-				error: Error('Can\'t fetch seqs...')
+				error: Error('Can\'t fetch seqs...' + err)
 			})
 		}
 	}
@@ -51,15 +49,12 @@ function receiveSeqs(data) {
 		let sorted_seqs = data.sort((seq1, seq2) => {
 			return moment((seq1.creation).isBefore(seq2.creation)) ? 1 : -1
 		})
-		let curr_seq = sorted_seqs[0];	
-		const success = new Promise((res, rej) => {
-			dispatch({
+		let curr_seq = sorted_seqs[0];
+		dispatch({
 				type: RECEIVE_SEQS_SUCCESS,
 				curr_seq: curr_seq
-			})
-		}).then(
-			dispatch(fetchQs())
-		)
+			})	
+		dispatch(fetchQs())		
 	}
 }
 
@@ -85,38 +80,29 @@ function requestQs() {
 export function fetchQs() {
 	return async(dispatch, getState) => {
 		const curr = getState().learn.seqs.curr_seq
-		dispatch(requestQs())
-		if (typeof curr !== 'undefined') {			
+		dispatch(requestQs())				
 			try {
 				let qs = ( await axios.get(`${api_url}/sequences/${curr['id']}/queues`)).data		
 				dispatch(receiveQs(qs)(dispatch, getState))
 			} catch(err) {
 				dispatch({
 					type: RECEIVE_QS_FAILURE,
-					error: Error('Check the \'fetchQs\' method Unknown error.')
+					error: Error(err)
 				})
 			}
-		} else {
-			setTimeout(() => {
-				dispatch(fetchQs())
-			}, 50)
-		}
+		
 	}
 }
 function receiveQs(data) {
 	return (dispatch, getState) => {
-		const curr_seq = getState().learn.seqs.curr_seq
-		const success = new Promise((res, rej) => {
-			dispatch({
-				type: RECEIVE_QS_SUCCESS,
-				qs: data['queues'],
-				curr_seq: curr_seq
-			})
-		}).then(
-			dispatch(setCurrQ())
-		).then(
-			dispatch(fetchTrials())
-		)
+		const curr_seq = getState().learn.seqs.curr_seq;
+		dispatch({
+			type: RECEIVE_QS_SUCCESS,
+			qs: data['queues'],
+			curr_seq: curr_seq
+		})
+		dispatch(setCurrQ())
+		dispatch(fetchTrials())
 	}
 }
 
@@ -166,7 +152,7 @@ export function fetchTrials() {
 			} catch(err) {
 				dispatch({
 					type: RECEIVE_TRIALS_FAILURE,
-					error: Error('See fetchTrials')
+					error: Error('See fetchTrials' + err)
 				})
 			}
 		} else {

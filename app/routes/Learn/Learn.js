@@ -33,10 +33,11 @@ export default class Learn extends Component {
 	// }
 
 	componentWillMount() {
-		const { loadLearnMode, params, sets} = this.props;
-		const set = sets[params.id];
-		loadLearnMode(set)
+		const { fetchSeqs, params } = this.props;
+		fetchSeqs(1, params.id, 'learn', 'mc')
 	}
+
+	// Replace 1 with the currentUser ID from state
 
 	componentWillUnmount() {
 		const { clearTrial } = this.props;

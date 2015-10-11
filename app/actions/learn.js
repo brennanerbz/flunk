@@ -162,7 +162,40 @@ export function clearLearn() {
 
 /* 
 @params
+*/
+export const SHOW_CORRECT = 'SHOW_CORRECT';
+export const ADAPT_DIFF = 'ADAPT_DIFF';
+export const ADAPT_ERROR = 'ADAPT_ERROR';
+export function adapt(answer, reaction_time, response_time) {
+	return async(dispatch, getState) => {
+		try {
+			let id = getState().learn.trial.id
+			await axios.put(`${api_url}/trials/${id}`, {
+				answer: answer,
+				reaction_time: reaction_time,
+				response_time: response_time
+			}).then(res => {
+				console.log("%c" + res.data['accuracy'], "color: green; font-weight: bold")
+			})
+		} catch(err) {
+			dispatch({
+				type: ADAPT_ERROR,
+				error: Error(err)
+			})
+		}
+	}
+}
+/*
 adapt()
+pass in the value from the input field into the PUT request
+upon the response of the PUT request, check the accuracy of the trial object
+if the trial object returns accuracy of 1, do nothing. return.
+if the trial object returns below 1, POST a new trial. Upon response of that, send that trial object to redux store
+*/
+
+
+/*
+in the redux store, when giving an new trial action, update the current state with everything except the feedback/praise
 */
 
 /*

@@ -28,16 +28,10 @@ export default class Learn extends Component {
 		params: PropTypes.object
 	}
 
-	// static fillStore(redux, props) {
-	// 	return redux.dispatch(loadLearnMode(props.params.id))
-	// }
-
 	componentWillMount() {
 		const {loadSeq , params } = this.props;
 		loadSeq(1, params.id)
 	}
-
-	// Replace 1 with the currentUser ID from state
 
 	componentWillUnmount() {
 		const { clearLearn } = this.props;
@@ -49,7 +43,7 @@ export default class Learn extends Component {
 			<div className="no_sidenav_container learn_container">
 				<div>
 					<LearnCard trial={this.props.trial}/>
-					<LearnInput/>
+					<LearnInput {...this.props}/>
 					<LearnHelp/>
 				</div>
 			 </div> 

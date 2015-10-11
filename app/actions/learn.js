@@ -22,7 +22,7 @@ export function loadSeq(id, set_id, diff) {
 			let filtered_seqs = seqs.filter(seq => seq.completion == 'None')	
 			if (filtered_seqs.length > 0) {
 				let curr_seq = filtered_seqs.sort((s1, s2) => {
-					return moment((s1.creation).isBefore(s2.creation) ? 1 : -1)
+					return new Date(s1['creation']) - new Date(s2['creation']);
 				})
 				curr_seq = curr_seq[0]
 				dispatch({ type: RECEIVE_SEQ_SUCCESS, curr_seq})
@@ -200,22 +200,17 @@ export function adapt(answer, reaction_time, response_time) {
 		}
 	}
 }
-/*
-adapt()
-pass in the value from the input field into the PUT request
-upon the response of the PUT request, check the accuracy of the trial object
-if the trial object returns accuracy of 1, do nothing. return.
-if the trial object returns below 1, POST a new trial. Upon response of that, send that trial object to redux store
-*/
 
-
-/*
-in the redux store, when giving an new trial action, update the current state with everything except the feedback/praise
-*/
 
 /*
 @params
-move()
+the move function will take a parameter that specifies which direction. If click to continue || arrownext, then we move forward one. If it's backward, we move down one. To properly cycle through, use the count of the queue list. 
+If we move back, and the number = 0, then go to the queue_list.count. 
+If we move forward, and the number is greater than the queue_list.count, then go to pos 1. 
+In order to properly handle the loading of new trials, dispatch a few actions.
+PUT the new position to the sequence class.
+Upon response of the PUT, dispatch redux to change curr_q to reflect. 
+.then after, call loadTrials(), which should pull the new q and load new trials.
 */
 
 

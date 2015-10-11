@@ -44,7 +44,7 @@ export default class Learn extends Component {
 				<div>
 					<LearnCard trial={this.props.trial}/>
 					<LearnInput {...this.props}/>
-					<LearnHelp/>
+					<LearnHelp trial={this.props.trial}/>
 				</div>
 			 </div> 
 		);

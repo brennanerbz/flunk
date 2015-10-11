@@ -106,7 +106,7 @@ export function loadTrials() {
 			if (trials.length === 0) { dispatch( newTrial() ) }
 			else {
 				dispatch({type: RECEIVE_TRIALS_SUCCESS, trials})
-				dispatch(newTrial())
+				dispatch(newTrial('mc'))
 			}
 		} catch(err) {
 			dispatch({
@@ -124,8 +124,8 @@ export function loadTrials() {
 export const RECEIVE_TRIAL_SUCCESS = 'RECEIVE_TRIAL_SUCCESS';
 export const RECEIVE_TRIAL_FAILURE = 'RECEIVE_TRIAL_FAILURE';
 export const RECEIVE_LEARN = 'RECEIVE_LEARN';
-export function newTrial() {
-	return async(dispatch, getState) => {
+export function newTrial(diff) {
+	return async(dispatch, getState) => {		
 		try {			
 			let lt = getState().learn.last_trial;		
 			let curr_trial = getState().learn.trial
@@ -134,12 +134,19 @@ export function newTrial() {
 			if (lt['accuracy'] !== null && lt['accuracy'] === 1) { 
 				dispatch({ type: RECEIVE_TRIAL_SUCCESS, lt })
 				return;  
-			}
+			}	
+			let d;
+			if (diff !== undefined) {
+				d = diff;
+			} else {
+				d = null // let the server generate diff 
+			}		
 			await axios.post(`${api_url}/trials/`, {
 				user_id: curr_seq['user_id'],
 				set_id: curr_seq['set_id'],
 				item_id: curr_q['item_id'],
-				queue_id: curr_q['id']
+				queue_id: curr_q['id'],
+				difficulty: 'related'
 			}).then(res => {
 				const trial = res.data
 				if (curr_trial['item_id'] !== trial['item_id']) {

@@ -1,14 +1,22 @@
 import {
 	REQUEST_LEARN,
+
 	RECEIVE_SEQ_SUCCESS,
 	RECEIVE_SEQ_FAILURE,
 	RECEIVE_QS_SUCCESS,
 	RECEIVE_QS_FAILURE, 
+
 	RECEIVE_TRIALS_SUCCESS,
 	RECEIVE_TRIALS_FAILURE,
 	RECEIVE_TRIAL_SUCCESS,
 	RECEIVE_TRIAL_FAILURE,
 	RECEIVE_LEARN,
+
+	ADAPT_DIFF,
+	ADAPT_ERROR,
+	GIVE_FEEDBACK,
+	SHOW_CORRECT,
+
 	CLEAR_LEARN
 } from '../actions/learn';
 
@@ -86,14 +94,30 @@ export default function learn(state = init_learn, action) {
 				...state,
 				trial: action.trial
 			}
+		case GIVE_FEEDBACK:
+			const new_fb = action.updated_trial['feedback'];
+			const new_praise = action.updated_trial['praise'];
+			return {
+				...state,
+				trial: Object.assign({...state.trial}, {feedback: new_fb, praise: new_praise})
+			}
+		case ADAPT_DIFF:
+			const old_fb = state.trial['feedback'];
+			const old_praise = state.trial['praise'];
+			return {
+				...state,
+				trial: Object.assign({...action.trial}, {feedback: old_fb, praise: old_praise})
+			}
 		case CLEAR_LEARN: 
 			return {
 				...state = init_learn				
 			}
+		case SHOW_CORRECT:
 		case RECEIVE_SEQ_FAILURE:
 		case RECEIVE_QS_FAILURE:
 		case RECEIVE_TRIALS_FAILURE:
 		case RECEIVE_TRIAL_FAILURE:
+		case ADAPT_ERROR:
 		default:
 			return state;
 	}

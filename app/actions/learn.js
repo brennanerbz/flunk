@@ -127,7 +127,8 @@ export const RECEIVE_LEARN = 'RECEIVE_LEARN';
 export function newTrial() {
 	return async(dispatch, getState) => {
 		try {			
-			let lt = getState().learn.last_trial;
+			let lt = getState().learn.last_trial;		
+			let curr_trial = getState().learn.trial
 			let curr_seq = getState().learn.curr_seq;
 			let curr_q = getState().learn.curr_q
 			if (lt['accuracy'] !== null && lt['accuracy'] === 1) { 
@@ -141,8 +142,12 @@ export function newTrial() {
 				queue_id: curr_q['id']
 			}).then(res => {
 				const trial = res.data
-				dispatch({type: RECEIVE_TRIAL_SUCCESS, trial})
-				dispatch({type: RECEIVE_LEARN})
+				if (curr_trial['item_id'] !== trial['item_id']) {
+					dispatch({type: RECEIVE_TRIAL_SUCCESS, trial})
+					dispatch({type: RECEIVE_LEARN})
+					return;
+				}
+				dispatch({type: ADAPT_DIFF, trial})						
 			})
 		} catch(err) {
 			dispatch({
@@ -164,6 +169,7 @@ export function clearLearn() {
 @params
 */
 export const SHOW_CORRECT = 'SHOW_CORRECT';
+export const GIVE_FEEDBACK = 'GIVE_FEEDBACK';
 export const ADAPT_DIFF = 'ADAPT_DIFF';
 export const ADAPT_ERROR = 'ADAPT_ERROR';
 export function adapt(answer, reaction_time, response_time) {
@@ -175,7 +181,16 @@ export function adapt(answer, reaction_time, response_time) {
 				reaction_time: reaction_time,
 				response_time: response_time
 			}).then(res => {
-				console.log("%c" + res.data['accuracy'], "color: green; font-weight: bold")
+				const updated_trial = res.data;
+				dispatch({type: GIVE_FEEDBACK, updated_trial})
+				const acc = updated_trial['accuracy']
+				if (acc === 1) { 
+					dispatch({type: SHOW_CORRECT})
+					return; 
+				}
+				if (acc < 1) {					
+					dispatch(newTrial())
+				}
 			})
 		} catch(err) {
 			dispatch({

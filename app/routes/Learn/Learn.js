@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as learnactions from '../../actions/learnmod';
+import * as learnactions from '../../actions/learn';
 import * as setactions from '../../actions/usersets';
 
 require('./Learn.scss');
@@ -12,8 +12,8 @@ import LearnInput from '../../components/LearnInput/LearnInput';
 import LearnHelp from '../../components/LearnHelp/LearnHelp';
 
 @connect(state => ({
-	is_fetching_trials: state.learn.trials.is_fetching_trials,
-	latest_trial: state.learn.trials.latest_trial,
+	is_fetching_learn: state.learn.is_fetching_learn,
+	trial: state.learn.trial,
 	sets: state.sets.set_items
 	}),
 	dispatch => ({
@@ -33,22 +33,22 @@ export default class Learn extends Component {
 	// }
 
 	componentWillMount() {
-		const { fetchSeqs, params } = this.props;
-		fetchSeqs(1, params.id, 'learn', 'mc')
+		const {loadSeq , params } = this.props;
+		loadSeq(1, params.id)
 	}
 
 	// Replace 1 with the currentUser ID from state
 
 	componentWillUnmount() {
-		const { clearTrial } = this.props;
-		clearTrial()
+		const { clearLearn } = this.props;
+		clearLearn()
 	}
 
 	render() {
 		return (
 			<div className="no_sidenav_container learn_container">
 				<div>
-					<LearnCard latest_trial={this.props.latest_trial}/>
+					<LearnCard trial={this.props.trial}/>
 					<LearnInput/>
 					<LearnHelp/>
 				</div>

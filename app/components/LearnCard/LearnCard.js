@@ -16,9 +16,9 @@ export default class LearnCard extends Component {
 					<div className="card-block">
 						<p className="card-text">
 						{	
-							typeof this.props.latest_trial['cue'] == 'undefined'
+							typeof this.props.trial['cue'] == 'undefined'
 							? null
-							: this.props.latest_trial['cue']
+							: this.props.trial['cue']
 						}
 						</p>
 					</div>

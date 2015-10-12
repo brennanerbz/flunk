@@ -9,8 +9,15 @@ export default class Hint extends Component {
 		return (
 			<div>
 				<p>
-					{hint}
+				  <button className="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+				    Button with data-target
+				  </button>
 				</p>
+				<div className="collapse" id="collapseExample">
+				  <div className="card card-block">
+				    {hint}
+				  </div>
+				</div>
 			</div>
 		);
 	}

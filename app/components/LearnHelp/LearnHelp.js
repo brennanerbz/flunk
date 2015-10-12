@@ -3,7 +3,7 @@ require('./LearnHelp.scss')
 import Hint from './Hint';
 import Related from './Related';
 import MultipleChoice from './MultipleChoice';
-import Answer from './Answer';
+import Target from './Target';
 
 export default class LearnHelp extends Component {
 	static propTypes = {
@@ -33,7 +33,7 @@ export default class LearnHelp extends Component {
 			case 'peek':
 			case 'copy':
 				return (
-					<Answer stem={trial.stem} target={trial.target}/>
+					<Target stem={trial.stem} target={trial.target}/>
 				)
 			default:
 				break;

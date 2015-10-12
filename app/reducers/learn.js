@@ -17,6 +17,9 @@ import {
 	GIVE_FEEDBACK,
 	SHOW_CORRECT,
 
+	MOVE_SLOT,
+	MOVE_ERROR,
+
 	CLEAR_LEARN
 } from '../actions/learn';
 
@@ -108,11 +111,21 @@ export default function learn(state = init_learn, action) {
 				...state,
 				trial: Object.assign({...action.trial}, {feedback: old_fb, praise: old_praise})
 			}
+		case MOVE_SLOT:
+			const new_pos = action.new_pos
+			const new_q = state.queue_list.filter(q => q['order'] === new_pos)[0]
+			return {
+				...state,
+				curr_pos: action.new_pos,
+				curr_q: new_q
+			}
 		case CLEAR_LEARN: 
 			return {
 				...state = init_learn				
 			}
 		case SHOW_CORRECT:
+
+		case MOVE_ERROR:
 		case RECEIVE_SEQ_FAILURE:
 		case RECEIVE_QS_FAILURE:
 		case RECEIVE_TRIALS_FAILURE:

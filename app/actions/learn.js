@@ -146,10 +146,11 @@ export function newTrial(diff) {
 				set_id: curr_seq['set_id'],
 				item_id: curr_q['item_id'],
 				queue_id: curr_q['id'],
-				difficulty: 'related'
+				difficulty: d
 			}).then(res => {
 				const trial = res.data
-				if (curr_trial['item_id'] !== trial['item_id']) {
+				console.log("%c", + trial, "color:green")
+				if (curr_trial == undefined || curr_trial['item_id'] !== trial['item_id']) {
 					dispatch({type: RECEIVE_TRIAL_SUCCESS, trial})
 					dispatch({type: RECEIVE_LEARN})
 					return;
@@ -193,6 +194,7 @@ export function adapt(answer, reaction_time, response_time) {
 				const acc = updated_trial['accuracy']
 				if (acc === 1) { 
 					dispatch({type: SHOW_CORRECT})
+					dispatch(move(1))
 					return; 
 				}
 				if (acc < 1) {					
@@ -211,6 +213,45 @@ export function adapt(answer, reaction_time, response_time) {
 
 /*
 @params
+*/
+export const MOVE_SLOT = 'MOVE_SLOT';
+export const MOVE_ERROR = 'MOVE_ERROR';
+export function move(dir) {
+	return async(dispatch, getState) => {
+		try {
+			const seq_length = getState().learn.queue_list.length;
+			const cur_pos = getState().learn.curr_pos;
+			const id = getState().learn.curr_seq['id']
+			let pos;
+			let next;
+			if (dir !== -1) {
+				next = cur_pos + dir;
+				if (next === seq_length) {  pos = 1; } else { pos = next }
+			} else {
+				next = cur_pos - dir;
+				if (next === 1) { pos = seq_length } else { pos = next }
+			}
+			await axios.put(`${api_url}/sequences/${id}`, {
+				position: pos,
+				difficulty: null,
+				mode: 'learn'
+			}).then(res => {
+				const new_pos = res.data['position']
+				dispatch({type: MOVE_SLOT, new_pos})
+			}).then(
+				dispatch(loadTrials())
+			)
+		} catch (err) {	
+			dispatch({
+				type: MOVE_ERROR,
+				error: Error(err)
+			})
+		}
+	}
+} 
+
+
+/*
 the move function will take a parameter that specifies which direction. If click to continue || arrownext, then we move forward one. If it's backward, we move down one. To properly cycle through, use the count of the queue list. 
 If we move back, and the number = 0, then go to the queue_list.count. 
 If we move forward, and the number is greater than the queue_list.count, then go to pos 1. 

@@ -3,6 +3,8 @@ import {
 
 	RECEIVE_SEQ_SUCCESS,
 	RECEIVE_SEQ_FAILURE,
+	NEW_SEQ_FAILURE,
+
 	RECEIVE_QS_SUCCESS,
 	RECEIVE_QS_FAILURE, 
 
@@ -15,7 +17,10 @@ import {
 	ADAPT_DIFF,
 	ADAPT_ERROR,
 	GIVE_FEEDBACK,
+
+	UPDATE_SLOT,
 	SHOW_CORRECT,
+	SHOW_COMPLETED_SEQ,
 
 	MOVE_SLOT,
 	MOVE_ERROR,
@@ -25,6 +30,8 @@ import {
 
 const init_learn = {
 	is_fetching_learn: false,
+	show_correct: false,
+	show_completed_seq: false,
 	curr_seq: {},
 	queue_list: [],
 	curr_pos: null,
@@ -74,16 +81,16 @@ export default function learn(state = init_learn, action) {
 			const cp = action.curr_seq['position']
 			return {
 				...state,
+				show_correct: false,
+				show_completed_seq: false,
 				curr_seq: action.curr_seq,
 				curr_pos: cp
 			}
-		case RECEIVE_QS_SUCCESS:
-			const ql = action.q_list;
-			const q = ql.filter(q => q['order'] == state.curr_pos)[0]						
+		case RECEIVE_QS_SUCCESS:						
 			return {
 				...state,
 				queue_list: action.q_list,
-				curr_q: q
+				curr_q: action.q
 			}
 		case RECEIVE_TRIALS_SUCCESS:
 			const lt = action.trials.slice(-1)[0]
@@ -114,8 +121,10 @@ export default function learn(state = init_learn, action) {
 		case MOVE_SLOT:
 			const new_pos = action.new_pos
 			const new_q = state.queue_list.filter(q => q['order'] === new_pos)[0]
+			console.log(new_q)
 			return {
 				...state,
+				show_correct: false,
 				curr_pos: action.new_pos,
 				curr_q: new_q
 			}
@@ -124,7 +133,24 @@ export default function learn(state = init_learn, action) {
 				...state = init_learn				
 			}
 		case SHOW_CORRECT:
-
+			return {
+				...state,
+				show_correct: true				
+			}
+		case UPDATE_SLOT:
+			return {
+				...state,
+				queue_list: state.queue_list.map(q => {
+					return q.id == action.data.id ? Object.assign({...state.curr_q}, { completion: action.data.completion }) : q
+				}),
+				curr_q: Object.assign({...state.curr_q}, {completion: action.data.completion})
+			}
+		case SHOW_COMPLETED_SEQ: 
+			return {
+				...state,
+				show_completed_seq: true
+			}
+		case NEW_SEQ_FAILURE:
 		case MOVE_ERROR:
 		case RECEIVE_SEQ_FAILURE:
 		case RECEIVE_QS_FAILURE:
@@ -135,6 +161,8 @@ export default function learn(state = init_learn, action) {
 			return state;
 	}
 }
+
+
 
 
 

@@ -13,6 +13,8 @@ import LearnHelp from '../../components/LearnHelp/LearnHelp';
 
 @connect(state => ({
 	is_fetching_learn: state.learn.is_fetching_learn,
+	showCorrect: state.learn.show_correct,
+	showCompletedSeq: state.learn.show_completed_seq,
 	trial: state.learn.trial,
 	sets: state.sets.set_items
 	}),
@@ -30,7 +32,7 @@ export default class Learn extends Component {
 
 	componentWillMount() {
 		const {loadSeq , params } = this.props;
-		loadSeq(1, params.id)
+		loadSeq(1, Number(params.id))
 	}
 
 	componentWillUnmount() {
@@ -39,11 +41,22 @@ export default class Learn extends Component {
 	}
 
 	render() {
+		const { newSeq, showCompletedSeq, showCorrect, skipToUnfinished, params} = this.props;
 		return (
 			<div className="no_sidenav_container learn_container">
 				<div>
 					<LearnCard trial={this.props.trial}/>
 					<LearnInput {...this.props}/>
+					{
+						showCorrect
+						? <a onClick={() => skipToUnfinished('next')}>Click to continue</a>
+						: null
+					}
+					{
+						showCompletedSeq
+						? <a onClick={() => newSeq(1, params.id)}>New sequence</a>
+						: null
+					}
 					<LearnHelp trial={this.props.trial}/>
 				</div>
 			 </div> 

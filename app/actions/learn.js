@@ -29,7 +29,8 @@ export function loadSeq(id, set_id, diff) {
 				dispatch(loadQs())
 			}
 			else {
-				dispatch(newSeq(user, set_id))
+				console.log(id + " " + set_id)
+				dispatch(newSeq(id, set_id))
 			}				
 		} catch (err) {
 			dispatch({
@@ -39,8 +40,14 @@ export function loadSeq(id, set_id, diff) {
 		}
 	}
 }
-export function newSeq(user, set_id, diff) {
+export const UPDATED_SEQUENCE = 'UPDATED_SEQUENCE';
+export const NEW_SEQ_FAILURE = 'NEW_SEQ_FAILURE';
+export function newSeq(user_id, set_id, diff) {
 	return async(dispatch, getState) => {
+		let current_seq = getState().learn.curr_seq;
+		let csid = current_seq['id']
+		let slot_list = getState().learn.queue_list;
+		let finished_slots = slot_list.filter(slot => slot.completion == "None")		
 		try {
 			let d;
 			if (diff !== undefined) {
@@ -48,19 +55,35 @@ export function newSeq(user, set_id, diff) {
 			} else {
 				d = 'mc'
 			}
+			if (current_seq !== undefined && finished_slots.length === 0) {
+				await axios.put(`${api_url}/sequences/${csid}`, {
+					completion: true
+				})
+				dispatch({type: UPDATED_SEQUENCE})
+			}
 			await axios.post(`${api_url}/sequences/`, {
-				user_id: user.id,
-				set_id: set_id,
+				user_id: Number(user_id),
+				set_id: Number(set_id),
 				mode: 'learn', // hardcoded for now
 				difficulty: d
-			}).then(curr_seq => {
-				let q_list = curr_seq['queue_list']
+			})
+			.then(res => {
+				var _cs = res.data
+				let curr_seq = _cs;
 				dispatch({type: RECEIVE_SEQ_SUCCESS, curr_seq})
-				dispatch({type: RECEIVE_QS_SUCCESS, q_list})
+				
+				let q_list = _cs.queue_list
+				let q = q_list.filter(q => q.order === _cs.position)[0]	
+				dispatch({type: RECEIVE_QS_SUCCESS, q_list, q})	
+
+			})
+			.then((res) => dispatch(loadTrials()))
+			.catch(err => {
+				console.log(err)
 			})			
 		} catch(err) {
 			dispatch({
-				type: FAIL_SEQ,
+				type: NEW_SEQ_FAILURE,
 				error: Error(err)
 			})
 		}
@@ -76,6 +99,8 @@ export const RECEIVE_QS_FAILURE = 'RECEIVE_QS_FAILURE';
 export function loadQs() {
 	return async(dispatch, getState) => {
 		let cs = getState().learn.curr_seq
+		let set_id = cs['set_id']
+		let user_id = cs['user_id']
 		try {
 			let q_list = ( await axios.get(`${api_url}/sequences/${cs['id']}/queues`) ).data	
 			q_list = q_list['queues']
@@ -83,15 +108,17 @@ export function loadQs() {
 			let q = q_list.filter(q => q['order'] == cs['position'])[0]
 			dispatch({ type: RECEIVE_QS_SUCCESS, q_list, q})
 
-			let done = q_list.filter(q => q['completion'])
-			if (done.length === 0) { 
-				dispatch(newSeq()) 
+			let done = q_list.filter(q => q['completion'] == 'None')
+			if(done.length === 0) {
+				dispatch(newSeq(user_id, set_id))
 				return;
 			}
+			
 			if (done.length > 0 && q['completion'] !== 'None') {
-				dispatch(skipToUnfinished())
+				dispatch(skipToUnfinished('next'))
 				return;
 			}
+
 			if (done.length > 0 && q['completion'] == 'None') {
 				dispatch(loadTrials())
 				return;
@@ -100,36 +127,6 @@ export function loadQs() {
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_QS_FAILURE,
-				error: Error(err)
-			})
-		}
-	}
-}
-
-
-
-export const SKIP_SUCCESS = 'SKIP_SUCCESS';
-export const SKIP_FAILURE = 'SKIP_FAILURE';
-export function skipToUnfinished() {
-	return async(dispatch, getState) => {
-		let curr_seq = getState().learn.curr_seq
-		let queue_list = getState().learn.queue_list
-		try {
-			let cur_pos = curr_seq['position']
-			let pos = cur_pos;
-			for(var i = cur_pos; i < queue_list.length; i++) {
-
-			}
-			queue_list.some(function(q, i) {
-			    if (q.completion == "None") {
-			        pos = i;
-			        return true;
-			    }
-			});
-			console.log("%c pos" + pos, "color:green; font-weight: bold;")
-		} catch(err) {
-			dispatch ({
-				type: SKIP_FAILURE,
 				error: Error(err)
 			})
 		}
@@ -145,26 +142,29 @@ export const RECEIVE_TRIALS_FAILURE = 'RECEIVE_TRIALS_FAILURE';
 export function loadTrials() {
 	return async(dispatch, getState) => {
 		let cs = getState().learn.curr_seq;
-		let cq = getState().learn.curr_q;
+		var _cq = getState().learn.curr_q;
+		console.log(_cq)
 		try {
-			let trials = ( await axios.get(`${api_url}/queues/${cq['id']}/trials`) ).data
+			let trials = ( await axios.get(`${api_url}/queues/${_cq.id}/trials`) ).data
 			trials = trials['trials']
 			dispatch({type: RECEIVE_TRIALS_SUCCESS, trials})
 
-			if (trials.length === 0) { dispatch( newTrial() ) } 
+			if (trials.length === 0) { 
+				dispatch(newTrial())
+				return;
+			} 
 			else {
 				let lt = trials.slice(-1)[0]
 				let q_id = lt['queue_id']
-				if (lt['accuracy'] == 1 && cq['completion'] == 'None') {
+				if (lt['accuracy'] === 1 && _cq['completion'] == 'None') { // error checker
 					await axios.put(`${api_url}/queues/${q_id}`, {
 						completion: true
-					}).then(
-						dispatch(move(1))						
-					).then(
-						dispatch(loadQs())
-					)
+					}).then(res => {
+						let data = res.data;
+						dispatch({type: UPDATE_SLOT, data})
+					})
 				} else {
-					dispatch(newTrial('mc'))				
+					dispatch(newTrial()) // determine diff level with better logic		
 				}
 			}									
 		} catch(err) {
@@ -186,20 +186,17 @@ export const RECEIVE_LEARN = 'RECEIVE_LEARN';
 export function newTrial(diff) {
 	return async(dispatch, getState) => {		
 		try {			
-			let lt = getState().learn.last_trial;		
 			let curr_trial = getState().learn.trial
 			let curr_seq = getState().learn.curr_seq;
 			let curr_q = getState().learn.curr_q
-			if (lt['accuracy'] !== null && lt['accuracy'] === 1) { 
-				dispatch({ type: RECEIVE_TRIAL_SUCCESS, lt })
-				return;  
-			}	
+				
 			let d;
 			if (diff !== undefined) {
 				d = diff;
 			} else {
 				d = null // let the server generate diff 
-			}		
+			}
+			console.log("%c" + curr_q['id'], "color:green;")		
 			await axios.post(`${api_url}/trials/`, {
 				user_id: curr_seq['user_id'],
 				set_id: curr_seq['set_id'],
@@ -208,29 +205,20 @@ export function newTrial(diff) {
 				difficulty: d
 			}).then(res => {
 				const trial = res.data
-				console.log("%c", + trial, "color:green")
 				if (curr_trial == undefined || curr_trial['item_id'] !== trial['item_id']) {
 					dispatch({type: RECEIVE_TRIAL_SUCCESS, trial})
 					dispatch({type: RECEIVE_LEARN})
 					return;
 				}
 				dispatch({type: ADAPT_DIFF, trial})						
-			}).catch(res => {
-				let trial = res.data;
-				if(trial['accuracy'] === 1) {
-
-				}
+			}).catch(err => {
+				console.log(err)				
 			})
-		} catch(err) {
-			let q_list = getState().learn.queue_list
-			console.log(q_list)
-			let completed_qs = q_list.filter(q => q['completion'] == 'None')
-			if (completed_qs.length === 0) { dispatch(newSeq()) } else {
-				dispatch({
-					type: RECEIVE_TRIAL_FAILURE,
-					error: Error(err)
-				})
-			}
+		} catch(err) {			
+			dispatch({
+				type: RECEIVE_TRIAL_FAILURE,
+				error: Error(err)
+			})			
 		}
 	}
 }
@@ -252,9 +240,7 @@ export function adapt(answer, reaction_time, response_time) {
 	return async(dispatch, getState) => {
 		try {
 			let id = getState().learn.trial.id
-			console.log("%c" + id, "color:green;")
 			let q_id = getState().learn.curr_q['id']
-			console.log("%c" + q_id, "color:green;")
 			await axios.put(`${api_url}/trials/${id}`, {
 				answer: answer,
 				reaction_time: reaction_time,
@@ -264,7 +250,8 @@ export function adapt(answer, reaction_time, response_time) {
 				dispatch({type: GIVE_FEEDBACK, updated_trial})
 				const acc = updated_trial['accuracy']
 				if (acc === 1) { 
-					dispatch(markCorrect(q_id))					
+					dispatch(markCorrect(q_id))
+					// dispatch(skipToUnfinished('next'))					
 				}
 				if (acc < 1) {					
 					dispatch(newTrial())
@@ -279,16 +266,27 @@ export function adapt(answer, reaction_time, response_time) {
 	}
 }
 
+export const UPDATE_SLOT = 'UPDATE_SLOT';
 export const SHOW_CORRECT = 'SHOW_CORRECT';
+export const SHOW_COMPLETED_SEQ = 'SHOW_COMPLETED_SEQ';
 export const MARK_ERROR = "MARK_ERROR"
 export function markCorrect(queue_id) {
-	return async(dispatch, getState) => {
+	return async(dispatch, getState) => {				
 		try {
 			await axios.put(`${api_url}/queues/${queue_id}`, {
 				completion: true
-			}).then(
+			}).then((res) => {
+				let data = res.data;
 				dispatch({type: SHOW_CORRECT})
-			)
+				dispatch({type: UPDATE_SLOT, data})
+				})
+			.then((res) => {
+				let list = getState().learn.queue_list
+				let completed_slots = list.filter(slot => slot['completion'] == "None")
+				if(list !== undefined && completed_slots.length === 0) {
+					dispatch({ type: SHOW_COMPLETED_SEQ })
+				}
+			})
 		} catch(err) {
 			dispatch({
 				type: MARK_ERROR,
@@ -299,26 +297,84 @@ export function markCorrect(queue_id) {
 }
 
 
+
+/*
+@params
+*/
+function prev(pos, list) {
+	for (var i = pos; i < list.length; i--) {
+		if(list[i]['completion'] == "None") { 			
+			return i;
+		}
+	}
+}
+function next(pos, list) {
+	for(var i = pos - 1; i < list.length; i++) {
+		if(list[i]['completion'] == 'None') {
+			return i;
+		}
+	}
+}
+function skip(dir, pos, list) {
+	let val,
+		recur,
+		length = list.slice(-1)[0]['order']
+	if (dir == 'next') {
+		if (pos == length) {
+			pos = 1
+		}
+		val = next(pos, list)
+		recur = next(1, list)
+	} else if (dir == 'prev') {
+		if (pos - 1 === 0 || pos === 0) {
+			pos = length;
+		}
+		val = prev(pos - 1, list)
+		recur = prev(length - 1, list)
+	}		
+	if (val !== undefined) {
+		return list[val]['order'];
+	} else {
+		return list[recur]['order'];
+	}
+}
+
+/*
+@params
+*/
+
+export const SKIP_SUCCESS = 'SKIP_SUCCESS';
+export const SKIP_FAILURE = 'SKIP_FAILURE';
+export function skipToUnfinished(direction) {
+	return async(dispatch, getState) => {
+		let curr_seq = getState().learn.curr_seq
+		let list = getState().learn.queue_list
+		console.log(list)
+		try {
+			let cur_pos = curr_seq['position']
+			if (direction == 'prev') {
+				cur_pos = cur_pos - 1;
+			}
+			let next_pos = skip(direction, cur_pos, list)
+			dispatch(updatePosition(next_pos))			
+		} catch(err) {
+			dispatch ({
+				type: SKIP_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
+
 /*
 @params
 */
 export const MOVE_SLOT = 'MOVE_SLOT';
 export const MOVE_ERROR = 'MOVE_ERROR';
-export function move(dir) {
+export function updatePosition(pos) {
 	return async(dispatch, getState) => {
 		try {
-			const seq_length = getState().learn.queue_list.length;
-			const cur_pos = getState().learn.curr_pos;
-			const id = getState().learn.curr_seq['id']
-			let pos;
-			let next;
-			if (dir !== -1) {
-				next = cur_pos + dir;
-				if (next === seq_length) {  pos = 1; } else { pos = next }
-			} else {
-				next = cur_pos - dir;
-				if (next === 1) { pos = seq_length } else { pos = next }
-			}
+			const id = getState().learn.curr_seq['id']			
 			await axios.put(`${api_url}/sequences/${id}`, {
 				position: pos,
 				difficulty: null,
@@ -326,9 +382,9 @@ export function move(dir) {
 			}).then(res => {
 				const new_pos = res.data['position']
 				dispatch({type: MOVE_SLOT, new_pos})
-			}).then(
+			}).then(res => {
 				dispatch(loadTrials())
-			)
+			})
 		} catch (err) {	
 			dispatch({
 				type: MOVE_ERROR,
@@ -337,20 +393,6 @@ export function move(dir) {
 		}
 	}
 } 
-
-
-/*
-the move function will take a parameter that specifies which direction. If click to continue || arrownext, then we move forward one. If it's backward, we move down one. To properly cycle through, use the count of the queue list. 
-If we move back, and the number = 0, then go to the queue_list.count. 
-If we move forward, and the number is greater than the queue_list.count, then go to pos 1. 
-In order to properly handle the loading of new trials, dispatch a few actions.
-PUT the new position to the sequence class.
-Upon response of the PUT, dispatch redux to change curr_q to reflect. 
-.then after, call loadTrials(), which should pull the new q and load new trials.
-*/
-
-
-
 
 
 

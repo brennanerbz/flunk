@@ -77,13 +77,59 @@ export function loadQs() {
 	return async(dispatch, getState) => {
 		let cs = getState().learn.curr_seq
 		try {
-			let q_list = ( await axios.get(`${api_url}/sequences/${cs['id']}/queues`) ).data
+			let q_list = ( await axios.get(`${api_url}/sequences/${cs['id']}/queues`) ).data	
 			q_list = q_list['queues']
-			dispatch({ type: RECEIVE_QS_SUCCESS, q_list})
-			dispatch(loadTrials())
+
+			let q = q_list.filter(q => q['order'] == cs['position'])[0]
+			dispatch({ type: RECEIVE_QS_SUCCESS, q_list, q})
+
+			let done = q_list.filter(q => q['completion'])
+			if (done.length === 0) { 
+				dispatch(newSeq()) 
+				return;
+			}
+			if (done.length > 0 && q['completion'] !== 'None') {
+				dispatch(skipToUnfinished())
+				return;
+			}
+			if (done.length > 0 && q['completion'] == 'None') {
+				dispatch(loadTrials())
+				return;
+			}			
+				
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_QS_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
+
+
+
+export const SKIP_SUCCESS = 'SKIP_SUCCESS';
+export const SKIP_FAILURE = 'SKIP_FAILURE';
+export function skipToUnfinished() {
+	return async(dispatch, getState) => {
+		let curr_seq = getState().learn.curr_seq
+		let queue_list = getState().learn.queue_list
+		try {
+			let cur_pos = curr_seq['position']
+			let pos = cur_pos;
+			for(var i = cur_pos; i < queue_list.length; i++) {
+
+			}
+			queue_list.some(function(q, i) {
+			    if (q.completion == "None") {
+			        pos = i;
+			        return true;
+			    }
+			});
+			console.log("%c pos" + pos, "color:green; font-weight: bold;")
+		} catch(err) {
+			dispatch ({
+				type: SKIP_FAILURE,
 				error: Error(err)
 			})
 		}
@@ -103,11 +149,24 @@ export function loadTrials() {
 		try {
 			let trials = ( await axios.get(`${api_url}/queues/${cq['id']}/trials`) ).data
 			trials = trials['trials']
-			if (trials.length === 0) { dispatch( newTrial() ) }
+			dispatch({type: RECEIVE_TRIALS_SUCCESS, trials})
+
+			if (trials.length === 0) { dispatch( newTrial() ) } 
 			else {
-				dispatch({type: RECEIVE_TRIALS_SUCCESS, trials})
-				dispatch(newTrial('mc'))
-			}
+				let lt = trials.slice(-1)[0]
+				let q_id = lt['queue_id']
+				if (lt['accuracy'] == 1 && cq['completion'] == 'None') {
+					await axios.put(`${api_url}/queues/${q_id}`, {
+						completion: true
+					}).then(
+						dispatch(move(1))						
+					).then(
+						dispatch(loadQs())
+					)
+				} else {
+					dispatch(newTrial('mc'))				
+				}
+			}									
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_TRIALS_FAILURE,
@@ -156,12 +215,22 @@ export function newTrial(diff) {
 					return;
 				}
 				dispatch({type: ADAPT_DIFF, trial})						
+			}).catch(res => {
+				let trial = res.data;
+				if(trial['accuracy'] === 1) {
+
+				}
 			})
 		} catch(err) {
-			dispatch({
-				type: RECEIVE_TRIAL_FAILURE,
-				error: Error(err)
-			})
+			let q_list = getState().learn.queue_list
+			console.log(q_list)
+			let completed_qs = q_list.filter(q => q['completion'] == 'None')
+			if (completed_qs.length === 0) { dispatch(newSeq()) } else {
+				dispatch({
+					type: RECEIVE_TRIAL_FAILURE,
+					error: Error(err)
+				})
+			}
 		}
 	}
 }
@@ -176,7 +245,6 @@ export function clearLearn() {
 /* 
 @params
 */
-export const SHOW_CORRECT = 'SHOW_CORRECT';
 export const GIVE_FEEDBACK = 'GIVE_FEEDBACK';
 export const ADAPT_DIFF = 'ADAPT_DIFF';
 export const ADAPT_ERROR = 'ADAPT_ERROR';
@@ -184,6 +252,9 @@ export function adapt(answer, reaction_time, response_time) {
 	return async(dispatch, getState) => {
 		try {
 			let id = getState().learn.trial.id
+			console.log("%c" + id, "color:green;")
+			let q_id = getState().learn.curr_q['id']
+			console.log("%c" + q_id, "color:green;")
 			await axios.put(`${api_url}/trials/${id}`, {
 				answer: answer,
 				reaction_time: reaction_time,
@@ -193,9 +264,7 @@ export function adapt(answer, reaction_time, response_time) {
 				dispatch({type: GIVE_FEEDBACK, updated_trial})
 				const acc = updated_trial['accuracy']
 				if (acc === 1) { 
-					dispatch({type: SHOW_CORRECT})
-					dispatch(move(1))
-					return; 
+					dispatch(markCorrect(q_id))					
 				}
 				if (acc < 1) {					
 					dispatch(newTrial())
@@ -204,6 +273,25 @@ export function adapt(answer, reaction_time, response_time) {
 		} catch(err) {
 			dispatch({
 				type: ADAPT_ERROR,
+				error: Error(err)
+			})
+		}
+	}
+}
+
+export const SHOW_CORRECT = 'SHOW_CORRECT';
+export const MARK_ERROR = "MARK_ERROR"
+export function markCorrect(queue_id) {
+	return async(dispatch, getState) => {
+		try {
+			await axios.put(`${api_url}/queues/${queue_id}`, {
+				completion: true
+			}).then(
+				dispatch({type: SHOW_CORRECT})
+			)
+		} catch(err) {
+			dispatch({
+				type: MARK_ERROR,
 				error: Error(err)
 			})
 		}

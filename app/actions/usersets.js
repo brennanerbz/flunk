@@ -19,7 +19,7 @@ export function fetchSets() {
 	return async(dispatch) => {
 		dispatch(requestSets());
 		try {
-			let data = ( await axios.get(`${api_url}/sets`) ).data
+			let data = ( await axios.get(`${api_url}/sets/`) ).data
 			dispatch(receiveSets(data['sets']))
 		} catch (err) {
 			dispatch({

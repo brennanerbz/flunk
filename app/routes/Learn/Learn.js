@@ -15,6 +15,8 @@ import LearnHelp from '../../components/LearnHelp/LearnHelp';
 	is_fetching_learn: state.learn.is_fetching_learn,
 	showCorrect: state.learn.show_correct,
 	showCompletedSeq: state.learn.show_completed_seq,
+	slots: state.learn.queue_list,
+	current_slot: state.learn.curr_q,
 	trial: state.learn.trial,
 	sets: state.sets.set_items
 	}),
@@ -41,11 +43,20 @@ export default class Learn extends Component {
 	}
 
 	render() {
-		const { newSeq, showCompletedSeq, showCorrect, skipToUnfinished, params} = this.props;
+		const { current_slot,
+				slots,
+				newSeq, 
+				showCompletedSeq, 
+				showCorrect, 
+				skipToUnfinished, 
+				params} = this.props;
 		return (
 			<div className="no_sidenav_container learn_container">
 				<div>
-					<LearnCard trial={this.props.trial}/>
+					<LearnCard slot={current_slot} 
+							   slots={slots} 
+							   skip={(dir) => skipToUnfinished(dir)} 
+							   trial={this.props.trial}/>
 					<LearnInput {...this.props}/>
 					{
 						showCorrect

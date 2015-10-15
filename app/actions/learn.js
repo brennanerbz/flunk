@@ -53,7 +53,7 @@ export function newSeq(user_id, set_id, diff) {
 			if (diff !== undefined) {
 				d = diff
 			} else {
-				d = 'mc'
+				d = 'recall'
 			}
 			if (current_seq !== undefined && finished_slots.length === 0) {
 				await axios.put(`${api_url}/sequences/${csid}`, {
@@ -278,7 +278,7 @@ export function markCorrect(queue_id) {
 			}).then((res) => {
 				let data = res.data;
 				dispatch({type: SHOW_CORRECT})
-				dispatch({type: UPDATE_SLOT, data})
+				dispatch({type: UPDATE_SLOT, data})				
 				})
 			.then((res) => {
 				let list = getState().learn.queue_list

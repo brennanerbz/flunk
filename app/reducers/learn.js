@@ -148,6 +148,7 @@ export default function learn(state = init_learn, action) {
 		case SHOW_COMPLETED_SEQ: 
 			return {
 				...state,
+				show_correct: false,
 				show_completed_seq: true
 			}
 		case NEW_SEQ_FAILURE:

@@ -59,7 +59,8 @@ export default class Learn extends Component {
 							   slots={slots} 
 							   skip={(dir) => nextSlot(dir)} 
 							   trial={this.props.trial}/>
-					<LearnInput {...this.props}/>
+					<LearnInput skip={(dir) => nextSlot(dir)}
+								{...this.props}/>
 					{
 						showCorrect
 						? <a onClick={() => goToUnfinished('next')}>Click to continue</a>
@@ -70,7 +71,11 @@ export default class Learn extends Component {
 						? <a onClick={() => newSeq(1, params.id)}>New sequence</a>
 						: null
 					}
-					<DiffControls />
+					{
+						!showCorrect && !showCompletedSeq
+						? <DiffControls />
+						: null
+					}				
 					<LearnHelp trial={this.props.trial}/>
 				</div>
 			 </div> 

@@ -16,6 +16,20 @@ export default class LearnInput extends Component {
 		});
 	}
 
+	keyDownHandlers = {
+		ArrowLeft() {
+			this.props.skip('prev')
+		}, 
+
+		ArrowRight() {
+			this.props.skip('next')
+		},
+
+		ArrowDown(event) {
+			this.handleSubmit(event)
+		}
+	}
+
 	handleReactionTime = () => {
 		if (this.state.reaction_time !== null ) { return; }
 		const t = new Date()
@@ -28,19 +42,22 @@ export default class LearnInput extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault()
 		const { adapt } = this.props;
-
 		const reaction_time = this.state.reaction_time;
 		const d = new Date()
-		const response_time = d.toISOString().replace('T', " ").replace("Z", "")
-		
+		const response_time = d.toISOString().replace('T', " ").replace("Z", "")		
 		const answer = this.state.answer.toLowerCase().trim()
-
-		console.log("React:" + reaction_time + "Resp:" + response_time)
 		adapt(answer, reaction_time, response_time)
 		this.setState({
 			answer: '',
 			reaction_time: null
 		});
+	}
+
+	handleKeyDown(event) {
+		this.handleReactionTime()
+  		if (this.keyDownHandlers[event.key]) {
+    		this.keyDownHandlers[event.key].call(this, event)
+  		}
 	}
 
 	componentWillReceiveProps() {
@@ -56,7 +73,7 @@ export default class LearnInput extends Component {
 			    	   ref="answerbox"
 			    	   value={this.state.answer}
 			    	   onChange={this.handleChange}
-			    	   onKeyDown={this.handleReactionTime}
+			    	   onKeyDown={::this.handleKeyDown}
 			    	   type="text" 
 			    	   className="form-control"/>
 			   	</form>

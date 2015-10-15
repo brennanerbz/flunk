@@ -9,6 +9,7 @@ require('./Learn.scss');
 
 import LearnCard from '../../components/LearnCard/LearnCard';
 import LearnInput from '../../components/LearnInput/LearnInput';
+import LearnFeedback from '../../components/LearnFeedback/LearnFeedback';
 import LearnHelp from '../../components/LearnHelp/LearnHelp';
 import DiffControls from '../../components/DiffControls/DiffControls';
 
@@ -75,8 +76,9 @@ export default class Learn extends Component {
 						!showCorrect && !showCompletedSeq
 						? <DiffControls />
 						: null
-					}				
-					<LearnHelp trial={this.props.trial}/>
+					}
+					<LearnFeedback slot={current_slot} trial={this.props.trial} />				
+					<LearnHelp slot={current_slot} trial={this.props.trial}/>
 				</div>
 			 </div> 
 		);

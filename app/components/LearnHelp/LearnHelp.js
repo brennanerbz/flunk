@@ -21,9 +21,7 @@ export default class LearnHelp extends Component {
 					<Hint hint={trial.augcue}/>
 				)
 			case 'related':
-				return (
-					<Related related={trial.related}/>
-				);
+				return;
 			case 'nonemc':
 			case 'mc':
 			 	return (
@@ -41,12 +39,20 @@ export default class LearnHelp extends Component {
 	}
 
 	render() {
+		const { slot } = this.props;
 		return(
 			<div>	
 				{
-					::this.renderHelp()
+					slot.completion == 'None'
+					? ::this.renderHelp()
+					: null
 				}
 			</div>
 		);
 	}
 }
+
+// case 'related':
+// 	return (
+// 		<Related related={trial.related}/>
+// 	);

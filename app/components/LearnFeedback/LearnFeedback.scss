@@ -1,0 +1,13 @@
+.feedback {
+	border-top: 1px solid #F3F3F3;
+	margin-top: 10px;
+	padding-top: 20px;
+	.related_choice {
+		cursor: pointer;
+		color: #2B80B9;
+		opacity: 0.95;
+		&:hover {
+			opacity: 1;
+		}
+	}
+}

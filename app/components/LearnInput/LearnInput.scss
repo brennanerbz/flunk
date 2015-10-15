@@ -1,9 +1,15 @@
+.input-group {
+	margin-bottom: 10px;
+}
+
 .form-control {
-	border-left: none!important;
-	border-radius: 0 6px 6px 0;
 	border: 1px solid #E0E0E0;
 	height: 42px;
-	&:focus {
+	opacity: 1;
+	color: #000;
+	border-top-left-radius: 0.25rem!important; 
+	border-bottom-left-radius: 0.25rem!important; 
+	 &:focus {
 		border: 1px solid #D8D8D8;
 	}
 }

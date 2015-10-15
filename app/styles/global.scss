@@ -256,6 +256,14 @@ button:focus, input[type="button"]:focus {
     &.side_tool {
     	width: 60%;
     }
+    &.bottom_tool {
+    	white-space: nowrap;
+    	padding: 5px 5px;
+    }
+}
+.tooltip.bottom {
+  padding: 5px 0;
+  margin-top: 4.5px;
 }
 .tooltip-side {
     left: 0!important;
@@ -292,6 +300,13 @@ button:focus, input[type="button"]:focus {
 	border-left:8px solid transparent;
 	border-right:8px solid transparent;
 	border-top:8px solid #000;
+}
+.tooltip.bottom .tooltip-arrow {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #000;
 }
 .tooltip-inner{
     max-width:200px;

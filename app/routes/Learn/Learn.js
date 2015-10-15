@@ -10,6 +10,7 @@ require('./Learn.scss');
 import LearnCard from '../../components/LearnCard/LearnCard';
 import LearnInput from '../../components/LearnInput/LearnInput';
 import LearnHelp from '../../components/LearnHelp/LearnHelp';
+import DiffControls from '../../components/DiffControls/DiffControls';
 
 @connect(state => ({
 	is_fetching_learn: state.learn.is_fetching_learn,
@@ -69,6 +70,7 @@ export default class Learn extends Component {
 						? <a onClick={() => newSeq(1, params.id)}>New sequence</a>
 						: null
 					}
+					<DiffControls />
 					<LearnHelp trial={this.props.trial}/>
 				</div>
 			 </div> 

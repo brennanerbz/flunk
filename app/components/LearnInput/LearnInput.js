@@ -50,9 +50,7 @@ export default class LearnInput extends Component {
 	render() {
 		return(
 			<div className="input-group">
-			    <span className="input-group-btn">
-			    	<button className="btn help_btn" type="button">?</button>
-			    </span>
+			    
 			    <form onSubmit={this.handleSubmit}>
 			    <input autoFocus={true} 
 			    	   ref="answerbox"
@@ -62,6 +60,9 @@ export default class LearnInput extends Component {
 			    	   type="text" 
 			    	   className="form-control"/>
 			   	</form>
+			   	<span className="input-group-btn">
+			   		<button className="btn help_btn" type="button">Answer</button>
+			   	</span>
 			</div>
 		);
 	}

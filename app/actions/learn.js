@@ -306,36 +306,6 @@ export function markCorrect(queue_id) {
 /*
 @params
 */
-// function prev(pos, list) {
-// 	for (let p = pos; p < list.length; p--) {
-// 		if(list[p]['completion'] == "None") { 			
-// 			return p;
-// 		}
-// 	}
-// }
-// function skip(dir, pos, list) {
-// 	let val,
-// 		recur,
-// 		length = list.slice(-1)[0]['order']
-// 	if (dir == 'next') {
-// 		if (pos == length) {
-// 			pos = 1
-// 		}
-// 		val = next(pos, list)
-// 		recur = next(1, list)
-// 	} else if (dir == 'prev') {
-// 		if (pos - 1 === 0 || pos === 0) {
-// 			pos = length;
-// 		}
-// 		val = prev(pos - 1, list)
-// 		recur = prev(length - 1, list)
-// 	}	
-// 	if (val !== undefined || list[val]['order'] !== pos) {
-// 		return list[val]['order'];
-// 	} else {
-// 		return list[recur]['order'];
-// 	}
-// }
 
 function nextIterator(pos, list) {
 	for(let n = pos - 1; n < list.length; n++) {
@@ -360,8 +330,7 @@ function decideUnfinishedSlot(pos, list) {
 	}
 }
 
-
-function skip(dir, pos, list) {
+function next(dir, pos, list) {
 	let new_pos;
 	let last = list.slice(-1)[0]['order']	
 	if(dir == 'next') {
@@ -397,7 +366,7 @@ export function nextSlot(direction) {
 		var _list = getState().learn.queue_list	
 		try {
 			let cur_pos = curr_seq['position']			
-			let get_pos = skip(direction, cur_pos, _list)					
+			let get_pos = next(direction, cur_pos, _list)					
 			dispatch(updatePosition(get_pos))			
 		} catch(err) {
 			dispatch ({

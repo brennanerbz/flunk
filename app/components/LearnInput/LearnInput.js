@@ -43,6 +43,10 @@ export default class LearnInput extends Component {
 		});
 	}
 
+	componentWillReceiveProps() {
+		this.refs.answerbox.focus()
+	}
+
 	render() {
 		return(
 			<div className="input-group">
@@ -51,6 +55,7 @@ export default class LearnInput extends Component {
 			    </span>
 			    <form onSubmit={this.handleSubmit}>
 			    <input autoFocus={true} 
+			    	   ref="answerbox"
 			    	   value={this.state.answer}
 			    	   onChange={this.handleChange}
 			    	   onKeyDown={this.handleReactionTime}

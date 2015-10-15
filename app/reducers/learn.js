@@ -125,6 +125,7 @@ export default function learn(state = init_learn, action) {
 			return {
 				...state,
 				show_correct: false,
+				curr_seq: Object.assign({...state.curr_seq}, {position: action.new_pos}),
 				curr_pos: action.new_pos,
 				curr_q: new_q
 			}

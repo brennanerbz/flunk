@@ -48,19 +48,20 @@ export default class Learn extends Component {
 				newSeq, 
 				showCompletedSeq, 
 				showCorrect, 
-				skipToUnfinished, 
+				goToUnfinished, 
+				nextSlot,
 				params} = this.props;
 		return (
 			<div className="no_sidenav_container learn_container">
 				<div>
 					<LearnCard slot={current_slot} 
 							   slots={slots} 
-							   skip={(dir) => skipToUnfinished(dir)} 
+							   skip={(dir) => nextSlot(dir)} 
 							   trial={this.props.trial}/>
 					<LearnInput {...this.props}/>
 					{
 						showCorrect
-						? <a onClick={() => skipToUnfinished('next')}>Click to continue</a>
+						? <a onClick={() => goToUnfinished('next')}>Click to continue</a>
 						: null
 					}
 					{

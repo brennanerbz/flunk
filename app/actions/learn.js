@@ -29,7 +29,6 @@ export function loadSeq(id, set_id, diff) {
 				dispatch(loadQs())
 			}
 			else {
-				console.log(id + " " + set_id)
 				dispatch(newSeq(id, set_id))
 			}				
 		} catch (err) {
@@ -115,7 +114,7 @@ export function loadQs() {
 			}
 			
 			if (done.length > 0 && q['completion'] !== 'None') {
-				dispatch(skipToUnfinished('next'))
+				dispatch(goToUnfinished('next'))
 				return;
 			}
 
@@ -143,11 +142,18 @@ export function loadTrials() {
 	return async(dispatch, getState) => {
 		let cs = getState().learn.curr_seq;
 		var _cq = getState().learn.curr_q;
-		console.log(_cq)
 		try {
 			let trials = ( await axios.get(`${api_url}/queues/${_cq.id}/trials`) ).data
 			trials = trials['trials']
 			dispatch({type: RECEIVE_TRIALS_SUCCESS, trials})
+
+			let done = _cq['completion']
+			if(done !== 'None') {
+				const trial = trials.slice(-1)[0]
+				dispatch({type: SHOW_CORRECT})
+				dispatch({type: RECEIVE_TRIAL_SUCCESS, trial})
+				return;
+			}
 
 			if (trials.length === 0) { 
 				dispatch(newTrial())
@@ -196,7 +202,6 @@ export function newTrial(diff) {
 			} else {
 				d = null // let the server generate diff 
 			}
-			console.log("%c" + curr_q['id'], "color:green;")		
 			await axios.post(`${api_url}/trials/`, {
 				user_id: curr_seq['user_id'],
 				set_id: curr_seq['set_id'],
@@ -301,43 +306,84 @@ export function markCorrect(queue_id) {
 /*
 @params
 */
-function prev(pos, list) {
-	for (var i = pos; i < list.length; i--) {
-		if(list[i]['completion'] == "None") { 			
-			return i;
+// function prev(pos, list) {
+// 	for (let p = pos; p < list.length; p--) {
+// 		if(list[p]['completion'] == "None") { 			
+// 			return p;
+// 		}
+// 	}
+// }
+// function skip(dir, pos, list) {
+// 	let val,
+// 		recur,
+// 		length = list.slice(-1)[0]['order']
+// 	if (dir == 'next') {
+// 		if (pos == length) {
+// 			pos = 1
+// 		}
+// 		val = next(pos, list)
+// 		recur = next(1, list)
+// 	} else if (dir == 'prev') {
+// 		if (pos - 1 === 0 || pos === 0) {
+// 			pos = length;
+// 		}
+// 		val = prev(pos - 1, list)
+// 		recur = prev(length - 1, list)
+// 	}	
+// 	if (val !== undefined || list[val]['order'] !== pos) {
+// 		return list[val]['order'];
+// 	} else {
+// 		return list[recur]['order'];
+// 	}
+// }
+
+function nextIterator(pos, list) {
+	for(let n = pos - 1; n < list.length; n++) {
+		if(list[n]['completion'] == 'None') {
+			return n;
 		}
 	}
 }
-function next(pos, list) {
-	for(var i = pos - 1; i < list.length; i++) {
-		if(list[i]['completion'] == 'None') {
-			return i;
-		}
-	}
-}
-function skip(dir, pos, list) {
+function decideUnfinishedSlot(pos, list) {
 	let val,
 		recur,
-		length = list.slice(-1)[0]['order']
-	if (dir == 'next') {
-		if (pos == length) {
-			pos = 1
-		}
-		val = next(pos, list)
-		recur = next(1, list)
-	} else if (dir == 'prev') {
-		if (pos - 1 === 0 || pos === 0) {
-			pos = length;
-		}
-		val = prev(pos - 1, list)
-		recur = prev(length - 1, list)
-	}		
+		length = list.slice(-1)[0]['order'];
+	if(pos == length) {
+		pos = 1
+	}
+	val = nextIterator(pos, list) 
+	recur = nextIterator(1, list)
 	if (val !== undefined) {
-		return list[val]['order'];
+		return list[val]['order']
 	} else {
-		return list[recur]['order'];
+		return list[recur]['order']
 	}
 }
+
+
+function skip(dir, pos, list) {
+	let new_pos;
+	let last = list.slice(-1)[0]['order']	
+	if(dir == 'next') {
+		new_pos = pos + 1;
+		if(new_pos < last) {
+			return new_pos
+		} else {
+			return last;
+		}
+	}
+	if (dir == 'prev') {
+		new_pos = pos - 1;
+		if (new_pos <= 0) {
+			return 1;
+		} else {
+			return new_pos;
+		}
+	}
+}
+
+// if the current pos + 1 is greater than the last order, start back at 1
+// loop through the list, incrementing by 1 to see if there are any matches to completion == "None" 
 
 /*
 @params
@@ -345,18 +391,14 @@ function skip(dir, pos, list) {
 
 export const SKIP_SUCCESS = 'SKIP_SUCCESS';
 export const SKIP_FAILURE = 'SKIP_FAILURE';
-export function skipToUnfinished(direction) {
+export function nextSlot(direction) {
 	return async(dispatch, getState) => {
 		let curr_seq = getState().learn.curr_seq
-		let list = getState().learn.queue_list
-		console.log(list)
+		var _list = getState().learn.queue_list	
 		try {
-			let cur_pos = curr_seq['position']
-			if (direction == 'prev') {
-				cur_pos = cur_pos - 1;
-			}
-			let next_pos = skip(direction, cur_pos, list)
-			dispatch(updatePosition(next_pos))			
+			let cur_pos = curr_seq['position']			
+			let get_pos = skip(direction, cur_pos, _list)					
+			dispatch(updatePosition(get_pos))			
 		} catch(err) {
 			dispatch ({
 				type: SKIP_FAILURE,
@@ -365,6 +407,23 @@ export function skipToUnfinished(direction) {
 		}
 	}
 }
+export function goToUnfinished(direction) {
+	return async(dispatch, getState) => {
+		let curr_seq = getState().learn.curr_seq
+		var _list = getState().learn.queue_list	
+		try {
+			let cur_pos = curr_seq['position']			
+			let unfinished_pos = decideUnfinishedSlot(cur_pos, _list)					
+			dispatch(updatePosition(unfinished_pos))			
+		} catch(err) {
+			dispatch ({
+				type: SKIP_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
+
 
 /*
 @params

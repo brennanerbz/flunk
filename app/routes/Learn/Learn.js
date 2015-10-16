@@ -8,6 +8,7 @@ import * as setactions from '../../actions/usersets';
 require('./Learn.scss');
 
 import LearnCard from '../../components/LearnCard/LearnCard';
+import ShowCorrect from '../../components/ShowCorrect/ShowCorrect';
 import LearnInput from '../../components/LearnInput/LearnInput';
 import LearnFeedback from '../../components/LearnFeedback/LearnFeedback';
 import LearnHelp from '../../components/LearnHelp/LearnHelp';
@@ -43,6 +44,16 @@ export default class Learn extends Component {
 		const { clearLearn } = this.props;
 		clearLearn()
 	}
+	
+
+	handleKeyUp(event) {
+		if(event.which && this.props.showCorrect) {
+			this.props.goToUnfinished('next')
+		}	
+		if(event.which && this.props.showCompletedSeq) {
+			this.props.newSeq(1, this.props.params.id)
+		}	
+	}
 
 	render() {
 		const { current_slot,
@@ -54,19 +65,25 @@ export default class Learn extends Component {
 				nextSlot,
 				params} = this.props;
 		return (
-			<div className="no_sidenav_container learn_container">
+			<div className="no_sidenav_container learn_container"
+				 onKeyPress={::this.handleKeyUp}>
 				<div>
 					<LearnCard slot={current_slot} 
 							   slots={slots} 
 							   skip={(dir) => nextSlot(dir)} 
 							   trial={this.props.trial}/>
-					<LearnInput skip={(dir) => nextSlot(dir)}
-								{...this.props}/>
 					{
 						showCorrect
-						? <a onClick={() => goToUnfinished('next')}>Click to continue</a>
+						? <ShowCorrect {...this.props}/>
 						: null
 					}
+					{
+						!showCorrect && !showCompletedSeq
+						? <LearnInput skip={(dir) => nextSlot(dir)}
+									{...this.props}/>
+						: null
+					}
+										
 					{
 						showCompletedSeq
 						? <a onClick={() => newSeq(1, params.id)}>New sequence</a>
@@ -87,6 +104,10 @@ export default class Learn extends Component {
 
 
 // Always render the card, and then decide to render the cue in the component below
-
+// {
+// 	showCorrect
+// 	? <a onClick={() => goToUnfinished('next')}>Click to continue</a>
+// 	: null
+// }
 
 

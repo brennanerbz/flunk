@@ -107,9 +107,10 @@ export default function learn(state = init_learn, action) {
 		case GIVE_FEEDBACK:
 			const new_fb = action.updated_trial['feedback'];
 			const new_praise = action.updated_trial['praise'];
+			const answer = action.updated_trial['answer'];
 			return {
 				...state,
-				trial: Object.assign({...state.trial}, {feedback: new_fb, praise: new_praise})
+				trial: Object.assign({...state.trial}, {feedback: new_fb, praise: new_praise, answer: answer })
 			}
 		case ADAPT_DIFF:
 			const old_fb = state.trial['feedback'];

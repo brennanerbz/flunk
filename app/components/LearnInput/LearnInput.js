@@ -60,8 +60,14 @@ export default class LearnInput extends Component {
   		}
 	}
 
-	componentWillReceiveProps() {
+	componentWillReceiveProps(nextProps) {
+		const { current_slot } = this.props;
 		this.refs.answerbox.focus()
+		if (current_slot !== nextProps.current_slot) {
+			this.setState({
+				answer: ''
+			});
+		}
 	}
 
 	render() {

@@ -38,7 +38,7 @@ export default class LearnFeedback extends Component {
 			}
 			{
 				correct !== 'None'
-				? <a>Click any button to continue</a>
+				? <a>Press any key to continue</a>
 				: null
 			}
 			{	

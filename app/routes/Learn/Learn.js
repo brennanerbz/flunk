@@ -18,6 +18,7 @@ import DiffControls from '../../components/DiffControls/DiffControls';
 	is_fetching_learn: state.learn.is_fetching_learn,
 	showCorrect: state.learn.show_correct,
 	showCompletedSeq: state.learn.show_completed_seq,
+	showFeedback: state.learn.show_feedback,
 	slots: state.learn.queue_list,
 	current_slot: state.learn.curr_q,
 	trial: state.learn.trial,
@@ -42,15 +43,38 @@ export default class Learn extends Component {
 
 	componentDidMount() {
 		window.addEventListener('keypress', ::this.handleKeyUp)
+		window.addEventListener('keydown', ::this.handleArrowKeys)
 	}
 
 	componentWillUnmount() {
 		const { clearLearn } = this.props;
 		clearLearn()
+		window.removeEventListener('keypress', ::this.handleKeyUp)
+		window.removeEventListener('keydown', ::this.handleArrowKeys)
+	}
+
+	keyDownHandlers = {
+		37() {
+			this.props.nextSlot('prev')
+		}, 
+
+		39() {
+			this.props.nextSlot('next')
+		},
+
+		40(event) {
+			if(this.props.current_slot.completion == 'None')
+				this.refs['learn_input'].handleSubmit(event)
+		}
+	}
+
+	handleArrowKeys(event) {
+		if (this.keyDownHandlers[event.which]) {
+    		this.keyDownHandlers[event.which].call(this, event)    		
+  		}
 	}
 	
-
-	handleKeyUp(event) {
+	handleKeyUp(event) {	
 		const { showCorrect, showCompletedSeq } = this.props;
 		if(event.which && showCorrect) {
 			this.props.goToUnfinished('next')
@@ -66,12 +90,14 @@ export default class Learn extends Component {
 				newSeq, 
 				showCompletedSeq, 
 				showCorrect, 
+				showFeedback,
 				goToUnfinished, 
 				nextSlot,
 				params} = this.props;
 		return (
 			<div className="no_sidenav_container learn_container"
-				 onKeyPress={::this.handleKeyUp}>
+				 onKeyPress={::this.handleKeyUp}
+				 onKeyDown={::this.handleArrowKeys}>
 				<div>
 					<LearnCard slot={current_slot} 
 							   slots={slots} 
@@ -84,11 +110,11 @@ export default class Learn extends Component {
 					}
 					{
 						!showCorrect && !showCompletedSeq
-						? <LearnInput skip={(dir) => nextSlot(dir)}
-									{...this.props}/>
+						? <LearnInput ref='learn_input'
+									  skip={(dir) => nextSlot(dir)}
+									  {...this.props}/>
 						: null
-					}
-										
+					}										
 					{
 						showCompletedSeq
 						? <a onClick={() => newSeq(1, params.id)}>New sequence</a>
@@ -99,8 +125,16 @@ export default class Learn extends Component {
 						? <DiffControls />
 						: null
 					}
-					<LearnFeedback slot={current_slot} trial={this.props.trial} />				
-					<LearnHelp slot={current_slot} trial={this.props.trial}/>
+					{
+						showFeedback
+						? <LearnFeedback slot={current_slot} trial={this.props.trial} />	
+						: null
+					}
+					{
+						!showCorrect && !showCompletedSeq
+						? <LearnHelp slot={current_slot} trial={this.props.trial}/>
+						: null
+					}													
 				</div>
 			 </div> 
 		);

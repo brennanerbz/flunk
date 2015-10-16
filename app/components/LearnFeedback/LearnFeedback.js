@@ -20,19 +20,35 @@ export default class LearnFeedback extends Component {
 		)
 	}
 
+	hintHook() {
+		let hook_choices = [
+		'Maybe this example will help...', 
+		'Try this hint...',
+		'This hint might help...',
+		'This other example might help you...'
+		]
+		let r_num = Math.floor(Math.random() * 4)
+		let hint_hook = hook_choices[r_num]
+		return (
+			<p>{hint_hook}</p>
+		)
+	}
+
+
 	renderFeedbackMessage(trial, slot) {
 		const correct = slot.completion
 		const praise = trial.praise.charAt(0).toUpperCase() + trial.praise.slice(1)
 		const feedback = trial.feedback
+		const answer = trial.answer
 		return(
 			<p className="feedback">
 			{	
-				praise.toLowerCase() !== 'bad'
+				praise.toLowerCase() !== 'bad' && answer !== null
 				? praise + " "
 				: null
 			} 
 			{	
-				feedback.toLowerCase() !== 'incorrect'
+				feedback.toLowerCase() !== 'incorrect' && answer !== null
 				? feedback + ". "
 				: null
 			}
@@ -44,6 +60,11 @@ export default class LearnFeedback extends Component {
 			{	
 				trial.difficulty == 'related' && correct == 'None'
 				? ::this.relatedHook(trial.related)
+				: null
+			}
+			{
+				trial.difficulty == 'aug' && correct == 'None'
+				? ::this.hintHook()
 				: null
 			}
 			</p>

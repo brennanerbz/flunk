@@ -149,7 +149,7 @@ export function loadTrials() {
 
 			let done = _cq['completion']
 			if(done !== 'None') {
-				const trial = trials.slice(-1)[0]
+				const trial = trials.filter(trial => Number(trial.accuracy) === 1)[0]
 				dispatch({type: SHOW_CORRECT})
 				dispatch({type: RECEIVE_TRIAL_SUCCESS, trial})
 				return;
@@ -194,7 +194,7 @@ export function newTrial(diff) {
 		try {			
 			let curr_trial = getState().learn.trial
 			let curr_seq = getState().learn.curr_seq;
-			let curr_q = getState().learn.curr_q
+			let curr_q = getState().learn.curr_q			
 				
 			let d;
 			if (diff !== undefined) {
@@ -300,7 +300,6 @@ export function markCorrect(queue_id) {
 		}
 	}
 }
-
 
 
 /*

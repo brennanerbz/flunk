@@ -20,13 +20,16 @@ export default class MultipleChoice extends Component {
 		let parsed_choices;
 		if(choices !== null || typeof choices !== undefined) { parsed_choices = choices.split("|") }
 		return (
-			<ul className="list-group">
-				{
-					parsed_choices !== undefined
-					? parsed_choices.map((choice, i) => <MultiChoiceItem key={i} choice={choice}/>)
-					: null
-				}
-			</ul>
+			<div>
+				<p className="diff_label">Multiple choice:</p>
+				<ul className="list-group">
+					{
+						parsed_choices !== undefined
+						? parsed_choices.map((choice, i) => <MultiChoiceItem key={i} choice={choice}/>)
+						: null
+					}
+				</ul>
+			</div>
 		);
 	}
 }

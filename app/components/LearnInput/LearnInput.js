@@ -8,26 +8,26 @@ export default class LearnInput extends Component {
 	state = {
 		answer: '',
 		reaction_time: null
-	}	
+	}		
+
+	// shouldComponentUpdate(nextProps) {
+	// 	return nextProps.current_slot.completion == 'None'
+	// }
+
+	componentWillReceiveProps(nextProps) {
+		const { current_slot } = this.props;
+		this.refs.answerbox.focus()
+		if (current_slot !== nextProps.current_slot) {
+			this.setState({
+				answer: ''
+			});
+		}
+	}
 
 	handleChange = (e) => {
 		this.setState({
 			answer: e.target.value
 		});
-	}
-
-	keyDownHandlers = {
-		ArrowLeft() {
-			this.props.skip('prev')
-		}, 
-
-		ArrowRight() {
-			this.props.skip('next')
-		},
-
-		ArrowDown(event) {
-			this.handleSubmit(event)
-		}
 	}
 
 	handleReactionTime = () => {
@@ -55,25 +55,11 @@ export default class LearnInput extends Component {
 
 	handleKeyDown(event) {
 		this.handleReactionTime()
-  		if (this.keyDownHandlers[event.key]) {
-    		this.keyDownHandlers[event.key].call(this, event)
-  		}
-	}
-
-	componentWillReceiveProps(nextProps) {
-		const { current_slot } = this.props;
-		this.refs.answerbox.focus()
-		if (current_slot !== nextProps.current_slot) {
-			this.setState({
-				answer: ''
-			});
-		}
 	}
 
 	render() {
 		return(
 			<div className="input-group">
-			    
 			    <form onSubmit={this.handleSubmit}>
 			    <input autoFocus={true} 
 			    	   ref="answerbox"

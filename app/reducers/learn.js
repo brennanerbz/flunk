@@ -32,6 +32,7 @@ const init_learn = {
 	is_fetching_learn: false,
 	show_correct: false,
 	show_completed_seq: false,
+	show_feedback: false,
 	curr_seq: {},
 	queue_list: [],
 	curr_pos: null,
@@ -99,10 +100,15 @@ export default function learn(state = init_learn, action) {
 				trials: action.trials,
 				last_trial: lt
 			}
-		case RECEIVE_TRIAL_SUCCESS:
+		case RECEIVE_TRIAL_SUCCESS:	
+			let feedback = action.trial.feedback		
+			if (feedback !== null && feedback.length > 0) {
+				var should_show_feedback = true
+			}
 			return {
 				...state,
-				trial: action.trial
+				trial: action.trial,
+				show_feedback: should_show_feedback
 			}
 		case GIVE_FEEDBACK:
 			const new_fb = action.updated_trial['feedback'];
@@ -110,7 +116,8 @@ export default function learn(state = init_learn, action) {
 			const answer = action.updated_trial['answer'];
 			return {
 				...state,
-				trial: Object.assign({...state.trial}, {feedback: new_fb, praise: new_praise, answer: answer })
+				trial: Object.assign({...state.trial}, {feedback: new_fb, praise: new_praise, answer: answer }),
+				show_feedback: true
 			}
 		case ADAPT_DIFF:
 			const old_fb = state.trial['feedback'];
@@ -126,6 +133,7 @@ export default function learn(state = init_learn, action) {
 			return {
 				...state,
 				show_correct: false,
+				show_feedback: false,
 				curr_seq: Object.assign({...state.curr_seq}, {position: action.new_pos}),
 				curr_pos: action.new_pos,
 				curr_q: new_q

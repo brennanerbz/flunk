@@ -3,8 +3,8 @@ require('./ShowCorrect.scss');
 
 export default class ShowCorrect extends Component {
 	static propTypes = {
-	}
-
+	}	
+	
 	render() {
 		const { current_slot, trial } = this.props;
 		return(

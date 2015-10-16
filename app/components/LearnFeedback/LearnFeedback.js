@@ -42,7 +42,7 @@ export default class LearnFeedback extends Component {
 				: null
 			}
 			{	
-				trial.difficulty == 'related'
+				trial.difficulty == 'related' && correct == 'None'
 				? ::this.relatedHook(trial.related)
 				: null
 			}

@@ -38,6 +38,10 @@ export default class Learn extends Component {
 	componentWillMount() {
 		const {loadSeq , params } = this.props;
 		loadSeq(1, Number(params.id))
+	}	
+
+	componentDidMount() {
+		window.addEventListener('keypress', ::this.handleKeyUp)
 	}
 
 	componentWillUnmount() {
@@ -47,10 +51,11 @@ export default class Learn extends Component {
 	
 
 	handleKeyUp(event) {
-		if(event.which && this.props.showCorrect) {
+		const { showCorrect, showCompletedSeq } = this.props;
+		if(event.which && showCorrect) {
 			this.props.goToUnfinished('next')
 		}	
-		if(event.which && this.props.showCompletedSeq) {
+		if(event.which && showCompletedSeq) {
 			this.props.newSeq(1, this.props.params.id)
 		}	
 	}

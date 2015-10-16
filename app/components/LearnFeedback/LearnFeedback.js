@@ -16,7 +16,7 @@ export default class LearnFeedback extends Component {
 			}
 		)		
 		return (
-			<span>{hook} {bold_choices.slice(0, 3)}{" and "}<b className="related_choice">{last_choice + "."}</b></span>
+			<span className="span_feedback">{hook} {bold_choices.slice(0, 3)}{" and "}<b className="related_choice">{last_choice + "."}</b></span>
 		)
 	}
 
@@ -30,7 +30,7 @@ export default class LearnFeedback extends Component {
 		let r_num = Math.floor(Math.random() * 4)
 		let hint_hook = hook_choices[r_num]
 		return (
-			<p>{hint_hook}</p>
+			<span>{hint_hook}</span>
 		)
 	}
 
@@ -41,45 +41,57 @@ export default class LearnFeedback extends Component {
 		const feedback = trial.feedback
 		const answer = trial.answer
 		return(
-			<p className="feedback">
-			{	
-				praise.toLowerCase() !== 'bad' && answer !== null
-				? praise + " "
-				: null
-			} 
-			{	
-				feedback.toLowerCase() !== 'incorrect' && answer !== null
-				? feedback + ". "
-				: null
-			}
-			{
-				correct !== 'None'
-				? <a>Press any key to continue</a>
-				: null
-			}
-			{	
-				trial.difficulty == 'related' && correct == 'None'
-				? ::this.relatedHook(trial.related)
-				: null
-			}
-			{
-				trial.difficulty == 'aug' && correct == 'None'
-				? ::this.hintHook()
-				: null
-			}
+			<p className="feedback_message">				
+				{	
+					praise
+					? <span>{praise + " "}</span>
+					: null
+				} 
+				{	
+					feedback
+					? <span>{feedback + ". "}</span>
+					: null
+				}
+				{
+					correct !== 'None'
+					? <a>Press any key to continue</a>
+					: null
+				}
+				{	
+					trial.difficulty == 'related' && correct == 'None'
+					? ::this.relatedHook(trial.related)
+					: null
+				}
+				{
+					trial.difficulty == 'aug' && correct == 'None'
+					? ::this.hintHook()
+					: null
+				}
 			</p>
 		)
 	}
 
+	shouldShowFeedback(feedback, praise) {
+		if (feedback.toLowerCase() !== 'incorrect' || praise.toLowerCase() !== 'bad') return true;
+	}
+
 	render() {
 		const { trial, slot } = this.props;
+		const quotes = require('../../assets/quotes.png');
 		return(
-			<div>
+			<div className="feedback">	
 				{
-					trial.feedback
+					trial.feedback || trial.praise 
+					? <span className="supplemental_feedback">
+					  	<img className="feedback_quotes" src={quotes}/>
+					  </span>
+					: null
+				}			
+				{
+					trial.feedback || trial.praise
 					? ::this.renderFeedbackMessage(trial, slot) 
 					: null
-				}
+				}								
 			</div>
 		);
 	}

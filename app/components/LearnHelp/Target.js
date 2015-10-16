@@ -30,8 +30,8 @@ export default class Answer extends Component {
 			<div>
 			{
 				stem !== null
-				? <p>{::this.fillInTheBlank(stem)}</p>
-				: <p>{::this.copyAnswer(target)}</p>
+				? ::this.fillInTheBlank(stem)
+				: ::this.copyAnswer(target)
 			}
 			</div>
 		);

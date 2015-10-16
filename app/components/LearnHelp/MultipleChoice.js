@@ -21,7 +21,7 @@ export default class MultipleChoice extends Component {
 		if(choices !== null || typeof choices !== undefined) { parsed_choices = choices.split("|") }
 		return (
 			<div>
-				<p className="diff_label">Multiple choice:</p>
+				<p className="diff_label mc_label">Multiple choice:</p>
 				<ul className="list-group">
 					{
 						parsed_choices !== undefined

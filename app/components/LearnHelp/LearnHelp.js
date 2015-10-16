@@ -41,7 +41,7 @@ export default class LearnHelp extends Component {
 	render() {
 		const { slot } = this.props;
 		return(
-			<div>	
+			<div className="learn_help">	
 				{
 					slot.completion == 'None'
 					? ::this.renderHelp()

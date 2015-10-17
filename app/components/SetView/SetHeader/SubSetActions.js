@@ -85,6 +85,9 @@ export default class SubSetActions extends Component {
 	toggleModal() {
 		$('[data-toggle="tooltip"]').tooltip('hide')
 		$(this.refs.share_modal).modal()
+		setTimeout(() => {
+			this.refs.share_link.select()
+		}, 300)		
 	}
 
 	render() {
@@ -119,14 +122,14 @@ export default class SubSetActions extends Component {
 				          <span aria-hidden="true">&times;</span>
 				          <span className="sr-only">Close</span>
 				        </button>
-				        <h4 className="modal-title" id="myModalLabel">Share</h4>
+				        <h3 className="modal-title" id="myModalLabel">Share study set</h3>
 				      </div>
 				      <div className="modal-body">
-				        ...
+				      	<input id="share_link" ref="share_link" type="text" value="https://ace.com/987389/cog-sci" />
 				      </div>
 				      <div className="modal-footer">
 				        <button type="button" className="button" data-dismiss="modal">Cancel</button>
-				        <button type="button" className="button button-primary">Done</button>
+				        <button type="button" className="button button-primary" data-dismiss="modal">Done</button>
 				      </div>
 				    </div>
 				  </div>

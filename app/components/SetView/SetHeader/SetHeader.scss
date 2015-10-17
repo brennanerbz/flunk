@@ -1,0 +1,29 @@
+.set_header {
+	display: table;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: normal;
+	.set_image {
+		height: 40px;
+	}
+	.header_info {
+		padding-left: 10px;
+		vertical-align: middle;
+		.set_title {
+			font-size: 24px;
+			// line-height: 1.4em;		
+			font-family: "Calibri";
+			letter-spacing: 0.01em;
+		}
+		.set_author {
+			display: block;
+			color: #D2D2D2;
+			font-size: 14px;
+			line-height: 0.75;
+			a {
+				color: #D2D2D2;
+			}
+		}
+	}	
+}

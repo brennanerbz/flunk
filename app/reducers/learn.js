@@ -84,6 +84,7 @@ export default function learn(state = init_learn, action) {
 				...state,
 				show_correct: false,
 				show_completed_seq: false,
+				show_feedback: false,
 				curr_seq: action.curr_seq,
 				curr_pos: cp
 			}

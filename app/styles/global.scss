@@ -417,7 +417,6 @@ button:focus, input[type="button"]:focus {
 }
 
 
-
 // /*Placeholder hover darken*/
 
 ::-webkit-input-placeholder {
@@ -428,8 +427,6 @@ textarea:hover::-webkit-input-placeholder {
     -webkit-transition: opacity 0.05 ease-in-out;
  	transition: opacity 0.05 ease-in-out;
 }
-
-
 :moz-placeholder {
 	color: #B2B2B2;
 }
@@ -446,9 +443,6 @@ textarea:hover::-webkit-input-placeholder {
   -moz-transition: opacity 0.1 ease-in-out;
   transition: opacity 0.1 ease-in-out;
 }
-
-
-
 :ms-input-placeholder {
 	color: #B2B2B2;
 }
@@ -456,6 +450,15 @@ textarea:hover:ms-input-placeholder {
 	opacity: 0.8;
     -ms-transition: opacity 0.1 ease-in-out;
  	transition: opacity 0.1 ease-in-out;
+}
+
+
+// Inline images and info
+.inline_image {
+	display: table-cell;
+}
+.inline_info {
+	display: table-cell;
 }
 
 

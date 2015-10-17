@@ -7,6 +7,7 @@ import * as setactions from '../../actions/usersets';
 
 require('./Learn.scss');
 
+/* Components */
 import LearnCard from '../../components/LearnCard/LearnCard';
 import ShowCorrect from '../../components/ShowCorrect/ShowCorrect';
 import LearnInput from '../../components/LearnInput/LearnInput';

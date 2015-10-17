@@ -82,6 +82,11 @@ export default class SubSetActions extends Component {
 		});
 	}
 
+	toggleModal() {
+		$('[data-toggle="tooltip"]').tooltip('hide')
+		$(this.refs.share_modal).modal()
+	}
+
 	render() {
 		const { set } = this.props;
 		const member_icon = require('../../../assets/profile_icon.png');
@@ -95,15 +100,38 @@ export default class SubSetActions extends Component {
 						{set.member_count}
 					</span>
 				</div>
-				<button className="toggle_btn"
+				<button className={classnames('toggle_btn')}
+					    onClick={::this.toggleModal}
 				   		ref="share"				   
 				   		title="Share"
 				   		data-toggle="tooltip" 
-				  		data-placement="bottom" >
+				  		data-placement="bottom">
 					<i className="">
 						<img style={_icon} className="share_icon" src={share_icon}/>
 					</i>					
 				</button>
+
+				<div ref="share_modal" className="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				  <div className="modal-dialog" role="document">
+				    <div className="modal-content">
+				      <div className="modal-header">
+				        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				          <span className="sr-only">Close</span>
+				        </button>
+				        <h4 className="modal-title" id="myModalLabel">Share</h4>
+				      </div>
+				      <div className="modal-body">
+				        ...
+				      </div>
+				      <div className="modal-footer">
+				        <button type="button" className="button" data-dismiss="modal">Cancel</button>
+				        <button type="button" className="button button-primary">Done</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+
 				<button onClick={::this.openMenu} 
 						onBlur={::this.closeMenu} 
 						className={classnames('toggle_btn', {'active': this.state.more_is_open})}

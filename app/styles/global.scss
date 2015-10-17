@@ -499,6 +499,52 @@ textarea:hover:ms-input-placeholder {
 	}
 }
 
+// Modal 
+.modal {
+	&.fade {
+		top: -100%;
+		-webkit-transition: opacity .15s linear,top .15s ease-out;
+		-moz-transition: opacity .15s linear,top .15s ease-out;
+		-o-transition: opacity .15s linear,top .15s ease-out;
+		transition: opacity .15s linear,top .15s ease-out;
+	}
+	&.fade {
+		&.in {
+			top: 5%;
+		}
+	}
+	&.in {
+		opacity: 1;		
+	}
+	.modal-header {
+		background: #fafafa;
+		color: #555549;
+	}
+	.modal-body {
+		border-bottom: none;
+	}
+	.modal-footer {
+		border-top: none;
+		.button {
+			&:not(:last-child) { 
+				margin-right: 10px; 
+			}
+		}
+	}
+}
+
+.modal-content {
+	border: none;
+	border-radius: 0.5rem;
+	box-shadow: 0 4px 1pc rgba(0,0,0,.5)!important;
+	font-family: "Lato";
+}
+
+.modal-backdrop {
+	background: #fff!important;
+}
+
+
 
 // Menu styles
 .menu {

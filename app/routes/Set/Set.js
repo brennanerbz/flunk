@@ -47,10 +47,16 @@ export default class Set extends Component {
 	render() {
 		return(
 			<div className="set_view main_content">
-				<SetHeader 	   set={set} />
-				<QuickPractice set={set}  />
-				<ItemList 	   set={set} />
-				<SetInfo  	   set={set}/>
+				<div className="row">
+					<div className="col-sm-9 col-md-8 col-lg-9">
+						<SetHeader set={set} />
+						<QuickPractice set={set}  />
+						<ItemList set={set} />	
+					</div>
+					<div className="col-md-4 col-lg-3">
+						<SetInfo set={set}/>
+					</div>
+				</div>
 			</div>
 		);
 	}

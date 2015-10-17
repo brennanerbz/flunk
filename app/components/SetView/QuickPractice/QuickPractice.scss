@@ -1,0 +1,16 @@
+.quick_practice {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	height: 200px!important;
+	min-height: 200px!important;
+	position: relative;
+	.quick_cue {
+		padding-top: 10px;
+		position: absolute;
+		top: 0;
+	}
+	.quick_input {
+		position: absolute;
+		bottom: 0;
+	}
+}

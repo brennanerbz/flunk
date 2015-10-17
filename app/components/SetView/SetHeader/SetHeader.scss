@@ -1,9 +1,23 @@
 .set_header {
-	display: table;
+	display: inline-block;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	line-height: normal;
+	border-bottom: 1px solid #F3F3F3;
+	width: 100%;
+	position: relative;
+	padding-bottom: 5px;
+	.main_actions {
+		display: inline-block;
+		position: absolute;
+		float: right;
+		top: 0;
+		right: 0;
+		button {
+			margin-right: 10px;
+		}
+	}
 	.set_image {
 		height: 40px;
 	}

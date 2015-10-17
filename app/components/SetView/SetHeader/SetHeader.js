@@ -17,6 +17,10 @@ export default class SetHeader extends Component {
 					<h1 className="page_header set_title">{set.title}</h1>
 					<span><p className="set_author">{set.item_count} items by <a className="link">{set.author}</a></p></span>
 				</div>
+				<div className="main_actions">
+					<button className="button button-primary">Learn</button>
+					<button className="button">Expert</button>
+				</div>
 			</span>
 		);
 	}

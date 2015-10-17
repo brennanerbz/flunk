@@ -33,9 +33,25 @@ var set = {
 		{
 			target: 'marginal utility',
 			cue: 	'as prices rise, consumers will replace more costly items with less expensive'
+		},
+		{
+			target: 'open',
+			cue: 	'the process of associating a file in secondary memory with a variable in a program through which the file can be manipulated.'
+		}, 
+		{
+			target: 'object oriented design',
+			cue: 	'object-based design or programming that includes characteristics of polymorphism and inheritance.'
+		}, 
+		{
+			target: 'amygdala',
+			cue: 	'the region of the brain that processes fear'
+		},
+		{
+			target: 'marginal utility',
+			cue: 	'as prices rise, consumers will replace more costly items with less expensive'
 		}
 	],
-	item_count: 4,
+	item_count: 8,
 	member_count: 5
 }
 
@@ -48,12 +64,12 @@ export default class Set extends Component {
 		return(
 			<div className="set_view main_content">
 				<div className="row">
-					<div className="col-sm-9 col-md-8 col-lg-9">
+					<div className="col-sm-9 col-md-8 col-lg-8">
 						<SetHeader set={set} />
 						<QuickPractice set={set}  />
 						<ItemList set={set} />	
 					</div>
-					<div className="col-md-4 col-lg-3">
+					<div className="col-md-4 col-lg-4">
 						<SetInfo set={set}/>
 					</div>
 				</div>

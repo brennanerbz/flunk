@@ -41,3 +41,18 @@
 		}
 	}	
 }
+
+
+.toggle_btn {	
+	margin-left: 10px;
+	width: 35px;
+	height: 35px;
+	border-radius: 20px;
+	border: 1px solid rgba(0,0,0,.1);
+	box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+	position: relative;
+	color: #67686e;
+	opacity: 0.75;
+	display: inline-block;
+	cursor: pointer;
+}

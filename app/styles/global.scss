@@ -336,7 +336,7 @@ button:focus, input[type="button"]:focus {
 // Main content // 
 .main_content {
 	position: absolute;
-	width: 75%;
+	width: 78%;
 	float: left;
 	margin-left: 260px;
 	margin-top: 90px;
@@ -461,6 +461,25 @@ textarea:hover:ms-input-placeholder {
 	display: table-cell;
 }
 
+
+// Side supp header
+.section_header {
+	border-top: 1px solid #F3F3F3;
+	margin-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 15px;
+	.header_icon {
+		height: 18px;
+		opacity: 0.6;
+		&:hover {
+			opacity: 0.9;
+		}
+	}
+	.section_header_label {
+		opacity: 0.6;
+		padding-left: 10px;
+	}
+}
 
 
 

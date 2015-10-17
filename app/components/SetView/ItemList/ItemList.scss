@@ -8,4 +8,13 @@
 	.item_cue {
 		line-height: 1.4;
 	}
+	.item_count_label {
+		padding-top: 5px;
+		font-size: 15px;
+		color: #555459;
+		.item_count {
+			color: #D2D2D2;
+		}
+	}
+	
 }

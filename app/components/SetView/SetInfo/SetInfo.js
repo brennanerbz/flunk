@@ -10,13 +10,14 @@ export default class SetInfo extends Component {
 	renderSubjects(subjects) {
 		let last_subject = subjects.slice(-1)[0]
 		let subject_list = subjects.pop()
-		subject_list = subjects.map(subject => {
-			return <span className="subject">{subject + ", "}</span>
+		subject_list = subjects.map((subject, i) => {
+			return <span key={i} className="subject">{subject + ", "}</span>
 		})
 		return (
 			<span className="subject">{subject_list} and {last_subject}</span>
 		);
 	}
+	
  
 	render() {
 		const { set } = this.props;
@@ -24,7 +25,7 @@ export default class SetInfo extends Component {
 		const author = set.author.split(" ")[0]
 		return(
 			<div className="set_info">
-				<SubSetActions {...this.props}/>
+				<SubSetActions {...this.props} ref="subactions"/>
 				<div className="section_header">					
 					<span className="section_icon">
 						<img src={info} className="info_icon header_icon"/>

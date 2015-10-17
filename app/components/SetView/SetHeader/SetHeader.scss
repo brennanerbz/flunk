@@ -1,7 +1,7 @@
 .set_header {
 	display: inline-block;
 	white-space: nowrap;
-	overflow: hidden;
+	// overflow: hidden;
 	text-overflow: ellipsis;
 	line-height: normal;
 	border-bottom: 1px solid #F3F3F3;
@@ -52,7 +52,11 @@
 	box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
 	position: relative;
 	color: #67686e;
+	background: #fff;
 	opacity: 0.75;
 	display: inline-block;
 	cursor: pointer;
+	&.active {
+		box-shadow: inset 0px 1px 3px 0px rgba(81,79,79,0.50);
+	}
 }

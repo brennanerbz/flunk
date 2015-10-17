@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react';
+import Menu from '../../Menu/Menu';
+import classnames from 'classnames';
 
 //TODO: replace the inline-styles with scss file
 
@@ -44,6 +46,42 @@ export default class SubSetActions extends Component {
 	static propTypes = {
 	}
 
+	state = {
+		more_is_open: false,
+		choices: ['Edit', 'Copy', 'Change privacy']
+	}	
+
+	componentDidMount() {
+		$('[data-toggle="tooltip"]').tooltip({
+			delay: { show: 1000, hide: 50},
+			template: '<div class="tooltip bottom_tool" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+		})
+	}
+
+	findPos() {
+		let node = this.refs.more
+		const rect = window.getComputedStyle(node)
+		return rect;
+	}
+
+	openMenu() {
+		$('[data-toggle="tooltip"]').tooltip('hide')
+		if (this.state.more_is_open) {
+			this.setState({
+				more_is_open: false
+			});
+			return;
+		}
+		this.setState({
+			more_is_open: true
+		});
+	}
+	closeMenu() {
+		this.setState({
+			more_is_open: false
+		});
+	}
+
 	render() {
 		const { set } = this.props;
 		const member_icon = require('../../../assets/profile_icon.png');
@@ -57,25 +95,43 @@ export default class SubSetActions extends Component {
 						{set.member_count}
 					</span>
 				</div>
-				<a className="toggle_btn"
-				   ref="share"				   
-				   title="Share"
-				   data-toggle="tooltip" 
-				   data-placement="bottom" >
+				<button className="toggle_btn"
+				   		ref="share"				   
+				   		title="Share"
+				   		data-toggle="tooltip" 
+				  		data-placement="bottom" >
 					<i className="">
 						<img style={_icon} className="share_icon" src={share_icon}/>
 					</i>					
-				</a>
-				<a className="toggle_btn"
-				   ref="more"				   
-				   title="More actions"
-				   data-toggle="tooltip" 
-				   data-placement="bottom" >
+				</button>
+				<button onClick={::this.openMenu} 
+						onBlur={::this.closeMenu} 
+						className={classnames('toggle_btn', {'active': this.state.more_is_open})}
+						ref="more"				   
+						title="More actions"
+						data-toggle="tooltip" 
+						data-placement="bottom" >
 					<i className="">
 						<img style={_smallicon} className="share_icon" src={more_icon}/>
 					</i>					
-				</a>
+				</button>
+				<Menu isOpen={this.state.more_is_open}
+					  side="mid"
+					  rect={::this.findPos}
+					  ref="more_actions"
+					  choices={this.state.choices}
+					  onSelect={(choice) => console.log(choice)}/>			
 			</div>
 		);
 	}
 }
+
+
+
+
+
+
+
+
+
+

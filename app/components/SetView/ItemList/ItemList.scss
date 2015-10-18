@@ -2,6 +2,7 @@
 	margin-top: 10px;
 	padding-top: 10px;
 	border-top: 1px solid #F3F3F3;
+	position: relative;
 	p {
 		letter-spacing: 0.01em;
 	}
@@ -16,5 +17,16 @@
 			color: #D2D2D2;
 		}
 	}
-	
+	.item_actions {
+		position: absolute;
+		right: 15px;
+		top: 15px;
+		cursor: pointer;
+		color: #555549;
+		opacity: 0.3;
+		text-decoration: none;
+		&:hover {
+			opacity: 1
+		}
+	}
 }

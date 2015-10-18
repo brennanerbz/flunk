@@ -2,8 +2,24 @@ import React, { Component, PropTypes } from 'react';
 require('./QuickPractice.scss');
 import LearnInput from '../../LearnInput/LearnInput';
 
+class VoidInput extends Component {
+	render() {
+		const lock_icon = require('../../../assets/lock_icon.png');
+		return (
+			<div className="void_input">
+				<span><img className="lock_icon" src={lock_icon}/></span>
+				<span>To enable quick mode and see progress, <a className="link">start practicing</a></span>
+			</div>
+		);
+	}
+}
+
 export default class QuickPractice extends Component {
 	static propTypes = {
+	}
+
+	state = {
+		hasStudied: false
 	}
 
 	parseQuickCue(set) {
@@ -22,7 +38,11 @@ export default class QuickPractice extends Component {
 					{::this.parseQuickCue(set)}
 				</div>
 				<div className="quick_input">
-					<LearnInput />
+					{
+						this.state.hasStudied
+						? <LearnInput />
+						: <VoidInput />
+					}
 				</div>
 			</div>
 		);

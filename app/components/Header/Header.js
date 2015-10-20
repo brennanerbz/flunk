@@ -14,7 +14,7 @@ import Avatar from '../Avatar/Avatar';
 	loc: state.router.location,
 	sets: state.sets.set_items,
 	isFetching: state.sets.isFetching,
-	is_fetching_seq: state.learn.is_fetching_seq
+	fetchingLearn: state.learn.is_fetching_learn
 }))
 export default class Header extends Component {
 	static propTypes = {
@@ -30,7 +30,7 @@ export default class Header extends Component {
 
 	render() {
 		const logo = require('./assets/FlunkLogo.png'),
-			  { loc, sets, isFetching, is_fetching_seq} = this.props;
+			  { loc, sets, isFetching, fetchingLearn} = this.props;
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
 		return(
@@ -41,7 +41,7 @@ export default class Header extends Component {
 							    : true },
 								'header header-top')}>
 					{ 
-						isFetching || is_fetching_seq
+						isFetching || fetchingLearn
 						? ::this.renderFetchProgress()
 						: null
 					}

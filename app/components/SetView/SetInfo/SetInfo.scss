@@ -1,0 +1,27 @@
+.set_info {
+	width: 90%;
+	margin-left: 10px;
+	.set_details {
+		padding-left: 10px;
+		.info_header {
+			font-size: 12px;
+			font-weight: 700;
+			color: #9E9EA6;
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+		.info_purpose, .subject {
+			font-size: 14px;
+		}
+		.created_details {
+			padding-top: 10px;
+			font-size: 14px;
+			color: #9E9EA6;
+			font-style: italic;
+		}
+	}
+	.info_icon {
+		height: 25px!important;
+		margin-left: 2px;
+	}
+}

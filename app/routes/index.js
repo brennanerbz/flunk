@@ -8,12 +8,14 @@ import Home from './Home/Home';
 import CreateSet from './CreateSet/CreateSet';
 import Profile from './Profile/Profile';
 import Learn from './Learn/Learn';
+import SetView from './Set/Set';
 
 import fillStore from '../utils/fillStore';
 
 const routes = (
   <Route component={FlunkApp}>
     <Route path="/" component={Home} />
+    <Route path='set' component={SetView}/>
     <Route path="profile" component={Profile} />
     <Route path="createset" component={CreateSet} />
     <Route path="learn/:id" component={Learn}/>

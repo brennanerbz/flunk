@@ -15,7 +15,7 @@ export default class SetList extends Component {
 		sets: PropTypes.array
 	}
 
-	componentDidMount = () => {
+	componentDidMount() {
 		$(this.refs['set_header']).tooltip({
 			delay: { show: 400, hide: 50},
 			template: '<div class="tooltip tooltip-side side_tool" role="tooltip"><div class="tooltip-arrow-left"></div><div class="tooltip-inner"></div></div>'

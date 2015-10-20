@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 require('./LearnCard.scss');
+import Controls from './LearnNavControls'
+import Signs from './LearnSignPosting';
 
 export default class LearnCard extends Component {
 	static propTypes = {
@@ -11,14 +13,15 @@ export default class LearnCard extends Component {
 			<div>
 			 	<div className="card">
 					<div className="card-header">
-					&nbsp;
+						<Controls {...this.props}/>
+						<Signs {...this.props}/>
 					</div>
 					<div className="card-block">
 						<p className="card-text">
 						{	
-							typeof this.props.latest_trial['cue'] == 'undefined'
+							typeof this.props.trial['cue'] == 'undefined'
 							? null
-							: this.props.latest_trial['cue']
+							: this.props.trial['cue']
 						}
 						</p>
 					</div>

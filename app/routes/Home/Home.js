@@ -12,7 +12,7 @@ export default class Home extends Component {
 		
 	}	
 	
-	render() {		
+	render() {		 
 		return(
 			<div className="main_content">
 				<div className="page_header_wrapper">

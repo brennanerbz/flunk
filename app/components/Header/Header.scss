@@ -127,11 +127,39 @@
     		color: #5C9C68;
     	}
     }
-    .create-set-button {
-    	text-decoration: none;
-    	font-size: 15px;
-        margin-right: 10px!important;
+    .create_set_btn_group {
+        background: #fff;
+        border: none;
+        outline: none;
+        vertical-align: middle;
+        border-left: 1px solid #f3f3f3;
+        position: relative;
+        margin-left: 15px;
+        opacity: 0.5;
+        transition: all 0.1s ease-in-out;
+        &:hover {
+            opacity: 0.9;
+        }
+        .create_icon {
+            height: 19px;
+            position: absolute;
+            left: 12px;
+            margin-right: 10px;
+            top: 11px;            
+        }
+        .create-set-button {
+            text-decoration: none!important;
+            font-size: 15px;
+            margin-right: 10px!important;
+            border: none;
+            color: #555459;
+            margin-left: 20px;
+            &:hover {
+                border: none;                
+            }
+        }
     }
+    
      
     .button .svg-icon {
     	vertical-align: middle;

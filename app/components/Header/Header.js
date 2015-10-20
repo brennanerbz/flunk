@@ -30,6 +30,7 @@ export default class Header extends Component {
 
 	render() {
 		const logo = require('./assets/FlunkLogo.png'),
+			  create_icon = require('../../assets/add_circle_icon.png'),
 			  { loc, sets, isFetching, fetchingLearn} = this.props;
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
@@ -51,7 +52,13 @@ export default class Header extends Component {
 							<Link className="site-logo" to="/">						
 									<img className="site-icon" src={logo} />
 							</Link>
-							<SearchBox {...this.props}/>							
+							<SearchBox {...this.props}/>
+							<button className="create_set_btn_group">
+								<img className="create_icon" src={create_icon}/>
+								<Link className="button create-set-button" to="/createset">
+												Create a study set					
+								</Link>	
+							</button>						
 						</span>
 						{ set && loc.pathname.indexOf('/learn') !== -1 ? 
 						<span className="set_name_wrapper overflow_ellipsis">
@@ -64,10 +71,7 @@ export default class Header extends Component {
 									loc.pathname.indexOf('/learn') !== -1 || loc.pathname == '/createset'
 									? null 									
 									: 
-									<span>
-										<Link className="button button-primary create-set-button" to="/createset">
-											Create a study set					
-										</Link>	
+									<span>										
 										<Notifications {...this.props}/>	
 									</span>						
 								}

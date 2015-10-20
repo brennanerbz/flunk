@@ -20,6 +20,8 @@ export default class SeqControl extends Component {
 		return(
 			<div className="seq_control">
 				<SignPosts {...this.props} />
+				<label className="label_term_first" for="term_first">See Term first</label>
+				<input id="term_first" type="checkbox" className="term_first"/>
 				<span className="">
 					<button className="square_fill_btn startover_btn"
 						    type="button"

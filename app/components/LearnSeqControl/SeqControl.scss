@@ -6,13 +6,23 @@
 	box-shadow: 0px 1px 1px 0px rgba(146,146,146,0.50);
 	color: #383F45;
 	padding-top: 2rem;
+	.term_first, .label_term_first {
+		position: absolute;
+		left: 55px;
+		top: 75px;
+	}
+	.label_term_first {
+		left: 75px;
+		top: 72px;
+		font-size: 13.5px;
+	}
 	.startover_btn {
 		background: #FBFBFA;
 		border: 1px solid #C7CACD;
 		color: #555549;
 		text-shadow: none;
 	    margin-left: 55px!important;
-	    top: 75px;
+	    top: 105px;
 	    position: absolute;
 		&:hover {
 			box-shadow: none;

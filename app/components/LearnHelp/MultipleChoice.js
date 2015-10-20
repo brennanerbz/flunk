@@ -5,7 +5,7 @@ class MultiChoiceItem extends Component {
 	render() {
 		const { choice } = this.props;
 		return(
-			<li className="list-group-item">{choice}</li>
+			<li className="mc_item"><span>{choice}</span></li>
 		);
 	}
 }
@@ -22,7 +22,7 @@ export default class MultipleChoice extends Component {
 		return (
 			<div>
 				<p className="diff_label mc_label">Multiple choice:</p>
-				<ul className="list-group">
+				<ul className="mc_choices">
 					{
 						parsed_choices !== undefined
 						? parsed_choices.map((choice, i) => <MultiChoiceItem key={i} choice={choice}/>)

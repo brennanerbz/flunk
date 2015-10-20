@@ -1,49 +1,38 @@
-.input-group {
-	margin-bottom: 10px;
-}
 
-.form-control {
-	border: 1px solid #E0E0E0;
-	height: 42px;
-	opacity: 1;
-	color: #000;
-	border-top-left-radius: 0.25rem!important; 
-	border-bottom-left-radius: 0.25rem!important; 
-	 &:focus {
-		border: 1px solid #D8D8D8;
+.input_box {
+	display: inline-flex;
+	position: relative;
+	width: 100%;
+	form {
+		width: 100%;
+		border-radius: 2px;
+		margin-right: 10px;
+		input {
+			display: inline-block;
+			width: 100%;
+			border: 1px solid #d9d9d9;
+			border-radius: 2px;
+			height: 38px;
+			padding: 0 10px 0 10px;
+			font-size: 17px;
+			&:focus {
+				border: 1px solid #498DFF;
+				outline: none;
+			}
+			&:active {
+				outline: none;
+			}
+		}
 	}
-}
-
-.btn {
-	background-color: #fff;
-	color: #555549;
-	border: 1px solid #E0E0E0;
-	height: 42px;
-}
- 
-.help_btn {
-	&:focus {
-		outline: none;
-		border: px solid #D8D8D8;
-	}
-	&:hover {
-		background: #56B68B;
-		color: #fff;
-		border-color: #56B68B; 
-	}
-
-	&:active {
-		outline: none!important;
-	}
-}
-
-.input-group-btn {
-	&:focus {
-		outline: none;
+	.answer_btn {
+		background: #4281F1;
+		border: 1px solid #498DFF;
 	}	
-	&:active {
-		outline: none;
-	}
+	.hint_btn {
+		border: none;
+		background: #2AB27B;
+		margin-right: 10px;
+	}	
 }
 
 .form-control::-webkit-input-placeholder {

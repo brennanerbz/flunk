@@ -59,7 +59,7 @@ export default class LearnInput extends Component {
 
 	render() {
 		return(
-			<div className="input-group">
+			<div className="input_box">	
 			    <form onSubmit={this.handleSubmit}>
 			    <input autoFocus={true} 
 			    	   ref="answerbox"
@@ -67,12 +67,20 @@ export default class LearnInput extends Component {
 			    	   onChange={this.handleChange}
 			    	   onKeyDown={::this.handleKeyDown}
 			    	   type="text" 
-			    	   className="form-control"/>
+			    	   className=""/>
 			   	</form>
-			   	<span className="input-group-btn">
-			   		<button className="btn help_btn" type="button">Answer</button>
+			   	<span className="">
+			   		<button className="square_fill_btn answer_btn help_btn" 
+			   			    type="button"
+			   			    onClick={::this.handleSubmit}>Answer</button>
 			   	</span>
 			</div>
 		);
 	}
 }
+
+// <span className="">
+// 	<button className="square_fill_btn hint_btn help_btn" 
+// 		    type="button"
+// 		    onClick={::this.handleSubmit}>Hint</button>
+// </span>

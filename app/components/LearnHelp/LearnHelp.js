@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 require('./LearnHelp.scss')
-import Hint from './Hint';
+// import Hint from './Hint';
 import Related from './Related';
 import MultipleChoice from './MultipleChoice';
 import Target from './Target';
@@ -16,10 +16,6 @@ export default class LearnHelp extends Component {
 		switch(trial.difficulty) {
 			case 'recall':
 				return;
-			case 'aug':
-				return (
-					<Hint hint={trial.augcue}/>
-				)
 			case 'related':
 				return;
 			case 'nonemc':
@@ -33,6 +29,7 @@ export default class LearnHelp extends Component {
 				return (
 					<Target stem={trial.stem} target={trial.target}/>
 				)
+			case 'aug':
 			default:
 				break;
 		}

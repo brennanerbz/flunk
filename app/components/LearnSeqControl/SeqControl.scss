@@ -1,0 +1,51 @@
+.seq_control {
+	width: 220px;
+	float: left;
+	position: fixed;
+	background: #fff;
+	box-shadow: 0px 1px 1px 0px rgba(146,146,146,0.50);
+	color: #383F45;
+	padding-top: 2rem;
+	.startover_btn {
+		background: #FBFBFA;
+		border: 1px solid #C7CACD;
+		color: #555549;
+		text-shadow: none;
+	    margin-left: 55px!important;
+	    top: 75px;
+	    position: absolute;
+		&:hover {
+			box-shadow: none;
+		}
+	}
+	/*---------Sign Posting --------*/
+
+	.sign_posting_list {
+		margin: 0;
+		padding: 0;
+		position: absolute;
+		left: 50px;
+		top: 20px;
+		padding-bottom: 10px;
+		border-bottom: 1px solid #f3f3f3;
+	}
+
+	.sign_posting_list li {
+		display: inline;
+		list-style-type: none;
+		padding-left: 10px;
+	}
+	.sign_circle {
+		color: #D8D8D8;
+		opacity: 0.9;
+		font-size: 10px;
+	}
+
+	.complete_sign {
+		color: #54B6AC;
+	}
+
+	.active_sign {
+		color: #4186F5;
+	}
+}

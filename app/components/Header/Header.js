@@ -37,7 +37,7 @@ export default class Header extends Component {
 			<div>				
 				<nav className={
 					classnames({'header-bordered': 
-							    loc.pathname.indexOf('/learn') !== -1 || loc.pathname == '/createset' ? false
+							    loc.pathname == '/createset' ? false
 							    : true },
 								'header header-top')}>
 					{ 

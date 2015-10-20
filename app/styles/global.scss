@@ -111,6 +111,36 @@ ul {
 	transition: background-color 100ms ease 0s, border-color 100ms ease 0s, color 100ms ease 0s, fill 100ms ease 0s;
 	line-height: normal;
 }
+.square_fill_btn {
+	height: 38px;
+	display: inline-block;		
+	border-radius: 2px;
+	padding: 2px;
+	line-height: 1.2rem;
+	white-space: nowrap;
+    margin: 0;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    padding: 8px 14px 9px;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 0.01em;
+	&:first-child {
+		color: #fff;
+		text-shadow:0 1px 0 rgba(0,0,0,.1);
+	}
+	&:hover {
+		box-shadow: inset 0 -2px rgba(0,0,0,.25);
+	}
+}
+
+.btn_primary {
+	background-color: #2AB27B;
+	outline: none;
+	border: none;
+}
+
+
 :global .text-input {
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	padding: 0px 15px;

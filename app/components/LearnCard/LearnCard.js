@@ -3,19 +3,18 @@ import { connect } from 'react-redux';
 require('./LearnCard.scss');
 import Controls from './LearnNavControls'
 import Signs from './LearnSignPosting';
+import LearnHelp from '../LearnHelp/LearnHelp';
+import LearnInput from '../LearnInput/LearnInput';
 
 export default class LearnCard extends Component {
 	static propTypes = {
 		
 	}
 	render() {
+		const { showCorrect, showCompletedSeq} = this.props;
 		return(
 			<div>
-			 	<div className="card">
-					<div className="card-header">
-						<Controls {...this.props}/>
-						<Signs {...this.props}/>
-					</div>
+			 	<div className="card">					
 					<div className="card-block">
 						<p className="card-text">
 						{	
@@ -24,6 +23,12 @@ export default class LearnCard extends Component {
 							: this.props.trial['cue']
 						}
 						</p>
+						{
+							!showCorrect && !showCompletedSeq
+							? <LearnHelp {...this.props}/>
+							: null
+						}						
+						<LearnInput {...this.props}/>
 					</div>
 				</div>
 			</div>

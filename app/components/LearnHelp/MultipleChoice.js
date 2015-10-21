@@ -5,7 +5,7 @@ class MultiChoiceItem extends Component {
 	render() {
 		const { choice } = this.props;
 		return(
-			<li className="mc_item"><span>{choice}</span></li>
+			<li className="mc_item"><span className={classnames({'last_child': this.props.index === 4})}>{choice}</span></li>
 		);
 	}
 }
@@ -24,7 +24,7 @@ export default class MultipleChoice extends Component {
 				<ul className="mc_choices">
 					{
 						parsed_choices !== undefined
-						? parsed_choices.map((choice, i) => <MultiChoiceItem key={i} choice={choice}/>)
+						? parsed_choices.map((choice, i) => <MultiChoiceItem index={i} key={i} choice={choice}/>)
 						: null
 					}
 				</ul>

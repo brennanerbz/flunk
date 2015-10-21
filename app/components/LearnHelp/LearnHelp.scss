@@ -10,9 +10,11 @@
 			span {				
 				border-bottom: 1px solid #f2f2f2;
 				border-radius: 2px;
-				padding: 6px 8px 8px 9px;
-
-			}
+				padding: 6px 8px 8px 9px;				
+				&.last_child {
+					border-bottom: none;
+				}
+			}									
 		}
 	}
 	.diff_label {
@@ -29,3 +31,6 @@
 		}
 	}
 }
+// li:not(:last-child):after {
+//     content:' |';
+// }

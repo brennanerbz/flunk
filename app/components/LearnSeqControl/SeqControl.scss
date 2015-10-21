@@ -6,38 +6,70 @@
 	box-shadow: 0px 1px 1px 0px rgba(146,146,146,0.50);
 	color: #383F45;
 	padding-top: 2rem;
+	.round_divider {
+		// margin-right: -.125rem;
+		margin: -5px 0px 0 0.5em;
+		padding: .5rem 18px 0rem 1.5rem;
+		line-height: 1.2rem;
+		font-size: 1rem;
+		font-family: "Calibri";
+		color: #555459;
+		font-weight: 900;
+		text-align: center;
+		cursor: default;
+		clear: both;
+		position: relative;
+		width: 90%;
+		hr {
+			position: absolute;
+			border-top: 1px solid #f3f3f3;
+			top: 1.1rem;
+			right: 18px;
+			left: 1.5rem;
+			margin: 0;
+		}
+		.round_divider_label {
+			background:#fff;
+			padding: 0 1rem;
+			display: inline-block;
+			margin: 0 auto;
+			position: relative;			
+		}		
+	}	
 	.term_first, .label_term_first {
 		position: absolute;
 		left: 55px;
-		top: 75px;
+		top: 95px;
 	}
 	.label_term_first {
-		left: 75px;
-		top: 72px;
+		left: 80px;
+		top: 92px;
 		font-size: 13.5px;
 	}
 	.startover_btn {
-		background: #FBFBFA;
+		background: #FFF;
 		border: 1px solid #C7CACD;
 		color: #555549;
 		text-shadow: none;
-	    margin-left: 55px!important;
-	    top: 105px;
+	    margin-left: 54px !important;
+	    top: 130px;
 	    position: absolute;
+	    width: 50%;
 		&:hover {
 			box-shadow: none;
+			color: #32A2E6;
+			border: 1px solid #ccc;
 		}
 	}
 	/*---------Sign Posting --------*/
 
 	.sign_posting_list {
 		margin: 0;
+		margin-top: 2px;
 		padding: 0;
 		position: absolute;
 		left: 50px;
-		top: 20px;
 		padding-bottom: 10px;
-		border-bottom: 1px solid #f3f3f3;
 	}
 
 	.sign_posting_list li {

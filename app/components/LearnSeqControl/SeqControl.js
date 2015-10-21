@@ -19,6 +19,13 @@ export default class SeqControl extends Component {
 	render() {
 		return(
 			<div className="seq_control">
+				<div className="round_divider">
+					<hr className="separator"/>
+					<i className="copy_only"/>
+					<div className="round_divider_label">
+					Round 1
+					</div> 
+				</div>
 				<SignPosts {...this.props} />
 				<label className="label_term_first" for="term_first">See Term first</label>
 				<input id="term_first" type="checkbox" className="term_first"/>

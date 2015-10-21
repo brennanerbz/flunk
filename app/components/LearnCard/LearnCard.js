@@ -17,32 +17,23 @@ export default class LearnCard extends Component {
 			<div>
 			 	<div className="learn_card">					
 					<div className="">
-						<p className="cue">
-						{	
-							typeof trial['cue'] == 'undefined'
-							? null
-							: trial['cue']
-						}
-						</p>
+						<div className="top_cue_container">
+							<p className="cue">
+							{	
+								typeof trial['cue'] == 'undefined'
+								? null
+								: trial['cue']
+							}
+							</p>
+							<a className="dont_know_btn link"
+							   onClick={console.log("TODO: link don\'t know to handleSubmit")}>
+							   Don't know
+							</a>
+						</div>
 						<div className="help_divider">
 							<hr className="separator"/>
 							<i className="copy_only"/>
-								<div className={classnames('help_divider_label', {'correct_answer': trial.difficulty == 'copy'})}>
-									{ 
-										trial.difficulty == 'mc' || trial.difficulty == 'nonemc'
-										? "Multiple Choice"
-										: null
-									}
-									{
-										trial.difficulty == 'stem'
-										? "Fill in the blank"
-										: null
-									}
-									{
-										trial.difficulty == 'copy' || trial.difficulty == 'peek'
-										? 'Correct answer'
-										: null
-									}
+								<div className={classnames('help_divider_label')}>								
 								</div> 
 						</div>
 						{

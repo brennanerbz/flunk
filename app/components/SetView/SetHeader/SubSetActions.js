@@ -95,6 +95,13 @@ export default class SubSetActions extends Component {
 			member_icon = require('../../../assets/profile_icon.png'),
 			share_icon = require('../../../assets/share_icon.png'),
 			more_icon = require('../../../assets/more_icon.png');
+		let dir;
+		if(this.props.right) {
+			dir = 'right'
+		}
+		if(this.props.left) {
+			dir = 'left'
+		}
 		return(
 			<div style={secondary_actions} className="secondary_actions">
 				<button className={classnames('toggle_btn')}
@@ -140,8 +147,10 @@ export default class SubSetActions extends Component {
 						<img style={_smallicon} className="share_icon" src={more_icon}/>
 					</i>					
 				</button>
-				<Menu isOpen={this.state.more_is_open}
-					  side="left"
+				<Menu 
+					  set={this.props.set}
+					  isOpen={this.state.more_is_open}
+					  side={dir}
 					  rect={::this.findPos}
 					  ref="more_actions"
 					  choices={this.state.choices}

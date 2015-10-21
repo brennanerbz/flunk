@@ -1,5 +1,19 @@
 .learn_card {
 	background: #FFFFFF;	
+	.top_cue_container {
+		display: inline-block;
+		position: relative;
+		width: 100%;
+		p {
+			width: 85%;
+		}
+		.dont_know_btn {
+			position: absolute;
+			right: 0;
+			top: 0px;
+			font-size: 13.5px;
+		}
+	}
 	.card-header {
 		background-color: #fff;
 		border-bottom: 1px solid #FBD6D8;
@@ -7,8 +21,8 @@
 	}
 	.help_divider {
 		// margin-right: -.125rem;
-		margin: 0.2rem -18px 0 -1.5rem;
-		padding: .5rem 18px 0rem 1.5rem;
+		margin: 0rem -18px 0 -1.5rem;
+		padding: 0rem 18px 0.5rem 1.5rem;
 		line-height: 1.2rem;
 		font-size: 1rem;
 		font-family: "Calibri";
@@ -37,7 +51,7 @@
 	}	
 	p {
 		&.cue {
-			font-size: 20px!important;
+			font-size: 21px!important;
 			padding-bottom: 5px;
 			margin-bottom: 0px;
 			margin-left: 10px;

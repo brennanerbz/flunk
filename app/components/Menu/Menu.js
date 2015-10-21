@@ -33,14 +33,32 @@ export default class Menu extends Component {
 	}
 
 	setMenuPositions() {
-	  const { rect } = this.props;
+	  const { rect, bounding, set, learn } = this.props;
 	  var r = rect(); // measurements
+	  if (bounding) {
+	  	this.setState({
+	  		menuTop: r.top + r.height,
+	  		menuRight: r.right,
+	  		menuLeft: r.left
+	  	});
+	  	return;
+	  }
 	  let height = r.height.replace('px', '')
-	  height = Number(height) + 5 + 'px'
+	  if(learn) {
+	  	height = Number(height) + 12 + 'px'
+	  } else {
+	  	 height = Number(height) + 5 + 'px'
+	  }	 
+	  let left;
+	  if (set) {
+	  	left = '55px'
+	  } else {
+	  	left = '25px'
+	  }
 	  this.setState({
 	    menuTop: height,
-	    menuRight: '10px',
-	    menuLeft: '55px'
+	    menuRight: '0px',
+	    menuLeft: left
 	  })
 	}
 

@@ -8,6 +8,7 @@ const styles = require('./Header.scss');
 import Notifications from './Notifications/Notifications';
 import SearchBox from './SearchBox/SearchBox';
 import Avatar from '../Avatar/Avatar';
+import Menu from '../Menu/Menu';
 
 
 @connect(state => ({
@@ -21,16 +22,46 @@ export default class Header extends Component {
 		loc: PropTypes.object
 	}
 
+	state = {
+		isSetMenuOpen: false,
+		choices: ['Go to set', 'Edit', 'Privacy settings', 'Mode']
+	}
+
 	renderFetchProgress() {
 		return (
 			<span className="loading_line"></span>
 		);
 	}
 
+	openSetMenu() {
+		let open = this.state.isSetMenuOpen;
+		if(open) {
+			this.setState({
+				isSetMenuOpen: false
+			});
+			return;
+		}
+		this.setState({
+			isSetMenuOpen: true
+		});
+	}
+
+	closeSetMenu() {
+		this.setState({
+			isSetMenuOpen: false
+		});
+	}
+
+	findSetMenuPos() {
+		let node = this.refs['open_set_btn'];
+		const rect = window.getComputedStyle(node)
+		return rect;
+	}
 
 	render() {
 		const logo = require('./assets/FlunkLogo.png'),
 			  create_icon = require('../../assets/add_circle_icon.png'),
+			  dropdown_icon = require('../../assets/dropdown_arrow.png'),
 			  { loc, sets, isFetching, fetchingLearn} = this.props;
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
@@ -65,9 +96,24 @@ export default class Header extends Component {
 							}
 						</span>
 						{ set && loc.pathname.indexOf('/learn') !== -1 ? 
-						<span className="set_name_wrapper overflow_ellipsis">
-							<h1 className="set_name">{set.name}</h1>
-						</span> 
+						<span className="open_set_container set_name_wrapper">
+							<button className="open_set_btn"
+									onClick={::this.openSetMenu}
+								    onBlur={::this.closeSetMenu}
+								    ref="open_set_btn">
+									<h1 className="set_name">{set.title}</h1>
+									<a>
+										<img className="dropdown_menu_icon icon" 
+										 src={dropdown_icon}/>
+									</a>
+							</button>
+							<Menu learn={true}
+								  isOpen={this.state.isSetMenuOpen}
+								  side='left'
+								  rect={::this.findSetMenuPos}
+								  choices={this.state.choices}
+								  onSelect={(choice) => console.log("TODO: add actions for set menu choices")} />
+						</span>						
 						: null } 
 						<span className="header-block header-right">
 							<div className="button-group">

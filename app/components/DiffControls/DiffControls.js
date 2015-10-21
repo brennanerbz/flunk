@@ -16,7 +16,7 @@ export default class DiffControls extends Component {
 		const more = require('../../assets/more_icon.png');		  
 		return(
 			<span className="diff_controls">
-				<button className="help_btn square_fill_btn btn_primary">Hint</button>
+				<button className="button button-primary">Hint</button>
 				<a className="toggle_btn"
 				   ref="more_actions"				   
 				   title="More actions"

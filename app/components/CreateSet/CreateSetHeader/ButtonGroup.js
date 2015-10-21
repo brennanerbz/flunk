@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
+import SubSetActions from '../../SetView/SetHeader/SubSetActions';
 
 export default class ButtonGroup extends Component {
 	static propTypes = {
@@ -12,13 +13,10 @@ export default class ButtonGroup extends Component {
 			<div className="CreateSetHeader-wrapper-buttongroup">
             	<div className="push-right">
             		<div className="Button-set">
-            			<button className="button">Share</button>
-            			<button className="button button-primary"
+                        <button className="button button-primary"
                                       onClick={onSave}
                               >Create</button>
-            			<button className="button button-icon button-circle">
-            				<i className="material-icons icon icon-more">more_horiz</i>
-            			</button>           		
+            			 <SubSetActions />	
             		</div>	            	
             	</div>
             </div>

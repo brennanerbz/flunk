@@ -40,7 +40,7 @@ export default class Menu extends Component {
 	  this.setState({
 	    menuTop: height,
 	    menuRight: '10px',
-	    menuLeft: '0px'
+	    menuLeft: '55px'
 	  })
 	}
 
@@ -54,12 +54,19 @@ export default class Menu extends Component {
 			top: this.state.menuTop,
 			right: this.state.menuRight
 		}
+		var left_styles = {
+			top: this.state.menuTop,
+			left: this.state.menuLeft
+		}
 		var _menustyle;
 		if(side == 'mid') {
 			_menustyle = mid_styles
 		}
 		if(side == 'right') {
 			_menustyle = right_styles
+		}
+		if(side == 'left') {
+			_menustyle = left_styles
 		}
 		return (
 			<div style={_menustyle} className="menu flex_menu">

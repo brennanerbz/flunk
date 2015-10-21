@@ -91,18 +91,12 @@ export default class SubSetActions extends Component {
 	}
 
 	render() {
-		const { set } = this.props;
-		const member_icon = require('../../../assets/profile_icon.png');
-		const share_icon = require('../../../assets/share_icon.png');
-		const more_icon = require('../../../assets/more_icon.png')
+		const { set } = this.props,
+			member_icon = require('../../../assets/profile_icon.png'),
+			share_icon = require('../../../assets/share_icon.png'),
+			more_icon = require('../../../assets/more_icon.png');
 		return(
 			<div style={secondary_actions} className="secondary_actions">
-				<div style={member_count_container}>
-					<span style={_member_count_style} className="member_count">
-						<img src={member_icon} style={_member_styles} className="member_icon"/>
-						{set.member_count}
-					</span>
-				</div>
 				<button className={classnames('toggle_btn')}
 					    onClick={::this.toggleModal}
 				   		ref="share"				   
@@ -128,7 +122,7 @@ export default class SubSetActions extends Component {
 				      	<input id="share_link" ref="share_link" type="text" value="https://ace.com/987389/cog-sci" />
 				      </div>
 				      <div className="modal-footer">
-				        <button type="button" className="button" data-dismiss="modal">Cancel</button>
+				        <button type="button" className="button button-outline" data-dismiss="modal">Cancel</button>
 				        <button type="button" className="button button-primary" data-dismiss="modal">Done</button>
 				      </div>
 				    </div>
@@ -147,7 +141,7 @@ export default class SubSetActions extends Component {
 					</i>					
 				</button>
 				<Menu isOpen={this.state.more_is_open}
-					  side="mid"
+					  side="left"
 					  rect={::this.findPos}
 					  ref="more_actions"
 					  choices={this.state.choices}
@@ -158,6 +152,13 @@ export default class SubSetActions extends Component {
 }
 
 
+
+// <div style={member_count_container}>
+// 					<span style={_member_count_style} className="member_count">
+// 						<img src={member_icon} style={_member_styles} className="member_icon"/>
+// 						{set.member_count}
+// 					</span>
+// 				</div>
 
 
 

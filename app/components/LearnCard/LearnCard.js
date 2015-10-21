@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import classnames from 'classnames';
 import { connect } from 'react-redux';
 require('./LearnCard.scss');
 import Controls from './LearnNavControls'
@@ -11,18 +12,39 @@ export default class LearnCard extends Component {
 		
 	}
 	render() {
-		const { showCorrect, showCompletedSeq} = this.props;
+		const { showCorrect, showCompletedSeq, trial, slots, current_slot } = this.props;
 		return(
 			<div>
-			 	<div className="card">					
-					<div className="card-block">
-						<p className="card-text">
+			 	<div className="learn_card">					
+					<div className="">
+						<p className="cue">
 						{	
-							typeof this.props.trial['cue'] == 'undefined'
+							typeof trial['cue'] == 'undefined'
 							? null
-							: this.props.trial['cue']
+							: trial['cue']
 						}
 						</p>
+						<div className="help_divider">
+							<hr className="separator"/>
+							<i className="copy_only"/>
+								<div className={classnames('help_divider_label', {'correct_answer': trial.difficulty == 'copy'})}>
+									{ 
+										trial.difficulty == 'mc' || trial.difficulty == 'nonemc'
+										? "Multiple Choice"
+										: null
+									}
+									{
+										trial.difficulty == 'stem'
+										? "Fill in the blank"
+										: null
+									}
+									{
+										trial.difficulty == 'copy' || trial.difficulty == 'peek'
+										? 'Correct answer'
+										: null
+									}
+								</div> 
+						</div>
 						{
 							!showCorrect && !showCompletedSeq
 							? <LearnHelp {...this.props}/>

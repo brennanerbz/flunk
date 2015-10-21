@@ -2,15 +2,16 @@
 	margin-top: 10px;	
 	margin-bottom: 10px;
 	padding-left: 8px;
+	font-size: 18px;
 	.mc_choices {
 		margin-left: -7px;
 		.mc_item {
 			margin-bottom: 18px;
-			span {
-				background-color: #FBFAF8;
-				border: 1px solid #D5D4D3;
+			span {				
+				border-bottom: 1px solid #f2f2f2;
 				border-radius: 2px;
-				padding: 6px 8px 8px 9px;			
+				padding: 6px 8px 8px 9px;
+
 			}
 		}
 	}

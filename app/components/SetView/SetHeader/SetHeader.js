@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 require('./SetHeader.scss');
-
 /* Components */
 import DifficultyButton from '../../DifficultyButton/DifficultyButton';
+import SubSetActions from './SubSetActions';
 
 export default class SetHeader extends Component {
 	static propTypes = {
@@ -23,9 +23,12 @@ export default class SetHeader extends Component {
 				</div>
 				<div className="main_actions">
 					<button className="button button-primary">Learn</button>
-					<DifficultyButton/>
+					<SubSetActions {...this.props} ref="subactions"/>
 				</div>
 			</span>
 		);
 	}
 }
+
+					// <DifficultyButton/>
+// 

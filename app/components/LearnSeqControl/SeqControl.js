@@ -23,7 +23,7 @@ export default class SeqControl extends Component {
 				<label className="label_term_first" for="term_first">See Term first</label>
 				<input id="term_first" type="checkbox" className="term_first"/>
 				<span className="">
-					<button className="square_fill_btn startover_btn"
+					<button className="button button-outline startover_btn"
 						    type="button"
 						    >Start over</button>
 				</span>

@@ -53,12 +53,16 @@ export default class Header extends Component {
 									<img className="site-icon" src={logo} />
 							</Link>
 							<SearchBox {...this.props}/>
-							<button className="create_set_btn_group">
-								<img className="create_icon" src={create_icon}/>
-								<Link className="button create-set-button" to="/createset">
-												Create a study set					
-								</Link>	
-							</button>						
+							{
+								loc.pathname.indexOf('/learn') !== -1 || loc.pathname.indexOf('/createset') !==  -1
+								? null
+								: <button className="create_set_btn_group">
+										<img className="create_icon" src={create_icon}/>
+										<Link className="button create-set-button button-outline" to="/createset">
+														Create a study set					
+										</Link>	
+								  </button>
+							}
 						</span>
 						{ set && loc.pathname.indexOf('/learn') !== -1 ? 
 						<span className="set_name_wrapper overflow_ellipsis">

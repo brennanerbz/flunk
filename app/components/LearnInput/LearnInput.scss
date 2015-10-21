@@ -3,15 +3,17 @@
 	display: inline-flex;
 	position: relative;
 	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 5px;
 	form {
 		width: 100%;
-		border-radius: 2px;
+		border-radius: 4px;
 		margin-right: 10px;
 		input {
 			display: inline-block;
 			width: 100%;
 			border: 1px solid #d9d9d9;
-			border-radius: 2px;
+			border-radius: 4px;
 			height: 38px;
 			padding: 0 10px 0 10px;
 			font-size: 17px;
@@ -22,34 +24,35 @@
 			&:active {
 				outline: none;
 			}
+			&.correct_answer {
+				color: #57AD67;
+			}
 		}
 	}
 	.answer_btn {
-		background: #4281F1;
-		border: 1px solid #498DFF;
-	}	
-	.hint_btn {
-		border: none;
-		background: #2AB27B;
-		margin-right: 10px;
-	}	
+		background: #5596E7;
+		color: #fff;	
+		&:hover { 
+			border: none;			
+		}	
+	}		
 }
 
-.form-control::-webkit-input-placeholder {
-   color: #B2B2B2;
-}
+// .form-control::-webkit-input-placeholder {
+//    color: #B2B2B2;
+// }
 
-.form-control:-moz-placeholder { /* Firefox 18- */
-   color: #B2B2B2;  
-}
+// .form-control:-moz-placeholder { /* Firefox 18- */
+//    color: #B2B2B2;  
+// }
 
-.form-control::-moz-placeholder {  /* Firefox 19+ */
-   color: #B2B2B2;  
-}
+// .form-control::-moz-placeholder {  /* Firefox 19+ */
+//    color: #B2B2B2;  
+// }
 
-.form-control:-ms-input-placeholder {  
-   color: #B2B2B2;  
-}
+// .form-control:-ms-input-placeholder {  
+//    color: #B2B2B2;  
+// }
 
 
 

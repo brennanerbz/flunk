@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import SetList from '../../components/SetList/SetList';
+import SetList from '../../SetList/SetList';
 
 /*
 @connect/dispatch

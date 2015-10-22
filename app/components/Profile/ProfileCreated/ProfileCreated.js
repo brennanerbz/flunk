@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import SetList from '../../components/SetList/SetList';
-
+import SetList from '../../SetList/SetList';
 
 /*
 @connect/dispatch

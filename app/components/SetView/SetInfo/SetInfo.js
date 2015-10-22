@@ -25,8 +25,7 @@ export default class SetInfo extends Component {
 		const author = set.author.split(" ")[0]
 		return(
 			<div className="set_info">
-				<SubSetActions {...this.props} ref="subactions"/>
-				<div className="section_header">					
+				<div className="section_header set_details">					
 					<span className="section_icon">
 						<img src={info} className="info_icon header_icon"/>
 					</span>

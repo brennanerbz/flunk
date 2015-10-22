@@ -72,35 +72,47 @@
     	border: 0px none;  
     	cursor: pointer;  	
     }
-    .set_name_wrapper {
-        display: inline-block;
-        position: absolute;
-        padding-top: 19px;
-        padding-left: 14px;
-        padding-right: 0px;
-        z-index: 700;
-        border: 0px none;  
-        cursor: pointer;
-        opacity: 0.85;
-        &:hover {
-            opacity: 1;
-        }
-       .set_name {
-           font-family: "Calibri";
-           font-size: 21px;
-           color: #555549;
-       } 
-       .diff_control {
-            width: 30px;
-            height: 30px;
-            border-radius: 20px;
-            border: 1px solid rgba(0,0,0,.1);
-            box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+    .open_set_container {
+        position: relative;
+        display: inline-flex;
+        .open_set_btn {
+            outline: none;
+            border: none;
+            background: none;
             position: relative;
-            color: #67686e;
-            background: #fff;
-       }
-    }    
+            display: inline-flex;
+        }
+        &.set_name_wrapper {
+            position: absolute;
+            padding-top: 19px;
+            padding-left: 24px;
+            padding-right: 0px;
+            z-index: 700;
+            border: 0px none;  
+            cursor: pointer;
+            opacity: 0.95;
+            &:hover {
+                opacity: 1;
+            }
+           .set_name {
+               font-family: "Calibri";
+               font-size: 18px;
+               color: #555549;
+               padding-top: 2px;
+           }        
+           .diff_control {
+                width: 30px;
+                height: 30px;
+                border-radius: 20px;
+                border: 1px solid rgba(0,0,0,.1);
+                box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+                position: relative;
+                color: #67686e;
+                background: #fff;
+           }
+        } 
+    }
+       
     .site-icon {
     	width: 85px;
     }
@@ -127,11 +139,39 @@
     		color: #5C9C68;
     	}
     }
-    .create-set-button {
-    	text-decoration: none;
-    	font-size: 15px;
-        margin-right: 10px!important;
+    .create_set_btn_group {
+        background: #fff;
+        border: none;
+        outline: none;
+        vertical-align: middle;
+        border-left: 1px solid #f3f3f3;
+        position: relative;
+        margin-left: 15px;
+        opacity: 0.65;
+        transition: all 0.1s ease-in-out;
+        &:hover {
+            opacity: 0.9;
+        }
+        .create_icon {
+            height: 19px;
+            position: absolute;
+            left: 12px;
+            margin-right: 10px;
+            top: 11px;            
+        }
+        .create-set-button {
+            text-decoration: none!important;
+            font-size: 15px;
+            margin-right: 10px!important;
+            border: none;
+            color: #555459;
+            margin-left: 20px;
+            &:hover {
+                border: none;                
+            }
+        }
     }
+    
      
     .button .svg-icon {
     	vertical-align: middle;

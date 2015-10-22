@@ -65,8 +65,7 @@ export default class Set extends Component {
 			<div className="set_view main_content">
 				<div className="row">
 					<div className="col-sm-9 col-md-8 col-lg-8">
-						<SetHeader set={set} />
-						<QuickPractice set={set}  />
+						<SetHeader set={set} />						
 						<ItemList set={set} />	
 					</div>
 					<div className="col-md-4 col-lg-4">
@@ -77,5 +76,7 @@ export default class Set extends Component {
 		);
 	}
 }
+
+// <QuickPractice set={set}  />
 
 

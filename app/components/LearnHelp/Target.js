@@ -8,8 +8,7 @@ export default class Answer extends Component {
 
 	fillInTheBlank(stem) {
 		return (
-			<div>
-				<p className="diff_label">Fill in the blank:</p>
+			<div>				
 				<p>{stem}</p>
 			</div>
 		)
@@ -17,9 +16,8 @@ export default class Answer extends Component {
 
 	copyAnswer(target) {
 		return (
-			<div>
-				<p className="diff_label">Copy answer:</p>
-				<p>{target}</p>
+			<div>				
+				<p className="correct_answer">{target}</p>
 			</div>
 		)
 	}

@@ -59,12 +59,14 @@ export default class LearnFeedback extends Component {
 				}
 				{	
 					trial.difficulty == 'related' && correct == 'None'
-					? ::this.relatedHook(trial.related)
+					? null
+					// ? ::this.relatedHook(trial.related)
 					: null
 				}
 				{
 					trial.difficulty == 'aug' && correct == 'None'
-					? ::this.hintHook()
+					? null
+					// ? ::this.hintHook()
 					: null
 				}
 			</p>

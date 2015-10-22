@@ -14,7 +14,7 @@ class MenuItem extends Component {
 
 export default class Menu extends Component {
 	static propTypes = {
-		rect: PropTypes.function,
+		// rect: PropTypes.function,
 		choices: PropTypes.array
 	}
 
@@ -33,14 +33,32 @@ export default class Menu extends Component {
 	}
 
 	setMenuPositions() {
-	  const { rect } = this.props;
+	  const { rect, bounding, set, learn } = this.props;
 	  var r = rect(); // measurements
+	  if (bounding) {
+	  	this.setState({
+	  		menuTop: r.top + r.height,
+	  		menuRight: r.right,
+	  		menuLeft: r.left
+	  	});
+	  	return;
+	  }
 	  let height = r.height.replace('px', '')
-	  height = Number(height) + 5 + 'px'
+	  if(learn) {
+	  	height = Number(height) + 12 + 'px'
+	  } else {
+	  	 height = Number(height) + 5 + 'px'
+	  }	 
+	  let left;
+	  if (set) {
+	  	left = '55px'
+	  } else {
+	  	left = '25px'
+	  }
 	  this.setState({
 	    menuTop: height,
-	    menuRight: '10px',
-	    menuLeft: '0px'
+	    menuRight: '0px',
+	    menuLeft: left
 	  })
 	}
 
@@ -54,12 +72,19 @@ export default class Menu extends Component {
 			top: this.state.menuTop,
 			right: this.state.menuRight
 		}
+		var left_styles = {
+			top: this.state.menuTop,
+			left: this.state.menuLeft
+		}
 		var _menustyle;
 		if(side == 'mid') {
 			_menustyle = mid_styles
 		}
 		if(side == 'right') {
 			_menustyle = right_styles
+		}
+		if(side == 'left') {
+			_menustyle = left_styles
 		}
 		return (
 			<div style={_menustyle} className="menu flex_menu">

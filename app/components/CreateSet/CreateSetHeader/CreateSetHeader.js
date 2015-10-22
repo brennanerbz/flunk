@@ -64,20 +64,19 @@ export default class CreateSetHeader extends Component {
 		const { saveSet } = this.props;
 		return(
 			<div className="CreateSetHeader"> 
-	          <div className="container CreateSetHeader-container">
-	            <div className="CreateSetHeader-wrapper">
-	              <Avatar is_create_set={true}/>
+	          <div className="container CreateSetHeader-container">	
+	            <div className="CreateSetHeader-wrapper">	              
 	              <CreateSetTitle	              	
 	              	autoFocus={true}
 	              	indexForTab={1}
-	              	placeholder="Set title"
+	              	placeholder="Untitled"
 	              	onBlur={this.handleTitleBlur}
 	              	onChange={this.handleTitleChange}
 	              	onFocus={this.handleTitleFocus}
 	              />
 	              <CreateSetPurpose
 	              	indexForTab={2}
-	              	placeholder="Optional purpose"
+	              	placeholder="Purpose (optional)"
 	              	onBlur={this.handlePurposeBlur}
 	              	onChange={this.handlePurposeChange}
 	              	onFocus={this.handlePurposeFocus}
@@ -90,3 +89,11 @@ export default class CreateSetHeader extends Component {
 		)
 	}
 }
+// 
+// 
+// <div className="create_avatar">
+	// <a className="link">
+		// <img src="https://cdn-images-1.medium.com/fit/c/72/72/0*Un7eHMAQh62QX1LO.jpg" className="avatar-img"/>	          		
+	// </a>
+// </div> 
+

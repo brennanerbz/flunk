@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 require('./LearnHelp.scss')
-import Hint from './Hint';
+import classnames from 'classnames';
+// import Hint from './Hint';
 import Related from './Related';
 import MultipleChoice from './MultipleChoice';
 import Target from './Target';
@@ -16,10 +17,6 @@ export default class LearnHelp extends Component {
 		switch(trial.difficulty) {
 			case 'recall':
 				return;
-			case 'aug':
-				return (
-					<Hint hint={trial.augcue}/>
-				)
 			case 'related':
 				return;
 			case 'nonemc':
@@ -33,15 +30,35 @@ export default class LearnHelp extends Component {
 				return (
 					<Target stem={trial.stem} target={trial.target}/>
 				)
+			case 'aug':
 			default:
 				break;
 		}
 	}
 
 	render() {
-		const { slot } = this.props;
+		const { slot, trial } = this.props;
 		return(
-			<div className="learn_help">	
+			<div className="learn_help">
+				<div className="">
+					<p className={classnames("diff_label", {'mc_label': trial.difficulty == 'mc' || trial.difficulty == 'nonemc'  })}>
+					{ 
+						trial.difficulty == 'mc' || trial.difficulty == 'nonemc'
+						? "Multiple Choice:"
+						: null
+					}
+					{
+						trial.difficulty == 'stem'
+						? "Fill in the blank:"
+						: null
+					}
+					{
+						trial.difficulty == 'copy' || trial.difficulty == 'peek'
+						? 'Correct answer:'
+						: null
+					}
+					</p>
+				</div>
 				{
 					slot.completion == 'None'
 					? ::this.renderHelp()

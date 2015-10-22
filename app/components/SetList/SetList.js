@@ -11,9 +11,9 @@ import * as actionCreators from '../../actions/usersets';
 
 import SetListItem from './SetListItem';
 
-
 @connect(state => ({
 	sets: state.sets.set_list.map(id => state.sets.set_items[id]),
+	set_list: state.sets.set_list,
 	isFetching: state.sets.isFetching
 	}),
 	dispatch => ({
@@ -41,7 +41,7 @@ export default class SetList extends Component {
 		});
 	}	
 
-	renderSets = (sets) => {		
+	renderSets(sets) {		
 		var sorted_sets = sets.map((set) => {
 		    const date = moment(set['doc']);
 		    const today = moment();
@@ -49,15 +49,15 @@ export default class SetList extends Component {
 		    const today_month = moment().format('MMMM');
 		    let diff = today.diff(date, 'days');
 
-		    if (diff > 30 && today_month !== date_month) {
+		    if (diff > 30 && today_month !== date_month) {		    	
 		        return assign({}, set, {time_ago: date_month})
 		    } else if (diff <= 7) {
 		        return assign({}, set, {time_ago: 'Last studied'})
-		    } else if (diff > 7 && diff < 14) {
+		    } else if (diff > 7 && diff < 14) {		    	
 		        return assign({}, set, {time_ago: 'Last week'})
-		    } else if (diff > 14 && diff < 21) {
+		    } else if (diff >= 14 && diff <= 21) {
 		        return assign({}, set, {time_ago: '2 weeks ago'})
-		    } else if (diff > 21) {
+		    } else if (diff >= 21) {
 		        return assign({}, set, {time_ago: '3 weeks ago'})
 		    }
 		})
@@ -79,7 +79,7 @@ export default class SetList extends Component {
 
 
 	render() {	
-		const { sets, isFetching } = this.props;
+		const { sets, isFetching, set_list } = this.props;
 		sets.sort((set1, set2) => {
 			return (moment(set1.doc).isBefore(set2.doc)) ? 1 : -1
 		})		
@@ -87,11 +87,11 @@ export default class SetList extends Component {
 			<div>				
 				<div className="sets_container">
 					{
-						isFetching 
+						isFetching || typeof sets == null || set_list.length === 0
 
 						? null
 
-						: this.renderSets(sets)
+						: ::this.renderSets(sets)
 					}
 				</div>
 			</div>

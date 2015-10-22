@@ -14,6 +14,8 @@ import LearnInput from '../../components/LearnInput/LearnInput';
 import LearnFeedback from '../../components/LearnFeedback/LearnFeedback';
 import LearnHelp from '../../components/LearnHelp/LearnHelp';
 import DiffControls from '../../components/DiffControls/DiffControls';
+import Hint from '../../components/Hint/Hint';
+import SeqControl from '../../components/LearnSeqControl/SeqControl';
 
 @connect(state => ({
 	is_fetching_learn: state.learn.is_fetching_learn,
@@ -96,48 +98,49 @@ export default class Learn extends Component {
 				nextSlot,
 				params} = this.props;
 		return (
-			<div className="no_sidenav_container learn_container"
-				 onKeyPress={::this.handleKeyUp}
-				 onKeyDown={::this.handleArrowKeys}>
-				<div>
-					<LearnCard slot={current_slot} 
-							   slots={slots} 
-							   skip={(dir) => nextSlot(dir)} 
-							   trial={this.props.trial}/>
-					{
-						showCorrect
-						? <ShowCorrect {...this.props}/>
-						: null
-					}
-					{
-						!showCorrect && !showCompletedSeq
-						? <LearnInput ref='learn_input'
-									  skip={(dir) => nextSlot(dir)}
-									  {...this.props}/>
-						: null
-					}										
-					{
-						showCompletedSeq
-						? <a onClick={() => newSeq(1, params.id)}>New sequence</a>
-						: null
-					}
-					{
-						!showCorrect && !showCompletedSeq
-						? <DiffControls />
-						: null
-					}
-					{
-						showFeedback
-						? <LearnFeedback slot={current_slot} trial={this.props.trial} />	
-						: null
-					}
-					{
-						!showCorrect && !showCompletedSeq
-						? <LearnHelp slot={current_slot} trial={this.props.trial}/>
-						: null
-					}													
-				</div>
-			 </div> 
+			<div className="learn_page">
+				<SeqControl {...this.props}/>
+				<div className="no_sidenav_container learn_container"
+					 onKeyPress={::this.handleKeyUp}
+					 onKeyDown={::this.handleArrowKeys}>			 
+					<div>
+						<LearnCard slot={current_slot} 
+								   slots={slots} 
+								   skip={(dir) => nextSlot(dir)} 
+								   trial={this.props.trial}
+								   {...this.props}/>
+						{
+							showCorrect
+							? <ShowCorrect {...this.props}/>
+							: null
+						}												
+						{
+							showCompletedSeq
+							? <a onClick={() => newSeq(1, params.id)}>New sequence</a>
+							: null
+						}
+						{
+							!showCorrect && !showCompletedSeq
+							? <DiffControls />
+							: null
+						}
+						{
+							showFeedback
+							? null
+							// ? <LearnFeedback slot={current_slot} trial={this.props.trial} />	
+							: null
+						}
+						{
+							!showCorrect && !showCompletedSeq
+							? <Hint {...this.props} />
+							: null
+						}
+						<div className="feedback">
+							<a className="feedback_link">Feedback</a>
+						</div>
+					</div>
+				 </div> 
+			 </div>
 		);
 	}
 }

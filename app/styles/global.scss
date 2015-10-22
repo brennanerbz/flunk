@@ -51,21 +51,21 @@ ul {
 	display: inline-block;
 	position: relative;
 	height: 37px;
-	padding: 0px 16px;
+	padding: 0px 17px;
 	color: rgba(0, 0, 0, 0.44);
 	background: transparent none repeat scroll 0% 0%;
-	font-size: 14px;
+	font-size: 15px;
 	text-align: center;
 	text-decoration: none;
 	cursor: pointer;
-	border: 1px solid rgba(0, 0, 0, 0.15);
+	border: none;
 	vertical-align: bottom;
 	white-space: nowrap;
 	-moz-user-select: none;
 	box-sizing: border-box;
-	border-radius: 999em;
+	border-radius: 4px;
 	font-family: "Lato";
-	letter-spacing: -0.02em;
+	letter-spacing: 0.003em;
 	font-weight: 400;
 	font-style: normal;
 	text-rendering: optimizelegibility;
@@ -74,8 +74,8 @@ ul {
 	line-height: 35px;
 	-webkit-transition: 0.1s ease-in-out;
 	transition: 0.1s ease-in-out;
-	&:hover {
-		border: 1px solid rgba(0, 0, 0, 0.23);
+	text-shadow: 0 1px 1px rgba(0,0,0,.1)!important;
+	&:hover {		
 		-moz-transition:  0.1 ease-in-out;
 		transition: 0.1 ease-in-out;
 	}
@@ -84,12 +84,20 @@ ul {
 	}
 }
 :global .button-primary {
-	border: 1px solid #A9D8B2;
-	color: #57AD68;
+	background-color: #52B78A;	
+	color: #fff;
 	&:hover {
-		border: 1px solid #73BD82;
-		color: #5C9C68;
+		box-shadow: inset 0 -2px rgba(0,0,0,.25);
+		border: none;		
 	}
+}
+:global .button-outline {
+	border: 1px solid #C7CACD;
+	text-shadow: none!important;
+	&:hover {
+		color: #32A2E6;
+		border: 1px solid #ccc;
+	}	
 }
 
 :global .button-link {
@@ -111,6 +119,36 @@ ul {
 	transition: background-color 100ms ease 0s, border-color 100ms ease 0s, color 100ms ease 0s, fill 100ms ease 0s;
 	line-height: normal;
 }
+.square_fill_btn {
+	height: 38px;
+	display: inline-block;		
+	border-radius: 2px;
+	padding: 2px;
+	line-height: 1.2rem;
+	white-space: nowrap;
+    margin: 0;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    padding: 8px 14px 9px;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 0.01em;
+	&:first-child {
+		color: #fff;
+		text-shadow:0 1px 0 rgba(0,0,0,.1);
+	}
+	&:hover {
+		box-shadow: inset 0 -2px rgba(0,0,0,.25);
+	}
+}
+
+.btn_primary {
+	background-color: #2AB27B;
+	outline: none;
+	border: none;
+}
+
+
 :global .text-input {
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	padding: 0px 15px;
@@ -171,8 +209,9 @@ ul {
 		box-shadow: inset 0px 1px 3px 0px rgba(81,79,79,0.50);
 	}
 }
-.btn_circle {
+.button_circle {
 	border-radius: 999em;
+	border: 1px solid rgba(0, 0, 0, 0.15)!important;
 }
 
 .btn_icon {
@@ -211,6 +250,11 @@ button:focus, input[type="button"]:focus {
 		padding: 0px;
 		width: 37px;
 		text-align: center;
+		border-radius: 999em;
+		border: 1px solid rgba(0, 0, 0, 0.15)!important;
+		&:hover {
+			border: 1px solid rgba(0, 0, 0, 0.25)!important;
+		}
 	}
 	.button-borderless {
 		border: none;
@@ -472,6 +516,9 @@ textarea:hover:ms-input-placeholder {
 	margin-top: 20px;
 	padding-top: 10px;
 	padding-bottom: 15px;
+	&.set_details {
+		margin-top: 153px;
+	}
 	.header_icon {
 		height: 18px;
 		opacity: 0.6;
@@ -501,6 +548,7 @@ textarea:hover:ms-input-placeholder {
 
 // Modal 
 .modal {
+	z-index: 9999999;
 	&.fade {
 		top: -100%;
 		-webkit-transition: opacity .15s linear,top .15s ease-out;

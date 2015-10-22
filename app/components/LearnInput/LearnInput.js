@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import classnames from 'classnames';
 require('./LearnInput.scss')
 
 export default class LearnInput extends Component {
@@ -7,12 +8,15 @@ export default class LearnInput extends Component {
 
 	state = {
 		answer: '',
-		reaction_time: null
+		reaction_time: null,
+		correct: false
 	}		
 
-	// shouldComponentUpdate(nextProps) {
-	// 	return nextProps.current_slot.completion == 'None'
-	// }
+	componentDidMount() {
+		this.setState({
+			correct: false
+		});
+	}
 
 	componentWillReceiveProps(nextProps) {
 		const { current_slot } = this.props;
@@ -27,7 +31,7 @@ export default class LearnInput extends Component {
 	handleChange = (e) => {
 		this.setState({
 			answer: e.target.value
-		});
+		});	
 	}
 
 	handleReactionTime = () => {
@@ -55,11 +59,24 @@ export default class LearnInput extends Component {
 
 	handleKeyDown(event) {
 		this.handleReactionTime()
+		// const { trial } = this.props,
+		// 	  target = event.target.value;
+		// if((target == trial.target.slice(0, -1) || target == trial.target) 
+		// 	&& (trial.difficulty == 'copy' || trial.difficulty == 'peek')) {
+		// 	this.setState({
+		// 		correct: true
+		// 	});
+		// }
+		// else if(target !== trial.target.slice(0, -1)) {
+		// 	this.setState({
+		// 		correct: false
+		// 	})
+		// }		
 	}
 
 	render() {
 		return(
-			<div className="input-group">
+			<div className="input_box">	
 			    <form onSubmit={this.handleSubmit}>
 			    <input autoFocus={true} 
 			    	   ref="answerbox"
@@ -67,10 +84,12 @@ export default class LearnInput extends Component {
 			    	   onChange={this.handleChange}
 			    	   onKeyDown={::this.handleKeyDown}
 			    	   type="text" 
-			    	   className="form-control"/>
+			    	   className={classnames({'correct_answer': this.state.correct})}/>
 			   	</form>
-			   	<span className="input-group-btn">
-			   		<button className="btn help_btn" type="button">Answer</button>
+			   	<span className="">
+			   		<button className="button answer_btn" 
+			   			    type="button"
+			   			    onClick={::this.handleSubmit}>Answer</button>
 			   	</span>
 			</div>
 		);

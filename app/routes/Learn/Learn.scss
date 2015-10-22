@@ -1,9 +1,27 @@
-.learn_container {
-	font-family: "Lato";
-	letter-spacing: 0.01em;
-	max-width: 950px!important;
-	padding-right: 85px;
-	p {
-		font-size: 18px;
+.learn_page{
+	margin-top: -15px;
+	.feedback {
+		border: none!important;
+		position: absolute;
+		right: 25px;
+		bottom: 35px;
+		a {
+			color: #787878;
+			font-size: 13px;
+			cursor: pointer;
+			font-style: italic;
+		}
+	}
+	.learn_container {
+		font-family: "Lato";
+		letter-spacing: 0.01em;
+		max-width: 800px!important;
+		padding-right: 85px;
+		padding-left: 10px;
+		padding-top: 20px;
+		margin-left: 230px!important;
+		p {
+			font-size: 17px;
+		}
 	}
 }

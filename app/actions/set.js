@@ -6,12 +6,13 @@ const api_url = 'http://127.0.0.1:5000/webapi/v1.0';
 
 // Concurrent call that will call each method and return the whole/entire state desired
 
-export const REQUEST_SET_VIEW = 'REQUEST_SET_VIEW';
+export const RECEIVE_SETVIEW_SUCCESS = 'REQUEST_SETVIEW_SUCCESS';
 export function fetchSetView(user_id, set_id) {
-	return async => {
+	return async(dispatch) => {
 		axios.all([fetchSet(set_id), fetchContent(set_id), fetchAssignment(user_id, set_id)])
 		.then(axios.spread((set, items, assignment) => {
-			// All requests are now complete
+			console.log("Axios.all:" + set, items, assignment)
+			dispatch({type: RECEIVE_SETVIEW_SUCCESS, set, items, assignment})
 		}))
 	}
 }
@@ -38,6 +39,7 @@ export function fetchSet(set_id) {
 		dispatch(requestSet())
 		try {
 			let set = await axios.get(`${api_url}/sets/${set_id}`)
+			console.log("Fetch Set:" + set)
 			dispatch({
 				type: RECEIVE_SET_SUCCESS,
 				set
@@ -77,10 +79,12 @@ export function fetchContent(set_id) {
 			.then((res) => {
 				dispatch({ type: RECEIVE_CONTENT_SUCCESS, content})
 				let data = res.data;
-				let ids = data.map(item => item.id)				
+				let ids = data.map(item => item.id)
+				console.log("Ids:" + ids)				
 				let item_list = ids.forEach(id => {
 					dispatch(fetchItem(id))
 				})
+				console.log("Fetch Content:" + item_list)
 				dispatch({type: RECEIVE_ITEMS_SUCCESS, item_list })
 			}).catch((err) => {
 				dispatch({type: RECEIVE_ITEMS_FAILURE})
@@ -146,6 +150,7 @@ export function fetchAssignment(user_id, set_id) {
 			await axios.get(`${api_url}/assignments?user_id=${user_id}&set_id=${set_id}`)
 			.then((res) => {
 				let assignment = res.data;
+				console.log("Fetch assignment:" + assignment)
 				if(assignment !== (null || undefined)) {
 					dispatch({type: RECEIVE_ASSIGNMENT_SUCCESS, assignment})
 					return;
@@ -175,6 +180,7 @@ export function updateAssignent(user_id, set_id) {
 		try {
 			await axios.put(`${api_url}/assignments?user_id=${user_id}&set_id=${set_id}`).then((res) => {
 				let new_assignment = res.data;
+				console.log("Update assignment:" + new_assignment)
 				dispatch({type: UPDATE_ASSIGNMENT_SUCCESS, new_assignment })
 			})
 		} catch(err) {

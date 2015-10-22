@@ -89,17 +89,27 @@
 
 
 // console.log(checkCompleted('next', pos))
-// console.log(checkCompleted('prev', pos - 1))
+// // console.log(checkCompleted('prev', pos - 1))
 
-let r_num = Math.floor(Math.random() * 4)
-for(var i = 0; i < 5; i++){
-	console.log(r_num)
-}
-
-
+// let r_num = Math.floor(Math.random() * 4)
+// for(var i = 0; i < 5; i++){
+// 	console.log(r_num)
+// }
 
 
+let data = [
+	{
+		name: 'B',
+		id: 0
+	}, 
+	{
+		name: 'C',
+		id: 1
+	}
+]
 
+let ids = data.map(obj => obj.id)
+console.log(ids)
 
 
 

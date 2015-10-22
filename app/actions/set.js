@@ -20,7 +20,8 @@ export function fetchSetView(user_id, set_id) {
 
 // Call /sets/:id route with the params id passed in from React. Will be a function to run concurrently. This will return a set object, and from this set object, we will be able to  fill store. 
 
-export const REQUEST_SET = 'REQUEST_SET';
+export const REQUEST_SET
+ = 'REQUEST_SET';
 export const RECEIVE_SET_SUCCESS = 'RECEIVE_SET_SUCCESS';
 export const RECEIVE_SET_FAILURE = 'RECEIVE_SET_FAILURE';
 
@@ -117,7 +118,7 @@ export function fetchItem(item_id) {
 	return async(dispatch, getState) => {
 		try {
 			let item = await axios.get(`${api_url}/items/${item_id}`)
-			dispatch({ type: RECEIVE_ITEM_SUCCESS })
+			dispatch({ type: RECEIVE_ITEM_SUCCESS, item })
 			return item;
 		} catch(err) {
 			dispatch({

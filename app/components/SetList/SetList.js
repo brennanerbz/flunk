@@ -66,7 +66,8 @@ export default class SetList extends Component {
 		sorted_sets.forEach((set, i) => {
 			if (set.time_ago !== last_time_ago) {
 				rows.push(<DayDivider set={set} 
-					                  key={'day' + i}/>)
+					                  key={'day' + i}
+					                  {...this.props}/>)
 			}
 			rows.push(<SetListItem set={set}							   
 								   setActiveRow={this.setActiveRow}
@@ -103,7 +104,7 @@ class DayDivider extends Component {
 	render() {
 		const set = this.props.set;		
 		return (
-			<div className="day_divider">
+			<div className={classnames("day_divider", {'profile_divider': this.props.profile})}>
 				<hr className="separator"/>
 				<i className="copy_only"/>
 					<div className="day_divider_label">

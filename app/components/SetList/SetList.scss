@@ -12,6 +12,12 @@
 	clear: both;
 	position: relative;
 	min-width: 460px;
+	&.profile_divider {
+		&:first-child {
+			margin-top: 15px!important;
+			display: none;
+		}
+	}
 	hr {
 		position: absolute;
 		border-top: 1px solid #DDD;

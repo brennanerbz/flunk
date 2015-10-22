@@ -64,7 +64,7 @@ export default class CreateSetHeader extends Component {
 		const { saveSet } = this.props;
 		return(
 			<div className="CreateSetHeader"> 
-	          <div className="container CreateSetHeader-container">	          
+	          <div className="container CreateSetHeader-container">	
 	            <div className="CreateSetHeader-wrapper">	              
 	              <CreateSetTitle	              	
 	              	autoFocus={true}
@@ -89,10 +89,11 @@ export default class CreateSetHeader extends Component {
 		)
 	}
 }
-
-
+// 
+// 
 // <div className="create_avatar">
-// 	<a className="link">
-// 		<img src="https://cdn-images-1.medium.com/fit/c/72/72/0*Un7eHMAQh62QX1LO.jpg" className="avatar-img"/>	          		
-// 	</a>
-// </div>
+	// <a className="link">
+		// <img src="https://cdn-images-1.medium.com/fit/c/72/72/0*Un7eHMAQh62QX1LO.jpg" className="avatar-img"/>	          		
+	// </a>
+// </div> 
+

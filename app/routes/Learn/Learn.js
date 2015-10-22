@@ -135,7 +135,9 @@ export default class Learn extends Component {
 							? <Hint {...this.props} />
 							: null
 						}
-
+						<div className="feedback">
+							<a className="feedback_link">Feedback</a>
+						</div>
 					</div>
 				 </div> 
 			 </div>

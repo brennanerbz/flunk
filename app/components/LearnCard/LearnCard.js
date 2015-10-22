@@ -18,6 +18,13 @@ export default class LearnCard extends Component {
 			 	<div className="learn_card">					
 					<div className="">
 						<div className="top_cue_container">
+							{
+								showCorrect
+								? <h4 className="correct_label">
+									Correct
+								  </h4>
+								: null
+							}							
 							<p className="cue">
 							{	
 								typeof trial['cue'] == 'undefined'
@@ -25,10 +32,14 @@ export default class LearnCard extends Component {
 								: trial['cue']
 							}
 							</p>
-							<a className="dont_know_btn link"
-							   onClick={console.log("TODO: link don\'t know to handleSubmit")}>
-							   Don't know
-							</a>
+							{
+								showCorrect
+								? null
+								: <a className="dont_know_btn link"
+							   		 onClick={console.log("TODO: link don\'t know to handleSubmit")}>
+							  		 Don't know
+								 </a>
+							}						
 						</div>
 						<div className="help_divider">
 							<hr className="separator"/>
@@ -40,8 +51,12 @@ export default class LearnCard extends Component {
 							!showCorrect && !showCompletedSeq
 							? <LearnHelp {...this.props}/>
 							: null
-						}						
-						<LearnInput {...this.props}/>
+						}
+						{
+							showCorrect
+							? null
+							: <LearnInput {...this.props}/>
+						}												
 					</div>
 				</div>
 			</div>

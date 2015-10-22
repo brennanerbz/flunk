@@ -4,6 +4,10 @@
 		display: inline-block;
 		position: relative;
 		width: 100%;
+		.correct_label {
+			padding-left: 10px;
+			color: #53AE65;
+		}
 		p {
 			width: 85%;
 		}

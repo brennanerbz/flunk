@@ -60,7 +60,7 @@ export default class Header extends Component {
 
 	render() {
 		const logo = require('./assets/FlunkLogo.png'),
-			  create_icon = require('../../assets/add_circle_icon.png'),
+			  create_icon = require('../../assets/create_new_pencil.png'),
 			  dropdown_icon = require('../../assets/dropdown_arrow.png'),
 			  { loc, sets, isFetching, fetchingLearn} = this.props;
 		let id = loc.pathname.replace(/\D/g,''),

@@ -115,7 +115,7 @@ export default class SubSetActions extends Component {
 					</i>					
 				</button>
 
-				<div ref="share_modal" className="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div ref="share_modal" className="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				  <div className="modal-dialog" role="document">
 				    <div className="modal-content">
 				      <div className="modal-header">
@@ -126,7 +126,7 @@ export default class SubSetActions extends Component {
 				        <h3 className="modal-title" id="myModalLabel">Share study set</h3>
 				      </div>
 				      <div className="modal-body">
-				      	<input id="share_link" ref="share_link" type="text" value="https://ace.com/987389/cog-sci" />
+				      	<input id="share_link" ref="share_link" type="text" defaultValue="https://ace.com/987389/cog-sci" />
 				      </div>
 				      <div className="modal-footer">
 				        <button type="button" className="button button-outline" data-dismiss="modal">Cancel</button>

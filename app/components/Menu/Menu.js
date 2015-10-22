@@ -14,7 +14,7 @@ class MenuItem extends Component {
 
 export default class Menu extends Component {
 	static propTypes = {
-		rect: PropTypes.function,
+		// rect: PropTypes.function,
 		choices: PropTypes.array
 	}
 

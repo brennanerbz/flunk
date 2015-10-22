@@ -27,7 +27,7 @@ export default class SeqControl extends Component {
 					</div> 
 				</div>
 				<SignPosts {...this.props} />
-				<label className="label_term_first" for="term_first">See Term first</label>
+				<label className="label_term_first">See Term first</label>
 				<input id="term_first" type="checkbox" className="term_first"/>
 				<span className="">
 					<button className="button button-outline startover_btn"

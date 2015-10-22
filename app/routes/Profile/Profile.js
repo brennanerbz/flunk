@@ -4,18 +4,28 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-/* Components */
+/* Parent Components */
 import ProfilePic from '../../components/Profile/ProfilePic/ProfilePic';
 import ProfileName from '../../components/Profile/ProfileName/ProfileName';
 import ProfileTabs from '../../components/Profile/ProfileTabs/ProfileTabs';
 import ProfileInfo from '../../components/Profile/ProfileInfo/ProfileInfo';
-import SetList from '../../components/SetList/SetList';
+
+/* Child Components */
+import ProfileCreated from '../../components/Profile/ProfileCreated/ProfileCreated';
+import ProfileStudied from '../../components/Profile/ProfileStudied/ProfileStudied';
 
 /* SCSS */
 require('./Profile.scss');
 
 /*
 @connect.....
+which route (created/studied) we're on, pass down the profile id to the child routes
+the user object with picture, name, username, school, etc.
+any stats related to the user
+*/
+/*
+@dispatch
+fetchUser(concurrent)
 */
 export default class Profile extends Component {
 	static propTypes = {
@@ -33,7 +43,11 @@ export default class Profile extends Component {
 						<ProfileTabs/>
 					</nav>
 					<article className="profile_setlist_container">
-						<SetList profile={true}/>
+						{
+							true
+							? <ProfileCreated />
+							: <ProfileStudied />
+						}
 					</article> 
 				</div>
 				<div className="col-md-4">

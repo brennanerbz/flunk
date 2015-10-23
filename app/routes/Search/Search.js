@@ -25,14 +25,14 @@ export default class Search extends Component {
 				<nav className="search_tabs">
 					<SearchTabs/>
 				</nav>
-				<article className="search_content no_sidenav_container">
+				<article className={classnames("search_content", "no_sidenav_container", {'sets_page': true})}>
 					{
-						true
+						false
 						? <SearchConcepts/>
 						: null
 					}
 					{
-						false
+						true
 						? <SearchSets />
 						: null
 					}

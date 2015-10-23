@@ -42,6 +42,11 @@
 							margin-top: 0!important;
 							font-size: 14.5px;
 							color: #57AD67;
+							opacity: 0.8;
+							cursor: pointer;
+							&:hover {
+								opacity: 1;
+							}
 						}
 					}
 				}

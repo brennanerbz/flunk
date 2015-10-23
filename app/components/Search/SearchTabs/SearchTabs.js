@@ -8,10 +8,10 @@ export default class SearchTabs extends Component {
 		return(
 			<div className="tabs_container">
 				<ul className="tabs_list">
-					<li className="tab_item concepts_tab active">
+					<li className="tab_item concepts_tab">
 						Concepts
 					</li>
-					<li className="tab_item sets_tab">
+					<li className="tab_item sets_tab active">
 						Sets
 					</li>
 					<li className="tab_item people_tab">
@@ -22,3 +22,9 @@ export default class SearchTabs extends Component {
 		);
 	}
 }
+
+    // position: fixed;
+    // line-height: 38px;
+    // background-color: #fff;
+    // z-index: 101;
+    // width: 100%;

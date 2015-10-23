@@ -1,0 +1,51 @@
+.search_concept_container {
+	display: block;
+	position: relative;
+	.concept_header {
+		padding-top: 10px!important;
+		h4 {
+			&.search_query {
+				font-size: 24px;
+				font-family: "Calibri";
+			}
+		}
+		ul {
+			&.subject_list {
+				display: table;
+				.subject {
+					display: inline-block;	
+					font-size: 14.5px;
+					color: #696969;				
+				}
+				:not(:first-child) {
+						margin-left: 10px;
+				}
+			}
+		}
+	}
+	.definition_list_container {
+		ul {
+			&.definition_list {
+				width: 540px;
+				.definition_item {
+					border-bottom: 1px solid #f3f3f3;
+					margin-bottom: 23px;
+					padding-bottom: 15px;
+					p {
+						&.definition {
+							font-size: 17px;
+							margin-bottom: 0;
+						}
+					}
+					span {
+						&.source {
+							margin-top: 0!important;
+							font-size: 14.5px;
+							color: #57AD67;
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -354,16 +354,17 @@ export function fetchTrials(slot_id) {
 	return async(dispatch, getState) => {
 		try {
 			let trials = await axios.get(`${api_url}/slots/${slot_id}/trials`).data
-			trials = trials['trials']
+			trials = trials['trials'],
+			trial = {};
 			if(trials.length === 0) {
-				dispatch() // TODO: new_trial function
+				trial['type'] = null;
+				dispatch(newTrial(trial))
 				return;
 			}			
 			dispatch({type: RECEIVE_TRIALS_SUCCESS, trials})
-			/* Temporary test for posting trial */
-			let last_trial = trials.slice(-1)[0]
-			dispatch(newTrial(last_trial))
-			/* End */
+			trial = trials.slice(-1)[0]
+			trial['type'] = 'return';
+			dispatch(newTrial(trial))	
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_TRIALS_FAILURE,
@@ -387,56 +388,68 @@ function willCreateNewTrial() {
 		type: NEW_TRIAL
 	}
 }
-export function newTrial() {
+var _default_trial = {
+	slot_id: 0,
+	cue_visible: '',
+	image: '',
+	correct_index_choice: '',
+	none: false,
+	truefalse: false,
+	all_of_the_above: false, 
+	format: '', 
+	click_to_answer: false,
+	type_index_to_answer: false,
+	cue_target_reversal: false,
+	reverse_truefalse: false,
+	reverse_mc: false,
+	format_chosen_by_user: false,
+	help_chosen_by_user: false,
+	subject: null,
+	synonyms: null,
+	augs: null,
+	related_terms: null,
+	nonemc_choices: null,
+	mc_choices: null,
+	truefalse_target_shown: null,
+	stem: null,
+	alt_cues: null,
+	start: null
+}
+export function newTrial(trial) {
 	return async(dispatch, getState) => {
 		dispatch(willCreateNewTrial())
 		try {
-			let last_trial = getState().learn.last_trial,
-				current_slot = getState().learn.current_slot,
-				new_format,
-				new_hint;
-			if(last_trial !== undefined) {
-				new_format = dispatch(newFormat(last_trial, null))
-				new_hint = dispatch(newHint(last_trial, current_slot))
-			} else {
-				new_format = dispatch(newFormat(null, current_slot))
-			}
-			arguments.forEach(arg => {
-				if(arg !== undefined) {
-					return arg;
-				} else {
-					return arg = null;
-				}
-			})
-			const s = new Date(),
-				  start = s.toISOString().replace("T", " ").replace("Z", "")
+			let new_trial,
+				current_slot = getState.learn.current_slot,
+				s = new Date(),
+			  	start = s.toISOString().replace("T", " ").replace("Z", "");
+			if (trial.type == 'return') {
+				new_trial = trial
+			} else if (trial.type == (null || undefined)) {
+				new_trial = Object.assign({..._default_trial}, {
+					slot_id: current_slot['id'],
+					cue_visible: current_slot['item']['cue'],
+					format: 'recall',
+					start: start
+				})
+			} else if (trial.type == 'adapt') {
+				new_trial = Object.assign({...trial}, {
+					format: trial.new_format,
+					start: start
+				})
+			} else if (trial.type == 'hint') {
+				new_trial = Object.assign({...trial}, {
+					help_chosen_by_user: true,
+					augs: trial.new_aug,
+					start: start
+				})
+			}	
 			await axios.post(`${api_url}/trials/`, {
-				slot_id: slot_id,
-				cue_visible: current_slot.item.cue,
-				image: image,
-				correct_index_choice: correct_index_choice,
-				none: none,
-				truefalse: truefalse,
-				all_of_the_above: all_of_the_above, 
-				format: new_format, // uses helper function newFormat()
-				click_to_answer: current_slot.click_to_answer,
-				type_index_to_answer: type_index_to_answer,
-				cue_target_reversal: cue_target_reversal,
-				reverse_truefalse: reverse_truefalse,
-				reverse_mc: reverse_mc,
-				format_chosen_by_user: format_chosen_by_user,
-				help_chosen_by_user: help_chosen_by_user,
-				subject: subject,
-				synonyms: synonyms,
-				augs: new_hint, // uses helper function newHint()
-				related_terms: related_terms,
-				nonemc_choices: nonemc_choices,
-				mc_choices: mc_choices,
-				truefalse_target_shown: truefalse_target_shown,
-				stem: stem,
-				alt_cues: alt_cues,
-				start: start // timestamp of requesst
-			}) 
+				new_trial
+			}).then(res => {
+				let _trial = res.data;
+				dispatch({type: NEW_TRIAL_SUCCESS, _trial})
+			})
 		} catch(err) {
 			dispatch({
 				type: NEW_TRIAL_FAILURE,
@@ -469,21 +482,40 @@ function newFormat(last_trial, current_slot) {
 
 /* Helper for deciding which hint to show next */
 export const NEW_HINT = 'NEW_HINT';
-function newHint(last_trial, current_slot) {
-	if(last_trial !== undefined) {
-		let augs = current_slot['augs'],
-			last_aug = last_trial['augs'][0],
-			current_index = augs.indexOf(last_aug),
-			next_index = current_index + 1;
-		if (next_index >= 2) {
-			next_index = 2
-		}
-		return current_slot['augs'][next_index]
-	} else {
-		return current_slot['augs'][0]
+export const NEW_HINT_SUCCESS = 'NEW_HINT_SUCCESS';
+export const NEW_HINT_FAILURE = 'NEW_HINT_FAILURE';
+function willShowHint() {
+	return { 
+		type: NEW_HINT
 	}
-	// TODO: make sure the last_trial is being updated before any computation 
 }
+export function hint() {
+	return (dispatch, getState) => {
+		try {
+			let current_trial = getState().learn.current_trial,
+				augs = getState().learn.current_slot['augs'],
+				recent_aug = current_trial['augs'][0],
+				index = augs.indexOf(recent_aug),
+				next_index = index + 1;
+			if (next_index >= augs.length) {
+				next_index = augs.length;
+			}
+			if (augs.length > 0 && recent_aug == undefined) {
+				next_index = 0;
+			}
+			let new_aug = augs[next_index]
+			current_trial['new_aug'] = new_aug;
+			dispatch(newTrial(current_trial))
+			dispatch({type: NEW_HINT_SUCCESS, new_aug})
+		} catch(err) {
+			dispatch({
+				type: NEW_HINT_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
+
 
 /*
 @params: 
@@ -544,7 +576,7 @@ export function adapt(updated_trial) {
 		dispatch(willAdapt())
 		try {
 			let new_format = dispatch(newFormat(updated_trial))
-			updated_trial = Object.assign({...updated_trial}, {new_format: new_format})
+			updated_trial['new_format'] = new_format
 			dispatch(newTrial(updated_trial))
 			dispatch({type: ADAPT_SUCCESS, new_format})
 		} catch(err) {

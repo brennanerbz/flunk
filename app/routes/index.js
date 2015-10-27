@@ -9,6 +9,7 @@ import CreateSet from './CreateSet/CreateSet';
 import Profile from './Profile/Profile';
 import Learn from './Learn/Learn';
 import SetView from './Set/Set';
+import Search from './Search/Search';
 
 import fillStore from '../utils/fillStore';
 
@@ -19,6 +20,7 @@ const routes = (
     <Route path="profile" component={Profile}/>     
     <Route path="createset" component={CreateSet} />
     <Route path="learn/:id" component={Learn}/>
+    <Route path="search" component={Search}/>
   </Route>
 );
 

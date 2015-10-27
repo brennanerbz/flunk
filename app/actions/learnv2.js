@@ -387,41 +387,19 @@ function willCreateNewTrial() {
 		type: NEW_TRIAL
 	}
 }
-export function newTrial(slot_id,
-					     cue_visible,
-					     image,
-					     correct_index_choice,
-					     none,
-					     truefalse,
-					     all_of_the_above,
-					     format,
-					     click_to_answer,
-					     type_index_to_answer,
-					     cue_target_reversal,
-					     reverse_truefalse,
-					     reverse_mc,
-					     format_chosen_by_user,
-					     help_chosen_by_user,
-					     subject,
-					     synonyms,
-					     augs,
-					     related_terms,
-					     nonemc_choices,
-					     mc_choices,
-					     truefalse_target_shown,
-					     stem,
-					     alt_cues,
-					     start) {
+export function newTrial() {
 	return async(dispatch, getState) => {
 		dispatch(willCreateNewTrial())
 		try {
 			let last_trial = getState().learn.last_trial,
-				current_sequence = getState().learn.current_sequence,
-				format_settings;
+				current_slot = getState().learn.current_slot,
+				new_format,
+				new_hint;
 			if(last_trial !== undefined) {
-				format_settings = dispatch(newFormat(last_trial, null))
+				new_format = dispatch(newFormat(last_trial, null))
+				new_hint = dispatch(newHint(last_trial, current_slot))
 			} else {
-				format_settings = dispatch(newFormat(null, current_sequence))
+				new_format = dispatch(newFormat(null, current_slot))
 			}
 			arguments.forEach(arg => {
 				if(arg !== undefined) {
@@ -430,17 +408,18 @@ export function newTrial(slot_id,
 					return arg = null;
 				}
 			})
-
+			const s = new Date(),
+				  start = s.toISOString().replace("T", " ").replace("Z", "")
 			await axios.post(`${api_url}/trials/`, {
 				slot_id: slot_id,
-				cue_visible: cue_visible,
+				cue_visible: current_slot.item.cue,
 				image: image,
 				correct_index_choice: correct_index_choice,
 				none: none,
 				truefalse: truefalse,
-				all_of_the_above: all_of_the_above,
-				format: format,
-				click_to_answer: click_to_answer,
+				all_of_the_above: all_of_the_above, 
+				format: new_format, // uses helper function newFormat()
+				click_to_answer: current_slot.click_to_answer,
 				type_index_to_answer: type_index_to_answer,
 				cue_target_reversal: cue_target_reversal,
 				reverse_truefalse: reverse_truefalse,
@@ -449,14 +428,14 @@ export function newTrial(slot_id,
 				help_chosen_by_user: help_chosen_by_user,
 				subject: subject,
 				synonyms: synonyms,
-				augs: augs,
+				augs: new_hint, // uses helper function newHint()
 				related_terms: related_terms,
 				nonemc_choices: nonemc_choices,
 				mc_choices: mc_choices,
 				truefalse_target_shown: truefalse_target_shown,
 				stem: stem,
 				alt_cues: alt_cues,
-				start: start
+				start: start // timestamp of requesst
 			}) 
 		} catch(err) {
 			dispatch({
@@ -469,12 +448,12 @@ export function newTrial(slot_id,
 
 /* Helper for format / diff settings */
 export const CHANGE_FORMAT = 'CHANGE_FORMAT';
-function newFormat(last_trial, current_sequence) {
+function newFormat(last_trial, current_slot) {
 	let working_obj;
 	if(last_trial !== null) {
 		working_obj = last_trial;
 	} else {
-		working_obj = current_sequence;
+		working_obj = current_slot;
 	}
 	let all_formats = ['gen', 'trans', 'recall', 'nonemc', 'mc', 'truefalse', 'stem', 'peek', 'copy'],
 		current_formats = ['recall', 'mc', 'stem', 'copy'],
@@ -488,9 +467,94 @@ function newFormat(last_trial, current_sequence) {
 	return new_format;
 }
 
+/* Helper for deciding which hint to show next */
+export const NEW_HINT = 'NEW_HINT';
+function newHint(last_trial, current_slot) {
+	if(last_trial !== undefined) {
+		let augs = current_slot['augs'],
+			last_aug = last_trial['augs'][0],
+			current_index = augs.indexOf(last_aug),
+			next_index = current_index + 1;
+		if (next_index >= 2) {
+			next_index = 2
+		}
+		return current_slot['augs'][next_index]
+	} else {
+		return current_slot['augs'][0]
+	}
+	// TODO: make sure the last_trial is being updated before any computation 
+}
+
+/*
+@params: 
+@purpose: update the current trial, and either create new trial w/adapt or show correct
+*/
+export const UPDATE_TRIAL = 'UPDATE_TRIAL';
+export const UPDATE_TRIAL_SUCCESS = 'UPDATE_TRIAL_SUCCESS';
+export const UPDATE_TRIAL_FAILURE = 'UPDATE_TRIAL_FAILURE';
+function willUpdateTrial() {
+	return {
+		type: UPDATE_TRIAL
+	}
+}
+export function updateTrial(response) { // TODO: make sure to pass in object from component. use state to determine other variables. 
+	return async(dispatch, getState) => {
+		try {
+			let current_trial = getState().learn.current_trial,
+				trial_id = current_trial['id'];
+			await axios.put(`${api_url}/trials/${trial_id}`, {
+				reaction_time: response.reaction_time,
+				response_time: response.response_time,
+				answer: response.answer,
+				answer_click: response.answer_clicked,
+				answer_by_letter: response_answer_by_letter,
+				taps: response.taps
+			}).then(res => {
+				let updated_trial = res.data;
+				if(updated_trial.accuracy === 1) {
+					dispatch(showCorrect())
+					return;
+				} 
+				dispatch(adapt(updated_trial))
+			})
+		} catch(err) {
+			dispatch({
+				type: UPDATE_TRIAL_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
+
+
+/*
+@params: 
+@purpose: take the current state of learn and return a new trial with updated settings
+*/
 export const ADAPT = 'ADAPT';
 export const ADAPT_SUCCESS = 'ADAPT_SUCCESS';
 export const ADAPT_FAILURE = 'ADAPT_FAILURE';
+function willAdapt() {
+	return {
+		type: ADAPT
+	}
+}
+export function adapt(updated_trial) {
+	return async(dispatch, getState) => {
+		dispatch(willAdapt())
+		try {
+			let new_format = dispatch(newFormat(updated_trial))
+			updated_trial = Object.assign({...updated_trial}, {new_format: new_format})
+			dispatch(newTrial(updated_trial))
+			dispatch({type: ADAPT_SUCCESS, new_format})
+		} catch(err) {
+			dispatch({
+				type: ADAPT_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
 
 export const SHOW_FEEDBACK = 'SHOW_FEEDBACK'
 

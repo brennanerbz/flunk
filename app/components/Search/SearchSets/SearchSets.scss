@@ -2,7 +2,7 @@
 	display: block;
 	position: relative;
 	width: 540px!important;
-	.sets_container {
+	.sets_list {
 		.search_set_item {
 			display: table;
 			margin-bottom: 20px;
@@ -32,6 +32,7 @@
 					font-size: 19px;
 					padding-bottom: 0;
 					margin-bottom: 0;
+					cursor: pointer;
 					&:hover { 
 						text-decoration: underline;
 					}

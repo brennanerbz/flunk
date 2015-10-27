@@ -32,12 +32,12 @@ export default class Search extends Component {
 						: null
 					}
 					{
-						true
+						false
 						? <SearchSets />
 						: null
 					}
 					{
-						false
+						true
 						? <SearchPeople />
 						: null
 					}

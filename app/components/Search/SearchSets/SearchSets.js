@@ -11,7 +11,7 @@ export default class SearchSets extends Component {
 	render() {
 		return(
 			<div className="search_sets_container">
-				<ul className="sets_container">
+				<ul className="sets_list">
 					{
 						Array.apply(null, Array(5)).map((x, i) => {
 							return <SearchSetItem key={i}/>

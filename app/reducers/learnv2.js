@@ -59,6 +59,7 @@ import {
 
 	CLEAR_LEARN
 } from '../actions/learnv2';
+import _ from 'lodash';
 
 const initial_learnstate = {
 	isFetchingLearn: false,
@@ -106,7 +107,7 @@ export default function learn(state = initial_learnstate, action) {
 				current_sequence: action.sequence
 			}
 		case RECEIVE_SLOTS_SUCCESS:
-			let current_slot = slots.filter(slot => slot.order == state.current_sequence.position),
+			let current_slot = action.slots.filter(slot => slot.order == state.current_sequence.position),
 				_show_correct;
 			if(current_slot.completion !== 'None') {
 				show_correct = true
@@ -121,18 +122,19 @@ export default function learn(state = initial_learnstate, action) {
 				current_slot: current_slot
 			}
 		case RECEIVE_TRIALS_SUCCESS:
-			let last = action.trials.slice(-1)[0],
-				show_correct;
-			if (last.accuracy === 1) {
-				show_correct = true
-			} else if (last.accuracy < 1) {
-				show_correct = false
-			}
+			if(action.trials.length > 0 || action.trials !== undefined) {
+				let last = action.trials.slice(-1)[0],
+					show_correct;
+				if (last.accuracy === 1) {
+					show_correct = true
+				} else if (last.accuracy < 1) {
+					show_correct = false
+				}
+			} 			
 			return {
 				...state,
 				isShowingCorrect: show_correct,
 				isFetchingTrials: false,
-				isFetchingLearn: false,
 				trials: action.trials
 			}
 		case NEW_TRIAL_SUCCESS:
@@ -144,11 +146,15 @@ export default function learn(state = initial_learnstate, action) {
 				trial: action._trial
 			}
 		case UPDATE_SEQUENCE_SUCCESS:
-			const new_slot = state.slots.filter(slot => slot.order == action.sequence.position)
+			let _new_slot = state.slots.filter(slot => slot.order == action.sequence.position),
+				_current_slot = state.current_slot;
+			if(_.isEqual(_new_slot, _current_slot)) {
+				_new_slot = _current_slot
+			}
 			return {
 				...state,
 				current_sequence: action.sequence,
-				current_slot: new_slot
+				current_slot: _new_slot
 			}
 		case UPDATE_SLOT_SUCCESS:
 			return {

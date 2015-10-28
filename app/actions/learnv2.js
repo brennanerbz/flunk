@@ -1,6 +1,5 @@
 import axios from 'axios';
 import moment from 'moment';
-import keyMirror from 'key-mirror';
 
 const api_url = 'http://127.0.0.1:5000/webapi/v1.0';
 
@@ -99,17 +98,21 @@ export function newSequence(sequence, user_id, set_id, assignment_id) {
 					assignment_id: assignment_id !== undefined ? assignment_id : null
 				})
 			} else if(sequence.type == 'completed') {
-				new_sequence = sequence
+				new_sequence = Object.assign({..._default_sequence}, {
+					user_id: sequence.user_id,
+					set_id: sequence.set_id,
+					assignment_id: sequence.assignment_id !== undefined ? sequence.assignment_id : null
+				})
 			}			
 			await axios.post(`${api_url}/sequences/`, 
 				new_sequence
 			).then(res => {
-				const sequence = res.data
-				const slots = sequence['slots']
+				const sequence = res.data				
 				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
 			}).then(res => {
+				const slots = res.data.sequence['slots']
 				dispatch({type: RECEIVE_SLOTS_SUCCESS, slots })
-			}).then(res => {
+			}).then(() => {
 				dispatch(fetchTrials())
 			})
 		} catch(err) {
@@ -141,11 +144,9 @@ export function updateSequence(sequence) {
 			if(sequence.type == 'updating_position') {
 				updated_sequence = sequence;
 			} else if (sequence.type == 'completed') {
-				let date = new Date()
-				date = date.toISOString.replace("T", ' ').replace('Z', '')					
+									
 				updated_sequence = Object.assign({...sequence}, {
-					completed: true,
-					completion: date
+					completed: true
 				})
 			}			
 			await axios.put(`${api_url}/sequences/${sequence.id}`, 
@@ -154,7 +155,10 @@ export function updateSequence(sequence) {
 				const sequence = res.data;
 				dispatch({type: UPDATE_SEQUENCE_SUCCESS, sequence}) 
 			}).then(res => {
-				dispatch(fetchTrials())
+				const sequence = res.data;
+				if(sequence.completed !== true) {
+					dispatch(fetchTrials())
+				}				
 			})
 		} catch(err) {
 			dispatch({
@@ -191,7 +195,7 @@ export function fetchSlots(sequence_id) {
 				return;
 			}
 			slots = slots['slots']
-			dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
+			await dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
 			await dispatch(fetchTrials())
 		} catch(err) {
 			dispatch({
@@ -358,6 +362,8 @@ export function newTrial(trial) {
 			} else if (trial.type == 'adapt') {
 				new_trial = Object.assign({...trial}, {
 					format: trial.new_format,
+					mc_choices: trial.mc_choices,
+					stem: trial.stem,
 					start: start
 				})
 			} else if (trial.type == 'hint') {
@@ -367,9 +373,9 @@ export function newTrial(trial) {
 					start: start
 				})
 			}	
-			await axios.post(`${api_url}/trials/`, {
+			await axios.post(`${api_url}/trials/`, 
 				new_trial
-			}).then(res => {
+			).then(res => {
 				let _trial = res.data;
 				dispatch({type: NEW_TRIAL_SUCCESS, _trial})
 			})
@@ -387,7 +393,7 @@ export const CHANGE_FORMAT = 'CHANGE_FORMAT';
 function newFormat(last_trial) {
 	return (dispatch, getState) => { 
 		let working_obj,
-		current_slot = getState().learn.current_slot;
+			current_slot = getState().learn.current_slot;
 		if(last_trial !== null) {
 			working_obj = last_trial;
 		} else {
@@ -434,6 +440,7 @@ export function hint() {
 			}
 			let new_aug = augs[next_index]
 			current_trial['new_aug'] = new_aug;
+			current_trial['type'] = 'hint';
 			dispatch(newTrial(current_trial))
 			dispatch({type: NEW_HINT_SUCCESS, new_aug})
 		} catch(err) {
@@ -504,8 +511,19 @@ export function adapt(updated_trial) {
 	return async(dispatch, getState) => {
 		dispatch(willAdapt())
 		try {
-			let new_format = dispatch(newFormat(updated_trial))
-			updated_trial['new_format'] = new_format
+			let new_format = dispatch(newFormat(updated_trial)),
+				current_slot = getState().learn.current_slot;	
+			if(new_format == 'mc') {
+				let mc_choices = current_slot['multiple_choice']
+			} else if (new_format == 'stem') {
+				let stem = current_slot['stem']
+			}
+			updated_trial = Object.assign({...updated_trial}, {
+				type: 'adapt',
+				format: new_format,
+				mc_choices: mc_choices !== (undefined || null) ? mc_choices : null,
+				stem: stem !== (undefined || null) ? stem : null
+			})
 			dispatch(newTrial(updated_trial))
 			dispatch({type: ADAPT_SUCCESS, new_format})
 		} catch(err) {

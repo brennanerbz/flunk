@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as learnactions from '../../actions/learn';
+import * as learnactions from '../../actions/learnv2';
 import * as setactions from '../../actions/usersets';
 
 require('./Learn.scss');
@@ -18,12 +18,12 @@ import Hint from '../../components/Learn/Hint/Hint';
 import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 
 @connect(state => ({
-	is_fetching_learn: state.learn.is_fetching_learn,
-	showCorrect: state.learn.show_correct,
-	showCompletedSeq: state.learn.show_completed_seq,
-	showFeedback: state.learn.show_feedback,
-	slots: state.learn.queue_list,
-	current_slot: state.learn.curr_q,
+	is_fetching_learn: state.learn.isFetchingLearn,
+	showCorrect: state.learn.isShowingCorrect,
+	showCompletedSeq: state.learn.isShowingCompletedSequence,
+	showFeedback: state.learn.isShowingFeedback,
+	slots: state.learn.slots,
+	current_slot: state.learn.current_slot,
 	trial: state.learn.trial,
 	sets: state.sets.set_items
 	}),
@@ -40,8 +40,9 @@ export default class Learn extends Component {
 	}
 
 	componentWillMount() {
-		const {loadSeq , params } = this.props;
-		loadSeq(1, Number(params.id))
+		console.log(this.props.showCorrect)
+		const {fetchLearn, params } = this.props;
+		fetchLearn(1, Number(params.id))
 	}	
 
 	componentDidMount() {
@@ -66,7 +67,7 @@ export default class Learn extends Component {
 		},
 
 		40(event) {
-			if(this.props.current_slot.completion == 'None')
+			if(this.props.current_slot.completion == null)
 				this.refs['learn_input'].handleSubmit(event)
 		}
 	}
@@ -80,21 +81,21 @@ export default class Learn extends Component {
 	handleKeyUp(event) {	
 		const { showCorrect, showCompletedSeq } = this.props;
 		if(event.which && showCorrect) {
-			this.props.goToUnfinished('next')
+			this.props.skipSlot()
 		}	
 		if(event.which && showCompletedSeq) {
-			this.props.newSeq(1, this.props.params.id)
+			this.props.newSequence(1, this.props.params.id)
 		}	
 	}
 
 	render() {
 		const { current_slot,
 				slots,
-				newSeq, 
+				newSequence, 
 				showCompletedSeq, 
 				showCorrect, 
 				showFeedback,
-				goToUnfinished, 
+				skipSlot, 
 				nextSlot,
 				params} = this.props;
 		return (
@@ -116,7 +117,7 @@ export default class Learn extends Component {
 						}												
 						{
 							showCompletedSeq
-							? <a onClick={() => newSeq(1, params.id)}>New sequence</a>
+							? <a onClick={() => newSequence(1, params.id)}>New sequence</a>
 							: null
 						}
 						{

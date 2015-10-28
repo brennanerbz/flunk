@@ -45,12 +45,22 @@ export default class LearnInput extends Component {
  
 	handleSubmit = (e) => {
 		e.preventDefault()
-		const { adapt } = this.props;
+		const { updateTrial } = this.props;
 		const reaction_time = this.state.reaction_time;
 		const d = new Date()
-		const response_time = d.toISOString().replace('T', " ").replace("Z", "")		
+		const response_time = d.toISOString().replace('T', " ").replace("Z", "")
 		const answer = this.state.answer.toLowerCase().trim()
-		adapt(answer, reaction_time, response_time)
+		updateTrial(
+			{
+				reaction_time: reaction_time,
+				response_time: response_time,
+				answer: answer,
+				answer_clicked: false,
+				answer_by_letter: false,
+				taps: null
+				
+			}
+		)
 		this.setState({
 			answer: '',
 			reaction_time: null

@@ -74,7 +74,7 @@ const initial_learnstate = {
 	current_sequence: {},
 	slots: [],
 	current_slot: {},
-	trials: {},
+	trials: [],
 	current_trial: {},
 	trial: {}
 }
@@ -107,19 +107,20 @@ export default function learn(state = initial_learnstate, action) {
 				current_sequence: action.sequence
 			}
 		case RECEIVE_SLOTS_SUCCESS:
-			let current_slot = action.slots.filter(slot => slot.order == state.current_sequence.position),
-				_show_correct;
-			if(current_slot.completion !== 'None') {
-				show_correct = true
-			} else {
+			let slots = action.slots,
+				slot = slots.filter(slot => slot.order === state.current_sequence.position)[0],				
+				show_correct;
+			if(slot.completed == false) {
 				show_correct = false
+			} else {
+				show_correct = true
 			}
 			return {
 				...state,
 				isFetchingSlots: false,
 				isShowingCorrect: show_correct,
 				slots: action.slots,
-				current_slot: current_slot
+				current_slot: slot
 			}
 		case RECEIVE_TRIALS_SUCCESS:
 			if(action.trials.length > 0 || action.trials !== undefined) {
@@ -138,15 +139,24 @@ export default function learn(state = initial_learnstate, action) {
 				trials: action.trials
 			}
 		case NEW_TRIAL_SUCCESS:
+			let _newtrials = state.trials.concat(action._trial),
+			 	_shouldshowcomplete;
+			if(action._trial.accuracy === 1) {
+				_shouldshowcomplete = true;
+			} else {
+				_shouldshowcomplete = false;
+			}
 			return {
 				...state,
 				isFetchingLearn: false,
-				trials: state.trials.concat(action._trial),
+				isFetchingTrials: false,
+				isShowingCorrect: _shouldshowcomplete,
+				trials: _newtrials,
 				current_trial: action._trial,
 				trial: action._trial
 			}
 		case UPDATE_SEQUENCE_SUCCESS:
-			let _new_slot = state.slots.filter(slot => slot.order == action.sequence.position),
+			let _new_slot = state.slots.filter(slot => slot.order === action.sequence.position)[0],
 				_current_slot = state.current_slot;
 			if(_.isEqual(_new_slot, _current_slot)) {
 				_new_slot = _current_slot
@@ -168,9 +178,10 @@ export default function learn(state = initial_learnstate, action) {
 			}
 		case UPDATE_TRIAL_SUCCESS:
 			return {
-				trials: state.trials.map(trial => {
-					return trial.id == action.updated_trial
-					? action.trial
+				...state,
+				trials: state.trials.map((trial) => {
+					return trial.id == action.updated_trial.id
+					? action.updated_trial
 					: trial
 				}),
 				current_trial: action.updated_trial,
@@ -199,10 +210,10 @@ export default function learn(state = initial_learnstate, action) {
 		case SKIP_SUCCESS:
 		case MOVE_SLOT_SUCCESS:
 			let next_correct;
-			if(action.next_slot.completion !== 'None') {
-				next_correct = true;
-			} else {
+			if(action.next_slot.completed == false) {
 				next_correct = false;
+			} else {
+				next_correct = true;
 			}
 			return {
 				...state,

@@ -3,10 +3,11 @@ import React, { Component, PropTypes } from 'react';
 export default class Answer extends Component {
 	static propTypes = {
 		target: PropTypes.string,
-		stem: PropTypes.string
+		stem: PropTypes.array
 	}
 
 	fillInTheBlank(stem) {
+		stem = stem[2]
 		return (
 			<div>				
 				<p>{stem}</p>

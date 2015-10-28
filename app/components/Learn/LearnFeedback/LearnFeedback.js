@@ -53,12 +53,12 @@ export default class LearnFeedback extends Component {
 					: null
 				}
 				{
-					correct !== 'None'
+					correct !== null
 					? <a>Press any key to continue</a>
 					: null
 				}
 				{	
-					trial.difficulty == 'related' && correct == 'None'
+					trial.difficulty == 'related' && correct == null
 					? null
 					// ? ::this.relatedHook(trial.related)
 					: null

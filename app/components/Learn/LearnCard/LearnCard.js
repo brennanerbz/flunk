@@ -12,7 +12,11 @@ export default class LearnCard extends Component {
 		
 	}
 	render() {
-		const { showCorrect, showCompletedSeq, trial, slots, current_slot } = this.props;
+		const { showCorrect, 
+				showCompletedSeq, 
+				trial, 
+				slots, 
+				current_slot } = this.props;
 		return(
 			<div>
 			 	<div className="learn_card">					
@@ -27,9 +31,9 @@ export default class LearnCard extends Component {
 							}							
 							<p className="cue">
 							{	
-								typeof trial['cue'] == 'undefined'
+								typeof current_slot.item.cue == undefined
 								? null
-								: trial['cue']
+								: current_slot.item.cue
 							}
 							</p>
 							{

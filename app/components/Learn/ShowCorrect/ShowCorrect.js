@@ -10,7 +10,7 @@ export default class ShowCorrect extends Component {
 		return(
 			<div className="show_correct_container">
 				<div className="show_correct">
-					<p className="correct_answer">{trial.answer}</p>				
+					<p className="correct_answer">{trial.answer}</p>
 				</div>
 				<a className="continue_btn"
 				   onClick={() => this.props.nextSlot('next')}>Press any key to continue</a>

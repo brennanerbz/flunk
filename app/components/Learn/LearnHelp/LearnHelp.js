@@ -13,8 +13,9 @@ export default class LearnHelp extends Component {
 	// recall | pic | related | augN | nonemc | mc | stem | peek | copy
 
 	renderHelp() {
-		const { trial } = this.props;
-		switch(trial.difficulty) {
+		const { current_slot } = this.props;
+		
+		switch(current_slot.format) {
 			case 'recall':
 				return;
 			case 'related':
@@ -22,13 +23,13 @@ export default class LearnHelp extends Component {
 			case 'nonemc':
 			case 'mc':
 			 	return (
-			 		<MultipleChoice choices={trial.choices}/>
-			 	)
+			 		<MultipleChoice choices={current_slot.mc}/>
+			 	) 
 			case 'stem':
 			case 'peek':
 			case 'copy':
 				return (
-					<Target stem={trial.stem} target={trial.target}/>
+					<Target stem={current_slot.stem} target={current_slot.item.target}/>
 				)
 			case 'aug':
 			default:
@@ -37,30 +38,30 @@ export default class LearnHelp extends Component {
 	}
 
 	render() {
-		const { slot, trial } = this.props;
+		const { slot, current_slot } = this.props;
 		return(
 			<div className="learn_help">
 				<div className="">
-					<p className={classnames("diff_label", {'mc_label': trial.difficulty == 'mc' || trial.difficulty == 'nonemc'  })}>
+					<p className={classnames("diff_label", {'mc_label': current_slot.format == 'mc' || current_slot.format == 'nonemc'  })}>
 					{ 
-						trial.difficulty == 'mc' || trial.difficulty == 'nonemc'
+						current_slot.format == 'mc' || current_slot.format == 'nonemc'
 						? "Multiple Choice:"
 						: null
 					}
 					{
-						trial.difficulty == 'stem'
+						current_slot.format == 'stem'
 						? "Fill in the blank:"
 						: null
 					}
 					{
-						trial.difficulty == 'copy' || trial.difficulty == 'peek'
+						current_slot.format == 'copy' || current_slot.format == 'peek'
 						? 'Correct answer:'
 						: null
 					}
 					</p>
 				</div>
 				{
-					slot.completion == 'None'
+					current_slot.completion == null
 					? ::this.renderHelp()
 					: null
 				}

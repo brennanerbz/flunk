@@ -109,11 +109,16 @@ export default class Learn extends Component {
 								 onKeyPress={::this.handleKeyUp}
 								 onKeyDown={::this.handleArrowKeys}>			 
 								<div>
-									<LearnCard slot={current_slot} 
+									{
+										current_slot !== undefined
+										? <LearnCard slot={current_slot} 
 											   slots={slots} 
 											   skip={(dir) => nextSlot(dir)} 
 											   trial={this.props.trial}
 											   {...this.props}/>
+										: null
+									}
+									
 									{
 										showCorrect
 										? <ShowCorrect {...this.props}/>

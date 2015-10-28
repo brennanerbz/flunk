@@ -3,10 +3,11 @@ import React, { Component, PropTypes } from 'react';
 export default class Answer extends Component {
 	static propTypes = {
 		target: PropTypes.string,
-		stem: PropTypes.string
+		stem: PropTypes.array
 	}
 
 	fillInTheBlank(stem) {
+		stem = stem[2]
 		return (
 			<div>				
 				<p>{stem}</p>
@@ -23,11 +24,11 @@ export default class Answer extends Component {
 	}
 
 	render() {
-		const { target, stem } = this.props;
+		const { target, stem, diff} = this.props;
 		return (
 			<div>
 			{
-				stem !== null
+				diff == 'stem'
 				? ::this.fillInTheBlank(stem)
 				: ::this.copyAnswer(target)
 			}

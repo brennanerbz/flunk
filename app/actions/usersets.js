@@ -2,7 +2,7 @@ import axios from 'axios';
 import moment from 'moment';
 import keyMirror from 'key-mirror';
 
-const api_url = 'http://127.0.0.1:5000/webapi/v1.0';
+const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 
 // * Sets * // 
 export const REQUEST_SETS = 'REQUEST_SETS';

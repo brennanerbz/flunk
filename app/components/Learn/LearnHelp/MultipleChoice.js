@@ -12,19 +12,19 @@ class MultiChoiceItem extends Component {
 
 export default class MultipleChoice extends Component {
 	static propTypes = {
-		choices: PropTypes.string
+		choices: PropTypes.array
 	}
 
 	render() {
 		const { choices } = this.props;
 		let parsed_choices;
-		if(choices !== null || typeof choices !== undefined) { parsed_choices = choices.split("|") }
+		// if(choices !== null || typeof choices !== undefined) { parsed_choices = choices.split("|") }
 		return (
 			<div>				
 				<ul className="mc_choices">
 					{
-						parsed_choices !== undefined
-						? parsed_choices.map((choice, i) => <MultiChoiceItem index={i} key={i} choice={choice}/>)
+						choices !== undefined
+						? choices.map((choice, i) => <MultiChoiceItem index={i} key={i} choice={choice}/>)
 						: null
 					}
 				</ul>

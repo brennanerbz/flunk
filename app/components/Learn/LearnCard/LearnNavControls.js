@@ -7,8 +7,8 @@ export default class Controls extends Component {
 	
 
 	render() {
-		const left = require('../../assets/arrow_left.png'),
-			  right = require('../../assets/arrow_right.png');
+		const left = require('../../../assets/arrow_left.png'),
+			  right = require('../../../assets/arrow_right.png');
 		return (
 			<div>
 				<i 

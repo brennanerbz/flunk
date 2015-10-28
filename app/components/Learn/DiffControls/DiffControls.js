@@ -13,7 +13,7 @@ export default class DiffControls extends Component {
 	}
 
 	render() {
-		const more = require('../../assets/more_icon.png');		  
+		const more = require('../../../assets/more_icon.png');		  
 		return(
 			<span className="diff_controls">
 				<button className="button button-primary">Hint</button>

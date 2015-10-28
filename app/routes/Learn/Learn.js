@@ -2,28 +2,28 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as learnactions from '../../actions/learn';
+import * as learnactions from '../../actions/learnv2';
 import * as setactions from '../../actions/usersets';
 
 require('./Learn.scss');
 
 /* Components */
-import LearnCard from '../../components/LearnCard/LearnCard';
-import ShowCorrect from '../../components/ShowCorrect/ShowCorrect';
-import LearnInput from '../../components/LearnInput/LearnInput';
-import LearnFeedback from '../../components/LearnFeedback/LearnFeedback';
-import LearnHelp from '../../components/LearnHelp/LearnHelp';
-import DiffControls from '../../components/DiffControls/DiffControls';
-import Hint from '../../components/Hint/Hint';
-import SeqControl from '../../components/LearnSeqControl/SeqControl';
+import LearnCard from '../../components/Learn/LearnCard/LearnCard';
+import ShowCorrect from '../../components/Learn/ShowCorrect/ShowCorrect';
+import LearnInput from '../../components/Learn/LearnInput/LearnInput';
+import LearnFeedback from '../../components/Learn/LearnFeedback/LearnFeedback';
+import LearnHelp from '../../components/Learn/LearnHelp/LearnHelp';
+import DiffControls from '../../components/Learn/DiffControls/DiffControls';
+import Hint from '../../components/Learn/Hint/Hint';
+import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 
 @connect(state => ({
-	is_fetching_learn: state.learn.is_fetching_learn,
-	showCorrect: state.learn.show_correct,
-	showCompletedSeq: state.learn.show_completed_seq,
-	showFeedback: state.learn.show_feedback,
-	slots: state.learn.queue_list,
-	current_slot: state.learn.curr_q,
+	showLearn: state.learn.isFetchingLearn,
+	showCorrect: state.learn.isShowingCorrect,
+	showCompletedSeq: state.learn.isShowingCompletedSequence,
+	showFeedback: state.learn.isShowingFeedback,
+	slots: state.learn.slots,
+	current_slot: state.learn.current_slot,
 	trial: state.learn.trial,
 	sets: state.sets.set_items
 	}),
@@ -40,8 +40,9 @@ export default class Learn extends Component {
 	}
 
 	componentWillMount() {
-		const {loadSeq , params } = this.props;
-		loadSeq(1, Number(params.id))
+		console.log(this.props.showCorrect)
+		const {fetchLearn, params } = this.props;
+		fetchLearn(1, Number(params.id))
 	}	
 
 	componentDidMount() {
@@ -66,7 +67,7 @@ export default class Learn extends Component {
 		},
 
 		40(event) {
-			if(this.props.current_slot.completion == 'None')
+			if(this.props.current_slot.completion == null)
 				this.refs['learn_input'].handleSubmit(event)
 		}
 	}
@@ -80,67 +81,79 @@ export default class Learn extends Component {
 	handleKeyUp(event) {	
 		const { showCorrect, showCompletedSeq } = this.props;
 		if(event.which && showCorrect) {
-			this.props.goToUnfinished('next')
+			this.props.skipSlot()
 		}	
 		if(event.which && showCompletedSeq) {
-			this.props.newSeq(1, this.props.params.id)
+			this.props.newSequence(1, this.props.params.id)
 		}	
 	}
 
 	render() {
 		const { current_slot,
 				slots,
-				newSeq, 
+				newSequence, 
+				showLearn,
 				showCompletedSeq, 
 				showCorrect, 
 				showFeedback,
-				goToUnfinished, 
+				skipSlot, 
 				nextSlot,
 				params} = this.props;
 		return (
 			<div className="learn_page">
-				<SeqControl {...this.props}/>
-				<div className="no_sidenav_container learn_container"
-					 onKeyPress={::this.handleKeyUp}
-					 onKeyDown={::this.handleArrowKeys}>			 
-					<div>
-						<LearnCard slot={current_slot} 
-								   slots={slots} 
-								   skip={(dir) => nextSlot(dir)} 
-								   trial={this.props.trial}
-								   {...this.props}/>
-						{
-							showCorrect
-							? <ShowCorrect {...this.props}/>
-							: null
-						}												
-						{
-							showCompletedSeq
-							? <a onClick={() => newSeq(1, params.id)}>New sequence</a>
-							: null
-						}
-						{
-							!showCorrect && !showCompletedSeq
-							? <DiffControls />
-							: null
-						}
-						{
-							showFeedback
-							? null
-							// ? <LearnFeedback slot={current_slot} trial={this.props.trial} />	
-							: null
-						}
-						{
-							!showCorrect && !showCompletedSeq
-							? <Hint {...this.props} />
-							: null
-						}
-						<div className="feedback">
-							<a className="feedback_link">Feedback</a>
-						</div>
-					</div>
-				 </div> 
-			 </div>
+				{
+					!showLearn
+					? <div>
+						<SeqControl {...this.props}/>
+							<div className="no_sidenav_container learn_container"
+								 onKeyPress={::this.handleKeyUp}
+								 onKeyDown={::this.handleArrowKeys}>			 
+								<div>
+									{
+										current_slot !== undefined
+										? <LearnCard slot={current_slot} 
+											   slots={slots} 
+											   skip={(dir) => nextSlot(dir)} 
+											   trial={this.props.trial}
+											   {...this.props}/>
+										: null
+									}
+									
+									{
+										showCorrect
+										? <ShowCorrect {...this.props}/>
+										: null
+									}												
+									{
+										showCompletedSeq
+										? <a onClick={() => newSequence(1, params.id)}>New sequence</a>
+										: null
+									}
+									{
+										!showCorrect && !showCompletedSeq
+										? <DiffControls />
+										: null
+									}
+									{
+										showFeedback
+										? null
+										// ? <LearnFeedback slot={current_slot} trial={this.props.trial} />	
+										: null
+									}
+									{
+										!showCorrect && !showCompletedSeq
+										? <Hint {...this.props} />
+										: null
+									}
+									<div className="feedback">
+										<a className="feedback_link">Feedback</a>
+									</div>
+								</div>
+							 </div> 
+						 </div>
+					: null
+				}
+			</div>
 		);
 	}
 }

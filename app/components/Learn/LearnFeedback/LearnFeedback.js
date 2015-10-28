@@ -79,7 +79,7 @@ export default class LearnFeedback extends Component {
 
 	render() {
 		const { trial, slot } = this.props;
-		const quotes = require('../../assets/quotes.png');
+		const quotes = require('../../../assets/quotes.png');
 		return(
 			<div className="feedback">	
 				{

@@ -8,14 +8,14 @@ import * as setactions from '../../actions/usersets';
 require('./Learn.scss');
 
 /* Components */
-import LearnCard from '../../components/LearnCard/LearnCard';
-import ShowCorrect from '../../components/ShowCorrect/ShowCorrect';
-import LearnInput from '../../components/LearnInput/LearnInput';
-import LearnFeedback from '../../components/LearnFeedback/LearnFeedback';
-import LearnHelp from '../../components/LearnHelp/LearnHelp';
-import DiffControls from '../../components/DiffControls/DiffControls';
-import Hint from '../../components/Hint/Hint';
-import SeqControl from '../../components/LearnSeqControl/SeqControl';
+import LearnCard from '../../components/Learn/LearnCard/LearnCard';
+import ShowCorrect from '../../components/Learn/ShowCorrect/ShowCorrect';
+import LearnInput from '../../components/Learn/LearnInput/LearnInput';
+import LearnFeedback from '../../components/Learn/LearnFeedback/LearnFeedback';
+import LearnHelp from '../../components/Learn/LearnHelp/LearnHelp';
+import DiffControls from '../../components/Learn/DiffControls/DiffControls';
+import Hint from '../../components/Learn/Hint/Hint';
+import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 
 @connect(state => ({
 	is_fetching_learn: state.learn.is_fetching_learn,

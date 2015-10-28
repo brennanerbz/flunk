@@ -606,7 +606,7 @@ function skipToUnfinished(current_slot, slots, pos) {
 	let last = slots.slice(-1)[0]['order'],
 		index;
 	if (pos = last) {
-		index = findUnfinished(1, last, slots)
+		index = findUnfinished(0, last, slots)
 	} else {
 		index = findUnfinished(pos, last, slots)
 	}

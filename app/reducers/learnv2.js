@@ -171,7 +171,7 @@ export default function learn(state = initial_learnstate, action) {
 				...state,
 				current_slot: action.slot,
 				slots: state.slots.map(slot => {
-					return slot.order = action.slot.order 
+					return slot.id === action.slot.id 
 					? action.slot
 					: slot
 				})

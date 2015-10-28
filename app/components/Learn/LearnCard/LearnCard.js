@@ -31,9 +31,9 @@ export default class LearnCard extends Component {
 							}							
 							<p className="cue">
 							{	
-								typeof current_slot.item.cue == undefined
-								? null
-								: current_slot.item.cue
+								current_slot !== undefined && current_slot.item.cue !== undefined
+								? current_slot.item.cue
+								: null
 							}
 							</p>
 							{

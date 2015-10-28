@@ -46,6 +46,7 @@ export function fetchSequence(user_id, set_id, assignment_id, mode) {
 	return async(dispatch, getState) => {
 		try {
 			let sequences = await axios.get(`${api_url}/sequences?user_id=${user_id}&set_id=${set_id}`).data
+			console.log(sequences)
 			if(sequences !== undefined) {
 				sequences = sequences['sequences'].filter(seq => seq.completed !== true)
 				if (sequences.length > 0) {
@@ -144,7 +145,6 @@ export function updateSequence(sequence) {
 			if(sequence.type == 'updating_position') {
 				updated_sequence = sequence;
 			} else if (sequence.type == 'completed') {
-									
 				updated_sequence = Object.assign({...sequence}, {
 					completed: true
 				})
@@ -183,15 +183,17 @@ export function fetchSlots(sequence_id) {
 	return async(dispatch, getState) => {
 		dispatch(requestSlots())
 		try {
-			let current_sequence = getState().learn.current_sequence;
-			let slots = await axios.get(`${api_url}/sequences/${sequence_id}/slots`).data
-			let unfinished_slots = slots['slots'].filter(slot => slot.completed !== true)
-			if(unfinished_slots.length === 0) {
-				current_sequence['type'] = 'completed';
-				await dispatch(updateSequence(current_sequence))
-				await dispatch(newSequence(current_sequence))
-				return;
-			}
+			let current_sequence = getState().learn.current_sequence,
+				slots = await axios.get(`${api_url}/sequences/${sequence_id}/slots`).data
+			if(slots !== undefined) {
+				let unfinished_slots = slots['slots'].filter(slot => slot.completed !== true)
+				if(unfinished_slots.length === 0) {
+					current_sequence['type'] = 'completed';
+					await dispatch(updateSequence(current_sequence))
+					await dispatch(newSequence(current_sequence))
+					return;
+				}
+			}			
 			slots = slots['slots']
 			await dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
 			await dispatch(fetchTrials())
@@ -314,7 +316,7 @@ var _default_trial = {
 	image: '',
 	correct_index_choice: '',
 	none: false,
-	truefalse: null,
+	truefalse: false,
 	all_of_the_above: false, 
 	format: '', 
 	click_to_answer: false,
@@ -343,17 +345,20 @@ export function newTrial(trial) {
 				current_slot = getState().learn.current_slot,
 				s = new Date(),
 			  	start = s.toISOString().replace("T", " ").replace("Z", "");
+			if(current_slot.completed == true) {
+				return;
+			}
 			if (trial.type == 'return') {
 				new_trial = trial
 			} else if (trial.type == null) {
 				new_trial = Object.assign({..._default_trial}, {
-					slot_id: current_slot['id'],
+					slot_id: current_slot.id,
 					cue_visible: current_slot['item']['cue'],
 					format: 'recall',
 					start: start
 				})
 			} else if (trial.type == 'adapt') {
-				console.log(trial)
+				// console.log(trial)
 				new_trial = Object.assign({..._default_trial}, {
 					slot_id: current_slot.id,
 					cue_visible: trial.cue_visible,
@@ -374,6 +379,7 @@ export function newTrial(trial) {
 					delete new_trial[_prop]
 				}
 			}
+			console.log(new_trial)
 			await axios.post(`${api_url}/trials/`, 
 				new_trial
 			).then(res => {
@@ -526,18 +532,20 @@ export function adapt(updated_trial) {
 				adapt_trial,
 				mc_choices,
 				request_choices,
+				request_stem,
 				stem;
 			if(new_format == 'mc') {
 				mc_choices = current_slot['mc']
 				request_choices = mc_choices.join('|')
 			} else if (new_format == 'stem') {
 				stem = current_slot['stem']
+				request_stem = stem.join("|")
 			}
 			updated_trial = Object.assign({...updated_trial}, {
 				type: 'adapt',
 				format: new_format,
 				mc_choices: request_choices !== undefined ? request_choices : null,
-				stem: stem !== undefined ? stem : null
+				stem: request_stem !== undefined ? request_stem : null
 			})
 			dispatch({type: ADAPT_SUCCESS, new_format})
 			if(current_slot.format !== new_format) {
@@ -588,7 +596,7 @@ export const SHOW_COMPLETED_SEQUENCE = 'SHOW_COMPLETED_SEQUENCE';
 export const SKIP_SUCCESS = 'SKIP_SUCCESS';
 export const SKIP_FAILURE = 'SKIP_FAILURE';
 function findUnfinished(pos, length, slots) {
-	for(var _u = pos; _u < length; u++) {
+	for(var _u = pos; _u < length; _u++) {
 		if (slots[_u]['completion'] == null) {
 			return _u
 		}
@@ -611,8 +619,8 @@ export function skipSlot() {
 				current_sequence = getState().learn.current_sequence,
 				slots = getState().learn.slots,
 				pos = current_sequence['position'],
-				new_slot_pos = skipToUnfinished(current_slot, slots, pos)
-			let next_slot = slots.filter(slot => slot.order == new_pos)
+				new_pos = skipToUnfinished(current_slot, slots, pos),
+				next_slot = slots.filter(slot => slot.order == new_pos)
 			dispatch({type: SKIP_SUCCESS, next_slot})
 			if(next_slot.completion !== null) {
 				dispatch({type: SHOW_CORRECT})
@@ -662,8 +670,11 @@ export function nextSlot(dir) {
 				current_sequence = getState().learn.current_sequence,
 				slots = getState().learn.slots,
 				pos = current_sequence['position'],
-				new_pos = findNext(dir, slots, pos);			
-			let next_slot = slots.filter(slot => slot.order == new_pos)
+				new_pos = findNext(dir, slots, pos),		
+				next_slot = slots.filter(slot => slot.order == new_pos)
+			if(pos == new_pos) {
+				return;
+			}
 			dispatch({type: MOVE_SLOT_SUCCESS, next_slot})
 			if(next_slot.completion !== null) {
 				dispatch({type: SHOW_CORRECT})

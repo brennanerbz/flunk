@@ -24,11 +24,11 @@ export default class Answer extends Component {
 	}
 
 	render() {
-		const { target, stem } = this.props;
+		const { target, stem, diff} = this.props;
 		return (
 			<div>
 			{
-				stem !== null
+				diff == 'stem'
 				? ::this.fillInTheBlank(stem)
 				: ::this.copyAnswer(target)
 			}

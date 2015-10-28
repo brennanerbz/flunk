@@ -29,7 +29,7 @@ export default class LearnHelp extends Component {
 			case 'peek':
 			case 'copy':
 				return (
-					<Target stem={current_slot.stem} target={current_slot.item.target}/>
+					<Target diff={current_slot.format} stem={current_slot.stem} target={current_slot.item.target}/>
 				)
 			case 'aug':
 			default:

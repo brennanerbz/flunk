@@ -45,7 +45,7 @@ function requestSequence() {
 export function fetchSequence(user_id, set_id, assignment_id, mode) {
 	return async(dispatch, getState) => {
 		try {
-			let sequences = await axios.get(`${api_url}/sequences?user_id=${user_id}&set_id=${set_id}`).data
+			let sequences = await axios.get(`${api_url}/sequences/?user_id=${Number(user_id)}&set_id=${Number(set_id)}`).data
 			console.log(sequences)
 			if(sequences !== undefined) {
 				sequences = sequences['sequences'].filter(seq => seq.completed !== true)
@@ -622,7 +622,7 @@ export function skipSlot() {
 				new_pos = skipToUnfinished(current_slot, slots, pos),
 				next_slot = slots.filter(slot => slot.order == new_pos)
 			dispatch({type: SKIP_SUCCESS, next_slot})
-			if(next_slot.completion !== null) {
+			if(next_slot.completed !== false) {
 				dispatch({type: SHOW_CORRECT})
 			}
 			current_sequence = Object.assign({...current_sequence}, {

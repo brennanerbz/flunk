@@ -217,8 +217,7 @@ export default function learn(state = initial_learnstate, action) {
 			}
 			return {
 				...state,
-				isShowingCorrect: next_correct,
-				current_slot: action.next_slot
+				isShowingCorrect: next_correct
 			}
 		case CLEAR_LEARN:
 			return {

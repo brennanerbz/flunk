@@ -29,13 +29,13 @@ export default class LearnCard extends Component {
 								  </h4>
 								: null
 							}							
-							<p className="cue">
+							
 							{	
-								current_slot !== undefined && current_slot.item.cue !== undefined
-								? current_slot.item.cue
-								: null
+								typeof current_slot.item.cue == undefined
+								? null
+								: <p className="cue">{current_slot.item.cue}</p>
 							}
-							</p>
+							
 							{
 								showCorrect
 								? null

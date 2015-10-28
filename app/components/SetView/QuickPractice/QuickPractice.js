@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 require('./QuickPractice.scss');
-import LearnInput from '../../LearnInput/LearnInput';
+import LearnInput from '../../Learn/LearnInput/LearnInput';
 
 class VoidInput extends Component {
 	render() {

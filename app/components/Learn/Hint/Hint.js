@@ -3,14 +3,14 @@ require('./Hint.scss');
 
 export default class Hint extends Component {
 	static propTypes = {
-		hint: PropTypes.string
+		hints: PropTypes.array
 	}
 
 	render() {
-		const { trial } = this.props;
-		const hint = trial.augcue;
+		const { hints, current_slot } = this.props,
+			    hint = hints[0];
 		return (
-			trial.difficulty == 'aug'
+			current_slot.help_chosen_by_user
 			? <div className="hint_container">				
 				<p className="hint">{hint}</p>
 				<p className="hint_source">Source</p>

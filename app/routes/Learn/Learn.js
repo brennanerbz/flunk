@@ -18,6 +18,7 @@ import Hint from '../../components/Learn/Hint/Hint';
 import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 
 @connect(state => ({
+	isFetchingTrials: state.learn.isFetchingTrials,
 	showLearn: state.learn.isFetchingLearn,
 	showCorrect: state.learn.isShowingCorrect,
 	showCompletedSeq: state.learn.isShowingCompletedSequence,
@@ -92,6 +93,7 @@ export default class Learn extends Component {
 		const { current_slot,
 				slots,
 				newSequence, 
+				isFetchingTrials,
 				showLearn,
 				showCompletedSeq, 
 				showCorrect, 
@@ -102,7 +104,7 @@ export default class Learn extends Component {
 		return (
 			<div className="learn_page">
 				{
-					!showLearn
+					!showLearn && slots !== undefined
 					? <div>
 						<SeqControl {...this.props}/>
 							<div className="no_sidenav_container learn_container"
@@ -110,7 +112,7 @@ export default class Learn extends Component {
 								 onKeyDown={::this.handleArrowKeys}>			 
 								<div>
 									{
-										current_slot !== undefined
+										typeof current_slot !== undefined || !isFetchingTrials
 										? <LearnCard slot={current_slot} 
 											   slots={slots} 
 											   skip={(dir) => nextSlot(dir)} 
@@ -141,8 +143,8 @@ export default class Learn extends Component {
 										: null
 									}
 									{
-										!showCorrect && !showCompletedSeq
-										? <Hint {...this.props} />
+										!showCorrect && !showCompletedSeq && current_slot !== undefined
+										? <Hint hints={current_slot.augs} {...this.props} />
 										: null
 									}
 									<div className="feedback">

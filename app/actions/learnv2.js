@@ -16,12 +16,11 @@ function requestLearn() {
 		type: REQUEST_LEARN
 	}
 }
-export function fetchLearn(user_id, set_id, assignment_id, sequence_id) {
+export function fetchLearn(user_id, set_id, assignment_id) {
 	return async(dispatch, getState) => {
 		dispatch(requestLearn())
 		try {
-			await axios.all([''])
-			// TODO: fill in with appr. function calls 
+			fetchSequence(user_id, set_id, assignment_id)
 		}
 		catch (err) {
 			dispatch({
@@ -31,7 +30,6 @@ export function fetchLearn(user_id, set_id, assignment_id, sequence_id) {
 		}
 	}
 }
-
 
 /*
 @params: user_id, set_id, assignment_id, mode
@@ -55,7 +53,8 @@ export function fetchSequence(user_id, set_id, assignment_id, mode) {
 					return new Date(s1.creation) - new Date(s2.creation)
 				})
 				const sequence = sorted_sequences[0]
-				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence}) // TODO: move return success to axios.all call
+				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence}) 
+				dispatch(fetchSlots(sequence.id))
 			} else {
 				let sequence = { type: 'noprior' }
 				dispatch(newSequence(sequence, user_id, set_id, assignment_id))
@@ -90,6 +89,7 @@ var _default_sequence = {
 }
 export function newSequence(sequence, user_id, set_id, assignment_id) {
 	return async(dispatch, getState) => {
+		dispatch(requestSequence())
 		try {
 			let new_sequence;
 			if(sequence.type == 'noprior') {
@@ -98,6 +98,8 @@ export function newSequence(sequence, user_id, set_id, assignment_id) {
 					set_id: set_id,
 					assignment_id: assignment_id !== undefined ? assignment_id : null
 				})
+			} else if(sequence.type == 'completed') {
+				new_sequence = sequence
 			}			
 			await axios.post(`${api_url}/sequences/`, 
 				new_sequence
@@ -105,7 +107,10 @@ export function newSequence(sequence, user_id, set_id, assignment_id) {
 				const sequence = res.data
 				const slots = sequence['slots']
 				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
+			}).then(res => {
 				dispatch({type: RECEIVE_SLOTS_SUCCESS, slots })
+			}).then(res => {
+				dispatch(fetchTrials())
 			})
 		} catch(err) {
 			dispatch({
@@ -135,12 +140,19 @@ export function updateSequence(sequence) {
 			let updated_sequence;
 			if(sequence.type == 'updating_position') {
 				updated_sequence = sequence;
-			} 			
-			await axios.put(`${api_url}/sequences/${sequence_id}`, 
+			} else if (sequence.type == 'completed') {
+				let date = new Date()
+				date = date.toISOString.replace("T", ' ').replace('Z', '')					
+				updated_sequence = Object.assign({...sequence}, {
+					completed: true,
+					completion: date
+				})
+			}			
+			await axios.put(`${api_url}/sequences/${sequence.id}`, 
 				updated_sequence
 			).then(res => {
 				const sequence = res.data;
-				dispatch({type: UPDATE_SEQUENCE_SUCCESS, sequence}) // TODO: make sure to update the current slot to reflect the change in sequence
+				dispatch({type: UPDATE_SEQUENCE_SUCCESS, sequence}) 
 			}).then(res => {
 				dispatch(fetchTrials())
 			})
@@ -169,15 +181,18 @@ export function fetchSlots(sequence_id) {
 	return async(dispatch, getState) => {
 		dispatch(requestSlots())
 		try {
+			let current_sequence = getState().learn.current_sequence;
 			let slots = await axios.get(`${api_url}/sequences/${sequence_id}/slots`).data
 			let unfinished_slots = slots['slots'].filter(slot => slot.completed !== true)
 			if(unfinished_slots.length === 0) {
-				dispatch() // TODO: send put request to current sequence that it's complete, and request new sequence
+				current_sequence['type'] = 'completed';
+				await dispatch(updateSequence(current_sequence))
+				await dispatch(newSequence(current_sequence))
 				return;
 			}
 			slots = slots['slots']
 			dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
-			// TODO: dispatch transformation of slots list to 5 item groups
+			await dispatch(fetchTrials())
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_SLOTS_FAILURE,
@@ -454,6 +469,7 @@ export function updateTrial(response) { // TODO: make sure to pass in object fro
 				response
 			).then(res => {
 				let updated_trial = res.data;
+				dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
 				if(updated_trial.accuracy === 1) {
 					current_slot['completed'] = true;
 					dispatch(updateSlot(current_slot))
@@ -558,7 +574,11 @@ export function skipSlot() {
 				slots = getState().learn.slots,
 				pos = current_sequence['position'],
 				new_slot_pos = skipToUnfinished(current_slot, slots, pos)
-			dispatch({type: SKIP_SUCCESS, new_pos})
+			let next_slot = slots.filter(slot => slot.order == new_pos)
+			dispatch({type: SKIP_SUCCESS, next_slot})
+			if(next_slot.completion !== 'None') {
+				dispatch(showCorrect())
+			}
 			current_sequence = Object.assign({...current_sequence}, {
 				position: new_pos,
 				type: 'updating_position'
@@ -604,8 +624,12 @@ export function nextSlot(dir) {
 				current_sequence = getState().learn.current_sequence,
 				slots = getState().learn.slots,
 				pos = current_sequence['position'],
-				new_pos = findNext(dir, slots, pos);
-			dispatch({type: MOVE_SLOT_SUCCESS, new_pos})
+				new_pos = findNext(dir, slots, pos);			
+			let next_slot = slots.filter(slot => slot.order == new_pos)
+			dispatch({type: MOVE_SLOT_SUCCESS, next_slot})
+			if(next_slot.completion !== 'None') {
+				dispatch(showCorrect())
+			}
 			current_sequence = Object.assign({...current_sequence}, {
 				position: new_pos,
 				type: 'updating_position'

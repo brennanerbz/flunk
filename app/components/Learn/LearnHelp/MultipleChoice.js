@@ -17,13 +17,11 @@ export default class MultipleChoice extends Component {
 
 	render() {
 		const { choices } = this.props;
-		let parsed_choices;
-		// if(choices !== null || typeof choices !== undefined) { parsed_choices = choices.split("|") }
 		return (
 			<div>				
 				<ul className="mc_choices">
 					{
-						choices !== undefined
+						choices !== null
 						? choices.map((choice, i) => <MultiChoiceItem index={i} key={i} choice={choice}/>)
 						: null
 					}

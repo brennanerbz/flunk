@@ -4,7 +4,6 @@ export default class Controls extends Component {
 	static propTypes = {
 
 	}
-	
 
 	render() {
 		const left = require('../../../assets/arrow_left.png'),
@@ -14,14 +13,14 @@ export default class Controls extends Component {
 				<i 
 					style={{cursor: 'pointer'}} 
 					className="arrow arrow_left" 
-					onClick={() => this.props.skip('prev')}					
+					// onClick={() => this.props.skip('prev')}					
 					><img src={left}/>
 				</i>
 					
 				<i 
 					style={{cursor: 'pointer'}}
 					className="arrow arrow_right"
-					onClick={() => this.props.skip('next')}
+					// onClick={() => this.props.skip('next')}
 					><img src={right}/>
 				</i>
 			</div>

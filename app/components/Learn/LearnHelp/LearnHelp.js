@@ -23,7 +23,7 @@ export default class LearnHelp extends Component {
 			case 'nonemc':
 			case 'mc':
 			 	return (
-			 		<MultipleChoice choices={current_slot.mc}/>
+			 		<MultipleChoice choices={current_slot.mc !== undefined ? current_slot.mc : null}/>
 			 	) 
 			case 'stem':
 			case 'peek':

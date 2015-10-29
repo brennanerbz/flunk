@@ -47,35 +47,39 @@ export default class Learn extends Component {
 	}	
 
 	componentDidMount() {
-		window.addEventListener('keypress', ::this.handleKeyUp)
-		window.addEventListener('keydown', ::this.handleArrowKeys)
+		window.addEventListener('keyup', ::this.handleKeyUp)
+		window.addEventListener('keypress', ::this.handleArrowKeys)
 	}
 
 	componentWillUnmount() {
 		const { clearLearn } = this.props;
 		clearLearn()
-		window.removeEventListener('keypress', ::this.handleKeyUp)
-		window.removeEventListener('keydown', ::this.handleArrowKeys)
+		window.removeEventListener('keyup', ::this.handleKeyUp)
+		window.removeEventListener('keypress', ::this.handleArrowKeys)
 	}
 
 	keyDownHandlers = {
 		37() {
 			this.props.nextSlot('prev')
+			return;
 		}, 
 
 		39() {
 			this.props.nextSlot('next')
+			return;
 		},
 
 		40(event) {
-			if(this.props.current_slot.completion == null)
+			if(this.props.current_slot.completion == null) {
 				this.refs['learn_input'].handleSubmit(event)
+			}
 		}
 	}
 
 	handleArrowKeys(event) {
 		if (this.keyDownHandlers[event.which]) {
-    		this.keyDownHandlers[event.which].call(this, event)    		
+    		this.keyDownHandlers[event.which].call(this, event)
+    		return;    		
   		}
 	}
 	
@@ -115,7 +119,6 @@ export default class Learn extends Component {
 										typeof current_slot !== undefined || !isFetchingTrials
 										? <LearnCard slot={current_slot} 
 											   slots={slots} 
-											   skip={(dir) => nextSlot(dir)} 
 											   trial={this.props.trial}
 											   {...this.props}/>
 										: null
@@ -144,7 +147,7 @@ export default class Learn extends Component {
 									}
 									{
 										!showCorrect && !showCompletedSeq && current_slot !== undefined
-										? <Hint hints={current_slot.augs} {...this.props} />
+										? <Hint hints={current_slot.augs !== undefined ? current_slot.augs : null} {...this.props} />
 										: null
 									}
 									<div className="feedback">

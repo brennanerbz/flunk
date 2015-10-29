@@ -45,18 +45,16 @@ function requestSequence() {
 export function fetchSequence(user_id, set_id, assignment_id, mode) {
 	return async(dispatch, getState) => {
 		try {
-			let sequences = await axios.get(`${api_url}/sequences/?user_id=${Number(user_id)}&set_id=${Number(set_id)}`).data
-			console.log(sequences)
-			if(sequences !== undefined) {
-				sequences = sequences['sequences'].filter(seq => seq.completed !== true)
-				if (sequences.length > 0) {
-					const sorted_sequences = sequences.sort((s1, s2) => {
-						return new Date(s1.creation) - new Date(s2.creation)
-					})
-					const sequence = sorted_sequences[0]
-					dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence}) 
-					dispatch(fetchSlots(sequence.id))
-				}	
+			let sequences;
+			await axios.get(`${api_url}/sequences/?user_id=${Number(user_id)}&set_id=${Number(set_id)}`).then(res => sequences = res.data.sequences)
+			sequences = sequences.filter(seq => seq.completed !== true)
+			if(sequences !== undefined && sequences.length > 0) {
+				const sorted_sequences = sequences.sort((s1, s2) => {
+					return new Date(s1.creation) - new Date(s2.creation)
+				})
+				const sequence = sorted_sequences[0]
+				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence}) 
+				dispatch(fetchSlots(sequence.id))
 			} else {
 				let sequence = { type: 'noprior' }
 				dispatch(newSequence(sequence, user_id, set_id, assignment_id))
@@ -83,9 +81,9 @@ var _default_sequence = {
 	format: 'recall',
 	timing: 'off',
 	difficulty: 'intermediate',
-	adapation: false,
-	chances: false,
-	loop: false,
+	adapation: true,
+	chances: true,
+	loop: true,
 	reverse_cue: false,
 	difficulty_chosen_by_user: false
 }
@@ -137,26 +135,31 @@ function willUpdateSequence() {
 		type: UPDATE_SEQUENCE
 	}
 }
-export function updateSequence(sequence) {
+export function updateSequence(_sequence) {
 	return async(dispatch, getState) => {
 		dispatch(willUpdateSequence())
 		try {
 			let updated_sequence;
-			if(sequence.type == 'updating_position') {
-				updated_sequence = sequence;
-			} else if (sequence.type == 'completed') {
-				updated_sequence = Object.assign({...sequence}, {
+			if(_sequence.type == 'updating_position') {
+				updated_sequence = _sequence;
+			} else if (_sequence.type == 'completed') {
+				updated_sequence = Object.assign({..._sequence}, {
 					completed: true
 				})
-			}			
-			await axios.put(`${api_url}/sequences/${sequence.id}`, 
+			}
+			for (var _seqprop in updated_sequence) {
+				if (_seqprop == 'type') {
+					delete updated_sequence[_seqprop]
+				}
+			}
+			console.log(updated_sequence)		
+			await axios.put(`${api_url}/sequences/${_sequence.id}`, 
 				updated_sequence
 			).then(res => {
 				const sequence = res.data;
 				dispatch({type: UPDATE_SEQUENCE_SUCCESS, sequence}) 
-				if(sequence.completed !== true) {
-					dispatch(fetchTrials())
-				}
+			}).then(() => {
+				dispatch(fetchTrials())
 			})
 		} catch(err) {
 			dispatch({
@@ -184,9 +187,10 @@ export function fetchSlots(sequence_id) {
 		dispatch(requestSlots())
 		try {
 			let current_sequence = getState().learn.current_sequence,
-				slots = await axios.get(`${api_url}/sequences/${sequence_id}/slots`).data
+				slots;
+			await axios.get(`${api_url}/sequences/${sequence_id}/slots`).then(res => slots = res.data.slots)
 			if(slots !== undefined) {
-				let unfinished_slots = slots['slots'].filter(slot => slot.completed !== true)
+				let unfinished_slots = slots.filter(slot => slot.completed !== true)
 				if(unfinished_slots.length === 0) {
 					current_sequence['type'] = 'completed';
 					await dispatch(updateSequence(current_sequence))
@@ -194,7 +198,6 @@ export function fetchSlots(sequence_id) {
 					return;
 				}
 			}			
-			slots = slots['slots']
 			await dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
 			await dispatch(fetchTrials())
 		} catch(err) {
@@ -274,19 +277,26 @@ export function fetchTrials() {
 	return async(dispatch, getState) => {
 		dispatch(requestTrials())
 		try {
-			let slot_id = getState().learn.current_slot['id'],
+			let slot = getState().learn.current_slot,
+				slot_id = slot.id,
 				trial = {},
-				trials = await axios.get(`${api_url}/slots/${slot_id}/trials/`).data;
-			if(trials !== undefined) {
-				trials = trials['trials'];	
+				trials;
+			await axios.get(`${api_url}/slots/${slot_id}/trials/`).then(res => trials = res.data.trials)
+			if(trials !== undefined && trials.length > 0) {
 				dispatch({type: RECEIVE_TRIALS_SUCCESS, trials})
 				trial = trials.slice(-1)[0]
-				trial['type'] = 'return';
-				dispatch(newTrial(trial))						
-				return;
+				if(trial.accuracy === 1 && slot.completed) {
+					return;
+				} else {
+					trial['type'] = 'return';
+					dispatch(newTrial(trial))						
+					return;
+				}
 			}
-			trial['type'] = null;
-			dispatch(newTrial(trial))
+			if(!slot.completed) {
+				trial['type'] = null;
+				dispatch(newTrial(trial))
+			}
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_TRIALS_FAILURE,
@@ -358,7 +368,6 @@ export function newTrial(trial) {
 					start: start
 				})
 			} else if (trial.type == 'adapt') {
-				// console.log(trial)
 				new_trial = Object.assign({..._default_trial}, {
 					slot_id: current_slot.id,
 					cue_visible: trial.cue_visible,
@@ -379,7 +388,6 @@ export function newTrial(trial) {
 					delete new_trial[_prop]
 				}
 			}
-			console.log(new_trial)
 			await axios.post(`${api_url}/trials/`, 
 				new_trial
 			).then(res => {
@@ -648,8 +656,7 @@ export const MOVE_SLOT = 'MOVE_SLOT'
 export const MOVE_SLOT_SUCCESS = 'MOVE_SLOT_SUCCESS'
 export const MOVE_SLOT_FAILURE = 'MOVE_SLOT_FAILURE'
 function findNext(dir, slots, pos) {
-	let last = slots.slice(-1)[0]['order'],
-		nextindex;
+	let last = slots.slice(-1)[0]['order'];
 	if(dir == 'next') {
 		if(pos == last) {
 			return pos;
@@ -675,8 +682,7 @@ export function nextSlot(dir) {
 			if(pos == new_pos) {
 				return;
 			}
-			dispatch({type: MOVE_SLOT_SUCCESS, next_slot})
-			if(next_slot.completion !== null) {
+			if(next_slot.completed) {
 				dispatch({type: SHOW_CORRECT})
 			}
 			current_sequence = Object.assign({...current_sequence}, {

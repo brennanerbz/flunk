@@ -123,48 +123,31 @@ export default function learn(state = initial_learnstate, action) {
 				current_slot: slot
 			}
 		case RECEIVE_TRIALS_SUCCESS:
-			if(action.trials.length > 0 || action.trials !== undefined) {
-				let last = action.trials.slice(-1)[0],
-					show_correct;
-				if (last.accuracy === 1) {
-					show_correct = true
-				} else if (last.accuracy < 1) {
-					show_correct = false
-				}
-			} 			
 			return {
 				...state,
-				isShowingCorrect: show_correct,
 				isFetchingTrials: false,
-				trials: action.trials
+				trials: action.trials,
+				trial: action.trials.slice(-1)[0]
 			}
 		case NEW_TRIAL_SUCCESS:
-			let _newtrials = state.trials.concat(action._trial),
-			 	_shouldshowcomplete;
-			if(action._trial.accuracy === 1) {
-				_shouldshowcomplete = true;
-			} else {
-				_shouldshowcomplete = false;
-			}
+			let _newtrials = state.trials.concat(action._trial);
 			return {
 				...state,
 				isFetchingLearn: false,
 				isFetchingTrials: false,
-				isShowingCorrect: _shouldshowcomplete,
+				isShowingCorrect: false,
 				trials: _newtrials,
 				current_trial: action._trial,
 				trial: action._trial
 			}
 		case UPDATE_SEQUENCE_SUCCESS:
-			let _new_slot = state.slots.filter(slot => slot.order === action.sequence.position)[0],
-				_current_slot = state.current_slot;
-			if(_.isEqual(_new_slot, _current_slot)) {
-				_new_slot = _current_slot
-			}
+			const _slot = state.slots.filter(slot => slot.order === action.sequence.position)[0],
+				  _correctslot = _slot.completed;			
 			return {
 				...state,
+				isShowingCorrect: _correctslot ? true : false,
 				current_sequence: action.sequence,
-				current_slot: _new_slot
+				current_slot: _slot
 			}
 		case UPDATE_SLOT_SUCCESS:
 			return {

@@ -11,6 +11,9 @@ export default class LearnCard extends Component {
 	static propTypes = {
 		
 	}
+	sendEvent(event) {
+		this.refs.learn_input.handleSubmit(event)
+	}
 	render() {
 		const { showCorrect, 
 				showCompletedSeq, 
@@ -60,7 +63,8 @@ export default class LearnCard extends Component {
 						{
 							showCorrect
 							? null
-							: <LearnInput {...this.props}/>
+							: <LearnInput ref="learn_input"
+										  {...this.props}/>
 						}												
 					</div>
 				</div>

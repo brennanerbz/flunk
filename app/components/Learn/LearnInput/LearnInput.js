@@ -31,7 +31,7 @@ export default class LearnInput extends Component {
 	componentWillUpdate(nextProps, nextState) {
 		setTimeout(() => {
 			this.refs.answerbox.focus()	
-		}, 1)
+		}, 5)
 	}
 
 	handleChange = (e) => {
@@ -52,9 +52,9 @@ export default class LearnInput extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault()
 		const { updateTrial } = this.props;
-		const reaction_time = this.state.reaction_time;
 		const d = new Date()
 		const response_time = d.toISOString().replace('T', " ").replace("Z", "")
+		const reaction_time = this.state.reaction_time !== null ? this.state.reaction_time : response_time;
 		const answer = this.state.answer.toLowerCase().trim()
 		updateTrial(
 			{
@@ -71,29 +71,17 @@ export default class LearnInput extends Component {
 			answer: '',
 			reaction_time: null
 		});
+		
 	}
 
 	handleKeyDown(event) {
-		this.handleReactionTime()
-		// const { trial } = this.props,
-		// 	  target = event.target.value;
-		// if((target == trial.target.slice(0, -1) || target == trial.target) 
-		// 	&& (trial.difficulty == 'copy' || trial.difficulty == 'peek')) {
-		// 	this.setState({
-		// 		correct: true
-		// 	});
-		// }
-		// else if(target !== trial.target.slice(0, -1)) {
-		// 	this.setState({
-		// 		correct: false
-		// 	})
-		// }		
+		this.handleReactionTime()		
 	}
 
 	render() {
 		return(
 			<div className="input_box">	
-			    <form onSubmit={this.handleSubmit}>
+			    <form onSubmit={(e) => e.preventDefault()}>
 			    <input autoFocus={true} 
 			    	   ref="answerbox"
 			    	   value={this.state.answer}

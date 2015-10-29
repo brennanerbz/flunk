@@ -506,13 +506,20 @@ export function hint() {
 export const UPDATE_TRIAL = 'UPDATE_TRIAL';
 export const UPDATE_TRIAL_SUCCESS = 'UPDATE_TRIAL_SUCCESS';
 export const UPDATE_TRIAL_FAILURE = 'UPDATE_TRIAL_FAILURE';
+export const GRADING = 'GRADING';
 function willUpdateTrial() {
 	return {
 		type: UPDATE_TRIAL
 	}
 }
+function grading() {
+	return {
+		type: GRADING
+	}
+}
 export function updateTrial(response) { // TODO: make sure to pass in object from component. use state to determine other variables. 
 	return async(dispatch, getState) => {
+		dispatch(grading())
 		dispatch(willUpdateTrial())
 		try {
 			let current_trial = getState().learn.current_trial,

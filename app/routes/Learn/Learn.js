@@ -18,6 +18,7 @@ import Hint from '../../components/Learn/Hint/Hint';
 import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 
 @connect(state => ({
+	isGrading: state.learn.isGrading,
 	isFetchingTrials: state.learn.isFetchingTrials,
 	showLearn: state.learn.isFetchingLearn,
 	showCorrect: state.learn.isShowingCorrect,
@@ -40,36 +41,55 @@ export default class Learn extends Component {
 		params: PropTypes.object
 	}
 
+	state = {
+		flag: false
+	}
+
 	componentWillMount() {
 		const {fetchLearn, params } = this.props;
 		fetchLearn(1, Number(params.id))
 	}	
 
 	componentDidMount() {
-		window.addEventListener('keypress', ::this.handleKeyPress)
+		window.addEventListener('keyup', ::this.handleKeyUp)
 	}
 
 	componentWillUnmount() {
 		const { clearLearn } = this.props;
 		clearLearn()
-		window.removeEventListener('keypress', ::this.handleKeyPress)
+		window.removeEventListener('keyup', ::this.handleKeyUp)
 	}
 
-	// TODO: add checks for completedSequence
+
 	keyDownHandlers = {
-		37() {
+		37(event) {
+			event.preventDefault()
 			this.props.nextSlot('prev')
 			return true;
 		}, 
 
-		39() {
+		39(event) {
+			event.preventDefault()
 			this.props.nextSlot('next')
 			return true;
 		},
 
 		40(event) {
+			event.preventDefault()
 			if(!this.props.current_slot.completed) {
-				this.refs['learn_input'].handleSubmit(event)
+				this.refs.learn_card.sendEvent(event)
+				return true;
+			}
+		},
+		13(event) {
+			event.preventDefault()
+			const { current_slot, isGrading, skipSlot } = this.props;
+			if(!current_slot.completed) {
+				this.refs.learn_card.sendEvent(event)
+				return true;
+			}
+			if(!isGrading && current_slot.completed) {
+				skipSlot()
 				return true;
 			}
 		}
@@ -78,11 +98,13 @@ export default class Learn extends Component {
 	handleArrowKeys(event) {
 		if (this.keyDownHandlers[event.which]) {
     		return this.keyDownHandlers[event.which].call(this, event);
+  		} else {
+  			return false;
   		}
 	}
 	
-	handleKeyPress(event) {	
-		const { showCorrect, showCompletedSequence } = this.props;
+	handleKeyUp(event) {
+		const { showCorrect, showCompletedSequence, isGrading } = this.props;
 		if(event.which && showCompletedSequence) {
 			this.props.newSequence(null)
 			return;
@@ -92,7 +114,8 @@ export default class Learn extends Component {
 				this.props.skipSlot()
 				return;
 			}
-		}	
+			return;
+		}
 		this.handleArrowKeys(event)
 	}
 
@@ -115,12 +138,12 @@ export default class Learn extends Component {
 					? <div>
 						<SeqControl {...this.props}/>
 							<div className="no_sidenav_container learn_container"
-								 onKeyDown={::this.handleKeyPress}
-								 onKeyPress={::this.handleArrowKeys}>			 
+								 onKeyUp={::this.handleKeyUp}>
 								<div>
 									{
 										current_slot !== undefined || !isFetchingTrials
 										? <LearnCard 
+											   ref="learn_card"
 											   slot={current_slot !== undefined ? current_slot : null} 
 											   slots={slots} 
 											   trial={this.props.trial}

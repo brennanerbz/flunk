@@ -38,6 +38,8 @@ import {
 	NEW_HINT_SUCCESS,
 	NEW_HINT_FAILURE,
 
+	GRADING,
+
 	UPDATE_TRIAL,
 	UPDATE_TRIAL_SUCCESS,
 	UPDATE_TRIAL_FAILURE,
@@ -62,6 +64,7 @@ import {
 import _ from 'lodash';
 
 const initial_learnstate = {
+	isGrading: false,
 	isFetchingLearn: false,
 	isFetchingSequence: false,
 	isFetchingSlots: false,
@@ -153,12 +156,18 @@ export default function learn(state = initial_learnstate, action) {
 		case UPDATE_SLOT_SUCCESS:
 			return {
 				...state,
+				isGrading: false,
 				current_slot: action.slot,
 				slots: state.slots.map(slot => {
 					return slot.id === action.slot.id 
 					? action.slot
 					: slot
 				})
+			}
+		case GRADING:
+			return {
+				...state,
+				isGrading: true
 			}
 		case UPDATE_TRIAL_SUCCESS:
 			return {
@@ -174,6 +183,7 @@ export default function learn(state = initial_learnstate, action) {
 		case ADAPT_SUCCESS:
 			return {
 				...state,
+				isGrading: false,
 				current_slot: Object.assign({...state.current_slot}, {format: action.new_format})
 			}
 		case NEW_HINT_SUCCESS:

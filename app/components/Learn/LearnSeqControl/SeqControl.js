@@ -32,6 +32,7 @@ export default class SeqControl extends Component {
 				<span className="">
 					<button className="button button-outline startover_btn"
 						    type="button"
+						    onClick={() => this.props.newSequence(null)}
 						    >Start over</button>
 				</span>
 			</div>

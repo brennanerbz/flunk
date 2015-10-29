@@ -41,7 +41,6 @@ export default class Learn extends Component {
 	}
 
 	componentWillMount() {
-		console.log(this.props.showCorrect)
 		const {fetchLearn, params } = this.props;
 		fetchLearn(1, Number(params.id))
 	}	

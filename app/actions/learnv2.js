@@ -90,20 +90,29 @@ var _default_sequence = {
 export function newSequence(prevsequence, user_id, set_id, assignment_id) {
 	return async(dispatch, getState) => {
 		try {
-			let new_sequence;
-			if(prevsequence.type == 'noprior') {
+			let new_sequence,
+				current_sequence = getState().learn.current_sequence;
+			if(prevsequence == null) {
 				new_sequence = Object.assign({..._default_sequence}, {
-					user_id: user_id,
-					set_id: set_id,
-					assignment_id: assignment_id !== undefined ? assignment_id : null
+					user_id: current_sequence.user_id,
+					set_id: current_sequence.set_id,
+					assignment_id: current_sequence.assignment_id !== undefined ? current_sequence.assignment_id : null
 				})
-			} else if(prevsequence.type == 'completed') {
-				new_sequence = Object.assign({..._default_sequence}, {
-					user_id: prevsequence.user_id,
-					set_id: prevsequence.set_id,
-					assignment_id: prevsequence.assignment_id !== undefined ? prevsequence.assignment_id : null
-				})
-			}			
+			} else {
+				if(prevsequence.type == 'noprior') {
+					new_sequence = Object.assign({..._default_sequence}, {
+						user_id: user_id,
+						set_id: set_id,
+						assignment_id: assignment_id !== undefined ? assignment_id : null
+					})
+				} else if(prevsequence.type == 'completed') {
+					new_sequence = Object.assign({..._default_sequence}, {
+						user_id: prevsequence.user_id,
+						set_id: prevsequence.set_id,
+						assignment_id: prevsequence.assignment_id !== undefined ? prevsequence.assignment_id : null
+					})
+				} 
+			}
 			await axios.post(`${api_url}/sequences/`, 
 				new_sequence
 			).then(res => {				

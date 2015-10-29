@@ -21,7 +21,7 @@ import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 	isFetchingTrials: state.learn.isFetchingTrials,
 	showLearn: state.learn.isFetchingLearn,
 	showCorrect: state.learn.isShowingCorrect,
-	showCompletedSeq: state.learn.isShowingCompletedSequence,
+	showCompletedSequence: state.learn.isShowingCompletedSequence,
 	showFeedback: state.learn.isShowingFeedback,
 	slots: state.learn.slots,
 	current_slot: state.learn.current_slot,
@@ -46,17 +46,18 @@ export default class Learn extends Component {
 	}	
 
 	componentDidMount() {
-		window.addEventListener('keyup', ::this.handleKeyUp)
+		window.addEventListener('keydown', ::this.handleKeyUp)
 		window.addEventListener('keypress', ::this.handleArrowKeys)
 	}
 
 	componentWillUnmount() {
 		const { clearLearn } = this.props;
 		clearLearn()
-		window.removeEventListener('keyup', ::this.handleKeyUp)
+		window.removeEventListener('keydown', ::this.handleKeyUp)
 		window.removeEventListener('keypress', ::this.handleArrowKeys)
 	}
 
+	// TODO: add checks for completedSequence
 	keyDownHandlers = {
 		37() {
 			this.props.nextSlot('prev')
@@ -83,12 +84,13 @@ export default class Learn extends Component {
 	}
 	
 	handleKeyUp(event) {	
-		const { showCorrect, showCompletedSeq } = this.props;
+		const { showCorrect, showCompletedSequence } = this.props;
+		if(event.which && showCompletedSequence) {
+			this.props.newSequence(null)
+			return;
+		}
 		if(event.which && showCorrect) {
 			this.props.skipSlot()
-		}	
-		if(event.which && showCompletedSeq) {
-			this.props.newSequence(1, this.props.params.id)
 		}	
 	}
 
@@ -98,7 +100,7 @@ export default class Learn extends Component {
 				newSequence, 
 				isFetchingTrials,
 				showLearn,
-				showCompletedSeq, 
+				showCompletedSequence, 
 				showCorrect, 
 				showFeedback,
 				skipSlot, 
@@ -124,17 +126,17 @@ export default class Learn extends Component {
 									}
 									
 									{
-										showCorrect
+										showCorrect 
 										? <ShowCorrect {...this.props}/>
 										: null
 									}												
 									{
-										showCompletedSeq
+										showCompletedSequence && !showCorrect
 										? <a onClick={() => newSequence(1, params.id)}>New sequence</a>
 										: null
 									}
 									{
-										!showCorrect && !showCompletedSeq
+										!showCorrect && !showCompletedSequence
 										? <DiffControls />
 										: null
 									}
@@ -145,7 +147,7 @@ export default class Learn extends Component {
 										: null
 									}
 									{
-										!showCorrect && !showCompletedSeq && current_slot !== undefined
+										!showCorrect && !showCompletedSequence && current_slot !== undefined
 										? <Hint hints={current_slot.augs !== undefined ? current_slot.augs : null} {...this.props} />
 										: null
 									}

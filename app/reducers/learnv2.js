@@ -104,7 +104,8 @@ export default function learn(state = initial_learnstate, action) {
 			return {
 				...state,
 				isFetchingSequence: false,
-				current_sequence: action.sequence
+				current_sequence: action.sequence,
+				isShowingCompletedSequence: action.sequence.completed
 			}
 		case RECEIVE_SLOTS_SUCCESS:
 			let slots = action.slots,
@@ -145,7 +146,7 @@ export default function learn(state = initial_learnstate, action) {
 				  _correctslot = _slot.completed;			
 			return {
 				...state,
-				isShowingCorrect: _correctslot ? true : false,
+				isShowingCorrect: _correctslot,
 				current_sequence: action.sequence,
 				current_slot: _slot
 			}
@@ -201,6 +202,11 @@ export default function learn(state = initial_learnstate, action) {
 			return {
 				...state,
 				isShowingCorrect: next_correct
+			}
+		case RECEIVE_LEARN_SUCCESS:
+			return {
+				...state,
+				isFetchingLearn: false
 			}
 		case CLEAR_LEARN:
 			return {

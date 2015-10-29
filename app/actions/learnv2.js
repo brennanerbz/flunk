@@ -161,14 +161,15 @@ export function updateSequence(_sequence) {
 					delete updated_sequence[_seqprop]
 				}
 			}
-			console.log(updated_sequence)		
 			await axios.put(`${api_url}/sequences/${_sequence.id}`, 
 				updated_sequence
 			).then(res => {
 				const sequence = res.data;
 				dispatch({type: UPDATE_SEQUENCE_SUCCESS, sequence}) 
 			}).then(() => {
-				dispatch(fetchTrials())
+				if(!getState().learn.current_sequence.completed) {
+					dispatch(fetchTrials())
+				}
 			})
 		} catch(err) {
 			dispatch({
@@ -202,13 +203,12 @@ export function fetchSlots(sequence_id) {
 				let unfinished_slots = slots.filter(slot => slot.completed !== true)
 				if(unfinished_slots.length === 0) {
 					current_sequence['type'] = 'completed';
-					await dispatch(updateSequence(current_sequence))
-					await dispatch(newSequence(current_sequence))
-					return;
+					dispatch(updateSequence(current_sequence))
+					dispatch({type: SHOW_COMPLETED_SEQUENCE})
 				}
+				await dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
+				await dispatch(fetchTrials())
 			}			
-			await dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
-			await dispatch(fetchTrials())
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_SLOTS_FAILURE,
@@ -295,7 +295,8 @@ export function fetchTrials() {
 				dispatch({type: RECEIVE_TRIALS_SUCCESS, trials})
 				trial = trials.slice(-1)[0]
 				if(trial.accuracy === 1 && slot.completed) {
-					return;
+					dispatch({type: SHOW_CORRECT})
+					dispatch({type: RECEIVE_LEARN_SUCCESS})
 				} else {
 					trial['type'] = 'return';
 					dispatch(newTrial(trial))						
@@ -362,12 +363,18 @@ export function newTrial(trial) {
 		try {
 			let new_trial,
 				current_slot = getState().learn.current_slot,
+				last_trial = getState().learn.trials.slice(-1)[0],
 				s = new Date(),
 			  	start = s.toISOString().replace("T", " ").replace("Z", "");
-			if(current_slot.completed == true) {
+			if(current_slot.completed) {
 				return;
 			}
 			if (trial.type == 'return') {
+				for(var _trialprop in trial) {
+					if(trial[_trialprop] instanceof Array) {
+						trial[_trialprop] = trial[_trialprop].join("|")
+					}
+				}
 				new_trial = trial
 			} else if (trial.type == null) {
 				new_trial = Object.assign({..._default_trial}, {
@@ -406,8 +413,10 @@ export function newTrial(trial) {
 		} catch(err) {
 			dispatch({
 				type: NEW_TRIAL_FAILURE,
+				errorObj: err,
 				error: Error(err)
 			})
+			dispatch(newSequence(null)) // TODO: take out 
 		}
 	}
 }
@@ -517,6 +526,14 @@ export function updateTrial(response) { // TODO: make sure to pass in object fro
 					return;
 				} 
 				dispatch(adapt(updated_trial))
+			}).then(() => {
+				let slots = getState().learn.slots
+					current_sequence = getState().learn.current_sequence;
+				if(slots.filter(slot => !slot.completed).length === 0) {
+					current_sequence['type'] = 'completed';
+					dispatch(updateSequence(current_sequence))
+ 					dispatch({type: SHOW_COMPLETED_SEQUENCE})
+				}
 			})
 		} catch(err) {
 			dispatch({

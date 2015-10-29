@@ -13,7 +13,10 @@ export default class ShowCorrect extends Component {
 					<p className="correct_answer">{trial.answer}</p>
 				</div>
 				<a className="continue_btn"
-				   onClick={() => this.props.skipSlot()}>Press any key to continue</a>
+				   onClick={this.props.showCompletedSequence 
+				   			? () => this.props.newSequence(null) 
+				   			: () => this.props.skipSlot()}>
+				   			Press any key to continue</a>
 			</div>
 		);
 	}

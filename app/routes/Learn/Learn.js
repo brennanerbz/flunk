@@ -46,15 +46,13 @@ export default class Learn extends Component {
 	}	
 
 	componentDidMount() {
-		window.addEventListener('keydown', ::this.handleKeyDown)
-		window.addEventListener('keypress', ::this.handleArrowKeys)
+		window.addEventListener('keypress', ::this.handleKeyPress)
 	}
 
 	componentWillUnmount() {
 		const { clearLearn } = this.props;
 		clearLearn()
-		window.removeEventListener('keydown', ::this.handleKeyDown)
-		window.removeEventListener('keypress', ::this.handleArrowKeys)
+		window.removeEventListener('keypress', ::this.handleKeyPress)
 	}
 
 	// TODO: add checks for completedSequence
@@ -70,7 +68,7 @@ export default class Learn extends Component {
 		},
 
 		40(event) {
-			if(this.props.current_slot.completion == null) {
+			if(!this.props.current_slot.completed) {
 				this.refs['learn_input'].handleSubmit(event)
 				return true;
 			}
@@ -83,7 +81,7 @@ export default class Learn extends Component {
   		}
 	}
 	
-	handleKeyDown(event) {	
+	handleKeyPress(event) {	
 		const { showCorrect, showCompletedSequence } = this.props;
 		if(event.which && showCompletedSequence) {
 			this.props.newSequence(null)
@@ -117,14 +115,16 @@ export default class Learn extends Component {
 					? <div>
 						<SeqControl {...this.props}/>
 							<div className="no_sidenav_container learn_container"
-								 onKeyDown={::this.handleKeyDown}
+								 onKeyDown={::this.handleKeyPress}
 								 onKeyPress={::this.handleArrowKeys}>			 
 								<div>
 									{
-										typeof current_slot !== undefined || !isFetchingTrials
-										? <LearnCard slot={current_slot} 
+										current_slot !== undefined || !isFetchingTrials
+										? <LearnCard 
+											   slot={current_slot !== undefined ? current_slot : null} 
 											   slots={slots} 
 											   trial={this.props.trial}
+											   cue={current_slot !== undefined ? current_slot.item.cue : null}
 											   {...this.props}/>
 										: null
 									}

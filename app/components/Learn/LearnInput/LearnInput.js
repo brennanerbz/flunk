@@ -19,13 +19,19 @@ export default class LearnInput extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const { current_slot } = this.props;
 		this.refs.answerbox.focus()
+		const { current_slot } = this.props;
 		if (current_slot !== nextProps.current_slot) {
 			this.setState({
 				answer: ''
 			});
 		}
+	}
+
+	componentWillUpdate(nextProps, nextState) {
+		setTimeout(() => {
+			this.refs.answerbox.focus()	
+		}, 1)
 	}
 
 	handleChange = (e) => {

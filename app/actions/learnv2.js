@@ -17,6 +17,7 @@ function requestLearn() {
 }
 export function fetchLearn(user_id, set_id, assignment_id) {
 	return async(dispatch, getState) => {
+		dispatch(clearLearn())
 		dispatch(requestLearn())
 		try {
 			dispatch(fetchSequence(user_id, set_id, assignment_id))
@@ -44,6 +45,7 @@ function requestSequence() {
 }
 export function fetchSequence(user_id, set_id, assignment_id, mode) {
 	return async(dispatch, getState) => {
+		dispatch(requestSequence())
 		try {
 			let sequences;
 			await axios.get(`${api_url}/sequences/?user_id=${Number(user_id)}&set_id=${Number(set_id)}`).then(res => sequences = res.data.sequences)
@@ -633,17 +635,20 @@ export const SKIP_SUCCESS = 'SKIP_SUCCESS';
 export const SKIP_FAILURE = 'SKIP_FAILURE';
 function findUnfinished(index, length, slots) {
 	for(var _u = index; _u < length; _u++) {
-		if (slots[_u]['completion'] == null) {
-			return _u
+		if (!slots[_u]['completed']) {
+			return _u;
 		}
 	}
 }
-function skipToUnfinished(current_slot, slots, index) {
-	let length = slots.length
-	if (index = length) {
+function skipToUnfinished(index, slots) {
+	let length = slots.length;
+	if (index == length) {		
 		index = findUnfinished(0, length, slots)
 	} else {
 		index = findUnfinished(index, length, slots)
+		if(index == undefined) {
+			index = findUnfinished(0, length, slots)
+		}
 	}
 	return index;
 }
@@ -653,10 +658,10 @@ export function skipSlot() {
 			let current_slot = getState().learn.current_slot,
 				current_sequence = getState().learn.current_sequence,
 				slots = getState().learn.slots,
-				index = slots.indexOf(current_slot.order),
-				new_index = skipToUnfinished(current_slot, slots, index),
+				index = slots.indexOf(current_slot),
+				new_index = skipToUnfinished(index, slots),
 				next_slot = slots[new_index],
-				new_pos = next_slot.order;
+				new_pos = next_slot.order;			
 			dispatch({type: SKIP_SUCCESS, next_slot})
 			if(!next_slot.completed) {
 				dispatch({type: SHOW_CORRECT})

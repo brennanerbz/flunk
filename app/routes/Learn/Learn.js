@@ -46,14 +46,14 @@ export default class Learn extends Component {
 	}	
 
 	componentDidMount() {
-		window.addEventListener('keydown', ::this.handleKeyUp)
+		window.addEventListener('keydown', ::this.handleKeyDown)
 		window.addEventListener('keypress', ::this.handleArrowKeys)
 	}
 
 	componentWillUnmount() {
 		const { clearLearn } = this.props;
 		clearLearn()
-		window.removeEventListener('keydown', ::this.handleKeyUp)
+		window.removeEventListener('keydown', ::this.handleKeyDown)
 		window.removeEventListener('keypress', ::this.handleArrowKeys)
 	}
 
@@ -61,37 +61,41 @@ export default class Learn extends Component {
 	keyDownHandlers = {
 		37() {
 			this.props.nextSlot('prev')
-			return;
+			return true;
 		}, 
 
 		39() {
 			this.props.nextSlot('next')
-			return;
+			return true;
 		},
 
 		40(event) {
 			if(this.props.current_slot.completion == null) {
 				this.refs['learn_input'].handleSubmit(event)
+				return true;
 			}
 		}
 	}
 
 	handleArrowKeys(event) {
 		if (this.keyDownHandlers[event.which]) {
-    		this.keyDownHandlers[event.which].call(this, event)
-    		return;    		
+    		return this.keyDownHandlers[event.which].call(this, event);
   		}
 	}
 	
-	handleKeyUp(event) {	
+	handleKeyDown(event) {	
 		const { showCorrect, showCompletedSequence } = this.props;
 		if(event.which && showCompletedSequence) {
 			this.props.newSequence(null)
 			return;
 		}
 		if(event.which && showCorrect) {
-			this.props.skipSlot()
+			if(!this.handleArrowKeys(event)) {
+				this.props.skipSlot()
+				return;
+			}
 		}	
+		this.handleArrowKeys(event)
 	}
 
 	render() {
@@ -113,8 +117,8 @@ export default class Learn extends Component {
 					? <div>
 						<SeqControl {...this.props}/>
 							<div className="no_sidenav_container learn_container"
-								 onKeyPress={::this.handleKeyUp}
-								 onKeyDown={::this.handleArrowKeys}>			 
+								 onKeyDown={::this.handleKeyDown}
+								 onKeyPress={::this.handleArrowKeys}>			 
 								<div>
 									{
 										typeof current_slot !== undefined || !isFetchingTrials
@@ -130,11 +134,6 @@ export default class Learn extends Component {
 										? <ShowCorrect {...this.props}/>
 										: null
 									}												
-									{
-										showCompletedSequence && !showCorrect
-										? <a onClick={() => newSequence(1, params.id)}>New sequence</a>
-										: null
-									}
 									{
 										!showCorrect && !showCompletedSequence
 										? <DiffControls />

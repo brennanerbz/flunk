@@ -47,10 +47,10 @@ export function fetchSequence(user_id, set_id, assignment_id, mode) {
 		try {
 			let sequences;
 			await axios.get(`${api_url}/sequences/?user_id=${Number(user_id)}&set_id=${Number(set_id)}`).then(res => sequences = res.data.sequences)
-			sequences = sequences.filter(seq => seq.completed !== true)
+			sequences = sequences.filter(seq => !seq.completed)
 			if(sequences !== undefined && sequences.length > 0) {
 				const sorted_sequences = sequences.sort((s1, s2) => {
-					return new Date(s1.creation) - new Date(s2.creation)
+					return new Date(s2.creation) - new Date(s1.creation)
 				})
 				const sequence = sorted_sequences[0]
 				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence}) 
@@ -169,6 +169,8 @@ export function updateSequence(_sequence) {
 			}).then(() => {
 				if(!getState().learn.current_sequence.completed) {
 					dispatch(fetchTrials())
+				} else {
+					dispatch({type: SHOW_COMPLETED_SEQUENCE})
 				}
 			})
 		} catch(err) {
@@ -527,12 +529,12 @@ export function updateTrial(response) { // TODO: make sure to pass in object fro
 				} 
 				dispatch(adapt(updated_trial))
 			}).then(() => {
-				let slots = getState().learn.slots
+				let slots = getState().learn.slots,
 					current_sequence = getState().learn.current_sequence;
 				if(slots.filter(slot => !slot.completed).length === 0) {
+					console.log("COMPLETED")
 					current_sequence['type'] = 'completed';
 					dispatch(updateSequence(current_sequence))
- 					dispatch({type: SHOW_COMPLETED_SEQUENCE})
 				}
 			})
 		} catch(err) {
@@ -629,22 +631,21 @@ export const SHOW_COMPLETED_SEQUENCE = 'SHOW_COMPLETED_SEQUENCE';
 */
 export const SKIP_SUCCESS = 'SKIP_SUCCESS';
 export const SKIP_FAILURE = 'SKIP_FAILURE';
-function findUnfinished(pos, length, slots) {
-	for(var _u = pos; _u < length; _u++) {
+function findUnfinished(index, length, slots) {
+	for(var _u = index; _u < length; _u++) {
 		if (slots[_u]['completion'] == null) {
 			return _u
 		}
 	}
 }
-function skipToUnfinished(current_slot, slots, pos) {
-	let last = slots.slice(-1)[0]['order'],
-		index;
-	if (pos = last) {
-		index = findUnfinished(0, last, slots)
+function skipToUnfinished(current_slot, slots, index) {
+	let length = slots.length
+	if (index = length) {
+		index = findUnfinished(0, length, slots)
 	} else {
-		index = findUnfinished(pos, last, slots)
+		index = findUnfinished(index, length, slots)
 	}
-	return slots[index]['order']
+	return index;
 }
 export function skipSlot() {
 	return async(dispatch, getState) => {
@@ -652,11 +653,12 @@ export function skipSlot() {
 			let current_slot = getState().learn.current_slot,
 				current_sequence = getState().learn.current_sequence,
 				slots = getState().learn.slots,
-				pos = current_sequence['position'],
-				new_pos = skipToUnfinished(current_slot, slots, pos),
-				next_slot = slots.filter(slot => slot.order == new_pos)
+				index = slots.indexOf(current_slot.order),
+				new_index = skipToUnfinished(current_slot, slots, index),
+				next_slot = slots[new_index],
+				new_pos = next_slot.order;
 			dispatch({type: SKIP_SUCCESS, next_slot})
-			if(next_slot.completed !== false) {
+			if(!next_slot.completed) {
 				dispatch({type: SHOW_CORRECT})
 			}
 			current_sequence = Object.assign({...current_sequence}, {

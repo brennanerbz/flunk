@@ -6,17 +6,20 @@ export default class ShowCorrect extends Component {
 	}	
 	
 	render() {
-		const { current_slot, trial } = this.props;
+		const { current_slot, trial, showCompletedSequence } = this.props;
+		console.log(showCompletedSequence)
 		return(
 			<div className="show_correct_container">
 				<div className="show_correct">
 					<p className="correct_answer">{trial.answer}</p>
 				</div>
 				<a className="continue_btn"
-				   onClick={this.props.showCompletedSequence 
+				   onClick={showCompletedSequence 
 				   			? () => this.props.newSequence(null) 
 				   			: () => this.props.skipSlot()}>
-				   			Press any key to continue</a>
+				   			{showCompletedSequence 
+				   			? "Press any key to start new round" 
+				   			: "Press any key to continue"}</a>
 			</div>
 		);
 	}

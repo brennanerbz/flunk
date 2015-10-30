@@ -59,7 +59,13 @@ import {
 	MOVE_SLOT_SUCCESS,
 	MOVE_SLOT_FAILURE,
 
-	CLEAR_LEARN
+	CLEAR_LEARN,
+
+	CREATE__MINISEQS,
+	UPDATE_CURRENT_MINISEQ,
+	MOVE_TO_UNFINISHED_MINISEQ,
+	SHOW_COMPLETE_MINISEQ,
+
 } from '../actions/learnv2';
 import _ from 'lodash';
 
@@ -80,10 +86,57 @@ const initial_learnstate = {
 	current_slot: {},
 	trials: [],
 	current_trial: {},
-	trial: {}
+	trial: {},
+
+	miniseqs: [],
+	current_miniseq: [],
+	current_miniseq_index: null,
+	isShowingCompleteMiniseq: false
 }
 export default function learn(state = initial_learnstate, action) {
 	switch(action.type) {
+		
+		case CREATE__MINISEQS:
+			let miniseqs = [],
+				length = state.current_sequence.length,
+				miniseq_count = Math.floor(length / 5),
+				_n = 0,
+				_i = 0;
+			for(let _l = 0; _l <= miniseq_count; _l++) {
+				let _s = 0,
+					_a = {completed: false, slots: []}
+				while(_s < 5 + _n) {
+					_a.slots.push(action.slots[_i])
+					_s++
+					_i++
+				}
+				_n + 4
+				miniseqs.push(_a)
+			}
+			for(let loop = 0; loop < miniseqs.length; loop++) {
+				var undefinedcount = 0,
+					complete_slot_count = 0,
+					seq = miniseqs[loop];
+				for(let i = 0; i < seq['slots'].length; i++) {
+					if(seq['slots'][i] !== undefined && seq['slots'][i].completed == true) {
+						complete_slot_count++
+					}
+					if(seq['slots'][i] == (undefined || null)) {
+						undefinedcount++
+						delete seq['slots'][i]
+					}
+				}
+				if(complete_slot_count == seq['slots'].length) {
+					seq['completed'] = true;
+				}
+				if(undefinedcount == seq['slots'].length) {
+					delete miniseqs[loop]
+				}
+			}
+			console.log(miniseqs)
+			return {
+				...state
+			}
 		case REQUEST_LEARN:
 			return {
 				...state,

@@ -55,7 +55,7 @@ export function fetchSequence(user_id, set_id, assignment_id, mode) {
 					return new Date(s2.creation) - new Date(s1.creation)
 				})
 				const sequence = sorted_sequences[0]
-				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence}) 
+				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
 				dispatch(fetchSlots(sequence.id))
 			} else {
 				let sequence = { type: 'noprior' }
@@ -122,6 +122,7 @@ export function newSequence(prevsequence, user_id, set_id, assignment_id) {
 				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
 				let slots = res.data.slots['slots']
 				dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
+				dispatch({type: CREATE__MINISEQS, slots})
 			}).then(() => {
 				dispatch(fetchTrials())
 			})
@@ -211,6 +212,7 @@ export function fetchSlots(sequence_id) {
 					dispatch({type: SHOW_COMPLETED_SEQUENCE})
 				}
 				await dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
+				await dispatch({type: CREATE__MINISEQS, slots})
 				await dispatch(fetchTrials())
 			}			
 		} catch(err) {
@@ -750,6 +752,11 @@ export function clearLearn() {
 		type: CLEAR_LEARN
 	}
 }
+
+export const CREATE__MINISEQS = 'CREATE__MINISEQS';
+export const UPDATE_CURRENT_MINISEQ = 'UPDATE_CURRENT_MINISEQ';
+export const MOVE_TO_UNFINISHED_MINISEQ = 'MOVE_TO_UNFINISHED_MINISEQ';
+export const SHOW_COMPLETE_MINISEQ = 'SHOW_COMPLETE_MINISEQ';
 
 
 

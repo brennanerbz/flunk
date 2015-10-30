@@ -51,37 +51,33 @@ export default class Learn extends Component {
 	}	
 
 	componentDidMount() {
-		window.addEventListener('keyup', ::this.handleKeyUp)
+		$(window).on('keyup', ::this.handleKeyUp)
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener('keyup', ::this.handleKeyUp)
+		$(window).off('keyup')
 		const { clearLearn } = this.props;
 		clearLearn()
 	}
 
 	keyDownHandlers = {
 		37(event) {
-			event.preventDefault()
 			this.props.nextSlot('prev')
 			return true;
 		}, 
 
 		39(event) {
-			event.preventDefault()
 			this.props.nextSlot('next')
 			return true;
 		},
 
 		40(event) {
-			event.preventDefault()
 			if(!this.props.current_slot.completed) {
 				this.refs.learn_card.sendEvent(event)
 				return true;
 			}
 		},
 		13(event) {
-			event.preventDefault()
 			const { current_slot, isGrading, skipSlot } = this.props;
 			if(!current_slot.completed) {
 				this.refs.learn_card.sendEvent(event)
@@ -101,7 +97,6 @@ export default class Learn extends Component {
 	}
 	
 	handleKeyUp(event) {
-		event.stopPropagation()
 		const { showCorrect, showCompletedSequence, isGrading } = this.props;
 		if(event.which && showCompletedSequence) {
 			this.props.newSequence(null)

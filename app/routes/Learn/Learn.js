@@ -97,12 +97,11 @@ export default class Learn extends Component {
 	handleArrowKeys(event) {
 		if (this.keyDownHandlers[event.which]) {
     		return this.keyDownHandlers[event.which].call(this, event);
-  		} else {
-  			return false;
   		}
 	}
 	
 	handleKeyUp(event) {
+		event.stopPropagation()
 		const { showCorrect, showCompletedSequence, isGrading } = this.props;
 		if(event.which && showCompletedSequence) {
 			this.props.newSequence(null)
@@ -118,6 +117,11 @@ export default class Learn extends Component {
 		this.handleArrowKeys(event)
 	}
 
+	handleUserResponse(response) {
+		const { updateTrial } = this.props;
+		updateTrial(response)
+ 	}
+
 	render() {
 		const { current_slot,
 				slots,
@@ -132,7 +136,9 @@ export default class Learn extends Component {
 				trial,
 				params} = this.props;
 		return (
-			<div className="learn_page">
+			<div className="learn_page"
+				 ref="learn_page"
+				 id="learn_page">
 				{
 					!showLearn && slots !== undefined
 					? <div>
@@ -142,6 +148,7 @@ export default class Learn extends Component {
 									{
 										current_slot !== undefined && trial !== undefined
 										? <LearnCard 
+											   sendResponse={(response) => ::this.handleUserResponse(response)}
 											   ref="learn_card"
 											   slot={current_slot !== undefined ? current_slot : null} 
 											   slots={slots} 
@@ -169,7 +176,9 @@ export default class Learn extends Component {
 									}
 									{
 										!showCorrect && !showCompletedSequence && current_slot !== undefined
-										? <Hint hints={current_slot.augs !== undefined ? current_slot.augs : null} {...this.props} />
+										? <Hint hints={current_slot.augs !== undefined 
+												? current_slot.augs : null} 
+												{...this.props} />
 										: null
 									}
 									<div className="feedback">

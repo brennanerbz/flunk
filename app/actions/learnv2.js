@@ -16,7 +16,7 @@ function requestLearn() {
 	}
 }
 export function fetchLearn(user_id, set_id, assignment_id) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		dispatch(clearLearn())
 		dispatch(requestLearn())
 		try {
@@ -542,7 +542,6 @@ export function updateTrial(response) { // TODO: make sure to pass in object fro
 				let slots = getState().learn.slots,
 					current_sequence = getState().learn.current_sequence;
 				if(slots.filter(slot => !slot.completed).length === 0) {
-					console.log("COMPLETED")
 					current_sequence['type'] = 'completed';
 					dispatch(updateSequence(current_sequence))
 				}
@@ -570,7 +569,7 @@ function willAdapt() {
 	}
 }
 export function adapt(updated_trial) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		dispatch(willAdapt())
 		try {
 			let new_format = dispatch(newFormat(updated_trial, getState())),
@@ -661,7 +660,7 @@ function skipToUnfinished(index, slots) {
 	return index;
 }
 export function skipSlot() {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		try {
 			let current_slot = getState().learn.current_slot,
 				current_sequence = getState().learn.current_sequence,
@@ -712,7 +711,7 @@ function findNext(dir, slots, pos) {
 	}			
 }
 export function nextSlot(dir) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		try {
 			let current_slot = getState().learn.current_slot,
 				current_sequence = getState().learn.current_sequence,

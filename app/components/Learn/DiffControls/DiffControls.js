@@ -14,7 +14,7 @@ export default class DiffControls extends Component {
 
 	getHint() {
 		console.log("hint coming...")
-		this.props.hint()
+		// this.props.hint()
 	}
 
 	render() {

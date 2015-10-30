@@ -52,7 +52,7 @@ export default class LearnInput extends Component {
  
 	handleSubmit = (e) => {
 		e.preventDefault()
-		const { updateTrial } = this.props;
+		const { sendResponse } = this.props;
 		const d = new Date(),
 			  response_time = d.toISOString().replace('T', " ").replace("Z", ""),
 			  reaction_time = this.state.reaction_time !== null ? this.state.reaction_time : response_time,
@@ -65,12 +65,11 @@ export default class LearnInput extends Component {
 			  	answer_by_letter: false,
 			  	taps: null
 			  }
-		updateTrial(response)
+		sendResponse(response)
 		this.setState({
 			answer: '',
 			reaction_time: null
 		});
-		console.log(response)
 	}
 
 	handleKeyDown(event) {

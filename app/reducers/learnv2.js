@@ -88,6 +88,7 @@ const initial_learnstate = {
 	current_trial: {},
 	trial: {},
 
+	slot_index: null,
 	miniseqs: [],
 	current_miniseq: [],
 	current_miniseq_index: null,
@@ -104,7 +105,7 @@ export default function learn(state = initial_learnstate, action) {
 				_i = 0;
 			for(let _l = 0; _l <= miniseq_count; _l++) {
 				let _s = 0,
-					_a = {completed: false, slots: []}
+					_a = {completed: false, current: false, slots: []}
 				while(_s < 5 + _n) {
 					_a.slots.push(action.slots[_i])
 					_s++
@@ -118,10 +119,15 @@ export default function learn(state = initial_learnstate, action) {
 					complete_slot_count = 0,
 					seq = miniseqs[loop];
 				for(let i = 0; i < seq['slots'].length; i++) {
-					if(seq['slots'][i] !== undefined && seq['slots'][i].completed == true) {
+					let slots = seq['slots'],
+						slot = slots[i];
+					if(slot !== undefined && slot.order == state.current_sequence.position) {
+						seq['current'] = true
+					}
+					if(slot !== undefined && slot.completed == true) {
 						complete_slot_count++
 					}
-					if(seq['slots'][i] == (undefined || null)) {
+					if(slot == (undefined || null)) {
 						undefinedcount++
 						delete seq['slots'][i]
 					}
@@ -133,9 +139,15 @@ export default function learn(state = initial_learnstate, action) {
 					delete miniseqs[loop]
 				}
 			}
-			console.log(miniseqs)
+			let current_miniseq = miniseqs.filter(seq => seq.current)[0],
+				cmi = miniseqs.indexOf(current_miniseq),
+				slot_index = current_miniseq.slots.indexOf(state.current_slot)
 			return {
-				...state
+				...state,
+				slot_index: slot_index,
+				miniseqs: miniseqs,
+				current_miniseq: current_miniseq,
+				current_miniseq_index: cmi
 			}
 		case REQUEST_LEARN:
 			return {

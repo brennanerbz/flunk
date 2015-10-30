@@ -18,6 +18,12 @@ import Hint from '../../components/Learn/Hint/Hint';
 import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 
 @connect(state => ({
+	slot_index: state.learn.slot_index,
+	miniseqs: state.learn.miniseqs,
+	current_miniseq: state.learn.current_miniseq,
+	current_miniseq_index: state.learn.current_miniseq_index,
+	isShowingCompleteMiniseq: state.learn.isShowingCompleteMiniseq,
+
 	showHint: state.learn.isShowingHint,
 	isGrading: state.learn.isGrading,
 	isFetchingTrials: state.learn.isFetchingTrials,

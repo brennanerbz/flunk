@@ -82,6 +82,11 @@ ul {
 	&:focus {
 		outline: none;
 	}
+	&.disabled {
+		cursor: auto;
+		background: #ccc;
+		color: #555549;
+	}
 }
 :global .button-primary {
 	background-color: #52B78A;	

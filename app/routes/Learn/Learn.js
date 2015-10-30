@@ -18,6 +18,7 @@ import Hint from '../../components/Learn/Hint/Hint';
 import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 
 @connect(state => ({
+	showHint: state.learn.isShowingHint,
 	isGrading: state.learn.isGrading,
 	isFetchingTrials: state.learn.isFetchingTrials,
 	showLearn: state.learn.isFetchingLearn,
@@ -126,6 +127,7 @@ export default class Learn extends Component {
 				showCompletedSequence, 
 				showCorrect, 
 				showFeedback,
+				showHint,
 				skipSlot, 
 				nextSlot,
 				trial,
@@ -170,10 +172,9 @@ export default class Learn extends Component {
 										: null
 									}
 									{
-										!showCorrect && !showCompletedSequence && current_slot !== undefined
-										? <Hint hints={current_slot.augs !== undefined 
-												? current_slot.augs : null} 
-												{...this.props} />
+										(!showCorrect && !showCompletedSequence) && (showHint && trial.augs !== null)
+										? <Hint hints={trial.augs.length > 0 ? trial.augs : null} 
+												{...this.props}/>
 										: null
 									}
 									<div className="feedback">

@@ -135,12 +135,13 @@ export default function learn(state = initial_learnstate, action) {
 				trial: action.trials.slice(-1)[0]
 			}
 		case NEW_TRIAL_SUCCESS:
-			let _newtrials = state.trials.concat(action._trial);
-				// _shouldShowHint = action._trial.augs.length > 0 
-				// 				&& action._trial.augs[0].indexOf(action._trial.censored_cue) !== -1;
+			const _newtrials = state.trials.concat(action._trial),
+				 showHint = true;
+				// _shouldShowHint = action._trial.augs.length > 0 ? true : false;
+								// && action._trial.augs[0].indexOf(action._trial.censored_cue) !== -1;
 			return {
 				...state,
-				// isShowingHint: _shouldShowHint,
+				isShowingHint: showHint,
 				isFetchingLearn: false,
 				isFetchingTrials: false,
 				isShowingCorrect: false,
@@ -190,14 +191,14 @@ export default function learn(state = initial_learnstate, action) {
 				isGrading: false,
 				current_slot: Object.assign({...state.current_slot}, {format: action.new_format})
 			}
-		case NEW_HINT_SUCCESS:
-			// let shouldShowHint = action.new_aug !== undefined 
-			// 				   && action.new_aug.indexOf(state.trial.censored_cue) !== -1;
-			return {
-				...state,
-				// isShowingHint: shouldShowHint,
-				trial: Object.assign({...state.trial}, {augs: action.new_aug})
-			}
+		// case NEW_HINT_SUCCESS:
+		// 	let shouldShowHint = action.new_aug !== undefined ? true : false;
+		// 					   // && action.new_aug.indexOf(state.trial.censored_cue) !== -1;
+		// 	return {
+		// 		...state,
+		// 		isShowingHint: shouldShowHint,
+		// 		trial: Object.assign({...state.trial}, {augs: action.new_aug})
+		// 	}
 		case SHOW_CORRECT:
 			return {
 				...state,

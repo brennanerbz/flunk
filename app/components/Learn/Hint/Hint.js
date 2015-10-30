@@ -7,13 +7,10 @@ export default class Hint extends Component {
 	}
 
 	render() {
-		const { hints, current_slot } = this.props;
-		let hint;
-		if(hints !== null) {
-			hint = hints[0]
-		}
+		const { hints } = this.props,
+			  hint = hints[0];
 		return (
-			false
+			hint !== null
 			? <div className="hint_container">				
 				<p className="hint">{hint}</p>
 				<p className="hint_source">Source</p>

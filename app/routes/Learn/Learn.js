@@ -190,12 +190,3 @@ export default class Learn extends Component {
 	}
 }
 
-
-// Always render the card, and then decide to render the cue in the component below
-// {
-// 	showCorrect
-// 	? <a onClick={() => goToUnfinished('next')}>Click to continue</a>
-// 	: null
-// }
-
-

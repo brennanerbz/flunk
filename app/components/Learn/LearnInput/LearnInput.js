@@ -43,8 +43,8 @@ export default class LearnInput extends Component {
 
 	handleReactionTime = () => {
 		if (this.state.reaction_time !== null ) { return; }
-		const t = new Date()
-		const reaction_time = t.toISOString().replace("T", " ").replace("Z", "")
+		const t = new Date(),
+			  reaction_time = t.toISOString().replace("T", " ").replace("Z", "")
 		this.setState({
 			reaction_time: reaction_time
 		});
@@ -52,8 +52,8 @@ export default class LearnInput extends Component {
  
 	handleSubmit = (e) => {
 		e.preventDefault()
-		const { sendResponse } = this.props;
-		const d = new Date(),
+		const { sendResponse } = this.props,
+			  d = new Date(),
 			  response_time = d.toISOString().replace('T', " ").replace("Z", ""),
 			  reaction_time = this.state.reaction_time !== null ? this.state.reaction_time : response_time,
 			  answer = this.state.answer.toLowerCase().trim(),
@@ -72,10 +72,6 @@ export default class LearnInput extends Component {
 		});
 	}
 
-	handleKeyDown(event) {
-		this.handleReactionTime()		
-	}
-
 	render() {
 		return(
 			<div className="input_box">	
@@ -84,7 +80,7 @@ export default class LearnInput extends Component {
 			    	   ref="answerbox"
 			    	   value={this.state.answer}
 			    	   onChange={this.handleChange}
-			    	   onKeyDown={::this.handleKeyDown}
+			    	   onKeyDown={::this.handleReactionTime}
 			    	   type="text" 
 			    	   className={classnames({'correct_answer': this.state.correct})}/>
 			   	</form>

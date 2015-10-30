@@ -84,8 +84,11 @@ ul {
 	}
 	&.disabled {
 		cursor: auto;
-		background: #ccc;
-		color: #555549;
+		background: #DDDDE0;
+		color: #fff;
+		&:hover {
+			box-shadow: none;
+		}
 	}
 }
 :global .button-primary {

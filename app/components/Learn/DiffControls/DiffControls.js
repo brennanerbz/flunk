@@ -18,14 +18,29 @@ export default class DiffControls extends Component {
 		this.props.hint()
 	}
 
+	shouldRenderHintButton() {
+		const trial_hints  = this.props.trial !== undefined ? this.props.trial.augs : null,
+			  slot_hints = this.props.current_slot !== undefined ? this.props.current_slot.augs : null,
+			  current_hint = trial_hints !== null ? trial_hints[0] : '';
+		if((trial_hints && slot_hints) !== null) {
+			if(slot_hints.length === 0) {
+				return true;
+			}
+			if(slot_hints.slice(-1)[0].indexOf(trial_hints[0]) !== -1) {
+				return true;
+			}
+		}
+	}
+
 	render() {
 		const more = require('../../../assets/more_icon.png'),
 			  trial_augs = this.props.trial !== undefined ? this.props.trial.augs : null,
-			  slot_augs = this.props.trials !== undefined ? this.props.current_slot.augs : null	  
+			  slot_augs = this.props.trials !== undefined ? this.props.current_slot.augs : null,
+			  shouldshow = ::this.shouldRenderHintButton();  
 		return(
 			<span className="diff_controls">
 				<button className={classnames("button button-primary", 
-						{"disabled": trial_augs !== null && trial_augs.length === 0 ? true : false})}
+						{"disabled": shouldshow})}
 					    onClick={::this.getHint}>Hint</button>
 				<a className="toggle_btn"
 				   ref="more_actions"				   

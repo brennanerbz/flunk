@@ -20,12 +20,7 @@ export default class DiffControls extends Component {
 
 	shouldHideHintButton(trial_hints, slot_hints) {
 		if((trial_hints && slot_hints) !== null) {
-			if(slot_hints.length === 0) {
-				return true;
-			}
-			if(slot_hints.slice(-1)[0].indexOf(trial_hints[0]) !== -1) {
-				return true;
-			}
+			return slot_hints.length === 0 || slot_hints.slice(-1)[0].indexOf(trial_hints[0]) !== -1
 		}
 	}
 

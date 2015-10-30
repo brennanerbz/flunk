@@ -44,7 +44,7 @@ export default class LearnCard extends Component {
 								showCorrect
 								? null
 								: <a className="dont_know_btn link"
-							   		 onClick={console.log("TODO: link don\'t know to handleSubmit")}>
+							   		 onClick={(event) => this.refs.learn_input.handleSubmit(event)}>
 							  		 Don't know
 								 </a>
 							}						

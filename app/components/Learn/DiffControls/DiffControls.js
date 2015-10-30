@@ -12,11 +12,17 @@ export default class DiffControls extends Component {
 		})
 	}
 
+	getHint() {
+		console.log("hint coming...")
+		this.props.hint()
+	}
+
 	render() {
 		const more = require('../../../assets/more_icon.png');		  
 		return(
 			<span className="diff_controls">
-				<button className="button button-primary">Hint</button>
+				<button className="button button-primary"
+					    onClick={::this.getHint}>Hint</button>
 				<a className="toggle_btn"
 				   ref="more_actions"				   
 				   title="More actions"

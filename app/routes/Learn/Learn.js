@@ -55,11 +55,10 @@ export default class Learn extends Component {
 	}
 
 	componentWillUnmount() {
+		window.removeEventListener('keyup', ::this.handleKeyUp)
 		const { clearLearn } = this.props;
 		clearLearn()
-		window.removeEventListener('keyup', ::this.handleKeyUp)
 	}
-
 
 	keyDownHandlers = {
 		37(event) {
@@ -130,6 +129,7 @@ export default class Learn extends Component {
 				showFeedback,
 				skipSlot, 
 				nextSlot,
+				trial,
 				params} = this.props;
 		return (
 			<div className="learn_page">
@@ -137,11 +137,10 @@ export default class Learn extends Component {
 					!showLearn && slots !== undefined
 					? <div>
 						<SeqControl {...this.props}/>
-							<div className="no_sidenav_container learn_container"
-								 onKeyUp={::this.handleKeyUp}>
+							<div className="no_sidenav_container learn_container">
 								<div>
 									{
-										current_slot !== undefined || !isFetchingTrials
+										current_slot !== undefined && trial !== undefined
 										? <LearnCard 
 											   ref="learn_card"
 											   slot={current_slot !== undefined ? current_slot : null} 
@@ -159,7 +158,7 @@ export default class Learn extends Component {
 									}												
 									{
 										!showCorrect && !showCompletedSequence
-										? <DiffControls />
+										? <DiffControls {...this.props} />
 										: null
 									}
 									{

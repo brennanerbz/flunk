@@ -474,14 +474,15 @@ export function hint() {
 		dispatch(willShowHint())
 		try {
 			let current_trial = getState().learn.current_trial,
-				augs = getState().learn.current_slot['augs'],
-				recent_aug = current_trial['augs'][0],
-				index = augs.indexOf(recent_aug),
+				current_slot = getState().learn.current_slot,
+				augs = current_slot['augs'],
+				recent_aug = current_trial.augs ? current_trial['augs'][0] : null,
+				index = recent_aug !== null ? augs.indexOf(recent_aug) : 0,
 				next_index = index + 1;
 			if (next_index >= augs.length) {
 				next_index = augs.length;
 			}
-			if (augs.length > 0 && recent_aug == undefined) {
+			if (augs.length > 0 && recent_aug == null) {
 				next_index = 0;
 			}
 			let new_aug = augs[next_index]
@@ -678,7 +679,7 @@ export function skipSlot() {
 				type: 'updating_position'
 			})
 			dispatch(updateSequence(current_sequence))
-		} catch(err) {
+		} catch(err) { 
 			dispatch({
 				type: SKIP_FAILURE,
 				error: Error(err)

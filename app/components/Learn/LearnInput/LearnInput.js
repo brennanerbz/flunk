@@ -7,7 +7,7 @@ export default class LearnInput extends Component {
 	}
 
 	state = {
-		answer: '',
+		answer: ' ',
 		reaction_time: null,
 		correct: false
 	}		
@@ -29,8 +29,9 @@ export default class LearnInput extends Component {
 	}
 
 	componentWillUpdate(nextProps, nextState) {
+		let answerbox = this.refs.answerbox;
 		setTimeout(() => {
-			this.refs.answerbox.focus()	
+			answerbox.focus()	
 		}, 5)
 	}
 
@@ -52,26 +53,24 @@ export default class LearnInput extends Component {
 	handleSubmit = (e) => {
 		e.preventDefault()
 		const { updateTrial } = this.props;
-		const d = new Date()
-		const response_time = d.toISOString().replace('T', " ").replace("Z", "")
-		const reaction_time = this.state.reaction_time !== null ? this.state.reaction_time : response_time;
-		const answer = this.state.answer.toLowerCase().trim()
-		updateTrial(
-			{
-				reaction_time: reaction_time,
-				response_time: response_time,
-				answer: answer,
-				answer_clicked: false,
-				answer_by_letter: false,
-				taps: null
-				
-			}
-		)
+		const d = new Date(),
+			  response_time = d.toISOString().replace('T', " ").replace("Z", ""),
+			  reaction_time = this.state.reaction_time !== null ? this.state.reaction_time : response_time,
+			  answer = this.state.answer.toLowerCase().trim(),
+			  response = {
+			  	reaction_time: reaction_time,
+			  	response_time: response_time,
+			  	answer: answer,
+			  	answer_clicked: false,
+			  	answer_by_letter: false,
+			  	taps: null
+			  }
+		updateTrial(response)
 		this.setState({
 			answer: '',
 			reaction_time: null
 		});
-		
+		console.log(response)
 	}
 
 	handleKeyDown(event) {

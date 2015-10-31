@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import * as learnactions from '../../actions/learnv2';
 import * as setactions from '../../actions/usersets';
 
@@ -21,8 +22,9 @@ import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 	slot_index: state.learn.slot_index,
 	miniseqs: state.learn.miniseqs,
 	current_miniseq: state.learn.current_miniseq,
-	current_miniseq_index: state.learn.current_miniseq_index,
+	cmi: state.learn.current_miniseq_index,
 	isShowingCompleteMiniseq: state.learn.isShowingCompleteMiniseq,
+	isUpdatingState: state.learn.isUpdatingState,
 
 	showHint: state.learn.isShowingHint,
 	isGrading: state.learn.isGrading,
@@ -49,7 +51,8 @@ export default class Learn extends Component {
 	}
 
 	state = {
-		flag: false
+		flag: false,
+		start: null
 	}
 
 	componentWillMount() {
@@ -59,6 +62,15 @@ export default class Learn extends Component {
 
 	componentDidMount() {
 		$(window).on('keyup', ::this.handleKeyUp)
+		
+	}
+
+	componentWillReceiveProps(nextProps){
+		if(this.props.current_slot.id !== nextProps.current_slot.id) {
+			this.setState({
+				start: null
+			});
+		}
 	}
 
 	componentWillUnmount() {
@@ -85,7 +97,25 @@ export default class Learn extends Component {
 			}
 		},
 		13(event) {
-			const { current_slot, isGrading, skipSlot } = this.props;
+			const { current_slot, trial, isGrading, skipSlot } = this.props;
+			var now, start, diff, difftwo;
+			if(current_slot.format == 'copy') {
+				if(this.state.start == null) {
+					this.setState({
+						start: Date.now()
+					});
+				}
+				if(this.state.start) {
+					now = Date.now(),
+					start = this.state.start,
+					diff = moment(now).diff(start)
+					difftwo = moment(trial.start).diff(now)
+				}
+				console.log(difftwo)
+				if(diff > 1000) {
+					// skipSlot() // awkward correct view flash when change
+				}
+			}			
 			if(!current_slot.completed) {
 				this.refs.learn_card.sendEvent(event)
 				return true;
@@ -102,6 +132,7 @@ export default class Learn extends Component {
     		return this.keyDownHandlers[event.which].call(this, event);
   		}
 	}
+
 	
 	handleKeyUp(event) {
 		const { showCorrect, showCompletedSequence, isGrading } = this.props;

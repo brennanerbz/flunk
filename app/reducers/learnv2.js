@@ -67,6 +67,8 @@ import {
 	MOVE_TO_UNFINISHED_MINISEQ,
 	SHOW_COMPLETE_MINISEQ,
 
+	UPDATING_STATE
+
 } from '../actions/learnv2';
 import _ from 'lodash';
 
@@ -96,10 +98,29 @@ const initial_learnstate = {
 	miniseqs: [],
 	current_miniseq: {},
 	current_miniseq_index: null,
-	isShowingCompleteMiniseq: false
+	isShowingCompleteMiniseq: false,
+
+	isUpdatingState: false
 }
+
+Array.prototype.clean = function(deleteValue) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] == deleteValue) {         
+      this.splice(i, 1);
+      i--;
+    }
+  }
+  return this;
+};
+
 export default function learn(state = initial_learnstate, action) {
 	switch(action.type) {
+
+		case UPDATING_STATE: 
+			return {
+				...state,
+				isUpdatingState: true
+			}
 
 		case SHOW_COMPLETE_MINISEQ:  
 			/*
@@ -138,7 +159,8 @@ export default function learn(state = initial_learnstate, action) {
 			return {
 				...state,
 				slot_index: index,
-				current_miniseq: _currminiseq
+				current_miniseq: _currminiseq,
+				isUpdatingState: false
 			}
 		case CREATE__MINISEQS:
 			let miniseqs = [],
@@ -163,6 +185,7 @@ export default function learn(state = initial_learnstate, action) {
 					seq = miniseqs[loop];
 				for(var i = 0; i < seq['slots'].length; i++) {
 					let slots = seq['slots'],
+						new_slots;
 						slot = slots[i];
 					if(slot !== undefined && slot.order == state.current_sequence.position) {
 						seq['current'] = true
@@ -170,12 +193,9 @@ export default function learn(state = initial_learnstate, action) {
 					if(slot !== undefined && slot.completed == true) {
 						complete_slot_count++
 					}
-					if(typeof slot == 'undefined') {
-						undefinedcount++
-						slots.splice(i, 1)
-						delete slots[i] // use splice instead so the Array.length is updated
-					}
+					seq.slots.clean(undefined)
 				}
+
 				if(complete_slot_count == seq['slots'].length) {
 					seq['completed'] = true;
 				}
@@ -269,7 +289,8 @@ export default function learn(state = initial_learnstate, action) {
 				...state,
 				isShowingCorrect: _correctslot,
 				current_sequence: action.sequence,
-				current_slot: _slot
+				current_slot: _slot,
+				isUpdatingState: false
 			}
 		case UPDATE_SLOT_SUCCESS:
 			return {

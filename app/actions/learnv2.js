@@ -164,6 +164,7 @@ export function updateSequence(_sequence) {
 					delete updated_sequence[_seqprop]
 				}
 			}
+			dispatch({type: UPDATING_STATE})
 			await axios.put(`${api_url}/sequences/${_sequence.id}`, 
 				updated_sequence
 			).then(res => {
@@ -214,6 +215,7 @@ export function fetchSlots(sequence_id) {
 					dispatch({type: SHOW_COMPLETED_SEQUENCE})
 				}
 				await dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
+				
 				await dispatch({type: CREATE__MINISEQS, slots})
 				await dispatch(fetchTrials())
 			}			
@@ -810,6 +812,8 @@ export function completeMiniSequence() {
 		}
 	}
 }
+
+export const UPDATING_STATE = 'UPDATING_STATE';
 
 
 

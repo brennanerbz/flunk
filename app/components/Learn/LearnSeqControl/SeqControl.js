@@ -17,13 +17,14 @@ export default class SeqControl extends Component {
 	}
 
 	render() {
+		const { cmi } = this.props;
 		return(
 			<div className="seq_control">
 				<div className="round_divider">
 					<hr className="separator"/>
 					<i className="copy_only"/>
 					<div className="round_divider_label">
-					Round 1
+					Round {cmi + 1}
 					</div> 
 				</div>
 				<SignPosts {...this.props} />

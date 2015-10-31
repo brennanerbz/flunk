@@ -6,8 +6,10 @@ export default class ShowCorrect extends Component {
 	}	
 	
 	render() {
-		const { current_slot, trial, showCompletedSequence } = this.props;
-		console.log(showCompletedSequence)
+		const { current_slot,
+			    trial, 
+			    showCompletedSequence
+			  } = this.props;
 		return(
 			<div className="show_correct_container">
 				<div className="show_correct">

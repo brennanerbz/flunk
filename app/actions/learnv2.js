@@ -550,7 +550,15 @@ export function updateTrial(response) { // TODO: make sure to pass in object fro
 					return;
 				} 
 				dispatch(adapt(updated_trial))
-			}).then(() => {
+			})
+			.then(() => {
+				let current_miniseq = getState().learn.current_miniseq,
+					slots = current_miniseq.slots;
+				if(slots.filter(slot => !slot.completed).length === 0) {
+					dispatch({type: SHOW_COMPLETE_MINISEQ})
+				}
+			})
+			.then(() => {
 				let slots = getState().learn.slots,
 					current_sequence = getState().learn.current_sequence;
 				if(slots.filter(slot => !slot.completed).length === 0) {
@@ -768,7 +776,35 @@ export const CREATE__MINISEQS = 'CREATE__MINISEQS';
 export const UPDATE_CURRENT_MINISEQ = 'UPDATE_CURRENT_MINISEQ';
 export const MOVE_TO_UNFINISHED_MINISEQ = 'MOVE_TO_UNFINISHED_MINISEQ';
 export const SHOW_COMPLETE_MINISEQ = 'SHOW_COMPLETE_MINISEQ';
-
+export const MINISEQ_ERROR = 'MINISEQ_ERROR';
+export function completeMiniSequence() {
+	return async(dispatch, getState) => {
+		try {
+			let current_sequence = getState().learn.current_sequence,
+				miniseqs = getState().learn.miniseqs,
+				current_miniseq = getState().learn.current_miniseq,
+				length = miniseqs.length,
+				cmi = getState().learn.current_miniseq_index,
+				new_index = findUnfinished(cmi, length, miniseqs), // @params: index, length and slots
+				new_miniseq = miniseqs[new_index],
+				new_position = new_miniseq.slots[0].order;
+			current_sequence = Object.assign({...current_sequence}, {position: new_position, type: 'updating_position'});
+			new_miniseq.current = true;
+			await dispatch({type: MOVE_TO_UNFINISHED_MINISEQ, new_miniseq, new_index})
+			await dispatch(updateSequence(current_sequence))
+			// get the  miniseqs and current miniseq state
+			// get the index of miniseq and the slot_index
+			// flush through all the miniseqs and find the next unfinished. use the same findUnfinished fn()
+			// await dispatch movetounfinished, which will update state of current minisequence
+			// await dispatch update sequence, which will update the db sequence with new position 
+		} catch(err) {
+			dispatch({
+				type: MINISEQ_ERROR,
+				error: Error(err)
+			})
+		}
+	}
+}
 
 
 

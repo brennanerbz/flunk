@@ -94,12 +94,41 @@ const initial_learnstate = {
 
 	slot_index: null,
 	miniseqs: [],
-	current_miniseq: [],
+	current_miniseq: {},
 	current_miniseq_index: null,
 	isShowingCompleteMiniseq: false
 }
 export default function learn(state = initial_learnstate, action) {
 	switch(action.type) {
+
+		case SHOW_COMPLETE_MINISEQ: 
+			console.log("Showing complete minisequence") 
+			/*
+			display the results from the previous 5 slot / trials 
+			do we have to call API for this, to get each trial?
+			for now, just show the previous 5 slots with their correct target answers
+			*/
+			return {
+				...state,
+				isShowingCompleteMiniseq: true,
+				current_miniseq: Object.assign({...state.current_miniseq}, {completed: true})
+			}
+		case MOVE_TO_UNFINISHED_MINISEQ: 
+			/*
+			need to update the miniseqs array with current[mini_seq] == complete. use current_mini index
+			write a function that iterates over miniseqs array finding the next incomplete minisequence,
+			update the state to reflect the new current
+			this will probably be an action creator as to update the db with sequence position 
+			we need to update the sequence position whenever someone does anything on page: click, touch, navigate away
+			*/
+			console.log("----")
+			console.log("new index")
+			console.log(action.new_index)
+ 			return {
+				...state,
+				current_miniseq_index: action.new_index,
+				current_miniseq: action.new_miniseq
+			}
 		
 		case UPDATE_CURRENT_MINISEQ:
 			let _newslot = action.slot,
@@ -115,11 +144,6 @@ export default function learn(state = initial_learnstate, action) {
 			}
 			let index = findIndex()	
 			_currminiseq['slots'][index] = _newslot
-			// _currminiseq['slots'].map(slot => {
-			// 	if(slot.id === _newslotid) {
-			// 		return slot = _newslot
-			// 	}
-			// })
 			return {
 				...state,
 				slot_index: index,
@@ -146,7 +170,7 @@ export default function learn(state = initial_learnstate, action) {
 				var undefinedcount = 0,
 					complete_slot_count = 0,
 					seq = miniseqs[loop];
-				for(let i = 0; i < seq['slots'].length; i++) {
+				for(var i = 0; i < seq['slots'].length; i++) {
 					let slots = seq['slots'],
 						slot = slots[i];
 					if(slot !== undefined && slot.order == state.current_sequence.position) {
@@ -155,9 +179,10 @@ export default function learn(state = initial_learnstate, action) {
 					if(slot !== undefined && slot.completed == true) {
 						complete_slot_count++
 					}
-					if(slot == (undefined || null)) {
+					if(typeof slot == 'undefined') {
 						undefinedcount++
-						delete seq['slots'][i]
+						slots.splice(i, 1)
+						delete slots[i] // use splice instead so the Array.length is updated
 					}
 				}
 				if(complete_slot_count == seq['slots'].length) {
@@ -167,6 +192,7 @@ export default function learn(state = initial_learnstate, action) {
 					delete miniseqs[loop]
 				}
 			}
+			// function to iterate over miniseqs and find the current based on current position, and completion. The current position of the global sequence should be correct. Just need to verify. 
 			let current_miniseq = miniseqs.filter(seq => seq.current)[0],
 				cmi = miniseqs.indexOf(current_miniseq),
 				slot_index = current_miniseq.slots.indexOf(state.current_slot)
@@ -201,6 +227,7 @@ export default function learn(state = initial_learnstate, action) {
 			return {
 				...state,
 				isFetchingSequence: false,
+				isShowingCompleteMiniseq: false,
 				current_sequence: action.sequence,
 				isShowingCompletedSequence: action.sequence.completed
 			}
@@ -216,6 +243,7 @@ export default function learn(state = initial_learnstate, action) {
 			return {
 				...state,
 				isFetchingSlots: false,
+				isShowingCompleteMiniseq: false,
 				isShowingCorrect: show_correct,
 				slots: action.slots,
 				current_slot: slot
@@ -238,6 +266,7 @@ export default function learn(state = initial_learnstate, action) {
 				isFetchingLearn: false,
 				isFetchingTrials: false,
 				isShowingCorrect: false,
+				isShowingCompleteMiniseq: false,
 				trials: _newtrials,
 				current_trial: action._trial,
 				trial: action._trial

@@ -140,6 +140,7 @@ export default class Learn extends Component {
 				isFetchingTrials,
 				showLearn,
 				showCompletedSequence, 
+				isShowingCompleteMiniseq,
 				showCorrect, 
 				showFeedback,
 				showHint,
@@ -170,10 +171,18 @@ export default class Learn extends Component {
 											   {...this.props}/>
 										: null
 									}
-									
+
 									{
 										showCorrect 
-										? <ShowCorrect {...this.props}/>
+										? <ShowCorrect correctMiniSequence={isShowingCompleteMiniseq} 
+													   {...this.props}/>
+										: null
+									}
+									{
+										isShowingCompleteMiniseq
+										? <a className="link" 
+										     onClick={() => this.props.completeMiniSequence()}>
+										     Go to next mini sequence</a>
 										: null
 									}												
 									{

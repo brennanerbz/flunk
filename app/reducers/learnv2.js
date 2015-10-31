@@ -1,3 +1,4 @@
+
 import {
 	REQUEST_LEARN,
 	RECEIVE_LEARN_SUCCESS,
@@ -59,7 +60,13 @@ import {
 	MOVE_SLOT_SUCCESS,
 	MOVE_SLOT_FAILURE,
 
-	CLEAR_LEARN
+	CLEAR_LEARN,
+
+	CREATE__MINISEQS,
+	UPDATE_CURRENT_MINISEQ,
+	MOVE_TO_UNFINISHED_MINISEQ,
+	SHOW_COMPLETE_MINISEQ,
+
 } from '../actions/learnv2';
 import _ from 'lodash';
 
@@ -75,15 +82,101 @@ const initial_learnstate = {
 	isShowingCompletedSequence: false,
 	isShowingFeedback: false,
 	isShowingHint: false,
+
 	current_sequence: {},
+
 	slots: [],
 	current_slot: {},
+
 	trials: [],
 	current_trial: {},
-	trial: {}
+	trial: {},
+
+	slot_index: null,
+	miniseqs: [],
+	current_miniseq: [],
+	current_miniseq_index: null,
+	isShowingCompleteMiniseq: false
 }
 export default function learn(state = initial_learnstate, action) {
 	switch(action.type) {
+		
+		case UPDATE_CURRENT_MINISEQ:
+			let _newslot = action.slot,
+				_newslotid = _newslot.id,
+			    _currminiseq = state.current_miniseq,
+			    _updatedminiseq;
+			function findIndex(){
+				for(var _in = 0; _in < _currminiseq.slots.length; _in++) {
+					if(_currminiseq.slots[_in].id === _newslotid) {
+						return _in
+					}
+				}
+			}
+			let index = findIndex()	
+			_currminiseq['slots'][index] = _newslot
+			// _currminiseq['slots'].map(slot => {
+			// 	if(slot.id === _newslotid) {
+			// 		return slot = _newslot
+			// 	}
+			// })
+			return {
+				...state,
+				slot_index: index,
+				current_miniseq: _currminiseq
+			}
+		case CREATE__MINISEQS:
+			let miniseqs = [],
+				length = state.current_sequence.length,
+				miniseq_count = Math.floor(length / 5),
+				_n = 0,
+				_i = 0;
+			for(let _l = 0; _l <= miniseq_count; _l++) {
+				let _s = 0,
+					_a = {completed: false, current: false, slots: []}
+				while(_s < 5 + _n) {
+					_a.slots.push(action.slots[_i])
+					_s++
+					_i++
+				}
+				_n + 4
+				miniseqs.push(_a)
+			}
+			for(let loop = 0; loop < miniseqs.length; loop++) {
+				var undefinedcount = 0,
+					complete_slot_count = 0,
+					seq = miniseqs[loop];
+				for(let i = 0; i < seq['slots'].length; i++) {
+					let slots = seq['slots'],
+						slot = slots[i];
+					if(slot !== undefined && slot.order == state.current_sequence.position) {
+						seq['current'] = true
+					}
+					if(slot !== undefined && slot.completed == true) {
+						complete_slot_count++
+					}
+					if(slot == (undefined || null)) {
+						undefinedcount++
+						delete seq['slots'][i]
+					}
+				}
+				if(complete_slot_count == seq['slots'].length) {
+					seq['completed'] = true;
+				}
+				if(undefinedcount == seq['slots'].length) {
+					delete miniseqs[loop]
+				}
+			}
+			let current_miniseq = miniseqs.filter(seq => seq.current)[0],
+				cmi = miniseqs.indexOf(current_miniseq),
+				slot_index = current_miniseq.slots.indexOf(state.current_slot)
+			return {
+				...state,
+				slot_index: slot_index,
+				miniseqs: miniseqs,
+				current_miniseq: current_miniseq,
+				current_miniseq_index: cmi
+			}
 		case REQUEST_LEARN:
 			return {
 				...state,

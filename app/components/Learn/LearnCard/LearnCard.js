@@ -11,8 +11,8 @@ export default class LearnCard extends Component {
 	static propTypes = {
 		
 	}
-	sendEvent(event) {
-		this.refs.learn_input.handleSubmit(event)
+	sendEvent(event, arg) {
+		this.refs.learn_input.handleSubmit(event, arg)
 	}
 	render() {
 		const { showCorrect, 

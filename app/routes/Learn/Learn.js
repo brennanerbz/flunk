@@ -18,6 +18,12 @@ import Hint from '../../components/Learn/Hint/Hint';
 import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 
 @connect(state => ({
+	slot_index: state.learn.slot_index,
+	miniseqs: state.learn.miniseqs,
+	current_miniseq: state.learn.current_miniseq,
+	current_miniseq_index: state.learn.current_miniseq_index,
+	isShowingCompleteMiniseq: state.learn.isShowingCompleteMiniseq,
+
 	showHint: state.learn.isShowingHint,
 	isGrading: state.learn.isGrading,
 	isFetchingTrials: state.learn.isFetchingTrials,
@@ -118,6 +124,15 @@ export default class Learn extends Component {
 		updateTrial(response)
  	}
 
+ 	handleHint(event) {
+ 		const hint = {type: "hint"} 
+ 		this.refs.learn_card.sendEvent(event, hint)
+ 	}
+
+ 	handleGetHint(response) {
+ 		this.props.hint(response)
+ 	}
+
 	render() {
 		const { current_slot,
 				slots,
@@ -145,7 +160,8 @@ export default class Learn extends Component {
 									{
 										current_slot !== undefined && trial !== undefined
 										? <LearnCard 
-											   sendResponse={(response) => ::this.handleUserResponse(response)}
+											   submitAnswer={(response) => ::this.handleUserResponse(response)}
+											   getHint={(response) => ::this.handleGetHint(response)}
 											   ref="learn_card"
 											   slot={current_slot !== undefined ? current_slot : null} 
 											   slots={slots} 
@@ -162,7 +178,7 @@ export default class Learn extends Component {
 									}												
 									{
 										!showCorrect && !showCompletedSequence
-										? <DiffControls {...this.props} />
+										? <DiffControls getHint={::this.handleHint} {...this.props} />
 										: null
 									}
 									{

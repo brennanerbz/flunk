@@ -1,3 +1,4 @@
+
 import {
 	REQUEST_LEARN,
 	RECEIVE_LEARN_SUCCESS,
@@ -81,9 +82,12 @@ const initial_learnstate = {
 	isShowingCompletedSequence: false,
 	isShowingFeedback: false,
 	isShowingHint: false,
+
 	current_sequence: {},
+
 	slots: [],
 	current_slot: {},
+
 	trials: [],
 	current_trial: {},
 	trial: {},
@@ -97,6 +101,30 @@ const initial_learnstate = {
 export default function learn(state = initial_learnstate, action) {
 	switch(action.type) {
 		
+		case UPDATE_CURRENT_MINISEQ:
+			let _newslot = action.slot,
+				_newslotid = _newslot.id,
+			    _currminiseq = state.current_miniseq,
+			    _updatedminiseq;
+			function findIndex(){
+				for(var _in = 0; _in < _currminiseq.slots.length; _in++) {
+					if(_currminiseq.slots[_in].id === _newslotid) {
+						return _in
+					}
+				}
+			}
+			let index = findIndex()	
+			_currminiseq['slots'][index] = _newslot
+			// _currminiseq['slots'].map(slot => {
+			// 	if(slot.id === _newslotid) {
+			// 		return slot = _newslot
+			// 	}
+			// })
+			return {
+				...state,
+				slot_index: index,
+				current_miniseq: _currminiseq
+			}
 		case CREATE__MINISEQS:
 			let miniseqs = [],
 				length = state.current_sequence.length,

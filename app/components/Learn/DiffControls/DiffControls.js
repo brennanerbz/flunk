@@ -13,11 +13,7 @@ export default class DiffControls extends Component {
 		})
 	}
 
-	getHint() {
-		console.log("hint coming...")
-		this.props.hint()
-	}
-
+	
 	shouldHideHintButton(trial_hints, slot_hints) {
 		if((trial_hints && slot_hints) !== null) {
 			return slot_hints.length === 0 || slot_hints.slice(-1)[0].indexOf(trial_hints[0]) !== -1
@@ -33,7 +29,7 @@ export default class DiffControls extends Component {
 			<span className="diff_controls">
 				<button className={classnames("button button-primary", 
 						{"disabled": shouldhide })}
-					    onClick={::this.getHint}>Hint</button>
+					    onClick={this.props.getHint}>Hint</button>
 				<a className="toggle_btn"
 				   ref="more_actions"				   
 				   title="More actions"

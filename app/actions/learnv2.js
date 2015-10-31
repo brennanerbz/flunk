@@ -170,6 +170,8 @@ export function updateSequence(_sequence) {
 				const sequence = res.data;
 				dispatch({type: UPDATE_SEQUENCE_SUCCESS, sequence}) 
 			}).then(() => {
+				let slot = getState().learn.current_slot
+				dispatch({ type: UPDATE_CURRENT_MINISEQ, slot })
 				if(!getState().learn.current_sequence.completed) {
 					dispatch(fetchTrials())
 				} else {
@@ -245,6 +247,7 @@ export function updateSlot(slot) {
 			).then(res => {
 				let slot = res.data;
 				dispatch({type: UPDATE_SLOT_SUCCESS, slot})
+				dispatch({ type: UPDATE_CURRENT_MINISEQ, slot })
 			})
 		} catch(err) {
 			dispatch({
@@ -375,12 +378,12 @@ export function newTrial(trial) {
 			if(current_slot.completed) {
 				return;
 			}
-			if (trial.type == 'return') {
-				for(var _trialprop in trial) {
-					if(trial[_trialprop] instanceof Array) {
-						trial[_trialprop] = trial[_trialprop].join("|")
-					}
+			for(var _trialprop in trial) {
+				if(trial[_trialprop] instanceof Array) {
+					trial[_trialprop] = trial[_trialprop].join("|")
 				}
+			}
+			if (trial.type == 'return') {
 				new_trial = trial
 			} else if (trial.type == null) {
 				new_trial = Object.assign({..._default_trial}, {
@@ -471,27 +474,34 @@ function willShowHint() {
 		type: NEW_HINT
 	}
 }
-export function hint() {
-	return (dispatch, getState) => {
+export function hint(response) {
+	return async(dispatch, getState) => {
 		dispatch(willShowHint())
 		try {
 			let current_trial = getState().learn.current_trial,
+				id = current_trial.id,
 				current_slot = getState().learn.current_slot,
 				augs = current_slot['augs'],
 				recent_aug = current_trial.augs ? current_trial['augs'][0] : null,
 				index = recent_aug !== null ? augs.indexOf(recent_aug) : 0,
 				next_index = index + 1;
-			if (next_index >= augs.length) {
-				next_index = augs.length;
-			}
-			if (augs.length > 0 && recent_aug == null) {
-				next_index = 0;
-			}
-			let new_aug = augs[next_index]
-			current_trial['new_aug'] = new_aug;
-			current_trial['type'] = 'hint';
-			dispatch(newTrial(current_trial))
-			dispatch({type: NEW_HINT_SUCCESS, new_aug})
+			await axios.put(`${api_url}/trials/${id}`, 
+				response
+			).then((res) => {
+				let updated_trial = res.data;
+				dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
+				if (next_index >= augs.length) {
+					next_index = augs.length;
+				}
+				if (augs.length > 0 && recent_aug == null) {
+					next_index = 0;
+				}
+				let new_aug = augs[next_index]
+				current_trial['new_aug'] = new_aug;
+				current_trial['type'] = 'hint';
+				dispatch(newTrial(current_trial))
+				dispatch({type: NEW_HINT_SUCCESS, new_aug})
+			})
 		} catch(err) {
 			dispatch({
 				type: NEW_HINT_FAILURE,
@@ -644,7 +654,7 @@ export const SKIP_SUCCESS = 'SKIP_SUCCESS';
 export const SKIP_FAILURE = 'SKIP_FAILURE';
 function findUnfinished(index, length, slots) {
 	for(var _u = index; _u < length; _u++) {
-		if (!slots[_u]['completed']) {
+		if (_u !== index && !slots[_u]['completed']) {
 			return _u;
 		}
 	}
@@ -666,8 +676,8 @@ export function skipSlot() {
 		try {
 			let current_slot = getState().learn.current_slot,
 				current_sequence = getState().learn.current_sequence,
-				slots = getState().learn.slots,
-				index = slots.indexOf(current_slot),
+				slots = getState().learn.current_miniseq.slots,
+				index = getState().learn.slot_index,
 				new_index = skipToUnfinished(index, slots),
 				next_slot = slots[new_index],
 				new_pos = next_slot.order;			
@@ -698,16 +708,16 @@ export const MOVE_SLOT = 'MOVE_SLOT'
 export const MOVE_SLOT_SUCCESS = 'MOVE_SLOT_SUCCESS'
 export const MOVE_SLOT_FAILURE = 'MOVE_SLOT_FAILURE'
 function findNext(dir, slots, pos) {
-	let last = slots.slice(-1)[0]['order'];
+	let length = slots.length - 1;
 	if(dir == 'next') {
-		if(pos == last) {
+		if(pos == length) {
 			return pos;
 		}
 		return pos + 1;
 	}
 	if (dir == 'prev') {
-		if (pos == 1) {
-			return 1;
+		if (pos == 0) {
+			return pos;
 		}
 		return pos - 1;
 	}			
@@ -717,11 +727,12 @@ export function nextSlot(dir) {
 		try {
 			let current_slot = getState().learn.current_slot,
 				current_sequence = getState().learn.current_sequence,
-				slots = getState().learn.slots,
-				pos = current_sequence['position'],
-				new_pos = findNext(dir, slots, pos),		
-				next_slot = slots.filter(slot => slot.order == new_pos)
-			if(pos == new_pos) {
+				slots = getState().learn.current_miniseq.slots,
+				pos = getState().learn.slot_index,
+				next_pos = findNext(dir, slots, pos),		
+				next_slot = slots[next_pos],
+				new_pos = next_slot.order;
+			if(pos == next_pos) {
 				return;
 			}
 			if(next_slot.completed) {

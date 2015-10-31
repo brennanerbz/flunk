@@ -124,6 +124,15 @@ export default class Learn extends Component {
 		updateTrial(response)
  	}
 
+ 	handleHint(event) {
+ 		const hint = {type: "hint"} 
+ 		this.refs.learn_card.sendEvent(event, hint)
+ 	}
+
+ 	handleGetHint(response) {
+ 		this.props.hint(response)
+ 	}
+
 	render() {
 		const { current_slot,
 				slots,
@@ -151,7 +160,8 @@ export default class Learn extends Component {
 									{
 										current_slot !== undefined && trial !== undefined
 										? <LearnCard 
-											   sendResponse={(response) => ::this.handleUserResponse(response)}
+											   submitAnswer={(response) => ::this.handleUserResponse(response)}
+											   getHint={(response) => ::this.handleGetHint(response)}
 											   ref="learn_card"
 											   slot={current_slot !== undefined ? current_slot : null} 
 											   slots={slots} 
@@ -168,7 +178,7 @@ export default class Learn extends Component {
 									}												
 									{
 										!showCorrect && !showCompletedSequence
-										? <DiffControls {...this.props} />
+										? <DiffControls getHint={::this.handleHint} {...this.props} />
 										: null
 									}
 									{

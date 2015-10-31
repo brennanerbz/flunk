@@ -50,9 +50,9 @@ export default class LearnInput extends Component {
 		});
 	}
  
-	handleSubmit = (e) => {
+	handleSubmit = (e, arg) => {
 		e.preventDefault()
-		const { sendResponse } = this.props,
+		const { submitAnswer, getHint } = this.props,
 			  d = new Date(),
 			  response_time = d.toISOString().replace('T', " ").replace("Z", ""),
 			  reaction_time = this.state.reaction_time !== null ? this.state.reaction_time : response_time,
@@ -65,11 +65,15 @@ export default class LearnInput extends Component {
 			  	answer_by_letter: false,
 			  	taps: null
 			  }
-		sendResponse(response)
 		this.setState({
 			answer: '',
 			reaction_time: null
 		});
+		if(arg !== undefined && arg.type == 'hint') {
+			getHint(response)
+			return;
+		} 
+		submitAnswer(response)
 	}
 
 	render() {

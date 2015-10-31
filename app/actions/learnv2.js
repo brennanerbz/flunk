@@ -789,14 +789,19 @@ export function completeMiniSequence() {
 				new_miniseq = miniseqs[new_index],
 				new_position = new_miniseq.slots[0].order;
 			current_sequence = Object.assign({...current_sequence}, {position: new_position, type: 'updating_position'});
+			current_miniseq.current = false;
 			new_miniseq.current = true;
-			await dispatch({type: MOVE_TO_UNFINISHED_MINISEQ, new_miniseq, new_index})
-			await dispatch(updateSequence(current_sequence))
-			// get the  miniseqs and current miniseq state
-			// get the index of miniseq and the slot_index
-			// flush through all the miniseqs and find the next unfinished. use the same findUnfinished fn()
-			// await dispatch movetounfinished, which will update state of current minisequence
-			// await dispatch update sequence, which will update the db sequence with new position 
+			miniseqs.map((miniseq) => {
+				if(miniseqs.indexOf(miniseq) == new_index) {
+					miniseq.current = true
+				}
+				if(miniseqs.indexOf(miniseq) == cmi) {
+					miniseq.current = false
+					miniseq.completed = true
+				}
+			})
+			await dispatch({type: MOVE_TO_UNFINISHED_MINISEQ, new_miniseq, new_index, miniseqs})
+			await dispatch(updateSequence(current_sequence)) 
 		} catch(err) {
 			dispatch({
 				type: MINISEQ_ERROR,

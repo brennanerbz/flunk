@@ -101,8 +101,7 @@ const initial_learnstate = {
 export default function learn(state = initial_learnstate, action) {
 	switch(action.type) {
 
-		case SHOW_COMPLETE_MINISEQ: 
-			console.log("Showing complete minisequence") 
+		case SHOW_COMPLETE_MINISEQ:  
 			/*
 			display the results from the previous 5 slot / trials 
 			do we have to call API for this, to get each trial?
@@ -114,20 +113,12 @@ export default function learn(state = initial_learnstate, action) {
 				current_miniseq: Object.assign({...state.current_miniseq}, {completed: true})
 			}
 		case MOVE_TO_UNFINISHED_MINISEQ: 
-			/*
-			need to update the miniseqs array with current[mini_seq] == complete. use current_mini index
-			write a function that iterates over miniseqs array finding the next incomplete minisequence,
-			update the state to reflect the new current
-			this will probably be an action creator as to update the db with sequence position 
-			we need to update the sequence position whenever someone does anything on page: click, touch, navigate away
-			*/
-			console.log("----")
-			console.log("new index")
-			console.log(action.new_index)
+			console.log(action.miniseqs)
  			return {
 				...state,
 				current_miniseq_index: action.new_index,
-				current_miniseq: action.new_miniseq
+				current_miniseq: action.new_miniseq,
+
 			}
 		
 		case UPDATE_CURRENT_MINISEQ:

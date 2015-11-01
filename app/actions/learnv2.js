@@ -172,13 +172,14 @@ export function updateSequence(_sequence) {
 				const sequence = res.data;
 				dispatch({type: UPDATE_SEQUENCE_SUCCESS, sequence}) 
 			}).then(() => {
-				let slot = getState().learn.current_slot
-				dispatch({ type: UPDATE_CURRENT_MINISEQ, slot })
 				if(!getState().learn.current_sequence.completed) {
 					dispatch(fetchTrials())
 				} else {
 					dispatch({type: SHOW_COMPLETED_SEQUENCE})
+					return;
 				}
+				let slot = getState().learn.current_slot
+				dispatch({ type: UPDATE_CURRENT_MINISEQ, slot })
 			})
 		} catch(err) {
 			dispatch({
@@ -560,20 +561,22 @@ export function updateTrial(response) { // TODO: make sure to pass in object fro
 				dispatch(adapt(updated_trial))
 			})
 			.then(() => {
+				let slots = getState().learn.slots,
+					current_sequence = getState().learn.current_sequence;
+				if(slots.filter(slot => !slot.completed).length === 0) {
+					current_sequence['type'] = 'completed';
+					dispatch(updateSequence(current_sequence))
+					return;
+				}
+			})
+			.then(() => {
 				let current_miniseq = getState().learn.current_miniseq,
 					slots = current_miniseq.slots;
 				if(slots.filter(slot => !slot.completed).length === 0) {
 					dispatch({type: SHOW_COMPLETE_MINISEQ})
 				}
 			})
-			.then(() => {
-				let slots = getState().learn.slots,
-					current_sequence = getState().learn.current_sequence;
-				if(slots.filter(slot => !slot.completed).length === 0) {
-					current_sequence['type'] = 'completed';
-					dispatch(updateSequence(current_sequence))
-				}
-			})
+			
 		} catch(err) {
 			dispatch({
 				type: UPDATE_TRIAL_FAILURE,
@@ -752,6 +755,7 @@ export function nextSlot(dir) {
 			if(pos == next_pos) {
 				return;
 			}
+			dispatch({type: MOVE_SLOT_SUCCESS, next_slot})
 			if(next_slot.completed) {
 				dispatch({type: SHOW_CORRECT})
 			}

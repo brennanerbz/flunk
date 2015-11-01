@@ -226,7 +226,7 @@ export default class Learn extends Component {
 										: null
 									}
 									{
-										isShowingCompleteMiniseq
+										!showCompletedSequence && isShowingCompleteMiniseq 
 										? <a className="link" 
 										     onClick={() => this.props.completeMiniSequence()}>
 										     Go to next mini sequence</a>

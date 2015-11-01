@@ -139,7 +139,7 @@ export default function learn(state = initial_learnstate, action) {
 				...state,
 				current_miniseq_index: action.new_index,
 				current_miniseq: action.new_miniseq,
-
+				miniseqs: action.miniseqs
 			}
 		
 		case UPDATE_CURRENT_MINISEQ:
@@ -353,7 +353,8 @@ export default function learn(state = initial_learnstate, action) {
 			}
 			return {
 				...state,
-				isShowingCorrect: next_correct
+				isShowingCorrect: next_correct,
+				current_slot: action.next_slot
 			}
 		case RECEIVE_LEARN_SUCCESS:
 			return {

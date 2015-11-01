@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 require('./LearnCard.scss');
@@ -6,6 +7,8 @@ import Controls from './LearnNavControls'
 import Signs from './LearnSignPosting';
 import LearnHelp from '../LearnHelp/LearnHelp';
 import LearnInput from '../LearnInput/LearnInput';
+
+import LearnCue from './LearnCue';
 
 export default class LearnCard extends Component {
 	static propTypes = {
@@ -23,9 +26,10 @@ export default class LearnCard extends Component {
 				current_slot } = this.props;
 		return(
 			<div>
-			 	<div className="learn_card">					
+			 	<div className="learn_card">
 					<div className="">
 						<div className="top_cue_container">
+							
 							{
 								showCorrect
 								? <h4 className="correct_label">
@@ -33,13 +37,7 @@ export default class LearnCard extends Component {
 								  </h4>
 								: null
 							}							
-							
-							{	
-								cue == (undefined || null)
-								? null
-								: <p className="cue">{cue}</p>
-							}
-							
+							<LearnCue {...this.props}/>
 							{
 								showCorrect
 								? null
@@ -47,7 +45,7 @@ export default class LearnCard extends Component {
 							   		 onClick={(event) => this.refs.learn_input.handleSubmit(event)}>
 							  		 Don't know
 								 </a>
-							}						
+							}
 						</div>
 						<div className="help_divider">
 							<hr className="separator"/>

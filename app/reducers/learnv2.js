@@ -131,7 +131,8 @@ export default function learn(state = initial_learnstate, action) {
 			return {
 				...state,
 				isShowingCompleteMiniseq: true,
-				current_miniseq: Object.assign({...state.current_miniseq}, {completed: true})
+				current_miniseq: Object.assign({...state.current_miniseq}, {completed: true}),
+				miniseqs: action.miniseqs
 			}
 		case MOVE_TO_UNFINISHED_MINISEQ: 
 			console.log(action.miniseqs)
@@ -322,7 +323,6 @@ export default function learn(state = initial_learnstate, action) {
 		case ADAPT_SUCCESS:
 			return {
 				...state,
-				isGrading: false,
 				current_slot: Object.assign({...state.current_slot}, {format: action.new_format})
 			}
 		// case NEW_HINT_SUCCESS:

@@ -536,17 +536,16 @@ function grading() {
 }
 export function updateTrial(response) { // TODO: make sure to pass in object from component. use state to determine other variables. 
 	return async(dispatch, getState) => {
+		// if(getState().learn.isGrading) {
+		// 	setTimeout(() => {
+		// 		dispatch(updateTrial(response))
+		// 	}, 5)
+		// }
 		await dispatch(grading())
-		// dispatch(willUpdateTrial())
 		try {
 			let current_trial = await getState().learn.current_trial,
 				current_slot = await getState().learn.current_slot,
 				trial_id = await current_trial.id;
-			if(trial_id == (undefined || null)) {
-				setTimeout(() => {
-					dispatch(updateTrial(response))
-				}, 5)
-			}
 			await axios.put(`${api_url}/trials/${trial_id}`, 
 				response
 			).then(res => {
@@ -570,10 +569,18 @@ export function updateTrial(response) { // TODO: make sure to pass in object fro
 				}
 			})
 			.then(() => {
-				let current_miniseq = getState().learn.current_miniseq,
+				let state = getState().learn,
+					current_miniseq = state.current_miniseq,
+					cmi = state.current_miniseq_index,
+					miniseqs = state.miniseqs,
 					slots = current_miniseq.slots;
 				if(slots.filter(slot => !slot.completed).length === 0) {
-					dispatch({type: SHOW_COMPLETE_MINISEQ})
+					miniseqs.map((miniseq) => {
+						if(miniseqs.indexOf(miniseq) == cmi) {
+							miniseq.completed = true
+						}
+					})
+					dispatch({type: SHOW_COMPLETE_MINISEQ, miniseqs})
 				}
 			})
 			
@@ -674,14 +681,14 @@ export const SKIP_SUCCESS = 'SKIP_SUCCESS';
 export const SKIP_FAILURE = 'SKIP_FAILURE';
 function findUnfinished(index, length, slots) {
 	for(var _u = index; _u < length; _u++) {
-		if (_u !== index && !slots[_u]['completed']) {
+		if (!slots[_u]['completed']) {
 			return _u;
 		}
 	}
 }
 function skipToUnfinished(index, slots) {
 	let length = slots.length;
-	if (index == length) {		
+	if (Number(index) == Number(length)) {		
 		index = findUnfinished(0, length, slots)
 	} else {
 		index = findUnfinished(index, length, slots)
@@ -689,6 +696,7 @@ function skipToUnfinished(index, slots) {
 			index = findUnfinished(0, length, slots)
 		}
 	}
+	console.log(index)
 	return index;
 }
 export function skipSlot() {
@@ -798,9 +806,10 @@ export function completeMiniSequence() {
 				current_miniseq = getState().learn.current_miniseq,
 				length = miniseqs.length,
 				cmi = getState().learn.current_miniseq_index,
-				new_index = findUnfinished(cmi, length, miniseqs), // @params: index, length and slots
+				new_index = findUnfinished(cmi, length - 1, miniseqs), // @params: index, length and slots
 				new_miniseq = miniseqs[new_index],
 				new_position = new_miniseq.slots[0].order;
+			console.log(new_index)
 			current_sequence = Object.assign({...current_sequence}, {position: new_position, type: 'updating_position'});
 			current_miniseq.current = false;
 			new_miniseq.current = true;
@@ -810,7 +819,6 @@ export function completeMiniSequence() {
 				}
 				if(miniseqs.indexOf(miniseq) == cmi) {
 					miniseq.current = false
-					miniseq.completed = true
 				}
 			})
 			await dispatch({type: MOVE_TO_UNFINISHED_MINISEQ, new_miniseq, new_index, miniseqs})

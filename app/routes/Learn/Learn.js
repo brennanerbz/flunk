@@ -35,6 +35,7 @@ import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 	showFeedback: state.learn.isShowingFeedback,
 	slots: state.learn.slots,
 	current_slot: state.learn.current_slot,
+	current_trial: state.learn.current_trial,
 	trial: state.learn.trial,
 	sets: state.sets.set_items
 	}),
@@ -52,7 +53,8 @@ export default class Learn extends Component {
 
 	state = {
 		flag: false,
-		start: null
+		start: null,
+		inputvalue: ''
 	}
 
 	componentWillMount() {
@@ -68,7 +70,7 @@ export default class Learn extends Component {
 	componentWillReceiveProps(nextProps){
 		if(this.props.current_slot.id !== nextProps.current_slot.id) {
 			this.setState({
-				start: null
+				inputvalue: ''
 			});
 		}
 	}
@@ -97,24 +99,17 @@ export default class Learn extends Component {
 			}
 		},
 		13(event) {
-			const { current_slot, trial, isGrading, skipSlot } = this.props;
+			const { current_slot, current_trial, isGrading, skipSlot } = this.props;
 			var now, start, diff, difftwo;
-			if(current_slot.format == 'copy') {
-				if(this.state.start == null) {
-					this.setState({
-						start: Date.now()
-					});
+			if(current_slot.format == 'copy' && this.state.inputvalue.length === 0) {
+				now = new Date()
+				now = (now).toISOString().replace("T", " ").replace("Z", "")
+				start = (current_trial.start)
+				diff = (moment(now).diff(start))
+				if(diff > 1500) {
+					skipSlot()
 				}
-				if(this.state.start) {
-					now = Date.now(),
-					start = this.state.start,
-					diff = moment(now).diff(start)
-					difftwo = moment(trial.start).diff(now)
-				}
-				console.log(difftwo)
-				if(diff > 1000) {
-					// skipSlot() // awkward correct view flash when change
-				}
+				return;
 			}			
 			if(!current_slot.completed) {
 				this.refs.learn_card.sendEvent(event)
@@ -150,6 +145,12 @@ export default class Learn extends Component {
 		this.handleArrowKeys(event)
 	}
 
+	updateStateWithUserResponse(value) {
+		this.setState({
+			inputvalue: value
+		});
+	}
+
 	handleUserResponse(response) {
 		const { updateTrial } = this.props;
 		updateTrial(response)
@@ -179,11 +180,25 @@ export default class Learn extends Component {
 				nextSlot,
 				trial,
 				params} = this.props;
+		// console.log(showLearn)
 		return (
 			<div className="learn_page"
 				 ref="learn_page"
 				 id="learn_page">
+				
 				{
+					showLearn
+					? <div className="spinner_container">	
+				 	  	<div className="loader spinner">
+				 	    Loading...
+				 	    </div>
+				 	    <span className="loading_label">Loading</span>
+				 	    <span className="loading"><span>.</span><span>.</span><span>.</span></span>
+			 	      </div>
+			 	    : null
+				}
+								 
+				 {
 					!showLearn && slots !== undefined
 					? <div>
 						<SeqControl {...this.props}/>
@@ -192,6 +207,7 @@ export default class Learn extends Component {
 									{
 										current_slot !== undefined && trial !== undefined
 										? <LearnCard 
+											   updateValue={(value) => ::this.updateStateWithUserResponse(value)}
 											   submitAnswer={(response) => ::this.handleUserResponse(response)}
 											   getHint={(response) => ::this.handleGetHint(response)}
 											   ref="learn_card"

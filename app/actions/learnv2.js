@@ -91,6 +91,7 @@ var _default_sequence = {
 }
 export function newSequence(prevsequence, user_id, set_id, assignment_id) {
 	return async(dispatch, getState) => {
+		dispatch({type: REQUEST_LEARN})
 		try {
 			let new_sequence,
 				current_sequence = getState().learn.current_sequence;
@@ -215,7 +216,7 @@ export function fetchSlots(sequence_id) {
 					dispatch({type: SHOW_COMPLETED_SEQUENCE})
 				}
 				await dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
-				
+
 				await dispatch({type: CREATE__MINISEQS, slots})
 				await dispatch(fetchTrials())
 			}			
@@ -250,7 +251,7 @@ export function updateSlot(slot) {
 				let slot = res.data;
 				dispatch({type: UPDATE_SLOT_SUCCESS, slot})
 				dispatch({ type: UPDATE_CURRENT_MINISEQ, slot })
-			})
+			})			
 		} catch(err) {
 			dispatch({
 				type: UPDATE_SLOT_FAILURE,
@@ -534,12 +535,17 @@ function grading() {
 }
 export function updateTrial(response) { // TODO: make sure to pass in object from component. use state to determine other variables. 
 	return async(dispatch, getState) => {
-		dispatch(grading())
-		dispatch(willUpdateTrial())
+		await dispatch(grading())
+		// dispatch(willUpdateTrial())
 		try {
-			let current_trial = getState().learn.current_trial,
-				current_slot = getState().learn.current_slot,
-				trial_id = current_trial.id;
+			let current_trial = await getState().learn.current_trial,
+				current_slot = await getState().learn.current_slot,
+				trial_id = await current_trial.id;
+			if(trial_id == (undefined || null)) {
+				setTimeout(() => {
+					dispatch(updateTrial(response))
+				}, 5)
+			}
 			await axios.put(`${api_url}/trials/${trial_id}`, 
 				response
 			).then(res => {
@@ -571,7 +577,8 @@ export function updateTrial(response) { // TODO: make sure to pass in object fro
 		} catch(err) {
 			dispatch({
 				type: UPDATE_TRIAL_FAILURE,
-				error: Error(err)
+				error: Error(err),
+				typeerror: err
 			})
 		}
 	}
@@ -615,11 +622,11 @@ export function adapt(updated_trial) {
 				stem: request_stem !== undefined ? request_stem : null
 			})
 			dispatch({type: ADAPT_SUCCESS, new_format})
+			dispatch(newTrial(updated_trial))
 			if(current_slot.format !== new_format) {
 				current_slot['format'] = new_format;
 				dispatch(updateSlot(current_slot))
 			}
-			dispatch(newTrial(updated_trial))
 		} catch(err) {
 			dispatch({
 				type: ADAPT_FAILURE,
@@ -692,7 +699,7 @@ export function skipSlot() {
 				next_slot = slots[new_index],
 				new_pos = next_slot.order;			
 			dispatch({type: SKIP_SUCCESS, next_slot})
-			if(!next_slot.completed) {
+			if(next_slot.completed) {
 				dispatch({type: SHOW_CORRECT})
 			}
 			current_sequence = Object.assign({...current_sequence}, {

@@ -32,13 +32,14 @@ export default class LearnInput extends Component {
 		let answerbox = this.refs.answerbox;
 		setTimeout(() => {
 			answerbox.focus()	
-		}, 5)
+		}, 10)
 	}
 
 	handleChange = (e) => {
 		this.setState({
 			answer: e.target.value
 		});	
+		this.props.updateValue(e.target.value)
 	}
 
 	handleReactionTime = () => {

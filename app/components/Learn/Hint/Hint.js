@@ -6,12 +6,16 @@ export default class Hint extends Component {
 		hints: PropTypes.array
 	}
 
+	shouldComponentUpdate(nextProps) {
+		return (this.props.current_slot.id == nextProps.current_slot.id) || (this.props.hints == nextProps.hints)
+	}
+
 	render() {
 		const { hints } = this.props,
 			  hint = hints[0];
 		return (
 			hint !== null
-			? <div className="hint_container">				
+			? <div className="hint_container">	
 				<p className="hint">{hint}</p>
 				<p className="hint_source">Source</p>
 			  </div>
@@ -21,4 +25,4 @@ export default class Hint extends Component {
 }
 
 
-// <p className="diff_label">Hint:</p>
+// <p className="hint_label">Hint:</p>

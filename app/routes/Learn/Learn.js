@@ -189,9 +189,11 @@ export default class Learn extends Component {
 				{
 					showLearn
 					? <div className="spinner_container">	
-				 	  	<div className="loader spinner">
-				 	    Loading...
-				 	    </div>
+				 	  	  <div className="loader">
+				 	  	    <svg className="circular" viewBox="25 25 50 50">
+				 	  	      <circle className="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"/>
+				 	  	    </svg>
+				 	  	  </div>
 				 	    <span className="loading_label">Loading</span>
 				 	    <span className="loading"><span>.</span><span>.</span><span>.</span></span>
 			 	      </div>

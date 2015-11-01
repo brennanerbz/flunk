@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 require('./LearnCard.scss');

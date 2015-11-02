@@ -10,7 +10,11 @@ export default class LearnInput extends Component {
 		answer: ' ',
 		reaction_time: null,
 		correct: false
-	}		
+	}
+
+	// shouldComponentUpdate(nextProps) {
+	// 	return this.props.current_slot.id == nextProps.current_slot.id
+	// }		
 
 	componentDidMount() {
 		this.setState({

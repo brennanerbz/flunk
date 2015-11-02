@@ -4,6 +4,10 @@ require('./ShowCorrect.scss');
 export default class ShowCorrect extends Component {
 	static propTypes = {
 	}	
+
+	shouldComponentUpdate(nextProps) {
+		return this.props.current_slot.id == nextProps.current_slot.id || this.props.trial.answer == nextProps.trial.answer
+	}
 	
 	render() {
 		const { current_slot,

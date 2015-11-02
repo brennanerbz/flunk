@@ -20,6 +20,7 @@ import DiffControls from '../../components/Learn/DiffControls/DiffControls';
 import Hint from '../../components/Learn/Hint/Hint';
 import SeqControl from '../../components/Learn/LearnSeqControl/SeqControl';
 import RoundSummary from '../../components/Learn/RoundSummary/RoundSummary';
+import SequenceSummary from '../../components/Learn/SequenceSummary/SequenceSummary';
 
 @connect(state => ({
 	slot_index: state.learn.slot_index,
@@ -244,7 +245,7 @@ export default class Learn extends Component {
 									}
 									{
 										showCompletedSequence && !isShowingCompleteMiniseq
-										? <h1>Completed</h1>
+										? <SequenceSummary {...this.props}/>
 										: null
 									}
 									{

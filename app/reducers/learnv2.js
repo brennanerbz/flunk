@@ -337,14 +337,15 @@ export default function learn(state = initial_learnstate, action) {
 		case SHOW_CORRECT:
 			return {
 				...state,
-				isShowingCorrect: true
+				isShowingCorrect: true,
+				isUpdatingState: false
 			}
 		case SHOW_COMPLETED_SEQUENCE: 
-			console.log("---")
-			console.log("completed sequence")
 			return {
 				...state,
-				isShowingCompletedSequence: true
+				isShowingCompletedSequence: true,
+				isShowingCompleteMiniseq: false,
+				isUpdatingState: false
 			}
 		case SKIP_SUCCESS:
 		case MOVE_SLOT_SUCCESS:

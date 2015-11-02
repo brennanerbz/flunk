@@ -29,9 +29,9 @@ export default class RoundSummary extends Component {
 		let { current_miniseq, cmi} = this.props,
 			  slots = current_miniseq.slots;
 		return(
-			<div className="round_summary">
-				<h3 className="round_header">Round {cmi + 1}</h3>
-				<table className="round_table">
+			<div className="summary">
+				<h3 className="table_header">Round {cmi + 1}</h3>
+				<table className="summary_table">
 					<tbody>
 						<tr className="recall_row">
 							<td className="recall row_label">

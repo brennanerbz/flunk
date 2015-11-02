@@ -174,12 +174,12 @@ export function updateSequence(_sequence) {
 			}).then(() => {
 				if(!getState().learn.current_sequence.completed) {
 					dispatch(fetchTrials())
+					let slot = getState().learn.current_slot
+					dispatch({ type: UPDATE_CURRENT_MINISEQ, slot })
 				} else {
 					dispatch({type: SHOW_COMPLETED_SEQUENCE})
 					return;
 				}
-				let slot = getState().learn.current_slot
-				dispatch({ type: UPDATE_CURRENT_MINISEQ, slot })
 			})
 		} catch(err) {
 			dispatch({
@@ -251,6 +251,11 @@ export function updateSlot(slot) {
 			).then(res => {
 				let slot = res.data;
 				dispatch({type: UPDATE_SLOT_SUCCESS, slot})
+			}).then(() => {
+				if(getState().learn.slots.filter(slot => !slot.completed).length === 0) {
+					return;
+				}
+				let slot = getState().learn.current_slot
 				dispatch({ type: UPDATE_CURRENT_MINISEQ, slot })
 			})			
 		} catch(err) {
@@ -572,6 +577,9 @@ export function updateTrial(response) { // TODO: make sure to pass in object fro
 				}
 			})
 			.then(() => {
+				if(getState().learn.current_sequence.completed) {
+					return;
+				}
 				let state = getState().learn,
 					current_miniseq = state.current_miniseq,
 					cmi = state.current_miniseq_index,

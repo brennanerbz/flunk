@@ -446,6 +446,10 @@ button:focus, input[type="button"]:focus {
 	&:hover {
 		
 	}
+	&.continue_link {
+		font-size: 16px;
+		padding-left: 10px;
+	}
 }
 // :global .link_name {
 // 	text-decoration: none;

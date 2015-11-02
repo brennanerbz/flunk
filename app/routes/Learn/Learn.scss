@@ -23,6 +23,23 @@
 		&.round_summary {
 			max-width: 850px!important;
 			padding-right: 0!important;
+			.fade_in-enter {
+			  opacity: 0.01;
+			}
+
+			.fade_in-enter.fade_in-enter-active {
+			  opacity: 1;
+			  transition: opacity 300ms cubic-bezier(0.42, 0.0, 1.0, 1.0);
+			}
+
+			.fade_in-leave {
+			  opacity: 1;
+			}
+
+			.fade_in-leave.fade_in-leave-active {
+			  opacity: 0.01;
+			  transition: opacity 150ms cubic-bezier(0.42, 0.0, 1.0, 1.0);
+			}
 		}
 		p {
 			font-size: 18px;

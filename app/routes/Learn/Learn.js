@@ -6,6 +6,8 @@ import moment from 'moment';
 import * as learnactions from '../../actions/learnv2';
 import * as setactions from '../../actions/usersets';
 
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
 require('./Learn.scss');
 
 /* Components */
@@ -131,14 +133,24 @@ export default class Learn extends Component {
 
 	
 	handleKeyUp(event) {
-		const { showCorrect, showCompletedSequence, isGrading } = this.props;
+		const { showCorrect, 
+			 	showCompletedSequence, 
+			 	isGrading,
+			 	isShowingCompleteMiniseq,
+			 	newSequence,
+			 	completeMiniSequence,
+			 	skipSlot } = this.props;
+		if(event.which && isShowingCompleteMiniseq) {
+			completeMiniSequence()
+			return;
+		}
 		if(event.which && showCompletedSequence) {
-			this.props.newSequence(null)
+			newSequence(null)
 			return;
 		}
 		if(event.which && showCorrect) {
 			if(!this.handleArrowKeys(event)) {
-				this.props.skipSlot()
+				skipSlot()
 				return;
 			}
 			return;
@@ -181,8 +193,6 @@ export default class Learn extends Component {
 				nextSlot,
 				trial,
 				params} = this.props;
-		// console.log(showLearn)
-		console.log(isShowingCompleteMiniseq)
 		return (
 			<div className="learn_page"
 				 ref="learn_page"
@@ -207,10 +217,13 @@ export default class Learn extends Component {
 					? <div>
 						<SeqControl {...this.props}/>
 							<div className={classnames("no_sidenav_container learn_container", 
-											{"round_summary": isShowingCompleteMiniseq})}>
+										   {"round_summary": isShowingCompleteMiniseq})}>
 								<div>
 									{
-										current_slot !== undefined && trial !== undefined && !isShowingCompleteMiniseq
+										current_slot !== undefined 
+										&& trial !== undefined 
+										&& !isShowingCompleteMiniseq
+										&& !showCompletedSequence
 										? <LearnCard 
 											   updateValue={(value) => ::this.updateStateWithUserResponse(value)}
 											   submitAnswer={(response) => ::this.handleUserResponse(response)}
@@ -230,19 +243,29 @@ export default class Learn extends Component {
 										: null
 									}
 									{
-										isShowingCompleteMiniseq
-										? <RoundSummary {...this.props}/>
+										showCompletedSequence && !isShowingCompleteMiniseq
+										? <h1>Completed</h1>
+										: null
+									}
+									{
+										isShowingCompleteMiniseq && !showCompletedSequence
+										? <ReactCSSTransitionGroup transitionName="fade_in" 
+								     							   transitionEnterTimeout={500} 
+								     							   transitionLeaveTimeout={500}>
+											<RoundSummary {...this.props}/>
+										  </ReactCSSTransitionGroup>
 										: null
 									}
 									{
 										!showCompletedSequence && isShowingCompleteMiniseq 
-										? <a className="link" 
+										? <a className="link continue_link" 
 										     onClick={() => this.props.completeMiniSequence()}>
 										     Press any key to continue to next round</a>
 										: null
 									}												
 									{
-										!showCorrect && (!showCompletedSequence || !isShowingCompleteMiniseq)
+										!showCorrect 
+										&& (!showCompletedSequence || !isShowingCompleteMiniseq)
 										? <DiffControls getHint={::this.handleHint} {...this.props} />
 										: null
 									}
@@ -253,7 +276,9 @@ export default class Learn extends Component {
 										: null
 									}
 									{
-										(!showCorrect && !showCompletedSequence || !isShowingCompleteMiniseq) && (showHint && trial.augs !== null) 
+										(!showCorrect 
+										&& !showCompletedSequence || !isShowingCompleteMiniseq) 
+										&& (showHint && trial.augs !== null) 
 										? <Hint hints={trial.augs.length > 0 ? trial.augs : null} 
 												{...this.props}/>
 										: null

@@ -299,11 +299,17 @@ export function fetchTrials() {
 	return async(dispatch, getState) => {
 		dispatch(requestTrials())
 		try {
-			let slot = getState().learn.current_slot,
+			let state = getState().learn,
+				slot = state.current_slot,
+				slots = state.current_miniseq.slots,
 				slot_id = slot.id,
 				trial = {},
 				trials;
 			await axios.get(`${api_url}/slots/${slot_id}/trials/`).then(res => trials = res.data.trials)
+			if(slots.filter(slot => !slot.completed).length === 0) {
+				dispatch(completeMiniSequence())
+				return;
+			}
 			if(trials !== undefined && trials.length > 0) {
 				dispatch({type: RECEIVE_TRIALS_SUCCESS, trials})
 				trial = trials.slice(-1)[0]
@@ -375,8 +381,9 @@ export function newTrial(trial) {
 		dispatch(willCreateNewTrial())
 		try {
 			let new_trial,
-				current_slot = getState().learn.current_slot,
-				last_trial = getState().learn.trials.slice(-1)[0],
+				state = await getState().learn,
+				current_slot = state.current_slot,
+				last_trial = state.trials.slice(-1)[0],
 				s = new Date(),
 			  	start = s.toISOString().replace("T", " ").replace("Z", "");
 			if(current_slot.completed) {
@@ -482,7 +489,7 @@ export function hint(response) {
 	return async(dispatch, getState) => {
 		dispatch(willShowHint())
 		try {
-			let current_trial = getState().learn.current_trial,
+			let current_trial = await getState().learn.current_trial,
 				id = current_trial.id,
 				current_slot = getState().learn.current_slot,
 				augs = current_slot['augs'],
@@ -536,16 +543,12 @@ function grading() {
 }
 export function updateTrial(response) { // TODO: make sure to pass in object from component. use state to determine other variables. 
 	return async(dispatch, getState) => {
-		// if(getState().learn.isGrading) {
-		// 	setTimeout(() => {
-		// 		dispatch(updateTrial(response))
-		// 	}, 5)
-		// }
 		await dispatch(grading())
 		try {
-			let current_trial = await getState().learn.current_trial,
-				current_slot = await getState().learn.current_slot,
-				trial_id = await current_trial.id;
+			let state = await getState().learn,
+				current_trial = state.current_trial,
+				current_slot = state.current_slot,
+				trial_id = current_trial.id;
 			await axios.put(`${api_url}/trials/${trial_id}`, 
 				response
 			).then(res => {
@@ -696,16 +699,16 @@ function skipToUnfinished(index, slots) {
 			index = findUnfinished(0, length, slots)
 		}
 	}
-	console.log(index)
 	return index;
 }
 export function skipSlot() {
 	return (dispatch, getState) => {
 		try {
-			let current_slot = getState().learn.current_slot,
-				current_sequence = getState().learn.current_sequence,
-				slots = getState().learn.current_miniseq.slots,
-				index = getState().learn.slot_index,
+			let state = getState().learn,
+				current_slot = state.current_slot,
+				current_sequence = state.current_sequence,
+				slots = state.current_miniseq.slots,
+				index = state.slot_index,
 				new_index = skipToUnfinished(index, slots),
 				next_slot = slots[new_index],
 				new_pos = next_slot.order;			
@@ -753,10 +756,11 @@ function findNext(dir, slots, pos) {
 export function nextSlot(dir) {
 	return (dispatch, getState) => {
 		try {
-			let current_slot = getState().learn.current_slot,
-				current_sequence = getState().learn.current_sequence,
-				slots = getState().learn.current_miniseq.slots,
-				pos = getState().learn.slot_index,
+			let state = getState().learn,
+				current_slot = state.current_slot,
+				current_sequence = state.current_sequence,
+				slots = state.current_miniseq.slots,
+				pos = state.slot_index,
 				next_pos = findNext(dir, slots, pos),		
 				next_slot = slots[next_pos],
 				new_pos = next_slot.order;
@@ -798,18 +802,20 @@ export const UPDATE_CURRENT_MINISEQ = 'UPDATE_CURRENT_MINISEQ';
 export const MOVE_TO_UNFINISHED_MINISEQ = 'MOVE_TO_UNFINISHED_MINISEQ';
 export const SHOW_COMPLETE_MINISEQ = 'SHOW_COMPLETE_MINISEQ';
 export const MINISEQ_ERROR = 'MINISEQ_ERROR';
+export const COMPLETED_ROUND = 'COMPLETED_ROUND';
 export function completeMiniSequence() {
 	return async(dispatch, getState) => {
+		dispatch({type: COMPLETED_ROUND})
 		try {
-			let current_sequence = getState().learn.current_sequence,
-				miniseqs = getState().learn.miniseqs,
-				current_miniseq = getState().learn.current_miniseq,
+			let state = await getState().learn,
+				current_sequence = state.current_sequence,
+				miniseqs = state.miniseqs,
+				current_miniseq = state.current_miniseq,
 				length = miniseqs.length,
-				cmi = getState().learn.current_miniseq_index,
-				new_index = findUnfinished(cmi, length - 1, miniseqs), // @params: index, length and slots
+				cmi = state.current_miniseq_index,
+				new_index = findUnfinished(cmi, length, miniseqs), // @params: index, length and slots
 				new_miniseq = miniseqs[new_index],
 				new_position = new_miniseq.slots[0].order;
-			console.log(new_index)
 			current_sequence = Object.assign({...current_sequence}, {position: new_position, type: 'updating_position'});
 			current_miniseq.current = false;
 			new_miniseq.current = true;
@@ -821,8 +827,8 @@ export function completeMiniSequence() {
 					miniseq.current = false
 				}
 			})
-			await dispatch({type: MOVE_TO_UNFINISHED_MINISEQ, new_miniseq, new_index, miniseqs})
-			await dispatch(updateSequence(current_sequence)) 
+			dispatch({type: MOVE_TO_UNFINISHED_MINISEQ, new_miniseq, new_index, miniseqs})
+			dispatch(updateSequence(current_sequence)) 
 		} catch(err) {
 			dispatch({
 				type: MINISEQ_ERROR,

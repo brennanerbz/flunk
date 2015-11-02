@@ -67,7 +67,9 @@ import {
 	MOVE_TO_UNFINISHED_MINISEQ,
 	SHOW_COMPLETE_MINISEQ,
 
-	UPDATING_STATE
+	UPDATING_STATE,
+
+	COMPLETED_ROUND
 
 } from '../actions/learnv2';
 import _ from 'lodash';
@@ -116,6 +118,11 @@ Array.prototype.clean = function(deleteValue) {
 export default function learn(state = initial_learnstate, action) {
 	switch(action.type) {
 
+		case COMPLETED_ROUND: 
+			return {
+				...state,
+				isShowingCompleteMiniseq: false
+			}
 		case UPDATING_STATE: 
 			return {
 				...state,
@@ -123,11 +130,6 @@ export default function learn(state = initial_learnstate, action) {
 			}
 
 		case SHOW_COMPLETE_MINISEQ:  
-			/*
-			display the results from the previous 5 slot / trials 
-			do we have to call API for this, to get each trial?
-			for now, just show the previous 5 slots with their correct target answers
-			*/
 			return {
 				...state,
 				isShowingCompleteMiniseq: true,
@@ -135,7 +137,6 @@ export default function learn(state = initial_learnstate, action) {
 				miniseqs: action.miniseqs
 			}
 		case MOVE_TO_UNFINISHED_MINISEQ: 
-			console.log(action.miniseqs)
  			return {
 				...state,
 				current_miniseq_index: action.new_index,
@@ -339,6 +340,8 @@ export default function learn(state = initial_learnstate, action) {
 				isShowingCorrect: true
 			}
 		case SHOW_COMPLETED_SEQUENCE: 
+			console.log("---")
+			console.log("completed sequence")
 			return {
 				...state,
 				isShowingCompletedSequence: true

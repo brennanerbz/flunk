@@ -43,7 +43,6 @@ export default class Set extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log(nextProps.params.id)
 		if(this.props.params.id !== nextProps.params.id) {
 			this.props.clearSet()
 			this.props.fetchSet(nextProps.params.id)

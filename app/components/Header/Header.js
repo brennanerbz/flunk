@@ -14,8 +14,11 @@ import Menu from '../Menu/Menu';
 @connect(state => ({
 	loc: state.router.location,
 	sets: state.sets.sets,
+	current_sequence: state.learn.current_sequence,
+	learn_set: state.learn.current_sequence.set,
+	set_id: state.learn.current_sequence.set_id,
 	isFetching: state.sets.isFetchingAssignments,
-	fetchingLearn: state.learn.is_fetching_learn,
+	fetchingLearn: state.learn.isFetchingLearn,
 	current_sequence: state.learn.current_sequence
 }))
 export default class Header extends Component {
@@ -68,7 +71,14 @@ export default class Header extends Component {
 		const logo = require('./assets/FlunkLogo.png'),
 			  create_icon = require('../../assets/create_new_pencil.png'),
 			  dropdown_icon = require('../../assets/dropdown_arrow.png'),
-			  { loc, sets, isFetching, current_sequence, fetchingLearn} = this.props;
+			  { loc, 
+			  	sets, 
+			  	isFetching, 
+			  	current_sequence, 
+			  	fetchingLearn,
+			  	learn_set,
+			  	set_id
+			  } = this.props;
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
 		return(
@@ -89,11 +99,9 @@ export default class Header extends Component {
 							<Link className="site-logo" to="/">						
 									<img className="site-icon" src={logo} />
 							</Link>
-							{
-								loc.pathname.indexOf('/learn') !== -1
-								? null
-								: <SearchBox {...this.props}/>
-							}
+
+							<SearchBox {...this.props}/>
+							
 							{
 								loc.pathname.indexOf('/learn') !== -1 || loc.pathname.indexOf('/createset') !==  -1
 								? null
@@ -105,15 +113,15 @@ export default class Header extends Component {
 								  </button>
 							}
 						</span>
-						{ set && loc.pathname.indexOf('/learn') !== -1 ? 
+						{ !fetchingLearn && loc.pathname.indexOf('/learn') !== -1 ? 
 						<span className="open_set_container set_name_wrapper"
 						      ref="set_name_wrapper">
-								<Link to={`/set/${set.id}`} className="open_set_btn"
+								<Link to={`/set/${set_id}`} className="open_set_btn"
 										// onClick={::this.openSetMenu}
 									    // onBlur={::this.closeSetMenu}
 									    ref="open_set_btn">
 										<h1 className="set_name"
-											ref="set_name"><span className="set_hash">#</span>{set.title.toLowerCase()}</h1>
+											ref="set_name"><span className="set_hash">#</span>{learn_set.title.toLowerCase()}</h1>
 										<span>
 											<img className="dropdown_menu_icon icon" 
 											 src={dropdown_icon}/>

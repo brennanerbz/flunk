@@ -7,13 +7,13 @@ export default class ItemList extends Component {
 	}
 
 	render() {
-		const { set } = this.props;
+		const { item_count, items } = this.props;
 		return(
 			<div className="item_list_container">
-				<p className="item_count_label">Terms: <span className="item_count">{set.item_count}</span></p>
+				<p className="item_count_label">Terms: <span className="item_count">{item_count}</span></p>
 				<a className="item_actions">Edit</a>
 				<ul className="item_list">
-					{set.items.map((item, i) => {
+					{items.map((item, i) => {
 						return <Item key={i} item={item}/>
 					})}
 				</ul>

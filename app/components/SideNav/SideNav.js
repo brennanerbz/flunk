@@ -1,10 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
 
 import Main from './Main';
 import SideNavSetList from './SideNavSetList';
 require('./SideNav.scss');
 
+@connect(state =>({
+	loc: state.router.location,
+}))
 export default class SideNav extends Component {
 	static propTypes = {
 		
@@ -22,8 +26,8 @@ export default class SideNav extends Component {
 	render() {
 		return(
 			<div className="sidenav">
-					<Main/>	
-					<SideNavSetList/>
+					<Main {...this.props}/>	
+					<SideNavSetList {...this.props}/>
 					<div className="clear_both"></div>
 			</div>
 		);

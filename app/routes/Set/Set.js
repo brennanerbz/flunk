@@ -13,52 +13,18 @@ import SetInfo from '../../components/SetView/SetInfo/SetInfo';
 import ItemList from '../../components/SetView/ItemList/ItemList';
 import QuickPractice from '../../components/SetView/QuickPractice/QuickPractice';
 
-var set = {
-	title: 		 'Cognitive Science',
-	description: 'A brief overview about the core concepts in cognitive science',
-	subjects: 	['psychology', 'cognitive psychology', 'science'],
-	author: 	 'Nathan Lomeli',
-	creation: 	 '2015-10-14 23:49:37.892450',
-	items: [
-		{
-			target: 'open',
-			cue: 	'the process of associating a file in secondary memory with a variable in a program through which the file can be manipulated.'
-		}, 
-		{
-			target: 'object oriented design',
-			cue: 	'object-based design or programming that includes characteristics of polymorphism and inheritance.'
-		}, 
-		{
-			target: 'amygdala',
-			cue: 	'the region of the brain that processes fear'
-		},
-		{
-			target: 'marginal utility',
-			cue: 	'as prices rise, consumers will replace more costly items with less expensive'
-		},
-		{
-			target: 'open',
-			cue: 	'the process of associating a file in secondary memory with a variable in a program through which the file can be manipulated.'
-		}, 
-		{
-			target: 'object oriented design',
-			cue: 	'object-based design or programming that includes characteristics of polymorphism and inheritance.'
-		}, 
-		{
-			target: 'amygdala',
-			cue: 	'the region of the brain that processes fear'
-		},
-		{
-			target: 'marginal utility',
-			cue: 	'as prices rise, consumers will replace more costly items with less expensive'
-		}
-	],
-	item_count: 8,
-	member_count: 5
-}
-
 @connect(state => ({
-	set: state.setView.set
+	isFetching: state.setView.isFetchingSet,
+	set: state.setView.set,
+	creator_username: state.setView.creator_username,
+	title: state.setView.title,
+	id: state.setView.id,
+	purpose: state.setView.purpose,
+	item_count: state.setView.item_count,
+	subjects: state.setView.subjects,
+	doc: state.setView.doc,
+	associations: state.setView.assocations,
+	items: state.setView.items
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -73,7 +39,15 @@ export default class Set extends Component {
 
 	componentWillMount() {
 		const { params, fetchSet } = this.props;
-		fetchSet(1)
+		fetchSet(params.id)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		console.log(nextProps.params.id)
+		if(this.props.params.id !== nextProps.params.id) {
+			this.props.clearSet()
+			this.props.fetchSet(nextProps.params.id)
+		}
 	}
 
 	componentWillUnmount() {
@@ -82,17 +56,22 @@ export default class Set extends Component {
 	}
 
 	render() {
+		const { isFetching } = this.props;
 		return(
 			<div className="set_view main_content">
-				<div className="row">
-					<div className="col-sm-9 col-md-8 col-lg-8">
-						<SetHeader set={set} />						
-						<ItemList set={set} />	
+				{
+					!isFetching
+					? <div className="row">
+						<div className="col-sm-9 col-md-8 col-lg-8">
+							<SetHeader {...this.props} />						
+							<ItemList {...this.props}/>	
+						</div>
+						<div className="col-md-4 col-lg-4">
+							<SetInfo {...this.props}/>
+						</div>
 					</div>
-					<div className="col-md-4 col-lg-4">
-						<SetInfo set={set}/>
-					</div>
-				</div>
+					: null
+				}
 			</div>
 		);
 	}

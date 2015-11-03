@@ -40,7 +40,7 @@ export default class SetListItem extends Component {
 		        <div className="col-sm-6 col-md-6 col-lg-7 set_col set_name">
 		        	<span className="overflow_ellipsis">
 		        		<Link className="link" 
-		        			  to={`/learn/${set.id}`}>{set.title}</Link>
+		        			  to={`/set/${set.id}`}>{set.title}</Link>
 		        	</span>
 		        </div>
 		        <div className="col-sm-5 col-md-5 col-lg-3 set_col set_author">

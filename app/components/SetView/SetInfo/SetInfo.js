@@ -8,10 +8,13 @@ export default class SetInfo extends Component {
 	}
 
 	renderSubjects(subjects) {
+		if(subjects.length === 0) {
+			return <span className="subject">No subjects listed</span>
+		}
 		let last_subject = subjects.slice(-1)[0]
-		let subject_list = subjects.pop()
-		subject_list = subjects.map((subject, i) => {
-			return <span key={i} className="subject">{subject + ", "}</span>
+		subjects.pop()
+		let subject_list = subjects.map((subject, i) => {
+			return <span key={'subject' + i} className="subject">{subject + ", "}</span>
 		})
 		return (
 			<span className="subject">{subject_list} and {last_subject}</span>
@@ -20,9 +23,11 @@ export default class SetInfo extends Component {
 	
  
 	render() {
-		const { set } = this.props;
-		const info = require('../../../assets/set_details_blue.png')
-		const author = set.author.split(" ")[0]
+	const { purpose, 
+			subjects, 
+			doc, 
+			creator_username } = this.props,
+	 	    info = require('../../../assets/set_details_blue.png');
 		return(
 			<div className="set_info">
 				<div className="section_header set_details">					
@@ -36,16 +41,16 @@ export default class SetInfo extends Component {
 				<div className="set_details">
 					<div className="purpose">
 						<p className="info_header">Purpose</p>
-						<p className="info_purpose">{set.description}</p>
+						<p className="info_purpose">{purpose}</p>
 					</div>
 					<div className="subject_list">
 						<p className="info_header">Subjects</p>
 						{
-							::this.renderSubjects(set.subjects)
+							::this.renderSubjects(subjects)
 						}
 					</div>
 					<div className="supplemental_details">
-						<p className="created_details">Created by {author} on {moment(set.creation).format("MMMM Do")}</p>
+						<p className="created_details">Created by {creator_username} on {moment(doc).format("MMMM Do")}</p>
 					</div>
 				</div>
 			</div>

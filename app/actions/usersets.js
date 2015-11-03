@@ -16,7 +16,6 @@ export function fetchAssignments(user_id) {
 			let assignments;
 			await axios.get(`${api_url}/users/${user_id}/assignments`)
 			.then((res) => assignments = res.data.assignments)
-			console.log(assignments)
 			dispatch({type: RECEIVE_ASSIGNMENTS_SUCCESS, assignments})
 		} catch (err) {
 			dispatch({

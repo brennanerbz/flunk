@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 require('./SetHeader.scss');
+import { Link } from 'react-router';
 /* Components */
 import DifficultyButton from '../../DifficultyButton/DifficultyButton';
 import SubSetActions from './SubSetActions';
@@ -11,16 +12,26 @@ export default class SetHeader extends Component {
 
 	render() {
 		const image = require('../../../assets/set_profile_image.png');
-		const { set } = this.props;
+		const { title, item_count, creator_username, id } = this.props;
 		return(
 			<span className="set_header">				
 				<div className="page_header_wrapper header_info inline_info">
-					<h1 className="page_header set_title">{set.title}</h1>
-					<span><p className="set_author">{set.item_count} terms by <a className="link">{set.author}</a></p></span>
+					<h1 className="page_header set_title">{title}</h1>
+					<span>
+						<p className="set_author">
+							{item_count} terms by <a className="link">{creator_username}</a>
+						</p>
+					</span>
 				</div>
 				<div className="main_actions">
-					<button className="button button-primary">Learn</button>
-					<SubSetActions set={true} left={true} {...this.props} ref="subactions"/>
+					<Link to={`/learn/${id}`}>
+						<button className="button button-primary">
+						Learn</button>
+					</Link>
+					<SubSetActions set={true} 
+								   left={true}  
+								   ref="subactions"
+								   {...this.props}/>
 				</div>
 			</span>
 		);

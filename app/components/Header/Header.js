@@ -57,8 +57,11 @@ export default class Header extends Component {
 		let node = this.refs['set_name'];
 		const new_rect = node.getBoundingClientRect()
 		const rect = window.getComputedStyle(node)
-		console.log(new_rect)
 		return new_rect;
+	}
+
+	handleSelect(choice) {
+		console.log(choice)
 	}
 
 	render() {
@@ -105,24 +108,17 @@ export default class Header extends Component {
 						{ set && loc.pathname.indexOf('/learn') !== -1 ? 
 						<span className="open_set_container set_name_wrapper"
 						      ref="set_name_wrapper">
-							<button className="open_set_btn"
-									onClick={::this.openSetMenu}
-								    onBlur={::this.closeSetMenu}
-								    ref="open_set_btn">
-									<h1 className="set_name"
-										ref="set_name"><span className="set_hash">#</span>{set.title.toLowerCase()}</h1>
-									<a>
-										<img className="dropdown_menu_icon icon" 
-										 src={dropdown_icon}/>
-									</a>
-							</button>
-							<Menu learn={true}
-								  bounding={true}
-								  isOpen={this.state.isSetMenuOpen}
-								  side='left'
-								  rect={::this.findSetMenuPos}
-								  choices={this.state.choices}
-								  onSelect={(choice) => console.log("TODO: add actions for set menu choices")} />
+								<Link to={`/set/${set.id}`} className="open_set_btn"
+										// onClick={::this.openSetMenu}
+									    // onBlur={::this.closeSetMenu}
+									    ref="open_set_btn">
+										<h1 className="set_name"
+											ref="set_name"><span className="set_hash">#</span>{set.title.toLowerCase()}</h1>
+										<span>
+											<img className="dropdown_menu_icon icon" 
+											 src={dropdown_icon}/>
+										</span>
+								</Link>
 						</span>						
 						: null } 
 						<span className="header-block header-right">
@@ -144,3 +140,12 @@ export default class Header extends Component {
 		);
 	}
 }
+
+
+// <Menu learn={true}
+// 	  bounding={true}
+// 	  isOpen={this.state.isSetMenuOpen}
+// 	  side='left'
+// 	  rect={::this.findSetMenuPos}
+// 	  choices={this.state.choices}
+// 	  onSelect={(choice) => ::this.handleSelect(choice)} />

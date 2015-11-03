@@ -20,34 +20,39 @@ export function fetchSetView(user_id, set_id) {
 
 // Call /sets/:id route with the params id passed in from React. Will be a function to run concurrently. This will return a set object, and from this set object, we will be able to  fill store. 
 
-export const REQUEST_SET
- = 'REQUEST_SET';
+export const REQUEST_SET = 'REQUEST_SET';
 export const RECEIVE_SET_SUCCESS = 'RECEIVE_SET_SUCCESS';
 export const RECEIVE_SET_FAILURE = 'RECEIVE_SET_FAILURE';
-
-function requestSet() {
-	return {
-		type: REQUEST_SET
-	}
-}
 
 /*
 @params set_id
 */
-
 export function fetchSet(set_id) {
 	return async(dispatch, getState) => {
-		dispatch(requestSet())
+		if(getState().sets.isFetchingAssignments) {
+			setTimeout(() => {
+				dispatch(fetchSet(set_id))
+			}, 5)
+			return;
+		}
+		dispatch({type: REQUEST_SET})
 		try {
 			let set,
-				assignments = getState().sets.assignments
+				assignments = await getState().sets.assignments,
+				assignment = assignments !== undefined 
+				? assignments.filter(asg => asg.set_id === Number(set_id))[0] 
+				: null;
 			await axios.get(`${api_url}/sets/${set_id}`).then((res) => set = res.data)
 			dispatch({
 				type: RECEIVE_SET_SUCCESS,
 				set
 			})
-			console.log(assignments)
-			dispatch(fetchAssociations(set_id))
+			if(assignment !== null) {
+				dispatch(fetchAssignment(assignment.id))
+				return;
+			} else {
+				dispatch(fetchAssociations(set_id))
+			}
 		}
 		catch(err) {
 			dispatch({
@@ -58,24 +63,12 @@ export function fetchSet(set_id) {
 	}
 }
 
-// Call the /sets/:id/contents route with params id. This will be a function to run concurrently with request set, and request assignment. 
-// Once the request for contents has been successful, .then fill the store with the content.
-
-export const REQUEST_ASSOCIATIONS = 'REQUEST_ASSOCIATIONS';
-export const RECEIVE_ASSOCIATIONS_SUCCESS = 'RECEIVE_ASSOCIATIONS_SUCCESS';
-export const RECEIVE_ASSOCIATIONS_FAILURE = 'RECEIVE_ASSOCIATIONS_FAILURE';
-export const RECEIVE_ITEMS_SUCCESS = 'RECEIVE_ITEMS_SUCCESS';
-export const RECEIVE_ITEMS_FAILURE = 'RECEIVE_ITEMS_FAILURE';
-
-function requestContent() {
-	return {
-		type: REQUEST_CONTENT
-	}
-}
-
 /*
 @params set_id
 */
+export const REQUEST_ASSOCIATIONS = 'REQUEST_ASSOCIATIONS';
+export const RECEIVE_ASSOCIATIONS_SUCCESS = 'RECEIVE_ASSOCIATIONS_SUCCESS';
+export const RECEIVE_ASSOCIATIONS_FAILURE = 'RECEIVE_ASSOCIATIONS_FAILURE';
 export function fetchAssociations(set_id) {
 	return async(dispatch, getState) => {
 		try {
@@ -97,65 +90,20 @@ export function fetchAssociations(set_id) {
 }
 
 
-//  Transform the request for content with .map, so for each content object, we call /items/:itemid. On the successful response of each of those, send a receive_item dispatch to store, which will append the incoming object to the items array. 
-export const REQUEST_ITEM = 'REQUEST_ITEM';
-export const RECEIVE_ITEM_SUCCESS = 'RECEIVE_ITEM_SUCCESS';
-export const RECEIVE_ITEM_FAILURE = 'RECEIVE_ITEM_FAILURE';
-
-function requestItem() {
-	return {
-		type: REQUEST_ITEM
-	}
-}
-
 /*
-@params item_id
+@params assignment_id
 */
-export function fetchItem(item_id) {
-	return async(dispatch, getState) => {
-		try {
-			let item = await axios.get(`${api_url}/items/${item_id}`)
-			dispatch({ type: RECEIVE_ITEM_SUCCESS, item })
-			return item;
-		} catch(err) {
-			dispatch({
-				type: RECEIVE_ITEM_FAILURE,
-				error: Error(err)
-			})
-		}
-	}
-}
-
-
-// Again, concurrently, call the /assignments/user_id={val}&set_id={val}. Check to see if there is a response, and if there is any assignment, dispatch the corresponding object to the store. This will help fill in any progress, stats, and user_only settings. If there is no assignment, dispatch the viewing user has not studied, so we can make sure to create a new assignment upon learning. 
 export const REQUEST_ASSIGNMENT = 'REQUEST_ASSIGNMENT';
 export const RECEIVE_ASSIGNMENT_SUCCESS = 'RECEIVE_ASSIGNMENT_SUCCESS';
 export const RECEIVE_ASSIGNMENT_FAILURE = 'RECEIVE_ASSIGNMENT_FAILURE';
 export const HAS_NOT_STUDIED = 'HAS_NOT_STUDIED';
-
-function requestAssignment() {
-	return {
-		type: REQUEST_ASSIGNMENT
-	}
-}
-
-/*
-@params user_id, set_id
-*/
-export function fetchAssignment(user_id, set_id) {
+export function fetchAssignment(id) {
 	return async(dispatch, getState) => {
+		dispatch({type: REQUEST_ASSIGNMENT})
 		try {
-			await axios.get(`${api_url}/assignments?user_id=${user_id}&set_id=${set_id}`)
-			.then((res) => {
-				let assignment = res.data;
-				console.log("Fetch assignment:" + assignment)
-				if(assignment !== (null || undefined)) {
-					dispatch({type: RECEIVE_ASSIGNMENT_SUCCESS, assignment})
-					return;
-				} else {
-					dispatch({type: HAS_NOT_STUDIED})
-				}			 
-			})
+			let assignment;
+			await axios.get(`${api_url}/assignments/${id}`).then((res) => assignment = res.data)
+			dispatch({type: RECEIVE_ASSIGNMENT_SUCCESS, assignment})
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_ASSIGNMENT_FAILURE,
@@ -166,19 +114,18 @@ export function fetchAssignment(user_id, set_id) {
 }
 
 
-// Call a PUT to the  /assignments/user_id={val}&set_id={val} route with most likely settings changes. Also, TODO: make sure to use a PUT to assignment in learn mode for position. 
-export const UPDATE_ASSIGNMENT_SUCCESS = 'UPDATE_ASSIGNMENT_SUCCESS';
-export const UPDATE_ASSIGNMENT_FAILURE = 'UPDATE_ASSIGNMENT_FAILURE';
-
 /*
 @params user_id, set_id
 */
-export function updateAssignent(user_id, set_id) {
+export const UPDATE_ASSIGNMENT_SUCCESS = 'UPDATE_ASSIGNMENT_SUCCESS';
+export const UPDATE_ASSIGNMENT_FAILURE = 'UPDATE_ASSIGNMENT_FAILURE';
+export function updateAssignent(id) {
 	return async(dispatch, getState) => {
 		try {
-			await axios.put(`${api_url}/assignments?user_id=${user_id}&set_id=${set_id}`).then((res) => {
+			await axios.put(`${api_url}/assignments${id}`).then((res) => {
 				let new_assignment = res.data;
-				console.log("Update assignment:" + new_assignment)
+				console.log("new_assignment")
+				console.log(new_assignment)
 				dispatch({type: UPDATE_ASSIGNMENT_SUCCESS, new_assignment })
 			})
 		} catch(err) {
@@ -191,9 +138,8 @@ export function updateAssignent(user_id, set_id) {
 }
 
 
-// Clear the set state upon leaving the view. 
+ 
 export const CLEAR_SET = 'CLEAR_SET';
-
 export function clearSet() {
 	return {
 		type: CLEAR_SET

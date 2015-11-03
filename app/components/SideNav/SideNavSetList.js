@@ -27,11 +27,12 @@ export default class SetList extends Component {
 	}
 
 	render() {
-		const { sets } = this.props,
+		const { sets, params } = this.props,
 			  add_circle_icon = require('../../assets/add_circle_icon.png');
 		sets.sort((set1, set2) => {
 			return (moment(set1.creation).isBefore(set2.creation)) ? 1 : -1
 		})
+		let id = params !== undefined ? params.id : ''
 		return(
 			<div className="sidenav_sets_wrapper">
 				<Link to="/createset">
@@ -53,7 +54,7 @@ export default class SetList extends Component {
 				</h2>
 				<ul className="sidenav_list">
 					{
-						sets.map((set, i) => <SideNavSetListItem set={set} key={'side' + set.id + i} />)
+						sets.map((set, i) => <SideNavSetListItem index={id} set={set} key={'side' + set.id + i} />)
 					}					
 					<Link to="/createset" className="sidenav_create list_more">Create a study set...</Link>
 				</ul>

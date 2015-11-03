@@ -5,7 +5,7 @@ class MenuItem extends Component {
 	render() {
 		const { choice } = this.props;
 		return(
-			<li onClick={() => this.props.onSelect(choice)} className="menu_item">
+			<li onClick={this.props.onSelect(choice)} className="menu_item">
 				<a className=""><i className="_icon"></i>{choice}</a>
 			</li>
 		);
@@ -42,7 +42,6 @@ export default class Menu extends Component {
 	  		menuLeft: r.left - 115,
 	  		menuWidth: r.width
 	  	});
-	  	console.log(this.state.menuLeft)
 	  	return;
 	  }
 	  let height = r.height.replace('px', '')

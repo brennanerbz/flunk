@@ -31,8 +31,9 @@ import {
 } from '../actions/set';
 
 const initial_setstate = {
-	set: {},
 	isFetchingSet: false,
+	set: {},
+	assignment: {},
 	id: null,
 	title: null,
 	purpose: null,
@@ -62,17 +63,19 @@ export default function setView(state = initial_setstate, action) {
 			}
 
 		case RECEIVE_SET_SUCCESS:
-			let set = action.set;
+			let set = action.set,
+				subjects = [];
+			set.subjects.forEach(sub => subjects.push(sub.name))
 			return {
 				...state,
 				set: set,
 				id: set.id,
 				title: set.title,
 				purpose: set.description,
-				doc: set.doc,
+				doc: set.creation,
 				creator_username: set.creator.username,
 				creator_pic: set.creator.profile_picture,
-				subjects: set.subjects
+				subjects: subjects
 			}
 		case RECEIVE_ASSOCIATIONS_SUCCESS:
 			let items = [];
@@ -83,15 +86,24 @@ export default function setView(state = initial_setstate, action) {
 				...state,
 				associations: action.associations,
 				items: items,
+				item_count: items.length,
 				isFetchingSet: false
 			}
 		case RECEIVE_ASSIGNMENT_SUCCESS:
-			let assignment = action.assignment;
+			let assignment = action.assignment,
+				_associations = [],
+				_items = [];
+			assignment.set.associations.forEach(asc => { 
+				_associations.push(asc) 
+				_items.push(asc.item)
+			})
 			return {
 				...state,
-				has_studied: true,
-				default_diff: assignment.default_diff, // TODO: LOOK UP OFFICIAL API KEYS
-				user_privacy: assignment.privacy
+				assignment: assignment,
+				associations: _associations,
+				items: _items,
+				item_count: _items.length,
+				isFetchingSet: false
 			}
 		case HAS_NOT_STUDIED:
 			return {
@@ -109,8 +121,6 @@ export default function setView(state = initial_setstate, action) {
 			}
 		case RECEIVE_SET_FAILURE:
 		case RECEIVE_ASSOCIATIONS_FAILURE:
-		case RECEIVE_ITEMS_FAILURE:
-		case RECEIVE_ITEM_FAILURE:
 		case RECEIVE_ASSIGNMENT_FAILURE:
 		case UPDATE_ASSIGNMENT_FAILURE:
 		default:

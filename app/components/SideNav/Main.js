@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import classnames from 'classnames';
 import { Link } from 'react-router';
 
 export default class Main extends Component {
@@ -12,7 +13,10 @@ export default class Main extends Component {
 		profile_icon = require('../../assets/profile_icon.png'),
 		profile_icon_active = require('../../assets/profile_icon_white.png'),
 		settings_icon = require('../../assets/settings_icon.png'),
-		settings_icon_active = require('../../assets/settings_icon_white.png');
+		settings_icon_active = require('../../assets/settings_icon_white.png'),
+		{loc} = this.props,
+		hi = loc.pathname === '/' ? home_icon_active : home_icon,
+		pi = loc.pathname.indexOf('profile') !== -1 ? profile_icon_active : profile_icon
 		return(
 			<div className="sidenav_main">				
 				<h2 className="sidenav_header">
@@ -21,21 +25,21 @@ export default class Main extends Component {
 					</span>
 				</h2>				
 				<ul className="sidenav_list">
-					<li className="sidenav_setitem active">
-						<a className="sidenav_setitem_name">
+					<li className={classnames("sidenav_setitem", {"active": loc.pathname === '/'})}>
+						<Link to="/" className="sidenav_setitem_name">
 							<span className="overflow_ellipsis">
 								<span className="prefix_icon">
-									<img src={home_icon_active} className="set_icon  home_icon"/>
+									<img src={hi} className="set_icon  home_icon"/>
 								</span>
 								Home
 							</span>
-						</a>
+						</Link>
 					</li>
-					<li className="sidenav_setitem">
+					<li className={classnames("sidenav_setitem", {"active": loc.pathname.indexOf('profile') !== -1})}>
 						<a className="sidenav_setitem_name">
 							<span className="overflow_ellipsis">
 								<span className="prefix_icon">
-									<img src={profile_icon} className="set_icon"/>
+									<img src={pi} className="set_icon"/>
 								</span>
 								Profile
 							</span>

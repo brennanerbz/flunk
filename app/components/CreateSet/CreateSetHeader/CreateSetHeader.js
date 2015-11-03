@@ -55,11 +55,6 @@ export default class CreateSetHeader extends Component {
 			purpose: purpose
 		});
 	}
-	handlePurposeBlur = () => {
-		const { savePurpose } = this.props;
-		const purpose = this.state.purpose;
-		savePurpose(purpose);
-	}
 	render() {
 		const { saveSet } = this.props;
 		return(
@@ -74,13 +69,11 @@ export default class CreateSetHeader extends Component {
 	              	onChange={this.handleTitleChange}
 	              	onFocus={this.handleTitleFocus}
 	              />
-	              <CreateSetPurpose
-	              	indexForTab={2}
-	              	placeholder="Purpose (optional)"
-	              	onBlur={this.handlePurposeBlur}
-	              	onChange={this.handlePurposeChange}
-	              	onFocus={this.handlePurposeFocus}
-	              />             
+	              <ul className="subject_list">
+	              	<li className="subject">
+	              		<p>psychology</p>
+	              	</li>
+	              </ul>
 	            </div>
 	            <ButtonGroup onSave={() => saveSet()}
 	            />	                        
@@ -89,6 +82,15 @@ export default class CreateSetHeader extends Component {
 		)
 	}
 }
+
+
+// <CreateSetPurpose
+// 	indexForTab={2}
+// 	placeholder="Purpose (optional)"
+// 	onBlur={this.handlePurposeBlur}
+// 	onChange={this.handlePurposeChange}
+// 	onFocus={this.handlePurposeFocus}
+// />
 // 
 // 
 // <div className="create_avatar">

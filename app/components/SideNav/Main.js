@@ -36,14 +36,14 @@ export default class Main extends Component {
 						</Link>
 					</li>
 					<li className={classnames("sidenav_setitem", {"active": loc.pathname.indexOf('profile') !== -1})}>
-						<a className="sidenav_setitem_name">
+						<Link to={`/profile/${1}`} className="sidenav_setitem_name">
 							<span className="overflow_ellipsis">
 								<span className="prefix_icon">
 									<img src={pi} className="set_icon"/>
 								</span>
 								Profile
 							</span>
-						</a>
+						</Link>
 					</li>
 					<li className="sidenav_setitem">
 						<a className="sidenav_setitem_name">

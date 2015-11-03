@@ -13,7 +13,7 @@ export default class ProfileCreated extends Component {
 	render() {
 		return(
 			<div>
-				<SetList profile={true}/>
+				<SetList sets={this.props.created_sets} profile={true}/>
 			</div>
 		);
 	}

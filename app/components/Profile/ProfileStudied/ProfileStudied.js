@@ -12,7 +12,7 @@ export default class ProfileStudied extends Component {
 	render() {
 		return(
 			<div>
-				<SetList profile={true}/>
+				<SetList sets={this.props.studied_sets} profile={true}/>
 			</div>
 		);
 	}

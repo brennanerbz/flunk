@@ -11,7 +11,7 @@ import SetListItem from './SetListItem';
 
 export default class SetList extends Component {
 	static propTypes = {
-		
+		sets: PropTypes.array
 	}
 
 	state = {

@@ -17,7 +17,7 @@ const routes = (
   <Route component={FlunkApp}>
     <Route path="/" component={Home} />
     <Route path='set/:id' component={SetView}/>
-    <Route path="profile" component={Profile}/>     
+    <Route path="profile/:id" component={Profile}/>     
     <Route path="createset" component={CreateSet} />
     <Route path="learn/:id" component={Learn}/>
     <Route path="search" component={Search}/>

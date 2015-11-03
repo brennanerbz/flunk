@@ -21,10 +21,13 @@
 			display: table-cell;
 			position: absolute;
 			margin: 0 0 0 30px;
+			width: 100%;
 			.profile_username {
-				font-family: "Calibri";
-				font-size: 32px;
-				margin-bottom: 0!important;
+				font-family: "Lato";
+				font-size: 1.8em;
+				font-weight: 900;
+				letter-spacing: 0.01em;
+				margin-bottom: 5px!important;
 			}
 			.profile_fullname {
 				opacity: 0.6;

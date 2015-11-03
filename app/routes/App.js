@@ -9,9 +9,15 @@ const styles = require('../styles/global.scss');
 import Header from '../components/Header/Header';
 import SideNav from '../components/SideNav/SideNav';
 
+import * as actions from '../actions/usersets';
+
 @connect(
 	state => ({ router: state.router }),
-	{ pushState }
+	dispatch => ({
+		...bindActionCreators({
+			...actions
+		}, dispatch)
+	})
 )
 export default class FlunkApp extends Component {
 	static propTypes = {
@@ -26,6 +32,12 @@ export default class FlunkApp extends Component {
 		return (
 			<SideNav {...this.props} />
 		);
+	}
+
+	componentWillMount() {
+		const { fetchAssignments } = this.props; 
+		// on mounting, will load user object and assignments
+		fetchAssignments(1)
 	}
 
 	render() {

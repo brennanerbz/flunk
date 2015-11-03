@@ -8,7 +8,7 @@
 	padding-top: 2rem;
 	.round_divider {
 		// margin-right: -.125rem;
-		margin: -5px 0px 0 0.5em;
+		margin: -5px 0px 0 0em;
 		padding: .5rem 18px 0rem 1.5rem;
 		line-height: 1.2rem;
 		font-size: 1rem;
@@ -51,10 +51,10 @@
 		border: 1px solid #C7CACD;
 		color: #555549;
 		text-shadow: none;
-	    margin-left: 54px !important;
-	    top: 130px;
+	    margin-left: 30px !important;
+	    top: 95px;
 	    position: absolute;
-	    width: 50%;
+	    width: 65%;
 		&:hover {
 			box-shadow: none;
 			color: #32A2E6;
@@ -68,7 +68,7 @@
 		margin-top: 2px;
 		padding: 0;
 		position: absolute;
-		left: 50px;
+		left: 46px;
 		padding-bottom: 10px;
 	}
 

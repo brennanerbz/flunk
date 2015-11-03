@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 import createset from './createset';
 import sets from './usersets';
-import set from './set';
+import setView from './set';
 import learn from './learnv2';
 import { routerStateReducer } from 'redux-router';
 
 const reducers = combineReducers({
 	sets,
-	set,
+	setView,
 	learn,	
 	createset,
 	router: routerStateReducer

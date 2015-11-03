@@ -37,10 +37,12 @@ export default class Menu extends Component {
 	  var r = rect(); // measurements
 	  if (bounding) {
 	  	this.setState({
-	  		menuTop: r.top + r.height,
+	  		menuTop: r.top + r.height + 10,
 	  		menuRight: r.right,
-	  		menuLeft: r.left
+	  		menuLeft: r.left - 115,
+	  		menuWidth: r.width
 	  	});
+	  	console.log(this.state.menuLeft)
 	  	return;
 	  }
 	  let height = r.height.replace('px', '')
@@ -63,10 +65,10 @@ export default class Menu extends Component {
 	}
 
 	renderMenu() {
-		const { choices, side } = this.props;
+		const { choices, side, bounding } = this.props;
 		var mid_styles = {
 			top: this.state.menuTop,
-			left: this.state.menuLeft
+			// left: this.state.menuLeft
 		}
 		var right_styles = {
 			top: this.state.menuTop,
@@ -85,6 +87,9 @@ export default class Menu extends Component {
 		}
 		if(side == 'left') {
 			_menustyle = left_styles
+		}
+		if(bounding) {
+			_menustyle['width'] = this.state.menuWidth
 		}
 		return (
 			<div style={_menustyle} className="menu flex_menu">

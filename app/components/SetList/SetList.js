@@ -7,21 +7,8 @@ import { bindActionCreators } from 'redux';
 
 const styles = require('./SetList.scss');
 
-import * as actionCreators from '../../actions/usersets';
-
 import SetListItem from './SetListItem';
 
-@connect(state => ({
-	sets: state.sets.set_list.map(id => state.sets.set_items[id]),
-	set_list: state.sets.set_list,
-	isFetching: state.sets.isFetching
-	}),
-	dispatch => ({
-		...bindActionCreators({
-		  ...actionCreators
-		}, dispatch)
-	})
-)
 export default class SetList extends Component {
 	static propTypes = {
 		
@@ -29,10 +16,6 @@ export default class SetList extends Component {
 
 	state = {
 		activeRow: 0
-	}
-
-	componentWillMount() {
-		this.props.fetchSets()
 	}
 
 	setActiveRow = (id) => {
@@ -43,11 +26,11 @@ export default class SetList extends Component {
 
 	renderSets(sets) {		
 		var sorted_sets = sets.map((set) => {
-		    const date = moment(set['doc']);
-		    const today = moment();
-		    const date_month = moment(set['doc']).format('MMMM');
-		    const today_month = moment().format('MMMM');
-		    let diff = today.diff(date, 'days');
+		    const date = moment(set['creation']),
+		    	  today = moment(),
+		     	  date_month = moment(set['creation']).format('MMMM'),
+		    	  today_month = moment().format('MMMM'),
+		    	  diff = today.diff(date, 'days');
 
 		    if (diff > 30 && today_month !== date_month) {		    	
 		        return assign({}, set, {time_ago: date_month})
@@ -66,13 +49,13 @@ export default class SetList extends Component {
 		sorted_sets.forEach((set, i) => {
 			if (set.time_ago !== last_time_ago) {
 				rows.push(<DayDivider set={set} 
-					                  key={'day' + i}
+					                  key={'day' + set.id + i}
 					                  {...this.props}/>)
 			}
 			rows.push(<SetListItem set={set}							   
 								   setActiveRow={this.setActiveRow}
 								   activeRow={this.state.activeRow}
-								   key={set.id}/>)
+								   key={'item' + set.id + i}/>)
 			last_time_ago = set.time_ago;
 		})
 		return rows;
@@ -80,15 +63,15 @@ export default class SetList extends Component {
 
 
 	render() {	
-		const { sets, isFetching, set_list } = this.props;
+		const { sets, isFetching } = this.props;
 		sets.sort((set1, set2) => {
-			return (moment(set1.doc).isBefore(set2.doc)) ? 1 : -1
+			return (moment(set1.creation).isBefore(set2.creation)) ? 1 : -1
 		})		
 		return(
 			<div>				
 				<div className="sets_container">
 					{
-						isFetching || typeof sets == null || set_list.length === 0
+						isFetching || typeof sets == undefined || sets.length === 0
 
 						? null
 

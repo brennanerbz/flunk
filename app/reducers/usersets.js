@@ -1,36 +1,34 @@
 import assign from 'lodash/object/assign';
 
 import {
-	REQUEST_SETS,
-	RECEIVE_SETS_SUCCESS,
-	RECEIVE_SETS_FAILURE
+	REQUEST_ASSIGNMENTS,
+	RECEIVE_ASSIGNMENTS_SUCCESS,
+	RECEIVE_ASSINGMENTS_FAILURE
 } from '../actions/usersets';
 
 let init_state = {
-	isFetching: false,
-	set_list: [],
-	set_items: {},
+	isFetchingAssignments: false,
+	assignments: [],
 	sets: []
 };
 
 export default function sets(state = init_state, action) {
 	switch(action.type) {
-		case (REQUEST_SETS):
+		case REQUEST_ASSIGNMENTS:
 			return {
 				...state,
-				isFetching: true
+				isFetchingAssignments: true
 			}
-		case (RECEIVE_SETS_SUCCESS):
-			const sets_obj = {};
-			action.sets.forEach(set => { sets_obj[set.id] = set })
+		case RECEIVE_ASSIGNMENTS_SUCCESS:
+			const sets_list = [];
+			action.assignments.forEach(assignment => { sets_list.push(assignment.set) })
 			return {
 				...state,
-				isFetching: false,
-				set_list: action.sets.map(set => set.id),
-				set_items: sets_obj,
-				sets: action.sets
+				isFetchingAssignments: false,
+				sets: sets_list,
+				assignments: action.assignments
 			}
-		case (RECEIVE_SETS_FAILURE):
+		case RECEIVE_ASSINGMENTS_FAILURE:
 		default:
 			return state;
 	}

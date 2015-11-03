@@ -238,13 +238,13 @@ export default class Learn extends Component {
 										: null
 									}
 									{
-										showCorrect && !isShowingCompleteMiniseq
+										showCorrect && !isShowingCompleteMiniseq && !showCompletedSequence
 										? <ShowCorrect correctMiniSequence={isShowingCompleteMiniseq} 
 													   {...this.props}/>
 										: null
 									}
 									{
-										showCompletedSequence && !isShowingCompleteMiniseq
+										showCompletedSequence
 										? <SequenceSummary {...this.props}/>
 										: null
 									}
@@ -265,8 +265,7 @@ export default class Learn extends Component {
 										: null
 									}												
 									{
-										!showCorrect 
-										&& (!showCompletedSequence || !isShowingCompleteMiniseq)
+										!showCorrect && !showCompletedSequence && !isShowingCompleteMiniseq 
 										? <DiffControls getHint={::this.handleHint} {...this.props} />
 										: null
 									}

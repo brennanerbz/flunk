@@ -13,9 +13,10 @@ import Menu from '../Menu/Menu';
 
 @connect(state => ({
 	loc: state.router.location,
-	sets: state.sets.set_items,
-	isFetching: state.sets.isFetching,
-	fetchingLearn: state.learn.is_fetching_learn
+	sets: state.sets.sets,
+	isFetching: state.sets.isFetchingAssignments,
+	fetchingLearn: state.learn.is_fetching_learn,
+	current_sequence: state.learn.current_sequence
 }))
 export default class Header extends Component {
 	static propTypes = {
@@ -53,16 +54,18 @@ export default class Header extends Component {
 	}
 
 	findSetMenuPos() {
-		let node = this.refs['open_set_btn'];
+		let node = this.refs['set_name'];
+		const new_rect = node.getBoundingClientRect()
 		const rect = window.getComputedStyle(node)
-		return rect;
+		console.log(new_rect)
+		return new_rect;
 	}
 
 	render() {
 		const logo = require('./assets/FlunkLogo.png'),
 			  create_icon = require('../../assets/create_new_pencil.png'),
 			  dropdown_icon = require('../../assets/dropdown_arrow.png'),
-			  { loc, sets, isFetching, fetchingLearn} = this.props;
+			  { loc, sets, isFetching, current_sequence, fetchingLearn} = this.props;
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
 		return(
@@ -83,7 +86,11 @@ export default class Header extends Component {
 							<Link className="site-logo" to="/">						
 									<img className="site-icon" src={logo} />
 							</Link>
-							<SearchBox {...this.props}/>
+							{
+								loc.pathname.indexOf('/learn') !== -1
+								? null
+								: <SearchBox {...this.props}/>
+							}
 							{
 								loc.pathname.indexOf('/learn') !== -1 || loc.pathname.indexOf('/createset') !==  -1
 								? null
@@ -96,18 +103,21 @@ export default class Header extends Component {
 							}
 						</span>
 						{ set && loc.pathname.indexOf('/learn') !== -1 ? 
-						<span className="open_set_container set_name_wrapper">
+						<span className="open_set_container set_name_wrapper"
+						      ref="set_name_wrapper">
 							<button className="open_set_btn"
 									onClick={::this.openSetMenu}
 								    onBlur={::this.closeSetMenu}
 								    ref="open_set_btn">
-									<h1 className="set_name">{set.title}</h1>
+									<h1 className="set_name"
+										ref="set_name"><span className="set_hash">#</span>{set.title.toLowerCase()}</h1>
 									<a>
 										<img className="dropdown_menu_icon icon" 
 										 src={dropdown_icon}/>
 									</a>
 							</button>
 							<Menu learn={true}
+								  bounding={true}
 								  isOpen={this.state.isSetMenuOpen}
 								  side='left'
 								  rect={::this.findSetMenuPos}

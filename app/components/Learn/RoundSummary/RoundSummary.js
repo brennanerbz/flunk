@@ -30,7 +30,7 @@ export default class RoundSummary extends Component {
 			  slots = current_miniseq.slots;
 		return(
 			<div className="summary">
-				<h3 className="table_header">Round {cmi + 1}</h3>
+				<h3 className="summary_header">Round {cmi + 1}</h3>
 				<table className="summary_table">
 					<tbody>
 						<tr className="recall_row">

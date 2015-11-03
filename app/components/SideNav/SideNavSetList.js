@@ -8,7 +8,7 @@ import moment from 'moment';
 import SideNavSetListItem from './SideNavSetListItem';
 
 @connect(state => ({
-	sets: state.sets.set_list.map(id => state.sets.set_items[id])
+	sets: state.sets.sets
 }))
 export default class SetList extends Component {
 	static propTypes = {
@@ -30,7 +30,7 @@ export default class SetList extends Component {
 		const { sets } = this.props,
 			  add_circle_icon = require('../../assets/add_circle_icon.png');
 		sets.sort((set1, set2) => {
-			return (moment(set1.doc).isBefore(set2.doc)) ? 1 : -1
+			return (moment(set1.creation).isBefore(set2.creation)) ? 1 : -1
 		})
 		return(
 			<div className="sidenav_sets_wrapper">
@@ -53,7 +53,7 @@ export default class SetList extends Component {
 				</h2>
 				<ul className="sidenav_list">
 					{
-						sets.map(set => <SideNavSetListItem set={set} key={set.id} />)
+						sets.map((set, i) => <SideNavSetListItem set={set} key={'side' + set.id + i} />)
 					}					
 					<Link to="/createset" className="sidenav_create list_more">Create a study set...</Link>
 				</ul>

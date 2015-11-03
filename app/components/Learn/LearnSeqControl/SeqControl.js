@@ -28,8 +28,6 @@ export default class SeqControl extends Component {
 					</div> 
 				</div>
 				<SignPosts {...this.props} />
-				<label className="label_term_first">See Term first</label>
-				<input id="term_first" type="checkbox" className="term_first"/>
 				<span className="">
 					<button className="button button-outline startover_btn"
 						    type="button"
@@ -40,3 +38,6 @@ export default class SeqControl extends Component {
 		);
 	}
 }
+
+// <input id="term_first" type="checkbox" className="term_first"/>
+// <label className="label_term_first">See Term first</label>

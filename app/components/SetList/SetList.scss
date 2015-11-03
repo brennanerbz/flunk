@@ -3,10 +3,11 @@
 	margin: 0.5rem -18px 0 -1.5rem;
 	padding: .5rem 55px .5rem 1.5rem;
 	line-height: 1.2rem;
-	font-size: 1rem;
-	font-family: "Calibri";
+	font-size: 0.95rem;
+	font-family: "Lato";
 	color: #555459;
 	font-weight: 900;
+	letter-spacing: 0.01em;
 	text-align: center;
 	cursor: default;
 	clear: both;
@@ -68,8 +69,10 @@
 		}
 	}		
 	.set_col { 
-		font-family: "Roboto";
-		color: #383F45;						
+		font-family: "Lato";
+		color: #383F45;	
+		font-size: 1.1em;
+		letter-spacing: 0.01em;					
 	}
 	.home_set_icon {
 		opacity: 0.2;
@@ -83,7 +86,7 @@
 	}
 	.set_author {
 		float: right;
-		font-size: 14.5px;
+		// font-size: 14.5px;
 		&:hover {
 			opacity: 1;
 			.link_name {

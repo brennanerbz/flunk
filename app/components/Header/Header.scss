@@ -85,7 +85,7 @@
         &.set_name_wrapper {
             position: absolute;
             padding-top: 19px;
-            padding-left: 24px;
+            padding-left: 130px;
             padding-right: 0px;
             z-index: 700;
             border: 0px none;  
@@ -94,12 +94,22 @@
             &:hover {
                 opacity: 1;
             }
+           .dropdown_menu_icon {
+                height: 5px;
+           }
            .set_name {
-               font-family: "Calibri";
-               font-size: 18px;
+               font-family: "Lato";
+               font-weight: 900;
+               letter-spacing: 0.01em;
+               font-size: 1.4em;
                color: #555549;
                padding-top: 2px;
-           }        
+           }      
+           .set_hash {
+            margin-right: 5px;
+            font-weight: 400;
+            color:#9e9ea6;
+           }  
            .diff_control {
                 width: 30px;
                 height: 30px;
@@ -144,7 +154,7 @@
         border: none;
         outline: none;
         vertical-align: middle;
-        border-left: 1px solid #f3f3f3;
+        // border-left: 1px solid #f3f3f3;
         position: relative;
         margin-left: 15px;
         opacity: 0.75;

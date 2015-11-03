@@ -12,7 +12,8 @@ import ActivityList from '../../components/ActivityList/ActivityList';
 import OnlineUserList from '../../components/OnlineUserList/OnlineUserList';
 
 @connect(state => ({
-	sets: state.sets.set_list.map(id => state.sets.set_items[id])
+	sets: state.sets.sets,
+	isFetching: state.sets.isFetchingAssignments
 	}), 
 	dispatch => ({
 		...bindActionCreators({
@@ -26,7 +27,7 @@ export default class Home extends Component {
 	}
 
 	componentWillMount() {
-		this.props.fetchSets()
+		this.props.fetchAssignments(1)
 	}	
 	
 	render() {	
@@ -41,7 +42,7 @@ export default class Home extends Component {
 						{
 							typeof sets == undefined || sets.length === 0
 							? null
-							: <SetList />
+							: <SetList {...this.props} />
 						}									
 					</div>					
 				</div>	

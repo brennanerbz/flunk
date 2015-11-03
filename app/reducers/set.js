@@ -8,9 +8,9 @@ import {
 	RECEIVE_SET_SUCCESS,
 	RECEIVE_SET_FAILURE,
 
-	REQUEST_CONTENT,
-	RECEIVE_CONTENT_SUCCESS,	
-	RECEIVE_CONTENT_FAILURE,
+	REQUEST_ASSOCIATIONS,
+	RECEIVE_ASSOCIATIONS_SUCCESS,	
+	RECEIVE_ASSOCIATIONS_FAILURE,
 
 	RECEIVE_ITEMS_SUCCESS,
 	RECEIVE_ITEMS_FAILURE,
@@ -40,8 +40,8 @@ const initial_setstate = {
 	creator_pic: null,
 	member_count: null,
 	item_count: null,
-	items_from_append: [],
-	items_from_whole: [],
+	associations: [],
+	items: [],
 	subjects: [],
 	doc: null,
 	has_studied: null,
@@ -53,7 +53,7 @@ const initial_setstate = {
 	last_slot: {} // TODO: EVENTUALLY, DISPLAY LAST_SLOT
 }
 
-export function set(state = initial_setstate, action) {
+export default function setView(state = initial_setstate, action) {
 	switch(action.type) {
 		case REQUEST_SET:
 			return {
@@ -68,23 +68,22 @@ export function set(state = initial_setstate, action) {
 				set: set,
 				id: set.id,
 				title: set.title,
-				purpose: set.purpose,
+				purpose: set.description,
 				doc: set.doc,
 				creator_username: set.creator.username,
-				creator_pic: set.creator.user_pic,
-				member_count: set.member_count,
-				item_count: set.item_count,
+				creator_pic: set.creator.profile_picture,
 				subjects: set.subjects
 			}
-		case RECEIVE_ITEMS_SUCCESS: // 1) Competing reducer TODO: CHOOSE ONE
+		case RECEIVE_ASSOCIATIONS_SUCCESS:
+			let items = [];
+			action.associations.forEach(acc => {
+				items.push(acc.item)
+			})
 			return {
 				...state,
-				items_from_whole: action.item_list
-			}
-		case RECEIVE_ITEM_SUCCESS: // 2) Competing reducer TODO: CHOOSE ONE
-			return {
-				...state,
-				items_from_append: state.items_from_append.concat(action.item)
+				associations: action.associations,
+				items: items,
+				isFetchingSet: false
 			}
 		case RECEIVE_ASSIGNMENT_SUCCESS:
 			let assignment = action.assignment;
@@ -109,7 +108,7 @@ export function set(state = initial_setstate, action) {
 				...state = initial_setstate
 			}
 		case RECEIVE_SET_FAILURE:
-		case RECEIVE_CONTENT_FAILURE:
+		case RECEIVE_ASSOCIATIONS_FAILURE:
 		case RECEIVE_ITEMS_FAILURE:
 		case RECEIVE_ITEM_FAILURE:
 		case RECEIVE_ASSIGNMENT_FAILURE:

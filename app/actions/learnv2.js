@@ -171,15 +171,15 @@ export function updateSequence(_sequence) {
 			).then(res => {
 				const sequence = res.data;
 				dispatch({type: UPDATE_SEQUENCE_SUCCESS, sequence}) 
+				if(sequence.completed) {
+					dispatch({type: SHOW_COMPLETED_SEQUENCE})
+				} 
 			}).then(() => {
 				if(!getState().learn.current_sequence.completed) {
-					dispatch(fetchTrials())
 					let slot = getState().learn.current_slot
+					dispatch(fetchTrials())
 					dispatch({ type: UPDATE_CURRENT_MINISEQ, slot })
-				} else {
-					dispatch({type: SHOW_COMPLETED_SEQUENCE})
-					return;
-				}
+				} 
 			})
 		} catch(err) {
 			dispatch({
@@ -568,33 +568,29 @@ export function updateTrial(response) { // TODO: make sure to pass in object fro
 				dispatch(adapt(updated_trial))
 			})
 			.then(() => {
-				let slots = getState().learn.slots,
-					current_sequence = getState().learn.current_sequence;
+				var state = getState().learn,
+					slots = state.slots,
+					current_sequence = state.current_sequence,
+					current_miniseq = state.current_miniseq,
+					cmi = state.current_miniseq_index,
+					miniseqs = state.miniseqs,
+					round_slots = current_miniseq.slots;
 				if(slots.filter(slot => !slot.completed).length === 0) {
 					current_sequence['type'] = 'completed';
 					dispatch(updateSequence(current_sequence))
 					return;
 				}
-			})
-			.then(() => {
-				if(getState().learn.current_sequence.completed) {
-					return;
-				}
-				let state = getState().learn,
-					current_miniseq = state.current_miniseq,
-					cmi = state.current_miniseq_index,
-					miniseqs = state.miniseqs,
-					slots = current_miniseq.slots;
-				if(slots.filter(slot => !slot.completed).length === 0) {
-					miniseqs.map((miniseq) => {
-						if(miniseqs.indexOf(miniseq) == cmi) {
-							miniseq.completed = true
-						}
-					})
-					dispatch({type: SHOW_COMPLETE_MINISEQ, miniseqs})
+				if(!current_sequence.completed && current_sequence.type !== 'completed') {
+					if(round_slots.filter(slot => !slot.completed).length === 0) {
+						miniseqs.map((miniseq) => {
+							if(miniseqs.indexOf(miniseq) == cmi) {
+								miniseq.completed = true
+							}
+						})
+						dispatch({type: SHOW_COMPLETE_MINISEQ, miniseqs})
+					}
 				}
 			})
-			
 		} catch(err) {
 			dispatch({
 				type: UPDATE_TRIAL_FAILURE,

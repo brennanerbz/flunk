@@ -7,6 +7,7 @@ export default class SequenceSummary extends Component {
 
 	render() {
 		const { slots } = this.props;
+		console.log(slots)
 		return(
 			<div className="summary">
 				<h3 className="summary_header">Overall Progress</h3>
@@ -28,10 +29,10 @@ export default class SequenceSummary extends Component {
 								Multiple Choice
 							</td>
 							<td className="count">
-								{slots.filter(slot => slot.format == 'recall').length} / {slots.length} 
+								{slots.filter(slot => slot.format == 'mc').length} / {slots.length} 
 							</td>
 							<td className="percent">
-								{(slots.filter(slot => slot.format == 'recall').length / 5) / 100 * 10000} % 
+								{(slots.filter(slot => slot.format == 'mc').length / 5) / 100 * 10000} % 
 							</td>
 						</tr>
 						<tr className="fb_row">
@@ -39,10 +40,10 @@ export default class SequenceSummary extends Component {
 								 Fill in the Blank
 							</td>
 							<td className="count">
-								{slots.filter(slot => slot.format == 'recall').length} / {slots.length} 
+								{slots.filter(slot => slot.format == 'stem').length} / {slots.length} 
 							</td>
 							<td className="percent">
-								{(slots.filter(slot => slot.format == 'recall').length / 5) / 100 * 10000} % 
+								{(slots.filter(slot => slot.format == 'stem').length / 5) / 100 * 10000} % 
 							</td>
 						</tr>
 						<tr className="copy_row">
@@ -50,16 +51,16 @@ export default class SequenceSummary extends Component {
 								Copy Answer
 							</td>
 							<td className="count">
-								{slots.filter(slot => slot.format == 'recall').length} / {slots.length} 
+								{slots.filter(slot => slot.format == 'copy').length} / {slots.length} 
 							</td>
 							<td className="percent">
-								{(slots.filter(slot => slot.format == 'recall').length / 5) / 100 * 10000} % 
+								{(slots.filter(slot => slot.format == 'copy').length / 5) / 100 * 10000} % 
 							</td>
 						</tr>
 					</tbody>
 				</table>
 				<button className="button button-primary"
-						onClick={this.props.newSequence(null)}>
+						onClick={() => this.props.newSequence(null)}>
 						Start new sequence</button>
 			</div>
 		);

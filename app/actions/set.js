@@ -39,12 +39,15 @@ export function fetchSet(set_id) {
 	return async(dispatch, getState) => {
 		dispatch(requestSet())
 		try {
-			let set = await axios.get(`${api_url}/sets/${set_id}`)
-			console.log("Fetch Set:" + set)
+			let set,
+				assignments = getState().sets.assignments
+			await axios.get(`${api_url}/sets/${set_id}`).then((res) => set = res.data)
 			dispatch({
 				type: RECEIVE_SET_SUCCESS,
 				set
 			})
+			console.log(assignments)
+			dispatch(fetchAssociations(set_id))
 		}
 		catch(err) {
 			dispatch({
@@ -58,9 +61,9 @@ export function fetchSet(set_id) {
 // Call the /sets/:id/contents route with params id. This will be a function to run concurrently with request set, and request assignment. 
 // Once the request for contents has been successful, .then fill the store with the content.
 
-export const REQUEST_CONTENT = 'REQUEST_CONTENT';
-export const RECEIVE_CONTENT_SUCCESS = 'RECEIVE_CONTENT_SUCCESS';
-export const RECEIVE_CONTENT_FAILURE = 'RECEIVE_CONTENT_FAILURE';
+export const REQUEST_ASSOCIATIONS = 'REQUEST_ASSOCIATIONS';
+export const RECEIVE_ASSOCIATIONS_SUCCESS = 'RECEIVE_ASSOCIATIONS_SUCCESS';
+export const RECEIVE_ASSOCIATIONS_FAILURE = 'RECEIVE_ASSOCIATIONS_FAILURE';
 export const RECEIVE_ITEMS_SUCCESS = 'RECEIVE_ITEMS_SUCCESS';
 export const RECEIVE_ITEMS_FAILURE = 'RECEIVE_ITEMS_FAILURE';
 
@@ -73,27 +76,21 @@ function requestContent() {
 /*
 @params set_id
 */
-export function fetchContent(set_id) {
+export function fetchAssociations(set_id) {
 	return async(dispatch, getState) => {
 		try {
-			let content_list = await axios.get(`${api_url}/sets/${set_id}`)
-			.then((res) => {
-				dispatch({ type: RECEIVE_CONTENT_SUCCESS, content})
-				let data = res.data;
-				let ids = data.map(item => item.id)
-				console.log("Ids:" + ids)				
-				let item_list = ids.forEach(id => {
-					dispatch(fetchItem(id))
-				})
-				console.log("Fetch Content:" + item_list)
-				dispatch({type: RECEIVE_ITEMS_SUCCESS, item_list })
-			}).catch((err) => {
-				dispatch({type: RECEIVE_ITEMS_FAILURE})
+			let associations;
+			await axios.get(`${api_url}/sets/${set_id}/associations/`)
+			.then((res) => associations = res.data.associations)
+			dispatch({
+				type: RECEIVE_ASSOCIATIONS_SUCCESS,
+				associations
 			})			
 		} catch(err) {
 			dispatch({
-				type: RECEIVE_CONTENT_FAILURE,
-				error: Error(err)
+				type: RECEIVE_ASSOCIATIONS_FAILURE,
+				error: Error(err),
+				typeErr: err
 			})
 		}
 	}

@@ -4,37 +4,25 @@ import keyMirror from 'key-mirror';
 
 const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 
-// * Sets * // 
-export const REQUEST_SETS = 'REQUEST_SETS';
-export const RECEIVE_SETS_SUCCESS = 'RECEIVE_SETS_SUCCESS';
-export const RECEIVE_SETS_FAILURE = 'RECEIVE_SETS_FAILURE';
+/* Assignments for given user */ 
+export const REQUEST_ASSIGNMENTS = 'REQUEST_ASSIGNMENTS';
+export const RECEIVE_ASSIGNMENTS_SUCCESS = 'RECEIVE_ASSIGNMENTS_SUCCESS';
+export const RECEIVE_ASSINGMENTS_FAILURE = 'RECEIVE_ASSINGMENTS_FAILURE';
 
-function requestSets() {
-	return {
-		type: REQUEST_SETS
-	}
-}
-
-export function fetchSets() {
+export function fetchAssignments(user_id) {
 	return async(dispatch) => {
-		dispatch(requestSets());
+		dispatch({type: REQUEST_ASSIGNMENTS});
 		try {
-			let data = ( await axios.get(`${api_url}/sets/`) ).data
-			dispatch(receiveSets(data['sets']))
+			let assignments;
+			await axios.get(`${api_url}/users/${user_id}/assignments`)
+			.then((res) => assignments = res.data.assignments)
+			console.log(assignments)
+			dispatch({type: RECEIVE_ASSIGNMENTS_SUCCESS, assignments})
 		} catch (err) {
 			dispatch({
-				type: RECEIVE_SETS_FAILURE,
+				type: RECEIVE_ASSINGMENTS_FAILURE,
 				error: Error('Can\'t fetch sets')
 			})
 		}
 	}
 }
-
-function receiveSets(data) {
-	console.log(data)
-	return {
-		type: RECEIVE_SETS_SUCCESS,
-		sets: data
-	}
-}
-

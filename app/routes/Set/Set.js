@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 require('./Set.scss')
 
+import * as setactions from '../../actions/set';
+
 /* Components */
 import SetHeader from '../../components/SetView/SetHeader/SetHeader';
 import SetInfo from '../../components/SetView/SetInfo/SetInfo';
@@ -55,9 +57,28 @@ var set = {
 	member_count: 5
 }
 
+@connect(state => ({
+	set: state.setView.set
+	}),
+	dispatch => ({
+		...bindActionCreators({
+			...setactions
+		}, dispatch)
+	})
+)
 export default class Set extends Component {
 	static propTypes = {
 		params: PropTypes.object
+	}
+
+	componentWillMount() {
+		const { params, fetchSet } = this.props;
+		fetchSet(1)
+	}
+
+	componentWillUnmount() {
+		const { clearSet } = this.props;
+		clearSet()
 	}
 
 	render() {

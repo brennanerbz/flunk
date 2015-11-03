@@ -285,8 +285,13 @@ export default function learn(state = initial_learnstate, action) {
 				trial: action._trial
 			}
 		case UPDATE_SEQUENCE_SUCCESS:
-			const _slot = state.slots.filter(slot => slot.order === action.sequence.position)[0],
-				  _correctslot = _slot.completed;			
+			let _slot = state.slots.filter(slot => slot.order === action.sequence.position)[0],
+				  _correctslot;
+			if(action.sequence.completed) {
+				_correctslot = false
+			} else {
+				_correctslot = _slot.completed;
+			}
 			return {
 				...state,
 				isShowingCorrect: _correctslot,
@@ -345,7 +350,8 @@ export default function learn(state = initial_learnstate, action) {
 				...state,
 				isShowingCompletedSequence: true,
 				isShowingCompleteMiniseq: false,
-				isUpdatingState: false
+				isUpdatingState: false,
+				isShowingCorrect: false
 			}
 		case SKIP_SUCCESS:
 		case MOVE_SLOT_SUCCESS:

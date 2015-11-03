@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Roboto:400,300|Lato:400,300);
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Roboto:400,300|Lato:900,700,400,300);
 
 @font-face {
   font-family: 'Calibri';
@@ -559,8 +559,10 @@ button:focus, input[type="button"]:focus {
 	margin-top: 90px;
 }
 .page_header {
-	font-family: 'Calibri';
-	font-size: 26px;
+	font-family: 'Lato';
+	font-weight: 900;
+	letter-spacing: 0.01em;
+	font-size: 1.4em;
 	color: #555459;
 	opacity: 0.95;
 	cursor: pointer;
@@ -712,6 +714,7 @@ textarea:hover:ms-input-placeholder {
 	&.dropdown_menu_icon {
 		margin-left: 8px;
 		height: 7px;
+		margin-top: 2px;
 	}
 }
 
@@ -834,9 +837,9 @@ textarea:hover:ms-input-placeholder {
 
 // Menu styles
 .menu {
-	position: absolute;
+	position: absolute!important;
 	z-index: 150;
-	display: inline-block;
+	display: block;
 	vertical-align: top;
 	overflow: hidden;
 	min-width: 220px;
@@ -844,6 +847,7 @@ textarea:hover:ms-input-placeholder {
 	font-family: "Lato";
 	color: #2c2d30;
 	background: #fff;
+	opacity: 1!important;
 	box-shadow: 0 5px 10px rgba(0,0,0,.12);
 	border-radius: 6px;
 	border: 1px solid rgba(0,0,0,.15);

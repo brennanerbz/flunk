@@ -19,7 +19,7 @@ export default class Autocomplete extends Component {
 		switchToDef: PropTypes.func,
 		switchToWord: PropTypes.func,
 		saveWord: PropTypes.func,
-		logDef: PropTypes.func,
+		saveDef: PropTypes.func,
 		rect: PropTypes.func,
 		addRow: PropTypes.func,
 		onResize: PropTypes.func,
@@ -356,7 +356,7 @@ export default class Autocomplete extends Component {
 	  if(this.props.wordSide) {
 	    this.props.saveWord(this.state.value)
 	  } else {
-	    this.props.logDef(this.state.value)
+	    this.props.saveDef(this.state.value)
 	  }
 	}
 

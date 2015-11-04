@@ -305,7 +305,7 @@ export function createItem(index, ...args) {
 			if(set == undefined) {
 				await dispatch(createSet())
 				setTimeout(() => {
-					dispatch(createItem(index, args))
+					dispatch(createItem(index, ...args))
 				}, 5)
 				return; 
 			}
@@ -323,6 +323,7 @@ export function createItem(index, ...args) {
 			await axios.post(`${api_url}/items/`, item)
 			.then(res => item = res.data)
 			await dispatch({type: CREATE_ITEM_SUCCESS, item})
+			// TODO: update the set subjects. wait till route is up on server
 			await dispatch(createAssociation(item.id, index))
 		} catch(err) {
 			dispatch({
@@ -351,12 +352,22 @@ export function createItem(index, ...args) {
 export const UPDATE_ITEM = 'UPDATE_ITEM';
 export const UPDATE_ITEM_SUCCESS = 'UPDATE_ITEM_SUCCESS';
 export const UPDATE_ITEM_FAILURE = 'UPDATE_ITEM_FAILURE';
-export function updateItem(item_id) {
+export function updateItem(item_id, ...args) {
 	return async(dispatch, getState) => {
-		dispatch({UPDATE_ITEM})
+		dispatch({type: UPDATE_ITEM})
 		try {
-			let item = getState().createset.items[id]
-			await axios.put(`${api_url}/items/`, item)
+			let item = getState().createset.items[item_id]
+			if(args.length > 0) {
+				for(var i = 0; i < args.length; i++) {
+					let arg = args[i],
+						name = arg.name,
+						prop = arg.prop;
+					if(item.hasOwnProperty(name)) {
+						item[name] = prop
+					}
+				}
+			}
+			await axios.put(`${api_url}/items/${item_id}`, item)
 			.then(res => item = res.data)
 			dispatch({type: UPDATE_ITEM_SUCCESS, item})
 		} catch(err) {

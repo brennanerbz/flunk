@@ -10,7 +10,6 @@ import TermRow from '../TermRow/TermRow';
 
 @connect(
 	state => ({
-		terms: state.createset.terms,
 		activeContext: state.createset.activeContext,
 		activeRow: state.createset.activeRow,
 		mousePos: state.createset.mousePos,
@@ -30,7 +29,6 @@ export default class TermRows extends Component {
 		resize: PropTypes.func,
 		adjustScroll: PropTypes.func,
 		activateRow: PropTypes.func,
-		terms: PropTypes.array,
 		activeRow: PropTypes.number,
 		mousePos: PropTypes.number,
 		activeContext: PropTypes.bool
@@ -61,8 +59,8 @@ export default class TermRows extends Component {
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
-	  const { activeRow, terms: terms } = this.props;
-	  if (prevProps.activeRow !== this.props.activeRow && activeRow === terms.length) {
+	  const { activeRow, rows } = this.props;
+	  if (prevProps.activeRow !== this.props.activeRow && activeRow === rows.length) {
 	    this.scrollToBottom()
 	  }
 	}

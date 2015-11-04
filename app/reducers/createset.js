@@ -79,27 +79,14 @@ const createState = {
   term_choices: null,
   def_choices: null,
   rows: [0, 1],
-  
   /* Old State */
   activeRow: null,
   mousePos: 0,
   resizing: false,
-  scrolling: false,
-  terms: [
-      {
-        id: 1,
-        word: '',
-        def: '',
-        // doc: Date.now()
-      },
-      {
-        id: 2,
-        word: '',
-        def: '',
-        // doc: Date.now()    
-      }
-    ]
+  scrolling: false
 };
+
+
 
 export default function createset(state = createState, action) {
   switch (action.type) {
@@ -127,9 +114,14 @@ export default function createset(state = createState, action) {
         isUpdatingSet: true
       }
     case UPDATE_SET_SUCCESS: 
+      let updated_set = action.set;
       return {
         ...state,
         isUpdatingSet: false,
+        set: updated_set,
+        title: updated_set.title,
+        purpose: updated_set.description,
+        subjects: updated_set.subjects
       }
     case CREATE_ITEM:
       return {
@@ -151,6 +143,15 @@ export default function createset(state = createState, action) {
       state.associations.push(association)
       return {
         ...state
+      }
+    case UPDATE_ITEM_SUCCESS:
+      let _items = state.items,
+          _newitem = action.item,
+          _id = _newitem.id
+      _items[_id] = _newitem
+      return {
+        ...state,
+        items: _items
       }
     case ADD_ROW:
       const new_id = state.rows.slice(-1)[0] + 1
@@ -225,6 +226,8 @@ export default function createset(state = createState, action) {
         ...state,
         scrolling: !state.scrolling
       }
+    case UPDATE_ITEM_FAILURE:
+    case CREATE_ASSOCIATION_FAILURE:
     case CREATE_ITEM_FAILURE:
     case UPDATE_SET_FAILURE:
     case CREATE_SET_FAILURE:

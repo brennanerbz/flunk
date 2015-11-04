@@ -35,11 +35,14 @@ export default class TermRow extends Component {
 						{...this.props}/>
 				</div>
 				<div className="TermRow-operations">	
-				{this.props.isMouseOver && this.props.lastIndex > 2 &&
-						<a className="TermRow-control material-icons"
-					   		onClick={this.handleDelete}>
-							clear
-						</a>
+					{	
+						this.props.isMouseOver 
+						&& this.props.lastIndex > 1
+						&&
+							<a className="TermRow-control material-icons"
+						   		onClick={this.handleDelete}>
+								clear
+							</a>
 					}
 				</div>
 			</div>

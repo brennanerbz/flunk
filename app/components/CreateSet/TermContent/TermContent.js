@@ -32,29 +32,51 @@ export default class TermContent extends Component {
   }
 
   handleSaveWord = (word) => {
-    // TODO: get term && association props
-    const { row, 
+    const { row,
+            association, 
+            item, 
             createItem,
             updateItem,
             index } = this.props;
-    if(this.state.word.length === 0 && word.length > 0) {
+    if(this.state.word.length === 0 && word.length > 0 && item == undefined) {
       this.setState({
         word: word
       })
+      console.log(word)
       createItem(index, {name: 'target', prop: word})
       return;
     }
-    if(this.state.word !== (undefined && word)) {
-      console.log("update item")
+    if(this.state.word !== word && item !== undefined) {
+      this.setState({
+        word: word
+      });
+      updateItem(item.id, {name: 'target', prop: word})
     }
   }
   
-  handleLogDef = (def) => {
-    const { row, editRow } = this.props;
-    this.setState({
-      def: def
-    })
-    editRow(row, this.state.word, def)
+  handleSaveDef = (def) => {
+    const { 
+      row,
+      association,
+      item,
+      createItem,
+      updateItem,
+      index
+    } = this.props;
+
+    if(this.state.def.length === 0 && def.length > 0 && item == undefined) {
+      this.setState({
+        def: def
+      });
+      createItem(index, {name: 'cue', prop: def})
+      return;
+    } 
+    if(this.state.def !== def && item !== undefined) {
+      this.setState({
+        def: def
+      });
+      updateItem(item.id, {name: 'cue', prop: def})
+    }
   }
 
   focusThatWord = () => {
@@ -84,7 +106,7 @@ export default class TermContent extends Component {
                 rect={() => this.computeStyle()}
                 wordSide={true}
                 ref={`word${row}`}          
-                // tabIndex={3}
+                tabIndex={2}
                 {...this.props}
 	            />
 	          </div>
@@ -92,11 +114,11 @@ export default class TermContent extends Component {
                  ref={`termContentDef${row}`}
                  onClick={this.focusThatDef}>
 	          	<DefSide
-                logDef={(def) => this.handleLogDef(def)}
+                saveDef={(def) => this.handleSaveDef(def)}
                 rect={() => this.computeStyle()}
                 defSide={true}
                 ref={`def${row}`}          
-                // tabIndex={3}
+                tabIndex={2}
                 {...this.props}
 	          	/>
 	          </div>

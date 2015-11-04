@@ -25,7 +25,6 @@ export default class Autocomplete extends Component {
 		onResize: PropTypes.func,
 		menuStyle: PropTypes.object,
 		inputProps: PropTypes.object,
-		term: PropTypes.object,
 		index: PropTypes.number,
 		lastIndex: PropTypes.number
 	}
@@ -188,8 +187,8 @@ export default class Autocomplete extends Component {
 	// CUSTOM METHODS
 
 	getNodeId = () => {
-	  const { term } = this.props;
-	  return term.id
+	  const { row } = this.props;
+	  return row
 	}
 
 	dispatchEvent = (EVENT_TYPE, defer) => {
@@ -348,7 +347,7 @@ export default class Autocomplete extends Component {
 	}
 
 	handleInputBlur = () => {
-	  if (this._ignoreBlur)
+	  if (this._ignoreBlur) 
 	    return
 	  this.setState({
 	    isOpen: false,
@@ -362,11 +361,11 @@ export default class Autocomplete extends Component {
 	}
 
 	handleInputFocus = () => {
-	  const { term, activateRow, switchToDef, switchToWord } = this.props;
+	  const { row, activateRow, switchToDef, switchToWord } = this.props;
 	  if (this._ignoreBlur)
 	    return
 	  // this.setState({ isOpen: true })
-	  activateRow(term.id)
+	  activateRow(row)
 
 	  if (this.props.defSide) {
 	    switchToDef()
@@ -376,8 +375,8 @@ export default class Autocomplete extends Component {
 	}
 
 	handleInputClick = () => {
-	  const {activateRow, term} = this.props;
-	  activateRow(term.id)
+	  const {activateRow, row} = this.props;
+	  activateRow(row)
 	}
 
 	focusSide = () => {
@@ -392,7 +391,7 @@ export default class Autocomplete extends Component {
 	      state: this.state
 	    })
 	  }
-	  const {term}  = this.props;
+	  const {row}  = this.props;
 	  return (
 	    <div className="Autocomplete-textarea" style={{display: 'inline-block'}}>
 	      <textarea
@@ -400,8 +399,8 @@ export default class Autocomplete extends Component {
 	        rows="1"         
 	        {...this.props.inputProps}
 	        aria-autocomplete="both"
-	        ref={`textarea${term.id}`}
-	        key={`textarea${term.id}`}
+	        ref={`textarea${row}`}
+	        key={`textarea${row}`}
 	        onFocus={this.handleInputFocus}
 	        onBlur={this.handleInputBlur}
 	        onChange={(event) => this.handleChange(event)}

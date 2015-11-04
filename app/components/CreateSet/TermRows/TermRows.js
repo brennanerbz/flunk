@@ -82,15 +82,12 @@ export default class TermRows extends Component {
 
 	deactivateRow = () => {
 	  const { activateRow } = this.props;
-	  activateRow(0)
+	  activateRow(null)
 	}
 
 	render() {
-	  //---Props
-	  const { terms: terms, activeRow, addRow } = this.props;
-	  //--- Calculation props 
-
-	  const length = terms.length;
+	  const { rows, activeRow, addRow } = this.props;
+	  const length = rows.length - 1;
 		return(
 		<div className="TermRows"
 	         onBlur={this.deactivateRow}>
@@ -109,19 +106,19 @@ export default class TermRows extends Component {
 	        </div>
 	      </div>
 	        {     
-	            terms.map((term, i) => {
+	            rows.map((row, i) => {
 	              return (
 	                <TermRow
-	                  isMouseOver={term.id === this.props.mousePos}
-	                  ref={`term${term.id}`}                    
+	                  row={row}
+	                  isMouseOver={row === this.props.mousePos}
+	                  ref={`row${row}`}                    
 	                  activeRow={activeRow}
 	                  activeSide={this.state.activeSide}
 	                  lastIndex={Number(length)}
 	                  totalCount={length}
-	                  index={i + 1}
-	                  term={term}
-	                  key={`term${term.id}`}
-	                  termLuid={`term${term.id}`}
+	                  index={i}
+	                  key={`row${row}`}
+	                  termLuid={`row${row}`}
 	                  {...this.props}
 	                />
 	              )

@@ -6,24 +6,20 @@ export default class TermRow extends Component {
 	static propTypes = {
 		deleteRow: PropTypes.func,
 		setMousePos: PropTypes.func,
-		term: PropTypes.object,
 		index: PropTypes.number,
 		lastIndex: PropTypes.number,
 		isMouseOver: PropTypes.bool
 	}
 
 	handleDelete = () => {
-		const { term, deleteRow } = this.props;
- 		deleteRow(term.id)
+		const { row, deleteRow } = this.props;
+ 		deleteRow(row)
 	}	
 
 	render() {
-		const { term, index } = this.props;
+		const { row, index } = this.props;
 		return(
-		<div className="TermRow"
-			 onFocus={()=> this.props.setMousePos(term.id)}
-			 onMouseOver={() => this.props.setMousePos(term.id)}
-			 onMouseLeave={() => this.props.setMousePos(0)}>
+		<div className="TermRow">
 			<a className="TermRow-counter">
 				{index}
 			</a>
@@ -43,3 +39,7 @@ export default class TermRow extends Component {
 		);
 	}
 }
+
+// onFocus={()=> this.props.setMousePos(row)}>
+// onMouseOver={() => this.props.setMousePos(row)}
+			 // onMouseLeave={() => this.props.setMousePos(0)}>

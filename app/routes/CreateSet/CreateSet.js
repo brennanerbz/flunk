@@ -31,6 +31,7 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	current_order_index: state.createset.current_order_index,
 	term_choices: state.createset.term_choices,
 	def_choices: state.createset.def_choices,
+	rows: state.createset.rows
 	}),
 	dispatch => ({
 		...bindActionCreators({

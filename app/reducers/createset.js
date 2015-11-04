@@ -78,9 +78,10 @@ const createState = {
   current_order_index: null,
   term_choices: null,
   def_choices: null,
+  rows: [0, 1],
   
   /* Old State */
-  activeRow: 0,
+  activeRow: null,
   mousePos: 0,
   resizing: false,
   scrolling: false,
@@ -148,34 +149,27 @@ export default function createset(state = createState, action) {
       }
 
     case ADD_ROW:
-      const newId = 2 + Number(_.uniqueId());
+      const new_id = state.rows.slice(-1)[0] + 1
+      state.rows.push(new_id)
       return {
         ...state,
-        activeRow: newId,
-        terms: [...state.terms,
-          {
-            id: newId,
-            word: '',
-            def: '',
-            // doc: Date.now()
-          }
-        ]
+        activeRow: new_id
       }
 
     case EDIT_ROW:
       return {
         ...state,
-        terms: state.terms.map((term) => {
-          return term.id === action.id ?
-            assign({}, term, {word: action.word, def: action.def}) :
-            term
+        rows: state.rows.map((_row) => {
+          return _row == action.row
+          ? action.row
+          : _row
         })
       }
 
     case DELETE_ROW:
       return {
         ...state,
-        terms: state.terms.filter(term => term.id !== action.id)
+        rows: state.rows.filter(_row => _row !== action.row)
       }
 
     case FLIP_ACTIVESIDE:
@@ -198,10 +192,9 @@ export default function createset(state = createState, action) {
       }
 
     case ACTIVATE_ROW:
-      // console.log("ID:" + action.id)
       return {
         ...state,
-        activeRow: action.id
+        activeRow: action.row
       }
       
     case SAVE_SET:
@@ -216,7 +209,7 @@ export default function createset(state = createState, action) {
     case SET_MOUSE_POS:
       return {
         ...state,
-        mousePos: action.id
+        mousePos: action.row
       }
     case RESIZE:
       return {

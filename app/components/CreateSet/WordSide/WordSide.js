@@ -15,7 +15,6 @@ export default class WordSide extends Component {
 		onChange: PropTypes.func,
 		onFocus: PropTypes.func,
 		flipActiveSide: PropTypes.func,		
-		term: PropTypes.object,
 		placeholder: PropTypes.string,
 		activeSide: PropTypes.string,
 	}
@@ -35,12 +34,12 @@ export default class WordSide extends Component {
 		}
 	}
 	autoFocus = () => {
-		const { term } = this.props;
-		this.refs['autocomplete' + term.id].focusSide()
+		const { row } = this.props;
+		this.refs['autocomplete' + row].focusSide()
 	}
 	
 	render() {
-		const { term } = this.props;
+		const { row } = this.props;
 
 		return(
 		<div className="WordSide">
@@ -51,7 +50,7 @@ export default class WordSide extends Component {
 						      {...this.props}
 						      switchToWord={this.switchToWord}
 							  className="AutoExpandTextArea-textarea"
-					          ref={`autocomplete${term.id}`}
+					          ref={`autocomplete${row}`}
 					          items={this.state.unitedStates}
 					          getItemValue={(item) => item.name}
 					          onSelect={(value, item) => {

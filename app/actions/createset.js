@@ -3,26 +3,6 @@ import moment from 'moment';
 
 const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 
-import {
-
-	SAVE_SET,
-
-	SAVE_TITLE,
-	SAVE_PURPOSE,
-
-	ADD_ROW,
-	EDIT_ROW,
-	DELETE_ROW,
-
-	FLIP_ACTIVESIDE,
-	ACTIVATE_ROW,
-
-	SET_MOUSE_POS,
-	RESIZE,
-	SCROLL
-	
-} from '../constants/createset';
-
 /*
 @params: { 	
 
@@ -452,13 +432,14 @@ export function updateAssociation(asc) {
 
 
 
-
+export const ADD_ROW = 'ADD_ROW'
 export function addRow() {
   return {
     type: ADD_ROW
   };
 }
 
+export const EDIT_ROW = 'EDIT_ROW'
 export function editRow(id, word, def) {
 	return {
 		type: EDIT_ROW,
@@ -468,6 +449,7 @@ export function editRow(id, word, def) {
 	}
 }
 
+export const DELETE_ROW = 'DELETE_ROW'
 export function deleteRow(id) {
 	return {
 		type: DELETE_ROW,
@@ -475,12 +457,14 @@ export function deleteRow(id) {
 	}
 }
 
+export const FLIP_ACTIVESIDE = 'FLIP_ACTIVESIDE'
 export function flipActiveSide() {
 	return {
 		type: FLIP_ACTIVESIDE
 	}
 }
 
+export const SAVE_TITLE = 'SAVE_TITLE'
 export function saveTitle(title) {
 	return {
 		type: SAVE_TITLE,
@@ -495,32 +479,37 @@ export function savePurpose(purpose) {
 	}
 }
 
-export function activateRow(id) {
+export const ACTIVATE_ROW = 'ACTIVATE_ROW'
+export function activateRow(row) {
 	return {
 		type: ACTIVATE_ROW,
-		id
+		row
 	}
 }
 
+export const SAVE_SET = 'SAVE_SET'
 export function saveSet(){
 	return {
 		type: SAVE_SET
 	}
 }
 
-export function setMousePos(id) {
+export const SET_MOUSE_POS = 'SET_MOUSE_POS'
+export function setMousePos(row) {
 	return {
 		type: SET_MOUSE_POS,
-		id
+		row
 	}
 }
 
+export const RESIZE = 'RESIZE'
 export function resize() {
 	return {
 		type: RESIZE
 	}
 }
 
+export const SCROLL = 'SCROLL'
 export function adjustScroll() {
 	return {
 		type: SCROLL

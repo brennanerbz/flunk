@@ -15,7 +15,6 @@ export default class DefSide extends Component {
 		onChange: PropTypes.func,
 		onFocus: PropTypes.func,
 		flipActiveSide: PropTypes.func,		
-		term: PropTypes.object,
 		placeholder: PropTypes.string,
 		activeSide: PropTypes.string,
 	}
@@ -40,12 +39,12 @@ export default class DefSide extends Component {
 	}
 
 	autoFocus = () => {
-		const { term } = this.props;
-		this.refs['autocomplete' + term.id].focusSide()
+		const { row } = this.props;
+		this.refs['autocomplete' + row].focusSide()
 	}
 
 	render() {
-		const { term } = this.props;
+		const { row } = this.props;
 		return(
 			<div className="DefSide">
 				<div className="DefSide-textarea">
@@ -54,7 +53,7 @@ export default class DefSide extends Component {
 				      // debug={true}
 				      switchToDef={this.switchToDef}
 					  className="AutoExpandTextArea-textarea"
-			          ref={`autocomplete${term.id}`}
+			          ref={`autocomplete${row}`}
 			          items={this.state.unitedStates}
 			          getItemValue={(item) => item.name}
 			          onSelect={(value, item) => {

@@ -6,7 +6,6 @@ import DefSide from '../DefSide/DefSide';
 export default class TermContent extends Component {
 	static propTypes = {
 		editRow: PropTypes.func,
-		term: PropTypes.object,
 		actions: PropTypes.object,
 		activeSide: PropTypes.string,
 		lastIndex: PropTypes.number
@@ -21,19 +20,19 @@ export default class TermContent extends Component {
   }
   
   computeStyle = () => {
-    const {term, activeSide } = this.props;
+    const {row, activeSide } = this.props;
     let node;
     if (activeSide === 'word') {
-      node = this.refs['termContentWord' + term.id];
+      node = this.refs['termContentWord' + row];
     } else {
-      node = this.refs['termContentDef' + term.id];
+      node = this.refs['termContentDef' + row];
     }
     const rect = node.getBoundingClientRect();
     return rect;
   }
 
   handleLogWord = (word) => {
-    const { term, 
+    const { row, 
             editRow, 
             createItem,
             index } = this.props;
@@ -43,57 +42,57 @@ export default class TermContent extends Component {
     console.log("---")
     console.log("create item")
     createItem(index, {name: 'target', prop: word})
-    editRow(term.id, word, this.state.def)
+    editRow(row, word, this.state.def)
   }
   
   handleLogDef = (def) => {
-    const { term, editRow } = this.props;
+    const { row, editRow } = this.props;
     this.setState({
       def: def
     })
-    editRow(term.id, this.state.word, def)
+    editRow(row, this.state.word, def)
   }
 
   focusThatWord = () => {
-    const { term } = this.props;
-    this.refs['word' + term.id].autoFocus()
+    const { row } = this.props;
+    this.refs['word' + row].autoFocus()
   }
   focusThatDef = () => {
-    const { term } = this.props;
-    this.refs['def' + term.id].autoFocus()
+    const { row } = this.props;
+    this.refs['def' + row].autoFocus()
   }
 
   render() {
-    const { activeRow, term, lastIndex } = this.props;
+    const { activeRow, row, lastIndex } = this.props;
   	return(
 		<div className={classnames(
-                   {"TermContent-focus": activeRow === term.id ,
-                   "TermContent": activeRow !== term.id} )}>
+                   {"TermContent-focus": activeRow === row ,
+                   "TermContent": activeRow !== row} )}>
 	        <div className="TermContent-wrap">          
 	          <div className={classnames(
                            "TermContent-side",
-                           {"word-side-focus": activeRow === term.id,
-                            "word-side": activeRow !== term.id})}
-                 ref={`termContentWord${term.id}`}
+                           {"word-side-focus": activeRow === row,
+                            "word-side": activeRow !== row})}
+                 ref={`termContentWord${row}`}
                  onClick={this.focusThatWord}>
 	            <WordSide
                 logWord={(word) => this.handleLogWord(word)}
                 rect={() => this.computeStyle()}
                 wordSide={true}
-                ref={`word${term.id}`}          
-                tabIndex={3}
+                ref={`word${row}`}          
+                // tabIndex={3}
                 {...this.props}
 	            />
 	          </div>
 	          <div className="TermContent-side def-side"
-                 ref={`termContentDef${term.id}`}
+                 ref={`termContentDef${row}`}
                  onClick={this.focusThatDef}>
 	          	<DefSide
                 logDef={(def) => this.handleLogDef(def)}
                 rect={() => this.computeStyle()}
                 defSide={true}
-                ref={`def${term.id}`}          
-                tabIndex={3}
+                ref={`def${row}`}          
+                // tabIndex={3}
                 {...this.props}
 	          	/>
 	          </div>

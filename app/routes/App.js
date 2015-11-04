@@ -10,12 +10,14 @@ import Header from '../components/Header/Header';
 import SideNav from '../components/SideNav/SideNav';
 
 import * as actions from '../actions/usersets';
+import * as user from '../actions/user';
 
 @connect(
 	state => ({ router: state.router }),
 	dispatch => ({
 		...bindActionCreators({
-			...actions
+			...actions,
+			...user
 		}, dispatch)
 	})
 )
@@ -35,8 +37,10 @@ export default class FlunkApp extends Component {
 	}
 
 	componentWillMount() {
-		const { fetchAssignments } = this.props; 
+		const { fetchAssignments, fetchUser } = this.props; 
 		// on mounting, will load user object and assignments
+		// TODO: use cookies/localstorage to query for user
+		fetchUser(1)
 		fetchAssignments(1)
 	}
 

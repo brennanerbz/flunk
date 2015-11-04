@@ -1,4 +1,43 @@
 import {
+  CREATE_SET,
+  CREATE_SET_SUCCESS,
+  CREATE_SET_FAILURE,
+
+  UPDATE_SET,
+  UPDATE_SET_SUCCESS,
+  UPDATE_SET_FAILURE,
+
+  CREATE_ASSIGNMENT,
+  CREATE_ASSIGNMENT_SUCCESS,
+  CREATE_ASSIGNMENT_FAILURE,
+
+  UPDATE_ASSIGNMENT,
+  UPDATE_ASSIGNMENT_SUCCESS,
+  UPDATE_ASSIGNMENT_FAILURE,
+
+  GET_TERM_SUGGESTIONS,
+  TERM_SUGGESTIONS_SUCCESS,
+  TERM_SUGGESTIONS_FAILURE,
+
+  GET_DEF_SUGGESTIONS,
+  DEF_SUGGESTIONS_SUCCESS,
+  DEF_SUGGESTIONS_FAILURE,
+
+  CREATE_ITEM,
+  CREATE_ITEM_SUCCESS,
+  CREATE_ITEM_FAILURE,
+
+  UPDATE_ITEM,
+  UPDATE_ITEM_SUCCESS,
+  UPDATE_ITEM_FAILURE,
+
+  CREATE_ASSOCIATION,
+  CREATE_ASSOCIATION_SUCCESS,
+  CREATE_ASSOCIATION_FAILURE,
+
+  UPDATE_ASSOCIATION,
+  UPDATE_ASSOCIATION_SUCCESS,
+  UPDATE_ASSOCIATION_FAILURE,
 	SAVE_SET,
 
 	SAVE_TITLE,
@@ -15,19 +54,34 @@ import {
 	RESIZE,
 	SCROLL
 	
-} from '../constants/createset';
+} from '../actions/createset';
 
 import _ from 'lodash';
 import assign from 'lodash/object/assign';
 
 const createState = {
+  isCreatingSet: false,
   activeContext: true,
+  set: {},
+  title: '',
+  id: null,
+  purpose: '',
+  subjects: [],
+  creator_id: null,
+  creator_username: '',
+  associations: [],
+  items: [],
+  current_item: {},
+  current_association: {},
+  current_order_index: null,
+  term_choices: [],
+  def_choices: [],
+  
+  /* Old State */
   activeRow: 0,
   mousePos: 0,
   resizing: false,
   scrolling: false,
-  title: '',
-  purpose: '',
   terms: [
       {
         id: 1,
@@ -46,6 +100,24 @@ const createState = {
 
 export default function createset(state = createState, action) {
   switch (action.type) {
+
+    case CREATE_SET:
+      return {
+        ...state,
+        isCreatingSet: true
+      }
+    case CREATE_SET_SUCCESS:
+      let set = action.set
+      return {
+        ...state,
+        isCreatingSet: false,
+        set: set,
+        id: set.id,
+        title: set.title,
+        creator_id: set.creator_id,
+        creator_username: set.creator.username,
+        subjects: set.subjects !== undefined ? set.subjects : null
+      }
 
     case ADD_ROW:
       const newId = 2 + Number(_.uniqueId());
@@ -128,7 +200,7 @@ export default function createset(state = createState, action) {
         ...state,
         scrolling: !state.scrolling
       }
-
+    case CREATE_SET_FAILURE:
     default:
       return state;
   }

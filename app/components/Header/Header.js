@@ -99,8 +99,12 @@ export default class Header extends Component {
 							<Link className="site-logo" to="/">						
 									<img className="site-icon" src={logo} />
 							</Link>
-
-							<SearchBox {...this.props}/>
+							
+							{
+								loc.pathname.indexOf('/createset') !== -1
+								? null
+								: <SearchBox {...this.props}/>
+							}
 							
 							{
 								loc.pathname.indexOf('/learn') !== -1 || loc.pathname.indexOf('/createset') !==  -1

@@ -17,25 +17,32 @@ export default class TermRow extends Component {
 	}	
 
 	render() {
-		const { row, index } = this.props;
+		const { row, 
+				index,
+				items,
+				associations } = this.props,
+				association = associations.length !== 0 ? associations[index] : undefined,
+				item = association !== undefined ? items[association.item_id] : undefined;
 		return(
-		<div className="TermRow">
-			<a className="TermRow-counter">
-				{index}
-			</a>
-			<div className="TermRow-content">
-				<TermContent			
-					{...this.props}/>
+			<div className="TermRow">
+				<a className="TermRow-counter">
+					{index}
+				</a>
+				<div className="TermRow-content">
+					<TermContent
+						item={item}
+						association={association}			
+						{...this.props}/>
+				</div>
+				<div className="TermRow-operations">	
+				{this.props.isMouseOver && this.props.lastIndex > 2 &&
+						<a className="TermRow-control material-icons"
+					   		onClick={this.handleDelete}>
+							clear
+						</a>
+					}
+				</div>
 			</div>
-			<div className="TermRow-operations">	
-			{this.props.isMouseOver && this.props.lastIndex > 2 &&
-					<a className="TermRow-control material-icons"
-				   		onClick={this.handleDelete}>
-						clear
-					</a>
-				}
-			</div>
-		</div>
 		);
 	}
 }

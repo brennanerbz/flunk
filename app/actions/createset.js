@@ -300,7 +300,15 @@ export function createItem(index, ...args) {
 		dispatch({type: CREATE_ITEM})
 		try {
 			let item = _itemtemplate,
-				user = getState().user.user;
+				user = getState().user.user,
+				set  = getState().createset.set;
+			if(set == undefined) {
+				await dispatch(createSet())
+				setTimeout(() => {
+					dispatch(createItem(index, args))
+				}, 5)
+				return; 
+			}
 			if(args.length > 0) {
 				for(var i = 0; i < args.length; i++) {
 					let arg = args[i],
@@ -388,7 +396,7 @@ export function createAssociation(item_id, index) {
 				association = Object.assign({..._associationtemplate}, {
 					item_id: item_id,
 					set_id: set_id,
-					order: index
+					order: index + 1
 				})
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => association = res.data)

@@ -31,18 +31,22 @@ export default class TermContent extends Component {
     return rect;
   }
 
-  handleLogWord = (word) => {
+  handleSaveWord = (word) => {
+    // TODO: get term && association props
     const { row, 
-            editRow, 
             createItem,
+            updateItem,
             index } = this.props;
-    this.setState({
-      word: word
-    })
-    console.log("---")
-    console.log("create item")
-    createItem(index, {name: 'target', prop: word})
-    editRow(row, word, this.state.def)
+    if(this.state.word.length === 0 && word.length > 0) {
+      this.setState({
+        word: word
+      })
+      createItem(index, {name: 'target', prop: word})
+      return;
+    }
+    if(this.state.word !== (undefined && word)) {
+      console.log("update item")
+    }
   }
   
   handleLogDef = (def) => {
@@ -76,7 +80,7 @@ export default class TermContent extends Component {
                  ref={`termContentWord${row}`}
                  onClick={this.focusThatWord}>
 	            <WordSide
-                logWord={(word) => this.handleLogWord(word)}
+                saveWord={(word) => this.handleSaveWord(word)}
                 rect={() => this.computeStyle()}
                 wordSide={true}
                 ref={`word${row}`}          

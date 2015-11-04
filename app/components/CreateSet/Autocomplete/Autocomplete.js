@@ -18,7 +18,7 @@ export default class Autocomplete extends Component {
 		activateRow: PropTypes.func,
 		switchToDef: PropTypes.func,
 		switchToWord: PropTypes.func,
-		logWord: PropTypes.func,
+		saveWord: PropTypes.func,
 		logDef: PropTypes.func,
 		rect: PropTypes.func,
 		addRow: PropTypes.func,
@@ -354,7 +354,7 @@ export default class Autocomplete extends Component {
 	    highlightedIndex: null
 	  })
 	  if(this.props.wordSide) {
-	    this.props.logWord(this.state.value)
+	    this.props.saveWord(this.state.value)
 	  } else {
 	    this.props.logDef(this.state.value)
 	  }

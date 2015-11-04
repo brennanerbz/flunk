@@ -28,8 +28,7 @@ export default class CreateSetHeader extends Component {
 		});
 	}
 	handleTitleBlur = () => {
-		const { saveTitle, 
-				createSet, 
+		const { createSet, 
 				updateSet,
 				id, // set_id
 				title, 
@@ -39,7 +38,7 @@ export default class CreateSetHeader extends Component {
 			createSet(_title)
 			return;
 		}
-		if((set && title) !== null) {
+		if((set && title) !== null && _title !== title) {
 			updateSet({name: "title", prop: _title})
 			return;
 		}
@@ -57,6 +56,7 @@ export default class CreateSetHeader extends Component {
 		}
 		if(set !== null) {
 			createAssignment(set.id, 'admin')
+			// TODO: createSequence()
 		}
 	}
 

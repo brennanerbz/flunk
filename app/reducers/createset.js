@@ -71,7 +71,7 @@ const createState = {
   subjects: null,
   creator_id: null,
   creator_username: '',
-  associations: null,
+  associations: [],
   items: null,
   current_item: null,
   current_association: null,
@@ -139,7 +139,6 @@ export default function createset(state = createState, action) {
     case CREATE_ITEM_SUCCESS: 
       let items = state.items || {},
           item = action.item,
-          assigned = {},
           id = item.id;
       items[id] = item;
       return {
@@ -147,7 +146,12 @@ export default function createset(state = createState, action) {
         isCreatingItem: false,
         items: items
       }
-
+    case CREATE_ASSOCIATION_SUCCESS:
+      let association = action.association
+      state.associations.push(association)
+      return {
+        ...state
+      }
     case ADD_ROW:
       const new_id = state.rows.slice(-1)[0] + 1
       state.rows.push(new_id)

@@ -62,8 +62,7 @@ export function createSet(title) {
 		dispatch({type: CREATE_SET})
 		try {
 			// TODO: check the method its being called whether from create page or copy
-			let title = title || getState().createset.title,
-				user = getState().user.user,
+			let user = getState().user.user,
 				set = Object.assign({..._settemplate}, {
 					creator_id: user.id,
 					title: title || 'Untitled'
@@ -72,7 +71,6 @@ export function createSet(title) {
 				set
 			)
 			.then(res => set = res.data)
-			console.log(set)
 			dispatch({type: CREATE_SET_SUCCESS, set})
 		} catch(err) {
 			dispatch({
@@ -102,16 +100,26 @@ export function createSet(title) {
 export const UPDATE_SET = 'UPDATE_SET';
 export const UPDATE_SET_SUCCESS = 'UPDATE_SET_SUCCESS';
 export const UPDATE_SET_FAILURE = 'UPDATE_SET_FAILURE';
-export function updateSet() {
+export function updateSet(...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: UPDATE_SET})
 		try {
 			let set = getState().createset.set;
-			await axios.put(`${api_url}/sets/${id}`, {
-				set
-			})
+			if(args.length > 0) {
+				for(var i = 0; i < args.length; i++) {
+					let arg = args[i],
+						name = arg.name,
+						prop = arg.prop;
+					if(set.hasOwnProperty(name)) {
+						set[name] = prop
+					}
+				}
+			}
+			await axios.put(`${api_url}/sets/${set.id}`, 
+				set 
+			)
 			.then(res => set = res.data)
-			dispatch({UPDATE_SET_SUCCESS, set})
+			dispatch({type: UPDATE_SET_SUCCESS, set})
 		} catch(err) {
 			dispatch({
 				type: UPDATE_SET_FAILURE,
@@ -139,9 +147,9 @@ export function updateSet() {
 var _assignmenttemplate = {
 	user_id: null,
 	set_id: null,
-	new_sequence_difficulty: null,
+	new_sequence_difficulty: 'intermediate',
 	starred: false,
-	deadlined: null,
+	deadline: null,
 	wallpaper: null,
 	permission: 'nonadmin',
 	privacy: 'public'
@@ -153,12 +161,13 @@ export function createAssignment(set_id, permission) {
 	return async(dispatch, getState) => {
 		dispatch({type: CREATE_ASSIGNMENT})
 		try {
-			let user_id = getState().user.id,
+			let user_id = getState().user.user.id,
 				assignment = Object.assign({..._assignmenttemplate}, {
 					user_id: user_id,
 					set_id: set_id,
 					permission: permission || 'nonadmin'
 				}) 
+			console.log(assignment)
 			await axios.post(`${api_url}/assignments/`, 
 				assignment
 			)
@@ -187,13 +196,23 @@ export function createAssignment(set_id, permission) {
 export const UPDATE_ASSIGNMENT = 'UPDATE_ASSIGNMENT';
 export const UPDATE_ASSIGNMENT_SUCCESS = 'UPDATE_ASSIGNMENT_SUCCESS';
 export const UPDATE_ASSIGNMENT_FAILURE = 'UPDATE_ASSIGNMENT_FAILURE';
-export function updateAssignment(_assignment) {
+export function updateAssignment(...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: UPDATE_ASSIGNMENT})
 		try {
-			let assignment;
+			let assignment = getState().createset.assignment;
+			if(args.length > 0) {
+				for(var i = 0; i < args.length; i++) {
+					let arg = args[i],
+						name = arg.name,
+						prop = arg.prop;
+					if(assignment.hasOwnProperty(name)) {
+						assignment[name] = prop
+					}
+				}
+			}
 			await axios.put(`${api_url}/assignments/${assignment.id}`, 
-				_assignment
+				assignment
 			)
 			.then(res => assignment = res.data)
 			dispatch({type: UPDATE_ASSIGNMENT_SUCCESS, assignment})
@@ -287,8 +306,8 @@ var _itemtemplate = {
 	cues_lang_id: null,
 	target: null,
 	cue: null,
-	synonyms: 'nonadmin',
-	image: 'public',
+	synonyms: null,
+	image: null,
 	message: null,
 	official: false,
 	visibility: 'public'
@@ -296,24 +315,27 @@ var _itemtemplate = {
 export const CREATE_ITEM = 'CREATE_ITEM';
 export const CREATE_ITEM_SUCCESS = 'CREATE_ITEM_SUCCESS';
 export const CREATE_ITEM_FAILURE = 'CREATE_ITEM_FAILURE';
-export function createItem(creator_id, ...args) {
+export function createItem(index, ...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: CREATE_ITEM})
 		try {
-			var item = _itemtemplate;
+			let item = _itemtemplate,
+				user = getState().user.user;
 			if(args.length > 0) {
-				for(var i = 0; i < args.length - 1; i++) {
-					let arg = args[i]
-					if(item.hasOwnProperty(arg.name)) {
-						item[arg.name] = arg
+				for(var i = 0; i < args.length; i++) {
+					let arg = args[i],
+						name = arg.name,
+						prop = arg.prop;
+					if(item.hasOwnProperty(name)) {
+						item[name] = prop
 					}
 				}
 			}
-			item.creator_id = creator_id
+			item.creator_id = user.id
 			await axios.post(`${api_url}/items/`, item)
 			.then(res => item = res.data)
 			await dispatch({type: CREATE_ITEM_SUCCESS, item})
-			await dispatch(createAssociation(item.id))
+			await dispatch(createAssociation(item.id, index))
 		} catch(err) {
 			dispatch({
 				type: CREATE_ITEM_FAILURE,

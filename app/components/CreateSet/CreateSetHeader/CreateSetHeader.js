@@ -32,25 +32,32 @@ export default class CreateSetHeader extends Component {
 				createSet, 
 				updateSet,
 				id, // set_id
-				statetitle, 
+				title, 
 				set } = this.props,
-			    title = this.state.title;
-		if(id == undefined && title.length > 2) {
-			createSet(title)
+			    _title = this.state.title;
+		if(id == null && _title.length > 2) {
+			createSet(_title)
 			return;
 		}
-		if(statetitle !== undefined && title !== statetitle) {
-			updateSet({name: title, title: title})
+		if((set && title) !== null) {
+			updateSet({name: "title", prop: _title})
 			return;
 		}
 	}
 	handleSave() {
-		const { createSet } = this.props;
-		if(this.state.title.length === 0) {
-			// TODO: add error message for incomplete set_page
+		const { createSet,
+				createAssignment,
+			    title,
+			    items,
+			    set } = this.props;
+		if((title || set) == null) {
+			console.log("Need at least one item or a title!")
+			// TODO: add error div for incomplete set_page
 			return;
 		}
-		createSet()
+		if(set !== null) {
+			createAssignment(set.id, 'admin')
+		}
 	}
 
 	render() {

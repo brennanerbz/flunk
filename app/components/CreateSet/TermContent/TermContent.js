@@ -33,10 +33,16 @@ export default class TermContent extends Component {
   }
 
   handleLogWord = (word) => {
-    const { term, editRow } = this.props;
+    const { term, 
+            editRow, 
+            createItem,
+            index } = this.props;
     this.setState({
       word: word
     })
+    console.log("---")
+    console.log("create item")
+    createItem(index, {name: 'target', prop: word})
     editRow(term.id, word, this.state.def)
   }
   

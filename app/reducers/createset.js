@@ -61,21 +61,23 @@ import assign from 'lodash/object/assign';
 
 const createState = {
   isCreatingSet: false,
+  isUpdatingSet: false,
+  isCreatingItem: false,
   activeContext: true,
-  set: {},
+  set: null,
   title: '',
   id: null,
   purpose: '',
-  subjects: [],
+  subjects: null,
   creator_id: null,
   creator_username: '',
-  associations: [],
-  items: [],
-  current_item: {},
-  current_association: {},
+  associations: null,
+  items: null,
+  current_item: null,
+  current_association: null,
   current_order_index: null,
-  term_choices: [],
-  def_choices: [],
+  term_choices: null,
+  def_choices: null,
   
   /* Old State */
   activeRow: 0,
@@ -117,6 +119,32 @@ export default function createset(state = createState, action) {
         creator_id: set.creator_id,
         creator_username: set.creator.username,
         subjects: set.subjects !== undefined ? set.subjects : null
+      }
+    case UPDATE_SET:
+      return {
+        ...state,
+        isUpdatingSet: true
+      }
+    case UPDATE_SET_SUCCESS: 
+      return {
+        ...state,
+        isUpdatingSet: false,
+      }
+    case CREATE_ITEM:
+      return {
+        ...state,
+        isCreatingItem: true
+      }
+    case CREATE_ITEM_SUCCESS: 
+      let items = state.items || {},
+          item = action.item,
+          assigned = {},
+          id = item.id;
+      items[id] = item;
+      return {
+        ...state,
+        isCreatingItem: false,
+        items: items
       }
 
     case ADD_ROW:
@@ -200,6 +228,8 @@ export default function createset(state = createState, action) {
         ...state,
         scrolling: !state.scrolling
       }
+    case CREATE_ITEM_FAILURE:
+    case UPDATE_SET_FAILURE:
     case CREATE_SET_FAILURE:
     default:
       return state;

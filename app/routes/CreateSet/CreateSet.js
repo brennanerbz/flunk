@@ -12,6 +12,10 @@ import TermRows from '../../components/CreateSet/TermRows/TermRows';
 import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSetHeader';
 
 @connect(state => ({
+	/* Flags */
+	isCreatingSet: state.createset.isCreatingSet,
+	isUpdatingSet: state.createset.isUpdatingSet,
+	/* Normal state */
 	state: state.createset,
 	set: state.createset.set,
 	title: state.createset.title,

@@ -60,17 +60,35 @@ export default class Autocomplete extends Component {
 		}
 	}
 
+	keyUpHandlers = {
+		Tab() {
+		  const { addRow, index, lastIndex, activeSide, flag, setFlag, activateRow } = this.props;
+		  console.log(flag)
+		  if(flag) {
+		  	setFlag(false)
+		  	return;
+		  }
+		  if (index !== lastIndex) return;
+		  if (activeSide == 'def') {
+		    addRow()
+		  }
+		}
+	}
+
 	keyDownHandlers = {
-	    Tab () {
-	      const { addRow, index, lastIndex, defSide } = this.props;
-	      if (index !== lastIndex) return;
-	      if (defSide) {
-	        addRow()
-	      }
+	    
+	    Tab(event) {
+	    	const { addRow, index, lastIndex, activeSide, flag } = this.props;
+	    	if (index == lastIndex && activeSide == 'def') event.preventDefault();
+	    	console.log(flag)
 	    },
 
-	    ArrowDown () {
+	    ArrowDown() {
 	      // event.preventDefault()
+	      const { shouldsuggest } = this.props;
+	      if(!shouldsuggest) {
+	      	return;
+	      }
 	      var { highlightedIndex } = this.state
 	      var index = (
 	        highlightedIndex === null ||
@@ -83,8 +101,12 @@ export default class Autocomplete extends Component {
 	      })
 	    },
 
-	    ArrowUp (event) {
+	    ArrowUp(event) {
 	      // event.preventDefault()
+	      const { shouldsuggest } = this.props;
+	      if(!shouldsuggest) {
+	      	return;
+	      }
 	      var { highlightedIndex } = this.state
 	      var index = (
 	        highlightedIndex === 0 ||
@@ -97,7 +119,7 @@ export default class Autocomplete extends Component {
 	      })
 	    },
 
-	    Enter (event) {
+	    Enter(event) {
 	      if (this.state.isOpen === false) {
 	        // already selected this, do nothing
 	        return
@@ -135,13 +157,13 @@ export default class Autocomplete extends Component {
 	    }
 	  }  
 	
-	componentWillMount () {
+	componentWillMount() {
 	  this._ignoreBlur = false
 	  this._performAutoCompleteOnUpdate = false
 	  this._performAutoCompleteOnKeyUp = false
 	}
 
-	componentDidMount () {  
+	componentDidMount() {  
 	  const { index, lastIndex, wordSide } = this.props;
 	  const node = this.refs['textarea' + this.getNodeId()];
 	  autosize(node);
@@ -155,7 +177,7 @@ export default class Autocomplete extends Component {
 	  }
 	}
 
-	componentWillReceiveProps (nextProps) {
+	componentWillReceiveProps(nextProps) {
 	  if (this.state.isOpen && nextProps.rect() !== this.props.rect()) { this.setMenuPositions() }
 
 	  this._performAutoCompleteOnUpdate = true;
@@ -164,7 +186,7 @@ export default class Autocomplete extends Component {
 	  }
 	}
 
-	componentDidUpdate (prevProps, prevState) {
+	componentDidUpdate(prevProps, prevState) {
 	  if (this.state.isOpen === true && prevState.isOpen === false)
 	    this.setMenuPositions()    
 
@@ -218,13 +240,16 @@ export default class Autocomplete extends Component {
 	}
 
 	handleKeyDown = (event) => {
+	  const { shouldsuggest } = this.props;
 	  if (this.keyDownHandlers[event.key])
 	    this.keyDownHandlers[event.key].call(this, event)
 	  else {
-	    this.setState({
-	      highlightedIndex: null,
-	      isOpen: true
-	    })
+	  	if(shouldsuggest) {
+	  		this.setState({
+	  		  highlightedIndex: null,
+	  		  isOpen: true
+	  		})
+	  	}
 	  }
 	}
 
@@ -239,11 +264,14 @@ export default class Autocomplete extends Component {
 	  })
 	}
 
-	handleKeyUp = () => {
-	  if (this._performAutoCompleteOnKeyUp) {
-	    this._performAutoCompleteOnKeyUp = false
-	    // this.maybeAutoCompleteText()
-	  }
+	handleKeyUp = (event) => {
+		if (this.keyUpHandlers[event.key]) {
+	  		this.keyUpHandlers[event.key].call(this, event)	
+		}
+	  	if (this._performAutoCompleteOnKeyUp) {
+	    	this._performAutoCompleteOnKeyUp = false
+	    	// this.maybeAutoCompleteText()
+	  	}
 	} 
 
 	getFilteredItems = () => {
@@ -361,12 +389,17 @@ export default class Autocomplete extends Component {
 	}
 
 	handleInputFocus = () => {
-	  const { row, activateRow, switchToDef, switchToWord } = this.props;
+	  const { 	row, 
+	  			activateRow, 
+	  			switchToDef, 
+	  			switchToWord,
+	  			flag,
+	  			setFlag } = this.props;
+	  console.log(flag)
 	  if (this._ignoreBlur)
 	    return
 	  // this.setState({ isOpen: true })
 	  activateRow(row)
-
 	  if (this.props.defSide) {
 	    switchToDef()
 	  } else {
@@ -395,6 +428,10 @@ export default class Autocomplete extends Component {
 	  return (
 	    <div className="Autocomplete-textarea" style={{display: 'inline-block'}}>
 	      <textarea
+	      	autoFocus={this.props.wordSide 
+	      			  && this.props.index ==  this.props.lastIndex
+	      			  && this.props.title_flag
+	      			  ? true : false}
 	        tabIndex={this.props.tabIndex}
 	        rows="1"         
 	        {...this.props.inputProps}

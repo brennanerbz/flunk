@@ -32,12 +32,14 @@ export default class CreateSetHeader extends Component {
 				updateSet,
 				id, // set_id
 				title, 
-				set } = this.props,
+				set,
+				setTitleFlag } = this.props,
 			    _title = this.state.title;
+		setTitleFlag(true)
 		if(id == null && _title.length > 2) {
 			createSet(_title)
 			return;
-		}
+		}                                                                       
 		if((set && title) !== null && _title !== title) {
 			updateSet({name: "title", prop: _title})
 			return;
@@ -61,7 +63,7 @@ export default class CreateSetHeader extends Component {
 	}
 
 	render() {
-		const { saveSet } = this.props;
+		const { saveSet, subjects } = this.props;
 		return(
 			<div className="CreateSetHeader"> 
 	          <div className="container CreateSetHeader-container">	
@@ -75,9 +77,14 @@ export default class CreateSetHeader extends Component {
 	              	onFocus={this.handleTitleFocus}
 	              />
 	              <ul className="subject_list">
-	              	<li className="subject">
-	              		<p>psychology</p>
-	              	</li>
+	              	{
+	              		subjects !== undefined
+	              		&& subjects !== null
+	              		? subjects.map((subject, i) => {
+	              			return <li key={i} className="subject"><p>{subject.name}</p></li>
+	              		})
+	              		: null
+	              	}
 	              </ul>
 	            </div>
 	            <ButtonGroup onSave={::this.handleSave}

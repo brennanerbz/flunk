@@ -75,7 +75,7 @@ export default class TermRows extends Component {
 	} 
 
 	handleScroll = () => {
-	  this.props.adjustScroll()
+	  // this.props.adjustScroll()
 	}
 
 	deactivateRow = () => {

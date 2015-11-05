@@ -54,7 +54,6 @@ export default class WordSide extends Component {
 					          items={this.state.unitedStates}
 					          getItemValue={(item) => item.name}
 					          onSelect={(value, item) => {
-					            
 					            this.setState({ unitedStates: [ item ] })							           
 					          }}
 					          onInput={(event, value) => {

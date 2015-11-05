@@ -52,6 +52,9 @@ export function createSet(title) {
 			)
 			.then(res => set = res.data)
 			dispatch({type: CREATE_SET_SUCCESS, set})
+			if(set.title !== 'Untitled') {
+				dispatch(updateSetSubjects())
+			}
 		} catch(err) {
 			dispatch({
 				type: CREATE_SET_FAILURE,
@@ -100,9 +103,38 @@ export function updateSet(...args) {
 			)
 			.then(res => set = res.data)
 			dispatch({type: UPDATE_SET_SUCCESS, set})
+			if(set.title !== 'Untitled' || set.description.length > 0) {
+				dispatch(updateSetSubjects())
+			}
 		} catch(err) {
 			dispatch({
 				type: UPDATE_SET_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
+export const UPDATE_SETSUBJECTS_SUCCESS = 'UPDATE_SETSUBJECTS_SUCCESS';
+export const UPDATE_SETSUBJECTS_FAILURE = 'UPDATE_SETSUBJECTS_FAILURE';
+export function updateSetSubjects(subjects) {
+	return async(dispatch, getState) => {
+		dispatch({type: UPDATE_SET})
+		try {
+			var subs,
+				set = getState().createset.set;
+			if(subjects !== undefined && subjects.length > 0) {
+				subs = subjects;
+				await axios.put(`${api_url}/sets/${set.id}/add-subjects/`, subs)
+				.then((res) => subs = res.data.subjects)
+				dispatch({type:UPDATE_SETSUBJECTS_SUCCESS, subs})
+				return;
+			}
+			await axios.put(`${api_url}/sets/${set.id}/subjects/`)
+			.then((res) => subs = res.data.subjects)
+			dispatch({type: UPDATE_SETSUBJECTS_SUCCESS, subs})
+		} catch(err) {
+			dispatch({
+				type: UPDATE_SETSUBJECTS_FAILURE,
 				error: Error(err)
 			})
 		}
@@ -323,7 +355,6 @@ export function createItem(index, ...args) {
 			await axios.post(`${api_url}/items/`, item)
 			.then(res => item = res.data)
 			await dispatch({type: CREATE_ITEM_SUCCESS, item})
-			// TODO: update the set subjects. wait till route is up on server
 			await dispatch(createAssociation(item.id, index))
 		} catch(err) {
 			dispatch({
@@ -370,6 +401,9 @@ export function updateItem(item_id, ...args) {
 			await axios.put(`${api_url}/items/${item_id}`, item)
 			.then(res => item = res.data)
 			dispatch({type: UPDATE_ITEM_SUCCESS, item})
+			if(item.subjects !== getState().createset.items[item_id].subjects) {
+				dispatch(updateSetSubjects())
+			}
 		} catch(err) {
 			dispatch({
 				type: UPDATE_ITEM_FAILURE,
@@ -412,6 +446,10 @@ export function createAssociation(item_id, index) {
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => association = res.data)
 			dispatch({type: CREATE_ASSOCIATION_SUCCESS, association})
+			let item = getState().createset.items[association.item_id]
+			if(item.subjects !== null) {
+				dispatch(updateSetSubjects())
+			}
 		} catch(err) {
 			dispatch({
 				type: CREATE_ASSOCIATION_FAILURE,
@@ -448,8 +486,28 @@ export function updateAssociation(asc) {
 	}
 }
 
+export const SET_FLAG = 'SET_FLAG';
+export function setFlag(flag) {
+	return {
+		type: SET_FLAG,
+		flag
+	}
+}
 
+export const TITLE_FLAG = 'TITLE_FLAG';
+export function setTitleFlag(flag) {
+	return {
+		type: TITLE_FLAG,
+		flag
+	}
+}
 
+export const CLEAR_SET = 'CLEAR_SET';
+export function clearSet() {
+	return {
+		type: CLEAR_SET
+	}
+}
 
 export const ADD_ROW = 'ADD_ROW'
 export function addRow() {

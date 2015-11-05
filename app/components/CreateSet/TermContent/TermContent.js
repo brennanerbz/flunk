@@ -20,8 +20,11 @@ export default class TermContent extends Component {
   }
   
   computeStyle = () => {
-    const {row, activeSide } = this.props;
+    const {row, activeSide, subjects } = this.props;
     let node;
+    if(subjects == (undefined || null)) {
+      return;
+    }
     if (activeSide === 'word') {
       node = this.refs['termContentWord' + row];
     } else {
@@ -31,13 +34,15 @@ export default class TermContent extends Component {
     return rect;
   }
 
-  handleSaveWord = (word) => {
+  handleSaveWord = (word) => { // word blur()
     const { row,
             association, 
             item, 
             createItem,
             updateItem,
-            index } = this.props;
+            index,
+            setFlag } = this.props;
+    setFlag(true)
     if(this.state.word.length === 0 && word.length > 0 && item == undefined) {
       this.setState({
         word: word
@@ -54,16 +59,17 @@ export default class TermContent extends Component {
     }
   }
   
-  handleSaveDef = (def) => {
+  handleSaveDef = (def) => { // def blur()
     const { 
       row,
       association,
       item,
       createItem,
       updateItem,
-      index
+      index,
+      setFlag
     } = this.props;
-
+    setFlag(false)
     if(this.state.def.length === 0 && def.length > 0 && item == undefined) {
       this.setState({
         def: def
@@ -89,7 +95,11 @@ export default class TermContent extends Component {
   }
 
   render() {
-    const { activeRow, row, lastIndex } = this.props;
+    const { activeRow, 
+            row, 
+            lastIndex, 
+            item,
+            subjects } = this.props;
   	return(
 		<div className={classnames(
                    {"TermContent-focus": activeRow === row ,
@@ -102,6 +112,10 @@ export default class TermContent extends Component {
                  ref={`termContentWord${row}`}
                  onClick={this.focusThatWord}>
 	            <WordSide
+                shouldsuggest={subjects !== undefined 
+                              && subjects !== null
+                              && subjects.length > 0 
+                              ? true : false}
                 saveWord={(word) => this.handleSaveWord(word)}
                 rect={() => this.computeStyle()}
                 wordSide={true}
@@ -114,6 +128,11 @@ export default class TermContent extends Component {
                  ref={`termContentDef${row}`}
                  onClick={this.focusThatDef}>
 	          	<DefSide
+                shouldsuggest={item !== undefined 
+                              && subjects !== undefined
+                              && subjects !== null
+                              && subjects.length > 0 
+                              ? true : false}
                 saveDef={(def) => this.handleSaveDef(def)}
                 rect={() => this.computeStyle()}
                 defSide={true}

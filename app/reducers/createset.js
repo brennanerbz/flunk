@@ -7,6 +7,9 @@ import {
   UPDATE_SET_SUCCESS,
   UPDATE_SET_FAILURE,
 
+  UPDATE_SETSUBJECTS_SUCCESS,
+  UPDATE_SETSUBJECTS_FAILURE,
+
   CREATE_ASSIGNMENT,
   CREATE_ASSIGNMENT_SUCCESS,
   CREATE_ASSIGNMENT_FAILURE,
@@ -52,7 +55,12 @@ import {
 
 	SET_MOUSE_POS,
 	RESIZE,
-	SCROLL
+	SCROLL,
+
+  CLEAR_SET,
+
+  SET_FLAG,
+  TITLE_FLAG
 	
 } from '../actions/createset';
 
@@ -68,7 +76,7 @@ const createState = {
   title: '',
   id: null,
   purpose: '',
-  subjects: null,
+  subjects: [],
   creator_id: null,
   creator_username: '',
   associations: [],
@@ -79,14 +87,15 @@ const createState = {
   term_choices: null,
   def_choices: null,
   rows: [0, 1],
+  flag: false,
+  title_flag: false,
   /* Old State */
   activeRow: null,
   mousePos: 0,
   resizing: false,
-  scrolling: false
+  scrolling: false,
+
 };
-
-
 
 export default function createset(state = createState, action) {
   switch (action.type) {
@@ -122,6 +131,12 @@ export default function createset(state = createState, action) {
         title: updated_set.title,
         purpose: updated_set.description,
         subjects: updated_set.subjects
+      }
+    case UPDATE_SETSUBJECTS_SUCCESS:
+      return {
+        ...state,
+        subjects: action.subs,
+        set: Object.assign({...state.set}, {subjects: action.subs})
       }
     case CREATE_ITEM:
       return {
@@ -160,6 +175,16 @@ export default function createset(state = createState, action) {
         ...state,
         activeRow: new_id
       }
+    case SET_FLAG: 
+      return {
+        ...state,
+        flag: action.flag
+      }
+    case TITLE_FLAG:
+      return {
+        ...state,
+        title_flag: action.flag
+      }
 
     case EDIT_ROW:
       return {
@@ -197,9 +222,11 @@ export default function createset(state = createState, action) {
       }
 
     case ACTIVATE_ROW:
+      
       return {
         ...state,
         activeRow: action.row
+        // flag: action.row == null ? false : state.flag
       }
       
     case SAVE_SET:
@@ -226,6 +253,11 @@ export default function createset(state = createState, action) {
         ...state,
         scrolling: !state.scrolling
       }
+    case CLEAR_SET:
+      return {
+        ...state = createState
+      }
+    case UPDATE_SETSUBJECTS_FAILURE:
     case UPDATE_ITEM_FAILURE:
     case CREATE_ASSOCIATION_FAILURE:
     case CREATE_ITEM_FAILURE:

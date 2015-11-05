@@ -60,7 +60,9 @@ import {
   CLEAR_SET,
 
   SET_FLAG,
-  TITLE_FLAG
+  TITLE_FLAG,
+
+  CLEAR_DEF_CHOICES
 	
 } from '../actions/createset';
 
@@ -151,7 +153,8 @@ export default function createset(state = createState, action) {
       return {
         ...state,
         isCreatingItem: false,
-        items: items
+        items: items,
+        term_choices: null
       }
     case CREATE_ASSOCIATION_SUCCESS:
       let association = action.association,
@@ -175,14 +178,24 @@ export default function createset(state = createState, action) {
         ...state,
         term_choices: action.terms
       }
+    case DEF_SUGGESTIONS_SUCCESS:
+      return {
+        ...state,
+        def_choices: action.items
+      }
+    case CLEAR_DEF_CHOICES:
+      return {
+        ...state,
+        def_choices: null
+      }
     case ADD_ROW:
-      const new_id = state.rows.slice(-1)[0] + 1,
-            rows = state.rows;
-      rows.push(new_id)
+      let new_id = state.rows.slice(-1)[0] + 1,
+            _rows = state.rows;
+      _rows.push(new_id)
       return {
         ...state,
         activeRow: new_id,
-        rows: rows
+        rows: _rows
       }
     case SET_FLAG: 
       return {
@@ -232,7 +245,6 @@ export default function createset(state = createState, action) {
       }
 
     case ACTIVATE_ROW:
-      
       return {
         ...state,
         activeRow: action.row
@@ -265,7 +277,8 @@ export default function createset(state = createState, action) {
       }
     case CLEAR_SET:
       return {
-        ...state = createState
+        ...state = createState,
+        rows: [0, 1]
       }
     case TERM_SUGGESTIONS_FAILURE:
     case UPDATE_SETSUBJECTS_FAILURE:

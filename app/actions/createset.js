@@ -276,19 +276,27 @@ export function getTermSuggestions(value) {
 export const GET_DEF_SUGGESTIONS = 'GET_DEF_SUGGESTIONS';
 export const DEF_SUGGESTIONS_SUCCESS = 'DEF_SUGGESTIONS_SUCCESS';
 export const DEF_SUGGESTIONS_FAILURE = 'DEF_SUGGESTIONS_FAILURE';
-export function getDefSuggestions(id) {
+export function getDefSuggestions(id, target) {
 	return async(dispatch, getState) => {
 		dispatch({type: GET_DEF_SUGGESTIONS})
 		try {
-			let definitions,
-				term = getState().createset.items[id].target,
-				subjects = getState().createset.subjects.join('|');
-			if(subjects == undefined || subjects.length === 0) {
-				return;
+			let items,
+				term,
+				subjects = [],
+				subs = getState().createset.subjects,
+				def_choices = getState().createset.def_choices;
+			if(def_choices !== null && def_choices.length > 0) return;
+			if(subs == undefined || subs.length === 0) return;
+			if(id == null) {
+				term = target
+			} else {
+				term = getState().createset.items[id].target
 			}
+			subs.forEach(sub => subjects.push(sub.name))
+			subjects.join("|")
 			await axios.get(`${api_url}/items/?target=${term}&subjects=${subjects}`)
-			.then(res => definitions = res.data)
-			dispatch({type: DEF_SUGGESTIONS_SUCCESS, definitions})
+			.then(res => items = res.data.items)
+			dispatch({type: DEF_SUGGESTIONS_SUCCESS, items})
 		} catch(err) {
 			dispatch({
 				type: DEF_SUGGESTIONS_FAILURE,
@@ -297,6 +305,13 @@ export function getDefSuggestions(id) {
 		}
 	}
 }
+export const CLEAR_DEF_CHOICES = 'CLEAR_DEF_CHOICES';
+export function clearDefChoices() {
+  return {
+    type: CLEAR_DEF_CHOICES
+  };
+}
+
 
 
 
@@ -360,6 +375,7 @@ export function createItem(index, ...args) {
 			.then(res => item = res.data)
 			await dispatch({type: CREATE_ITEM_SUCCESS, item})
 			await dispatch(createAssociation(item.id, index))
+			await dispatch(getDefSuggestions(null, item.target))
 		} catch(err) {
 			dispatch({
 				type: CREATE_ITEM_FAILURE,

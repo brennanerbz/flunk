@@ -22,7 +22,7 @@ export default class DefSide extends Component {
 	constructor(props) {
 	  super(props);
 	  this.state = {
-	    unitedStates: getStates(),
+	    defs: [],
 	    loading: false
 	  }
 	}
@@ -44,7 +44,7 @@ export default class DefSide extends Component {
 	}
 
 	render() {
-		const { row } = this.props;
+		const { row, def_choices, getDefSuggestions, item, subjects } = this.props;
 		return(
 			<div className="DefSide">
 				<div className="DefSide-textarea">
@@ -54,25 +54,28 @@ export default class DefSide extends Component {
 				      switchToDef={this.switchToDef}
 					  className="AutoExpandTextArea-textarea"
 			          ref={`autocomplete${row}`}
-			          items={this.state.unitedStates}
-			          getItemValue={(item) => item.name}
-			          onSelect={(value, item) => {
-			            
-			            this.setState({ unitedStates: [ item ] })							           
-			          }}
-			          onInput={(event, value) => {
-			            this.setState({loading: true})
-			            fakeRequest(value, (items) => {
-			              this.setState({ unitedStates: items, loading: false })
-			            })
-			          }}
-			          renderItem={(item, isHighlighted) => (
-			            <div
-			              style={isHighlighted ? styles.highlightedItem : styles.item}
-			              key={item.abbr}
-			              id={item.abbr}
-			            >{item.name}</div>
-			          )}					          
+	                  items={def_choices !== undefined ? def_choices : []}
+	                  getItemValue={(_item) => _item.cue}
+	                  onSelect={(value, _item) => {
+	                     this.setState({ defs: [ _item.cue ] })							           
+	                  }}
+	                  onInput={(event, value) => console.log(value)}
+	                  onFocus={(event, value) => {
+	                     if(subjects !== undefined && subjects.length > 0 && item !== undefined) {
+	         				this.setState({loading: true})
+	         				getDefSuggestions(item.id, (items) => {
+	         				  this.setState({ defs: items, loading: false })
+	         				})
+	         			}
+	                   }}
+	                  renderItem={(_item, isHighlighted) => (
+	                     <div
+	                       style={isHighlighted ? styles.highlightedItem : styles._item}
+	                       key={_item.abbr}
+	                       id={_item.abbr}>
+	                       {_item.cue}
+	                     </div>
+	                   )}					          
 			        />
 				</div>
 			</div>

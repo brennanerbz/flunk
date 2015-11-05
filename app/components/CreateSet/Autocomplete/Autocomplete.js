@@ -176,7 +176,7 @@ export default class Autocomplete extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-	  if (this.state.isOpen && nextProps.rect() !== this.props.rect()) { this.setMenuPositions() }
+	  if (nextProps.rect() !== this.props.rect()) { this.setMenuPositions() }
 
 	  this._performAutoCompleteOnUpdate = true;
 	  if (this.getValue(nextProps) !== this.getValue(this.props)){
@@ -186,11 +186,11 @@ export default class Autocomplete extends Component {
 
 	componentDidUpdate(prevProps, prevState) {
 	  if (this.state.isOpen === true && prevState.isOpen === false)
-	    this.setMenuPositions()    
-
-	  if (this.state.isOpen && this._performAutoCompleteOnUpdate) {
+	    this.setMenuPositions()
+	  if(this.state.value !== prevState.value)
+	  	this.setMenuPositions()    
+	  if (this.state.isOpen && this._performAutoCompleteOnUpdate) 
 	    this._performAutoCompleteOnUpdate = false
-	  }
 	  if (prevState.value !== this.state.value){
 	    this.dispatchEvent(UPDATE, true);
 	  }
@@ -389,6 +389,7 @@ export default class Autocomplete extends Component {
 	    this.props.saveWord(this.state.value)
 	  } else {
 	    this.props.saveDef(this.state.value)
+	    this.props.clearDefChoices()
 	  }
 	}
 
@@ -398,14 +399,17 @@ export default class Autocomplete extends Component {
 	  			switchToDef, 
 	  			switchToWord,
 	  			flag,
-	  			setFlag } = this.props;
-	  console.log(flag)
+	  			setFlag,
+	  			onFocus,
+	  			item,
+	  			items } = this.props;
 	  if (this._ignoreBlur)
 	    return
-	  // this.setState({ isOpen: true })
 	  activateRow(row)
 	  if (this.props.defSide) {
-	    switchToDef()
+	  	switchToDef()
+	  	onFocus()
+	  	this.setState({ isOpen: true })
 	  } else {
 	    switchToWord()
 	  }

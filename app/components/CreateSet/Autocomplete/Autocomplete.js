@@ -63,7 +63,6 @@ export default class Autocomplete extends Component {
 	keyUpHandlers = {
 		Tab() {
 		  const { addRow, index, lastIndex, activeSide, flag, setFlag, activateRow } = this.props;
-		  console.log(flag)
 		  if(flag) {
 		  	setFlag(false)
 		  	return;
@@ -80,7 +79,6 @@ export default class Autocomplete extends Component {
 	    Tab(event) {
 	    	const { addRow, index, lastIndex, activeSide, flag } = this.props;
 	    	if (index == lastIndex && activeSide == 'def') event.preventDefault();
-	    	console.log(flag)
 	    },
 
 	    ArrowDown() {
@@ -254,13 +252,14 @@ export default class Autocomplete extends Component {
 	}
 
 	handleChange = (event) => {
+	  const { subjects, onInput, getTermSuggestions } = this.props;
 	  this._performAutoCompleteOnKeyUp = true
 	  var text = event.target.value;
 	  // text = text.replace(/\s+/g, '');
 	  this.setState({
 	    value: text,
 	  }, () => {
-	    this.props.onInput(event, this.state.value)
+	    onInput(event, this.state.value)
 	  })
 	}
 
@@ -275,19 +274,22 @@ export default class Autocomplete extends Component {
 	} 
 
 	getFilteredItems = () => {
-	  let items = this.props.items
+	  let { items } = this.props;
+	  if(items == undefined || null) return;
 
 	  if (this.props.shouldItemRender) {
 	    items = items.filter((item) => (
 	      this.props.shouldItemRender(item, this.state.value)
 	    ))
 	  }
-
+	  
+	  /* Most likely not going to use 
 	  if (this.props.sortItems) {
 	    items.sort((a, b) => (
 	      this.props.sortItems(a, b, this.state.value)
 	    ))
 	  }
+	  */
 
 	  return items
 	}
@@ -351,7 +353,9 @@ export default class Autocomplete extends Component {
 	}
 
 	renderMenu = () => {
-	  var items = this.getFilteredItems().map((item, index) => {
+	  var items = this.getFilteredItems();
+	  if(items == undefined || null) return;
+	  items = items.map((item, index) => {
 	    var element = this.props.renderItem(
 	      item,
 	      this.state.highlightedIndex === index,

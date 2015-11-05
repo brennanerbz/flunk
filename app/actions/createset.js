@@ -249,12 +249,16 @@ export function getTermSuggestions(value) {
 		dispatch({type: GET_TERM_SUGGESTIONS})
 		try {
 			let terms,
-				subjects = getState().createset.subjects.join('|')
-			if(subjects == undefined || subjects.length === 0) {
+				subjects = [],
+				subs = getState().createset.subjects;
+			if(subs == undefined || subs.length === 0) {
 				return;
 			}
-			await axios.get(`${api_url}/terms/?target=${value}&subjects=${subjects}`)
-		    .then(res => terms = res.data)
+			subs.forEach(sub => subjects.push(sub.name))
+			subjects.join("|")
+			await axios.get(`${api_url}/terms/?search=${value}&subjects=${subjects}`)
+		    .then(res => terms = res.data.terms)
+		    console.log(terms)
 			dispatch({type: TERM_SUGGESTIONS_SUCCESS, terms})
 		} catch(err) {
 			dispatch({
@@ -447,8 +451,9 @@ export function createAssociation(item_id, index) {
 			.then(res => association = res.data)
 			dispatch({type: CREATE_ASSOCIATION_SUCCESS, association})
 			let item = getState().createset.items[association.item_id]
+			dispatch(updateSetSubjects())
 			if(item.subjects !== null) {
-				dispatch(updateSetSubjects())
+				
 			}
 		} catch(err) {
 			dispatch({

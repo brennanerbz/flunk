@@ -22,7 +22,7 @@ export default class WordSide extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			unitedStates: getStates(),
+			terms: [],
 			loading: false
 		}
 	}
@@ -39,7 +39,7 @@ export default class WordSide extends Component {
 	}
 	
 	render() {
-		const { row } = this.props;
+		const { row, term_choices, subjects, getTermSuggestions } = this.props;
 
 		return(
 		<div className="WordSide">
@@ -51,23 +51,25 @@ export default class WordSide extends Component {
 						      switchToWord={this.switchToWord}
 							  className="AutoExpandTextArea-textarea"
 					          ref={`autocomplete${row}`}
-					          items={this.state.unitedStates}
-					          getItemValue={(item) => item.name}
+					          items={term_choices !== undefined ? term_choices : []}
+					          getItemValue={(item) => item}
 					          onSelect={(value, item) => {
-					            this.setState({ unitedStates: [ item ] })							           
+					            this.setState({ terms: [ item ] })							           
 					          }}
 					          onInput={(event, value) => {
-					            this.setState({loading: true})
-					            fakeRequest(value, (items) => {
-					              this.setState({ unitedStates: items, loading: false })
-					            })
+					            if(subjects !== undefined && subjects.length > 0) {
+									this.setState({loading: true})
+									getTermSuggestions(value, (items) => {
+									  this.setState({ terms: items, loading: false })
+									})
+								}
 					          }}
 					          renderItem={(item, isHighlighted) => (
 					            <div
 					              style={isHighlighted ? styles.highlightedItem : styles.item}
 					              key={item.abbr}
 					              id={item.abbr}
-					            >{item.name}</div>
+					            >{item}</div>
 					          )}
 					          
 					        />

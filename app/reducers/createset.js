@@ -67,7 +67,7 @@ import {
 import _ from 'lodash';
 import assign from 'lodash/object/assign';
 
-const createState = {
+var createState = {
   isCreatingSet: false,
   isUpdatingSet: false,
   isCreatingItem: false,
@@ -154,10 +154,12 @@ export default function createset(state = createState, action) {
         items: items
       }
     case CREATE_ASSOCIATION_SUCCESS:
-      let association = action.association
-      state.associations.push(association)
+      let association = action.association,
+          associations = state.associations;
+      associations.push(association)
       return {
-        ...state
+        ...state,
+        associations: associations
       }
     case UPDATE_ITEM_SUCCESS:
       let _items = state.items,
@@ -168,12 +170,19 @@ export default function createset(state = createState, action) {
         ...state,
         items: _items
       }
-    case ADD_ROW:
-      const new_id = state.rows.slice(-1)[0] + 1
-      state.rows.push(new_id)
+    case TERM_SUGGESTIONS_SUCCESS:
       return {
         ...state,
-        activeRow: new_id
+        term_choices: action.terms
+      }
+    case ADD_ROW:
+      const new_id = state.rows.slice(-1)[0] + 1,
+            rows = state.rows;
+      rows.push(new_id)
+      return {
+        ...state,
+        activeRow: new_id,
+        rows: rows
       }
     case SET_FLAG: 
       return {
@@ -258,6 +267,7 @@ export default function createset(state = createState, action) {
       return {
         ...state = createState
       }
+    case TERM_SUGGESTIONS_FAILURE:
     case UPDATE_SETSUBJECTS_FAILURE:
     case UPDATE_ITEM_FAILURE:
     case CREATE_ASSOCIATION_FAILURE:

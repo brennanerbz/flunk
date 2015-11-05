@@ -79,8 +79,9 @@ export default class TermRows extends Component {
 	}
 
 	deactivateRow = () => {
-	  const { activateRow } = this.props;
+	  const { activateRow, setFlag } = this.props;
 	  activateRow(null)
+	  setFlag(false)
 	}
 
 	render() {

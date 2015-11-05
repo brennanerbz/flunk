@@ -458,19 +458,19 @@ export function createAssociation(item_id, index) {
 	return async(dispatch, getState) => {
 		try {
 			let set_id = getState().createset.set.id,
-				association = Object.assign({..._associationtemplate}, {
-					item_id: item_id,
-					set_id: set_id,
-					order: index + 1
-				})
+				state_asc = getState().createset.associations[index],
+				association;
+			if(state_asc !== undefined && null) return;
+			association = Object.assign({..._associationtemplate}, {
+				item_id: item_id,
+				set_id: set_id,
+				order: index + 1
+			})
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => association = res.data)
 			dispatch({type: CREATE_ASSOCIATION_SUCCESS, association})
 			let item = getState().createset.items[association.item_id]
 			dispatch(updateSetSubjects())
-			if(item.subjects !== null) {
-				
-			}
 		} catch(err) {
 			dispatch({
 				type: CREATE_ASSOCIATION_FAILURE,
@@ -491,13 +491,23 @@ export function createAssociation(item_id, index) {
 export const UPDATE_ASSOCIATION = 'UPDATE_ASSOCIATION';
 export const UPDATE_ASSOCIATION_SUCCESS = 'UPDATE_ASSOCIATION_SUCCESS';
 export const UPDATE_ASSOCIATION_FAILURE = 'UPDATE_ASSOCIATION_FAILURE';
-export function updateAssociation(asc) {
+export function updateAssociation(asc, ...args) {
 	return async(dispatch, getState) => {
 		try {
-			let association;
-			await axios.put(`${api_url}/associations/${asc.id}`, asc)
-			.then(res => res.data = association)
-			dispatch({UPDATE_ASSOCIATION_SUCCESS, association})
+			let association = Object.assign({}, asc);
+			if(args.length > 0) {
+				for(var i = 0; i < args.length; i++) {
+					let arg = args[i],
+						name = arg.name,
+						prop = arg.prop;
+					if(association.hasOwnProperty(name)) {
+						association[name] = prop
+					}
+				}
+			}
+			await axios.put(`${api_url}/associations/${association.id}`, association)
+			.then(res => association = res.data)
+			dispatch({type: UPDATE_ASSOCIATION_SUCCESS, association})
 		} catch(err) {
 			dispatch({
 				type: UPDATE_ASSOCIATION_FAILURE,

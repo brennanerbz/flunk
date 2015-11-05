@@ -69,14 +69,14 @@ export default class TermContent extends Component {
       setFlag
     } = this.props;
     setFlag(false)
-    if(this.state.def.length === 0 && def.length > 0 && item == undefined) {
+    if(this.state.def.length === 0 && def.length > 0 && item == undefined && association == undefined) {
       this.setState({
         def: def
       });
       createItem(index, {name: 'cue', prop: def})
       return;
     } 
-    if(this.state.def !== def && item !== undefined) {
+    if(this.state.def !== (def && item.def) && (item && association) !== undefined) {
       this.setState({
         def: def
       });

@@ -173,6 +173,19 @@ export default function createset(state = createState, action) {
         ...state,
         items: _items
       }
+    case UPDATE_ASSOCIATION_SUCCESS:
+      let asc = action.association,
+          old_acs = state.associations[asc.order - 1],
+          _items_ = state.items,
+          _item = _items_[old_acs.item_id];
+      _items_[asc.item_id] = asc.item
+      _items_[_item.id] = _items_[asc.item_id]
+      delete _items_[_item.id]
+      return {
+        ...state,
+        associations: state.associations[asc.order - 1] = asc,
+        items: _items_
+      }
     case TERM_SUGGESTIONS_SUCCESS:
       return {
         ...state,
@@ -280,6 +293,7 @@ export default function createset(state = createState, action) {
         ...state = createState,
         rows: [0, 1]
       }
+    case UPDATE_ASSOCIATION_FAILURE:
     case TERM_SUGGESTIONS_FAILURE:
     case UPDATE_SETSUBJECTS_FAILURE:
     case UPDATE_ITEM_FAILURE:

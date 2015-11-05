@@ -44,7 +44,13 @@ export default class DefSide extends Component {
 	}
 
 	render() {
-		const { row, def_choices, getDefSuggestions, item, subjects } = this.props;
+		const { row, 
+				def_choices, 
+				getDefSuggestions, 
+				updateAssociation,
+				item, 
+				association,
+				subjects } = this.props;
 		return(
 			<div className="DefSide">
 				<div className="DefSide-textarea">
@@ -57,7 +63,9 @@ export default class DefSide extends Component {
 	                  items={def_choices !== undefined ? def_choices : []}
 	                  getItemValue={(_item) => _item.cue}
 	                  onSelect={(value, _item) => {
-	                     this.setState({ defs: [ _item.cue ] })							           
+	                     this.setState({ defs: [ _item.cue ]})
+	                     console.log(association.item_id)
+	                     updateAssociation(association, {name: 'item', prop: _item}, {name: 'item_id', prop: _item.id })
 	                  }}
 	                  onInput={(event, value) => console.log(value)}
 	                  onFocus={(event, value) => {

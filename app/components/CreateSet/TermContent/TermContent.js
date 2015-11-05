@@ -47,7 +47,6 @@ export default class TermContent extends Component {
       this.setState({
         word: word
       })
-      console.log(word)
       createItem(index, {name: 'target', prop: word})
       return;
     }

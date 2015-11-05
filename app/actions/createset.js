@@ -527,10 +527,10 @@ export function editRow(id, word, def) {
 }
 
 export const DELETE_ROW = 'DELETE_ROW'
-export function deleteRow(id) {
+export function deleteRow(row) {
 	return {
 		type: DELETE_ROW,
-		id
+		row
 	}
 }
 

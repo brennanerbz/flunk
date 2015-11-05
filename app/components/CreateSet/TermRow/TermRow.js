@@ -29,7 +29,7 @@ export default class TermRow extends Component {
 				onMouseOver={() => this.props.setMousePos(row)}
 				onMouseLeave={() => this.props.setMousePos(null)}>
 				<a className="TermRow-counter">
-					{index}
+					{index + 1}
 				</a>
 				<div className="TermRow-content">
 					<TermContent

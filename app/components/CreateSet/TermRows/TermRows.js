@@ -60,7 +60,7 @@ export default class TermRows extends Component {
 
 	componentDidUpdate = (prevProps, prevState) => {
 	  const { activeRow, rows } = this.props;
-	  if (prevProps.activeRow !== this.props.activeRow && activeRow === rows.length) {
+	  if (prevProps.activeRow !== this.props.activeRow && activeRow === rows.length - 1) {
 	    this.scrollToBottom()
 	  }
 	}
@@ -75,7 +75,7 @@ export default class TermRows extends Component {
 	} 
 
 	handleScroll = () => {
-	  // this.props.adjustScroll()
+	  this.props.adjustScroll()
 	}
 
 	deactivateRow = () => {

@@ -85,6 +85,13 @@ export default class CreateSetHeader extends Component {
 	              		})
 	              		: null
 	              	}
+	              	{
+	              		subjects !== undefined
+	              		&& subjects !== null
+	              		&& subjects.length > 0
+	              		? <span className="edit_link"><a className="link">edit</a></span>
+	              		: null
+	              	}
 	              </ul>
 	            </div>
 	            <ButtonGroup onSave={::this.handleSave}

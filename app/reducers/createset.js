@@ -199,7 +199,8 @@ export default function createset(state = createState, action) {
     case DELETE_ROW:
       return {
         ...state,
-        rows: state.rows.filter(_row => _row !== action.row)
+        rows: state.rows.filter(_row => _row !== action.row),
+        // activeRow: state.rows.splice(-1)[0]
       }
 
     case FLIP_ACTIVESIDE:

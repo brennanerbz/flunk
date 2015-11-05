@@ -41,7 +41,8 @@ export default class TermContent extends Component {
             createItem,
             updateItem,
             index,
-            setFlag } = this.props;
+            setFlag,
+            activeRow } = this.props;
     setFlag(true)
     if(this.state.word.length === 0 && word.length > 0 && item == undefined) {
       this.setState({
@@ -72,7 +73,9 @@ export default class TermContent extends Component {
     if(this.state.def.length === 0 && def.length > 0 && item == undefined && association == undefined) {
       this.setState({
         def: def
-      });
+      }); 
+
+      // TODO: 
       createItem(index, {name: 'cue', prop: def})
       return;
     } 

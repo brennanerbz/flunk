@@ -52,7 +52,7 @@ export default class TermRows extends Component {
 	}
 
 	componentWillReceiveProps = (nextProps) => {
-	  const { activeContext } = this.props;
+	  const { activeContext, setFlag, flag, activeRow } = this.props;
 	  this.setState({
 	    activeSide: nextProps.activeContext ? 'word' : 'def'
 	  });
@@ -78,10 +78,14 @@ export default class TermRows extends Component {
 	  this.props.adjustScroll()
 	}
 
+
+
 	deactivateRow = () => {
-	  const { activateRow, setFlag } = this.props;
-	  activateRow(null)
-	  // setFlag(false)
+	  let { activateRow, setFlag, flag } = this.props;
+	  if(document.activeElement == document.body) {
+	  	activateRow(null)
+	  	if(flag)setFlag(false)
+	  }
 	}
 
 	render() {
@@ -89,6 +93,7 @@ export default class TermRows extends Component {
 	  const length = rows.length - 1;
 		return(
 		<div className="TermRows"
+			 ref="term_rows"
 	         onBlur={this.deactivateRow}>
 	      <div className="TermRow">
 	        <div className="TermRow-content row-labels">

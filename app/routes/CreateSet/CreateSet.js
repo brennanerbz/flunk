@@ -63,7 +63,8 @@ export default class CreateSetPage extends Component {
 			  <CreateSetHeader {...this.props}/>                 
 			  <div className="container">
 			    <div className="CreateSetPage-list">
-			      <TermRows {...this.props}/>
+			      <TermRows {...this.props}
+			      			/>
 			    </div>
 			  </div>
 			</div>

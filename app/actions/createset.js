@@ -179,7 +179,6 @@ export function createAssignment(set_id, permission) {
 					set_id: set_id,
 					permission: permission || 'nonadmin'
 				}) 
-			console.log(assignment)
 			await axios.post(`${api_url}/assignments/`, 
 				assignment
 			)
@@ -251,6 +250,7 @@ export function getTermSuggestions(value) {
 			let terms,
 				subjects = [],
 				subs = getState().createset.subjects;
+			if(value.length === 0) return;
 			if(subs == undefined || subs.length === 0) {
 				return;
 			}
@@ -258,7 +258,6 @@ export function getTermSuggestions(value) {
 			subjects.join("|")
 			await axios.get(`${api_url}/terms/?search=${value}&subjects=${subjects}`)
 		    .then(res => terms = res.data.terms)
-		    console.log(terms)
 			dispatch({type: TERM_SUGGESTIONS_SUCCESS, terms})
 		} catch(err) {
 			dispatch({
@@ -285,7 +284,7 @@ export function getDefSuggestions(id, target) {
 				subjects = [],
 				subs = getState().createset.subjects,
 				def_choices = getState().createset.def_choices;
-			if(def_choices !== null && def_choices.length > 0) return;
+			// if(def_choices !== null && def_choices.length > 0) return;
 			if(subs == undefined || subs.length === 0) return;
 			if(id == null) {
 				term = target
@@ -312,9 +311,6 @@ export function clearDefChoices() {
   };
 }
 
-
-
-
 /*
 
 ‘parent_id’: Integer,
@@ -330,6 +326,7 @@ export function clearDefChoices() {
 ‘visibility’: String,		‘public’ | ‘private’
 
 */
+
 var _itemtemplate = {
 	parent_id: null,
 	creator_id: null,
@@ -349,10 +346,28 @@ export const CREATE_ITEM_FAILURE = 'CREATE_ITEM_FAILURE';
 export function createItem(index, ...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: CREATE_ITEM})
-		try {
+		try {                                                                                                            
 			let item = _itemtemplate,
 				user = getState().user.user,
-				set  = getState().createset.set;
+				set  = getState().createset.set,
+				association, 
+				current_item;
+
+			if(args[0].name == "child") {
+				let item = args[0].prop;
+				current_item = getState().createset.items[item.id]
+			} 
+
+			if(current_item !== undefined) {
+				if (current_item.cue || current_item.target == null) {
+					updateItem(current_item, ...args)
+					return;
+				}
+				if (current_item.adopted !== true) {
+					updateItem(current_item, ...args)
+					return;
+				}
+			}
 			if(set == undefined) {
 				await dispatch(createSet())
 				setTimeout(() => {
@@ -365,6 +380,18 @@ export function createItem(index, ...args) {
 					let arg = args[i],
 						name = arg.name,
 						prop = arg.prop;
+					if(name == 'child') {
+						association = getState().createset.associations.filter(asc => asc.item_id == prop.id)[0]
+						item = Object.assign({...item}, {
+							parent_id: prop.id,
+							target: prop.target,
+							cue: prop.cue,
+							synonyms: prop.synonyms !== null ? prop.synonyms.join("|") : null,
+							image: prop.image,
+							message: prop.message,
+							visibility: prop.visibility
+						})
+					}
 					if(item.hasOwnProperty(name)) {
 						item[name] = prop
 					}
@@ -373,8 +400,14 @@ export function createItem(index, ...args) {
 			item.creator_id = user.id
 			await axios.post(`${api_url}/items/`, item)
 			.then(res => item = res.data)
-			await dispatch({type: CREATE_ITEM_SUCCESS, item})
-			await dispatch(createAssociation(item.id, index))
+			if(association == undefined) {
+				await dispatch({type: CREATE_ITEM_SUCCESS, item})
+				await dispatch(createAssociation(item.id, index))
+			} else {
+				await dispatch(updateAssociation(association, 
+												{name: 'item', prop: item}, 
+												{name: 'item_id', prop: item.id}))
+			}
 			await dispatch(getDefSuggestions(null, item.target))
 		} catch(err) {
 			dispatch({
@@ -385,6 +418,7 @@ export function createItem(index, ...args) {
 	}
 }
 
+// createItem(index, {name: 'child', prop: item}, {name: 'cue', prop: def})
 
 /*
 
@@ -403,11 +437,11 @@ export function createItem(index, ...args) {
 export const UPDATE_ITEM = 'UPDATE_ITEM';
 export const UPDATE_ITEM_SUCCESS = 'UPDATE_ITEM_SUCCESS';
 export const UPDATE_ITEM_FAILURE = 'UPDATE_ITEM_FAILURE';
-export function updateItem(item_id, ...args) {
+export function updateItem(_item, ...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: UPDATE_ITEM})
 		try {
-			let item = getState().createset.items[item_id]
+			let item = Object.assign({}, _item)
 			if(args.length > 0) {
 				for(var i = 0; i < args.length; i++) {
 					let arg = args[i],
@@ -458,18 +492,16 @@ export function createAssociation(item_id, index) {
 	return async(dispatch, getState) => {
 		try {
 			let set_id = getState().createset.set.id,
-				state_asc = getState().createset.associations[index],
+				order = getState().createset.order,
 				association;
-			if(state_asc !== undefined && null) return;
 			association = Object.assign({..._associationtemplate}, {
 				item_id: item_id,
 				set_id: set_id,
-				order: index + 1
+				order: order
 			})
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => association = res.data)
-			dispatch({type: CREATE_ASSOCIATION_SUCCESS, association})
-			let item = getState().createset.items[association.item_id]
+			dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index})
 			dispatch(updateSetSubjects())
 		} catch(err) {
 			dispatch({
@@ -494,12 +526,16 @@ export const UPDATE_ASSOCIATION_FAILURE = 'UPDATE_ASSOCIATION_FAILURE';
 export function updateAssociation(asc, ...args) {
 	return async(dispatch, getState) => {
 		try {
-			let association = Object.assign({}, asc);
+			let association = Object.assign({}, asc),
+				adopted = false;
 			if(args.length > 0) {
 				for(var i = 0; i < args.length; i++) {
 					let arg = args[i],
 						name = arg.name,
 						prop = arg.prop;
+					if(name == 'adopted') {
+						adopted = true;
+					}
 					if(association.hasOwnProperty(name)) {
 						association[name] = prop
 					}
@@ -507,7 +543,7 @@ export function updateAssociation(asc, ...args) {
 			}
 			await axios.put(`${api_url}/associations/${association.id}`, association)
 			.then(res => association = res.data)
-			dispatch({type: UPDATE_ASSOCIATION_SUCCESS, association})
+			dispatch({type: UPDATE_ASSOCIATION_SUCCESS, association, adopted})
 		} catch(err) {
 			dispatch({
 				type: UPDATE_ASSOCIATION_FAILURE,
@@ -622,4 +658,4 @@ export function adjustScroll() {
 	return {
 		type: SCROLL
 	}
-}	
+}

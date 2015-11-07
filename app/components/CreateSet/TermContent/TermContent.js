@@ -42,20 +42,28 @@ export default class TermContent extends Component {
             updateItem,
             index,
             setFlag,
+            flag,
             activeRow } = this.props;
     setFlag(true)
-    if(this.state.word.length === 0 && word.length > 0 && item == undefined) {
+
+    if((item !== undefined || null) && item.target !== null) {
+      if(def.toLowerCase().trim() == item.target.toLowerCase().trim()) return;
+    }
+
+    if(this.state.word.length === 0 && word.length > 0 
+      && item == undefined) {
       this.setState({
         word: word
       })
       createItem(index, {name: 'target', prop: word})
       return;
     }
-    if(this.state.word !== word && item !== undefined) {
+    if((item && association) !== (undefined && null)
+      && word.toLowerCase().trim() !== this.state.word.toLowerCase().trim()) {
       this.setState({
         word: word
       });
-      updateItem(item.id, {name: 'target', prop: word})
+      createItem(index, {name: 'child', prop: item}, {name: 'target', prop: word})
     }
   }
   
@@ -64,27 +72,37 @@ export default class TermContent extends Component {
       row,
       association,
       item,
+      items,
       createItem,
       updateItem,
       index,
-      setFlag
+      setFlag,
+      user
     } = this.props;
     setFlag(false)
-    if(this.state.def.length === 0 && def.length > 0 && item == undefined && association == undefined) {
+
+    if((item !== undefined || null) && item.cue !== null) {
+      if(def.toLowerCase().trim() == item.cue.toLowerCase().trim()) return;
+    }
+    
+    if(this.state.def.length === 0 && def.length > 0
+     && (item && association) == undefined) {
       this.setState({
         def: def
       }); 
-
-      // TODO: 
       createItem(index, {name: 'cue', prop: def})
       return;
     } 
-    if(this.state.def !== (def && item.def) && (item && association) !== undefined) {
+
+    if((item && association) !== (undefined && null) 
+      && def.toLowerCase().trim() !== this.state.def.toLowerCase().trim()) {
       this.setState({
         def: def
       });
-      updateItem(item.id, {name: 'cue', prop: def})
+      createItem(index, {name: 'child', prop: item}, {name: 'cue', prop: def})
+      return;
     }
+
   }
 
   focusThatWord = () => {

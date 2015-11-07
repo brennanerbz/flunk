@@ -56,6 +56,9 @@ export default class TermRows extends Component {
 	  this.setState({
 	    activeSide: nextProps.activeContext ? 'word' : 'def'
 	  });
+	  if(document.activeElement == document.body) {
+	  	if(flag)setFlag(false)
+	  }
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
@@ -77,8 +80,6 @@ export default class TermRows extends Component {
 	handleScroll = () => {
 	  this.props.adjustScroll()
 	}
-
-
 
 	deactivateRow = () => {
 	  let { activateRow, setFlag, flag } = this.props;

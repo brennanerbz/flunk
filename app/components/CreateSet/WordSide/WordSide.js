@@ -64,14 +64,13 @@ export default class WordSide extends Component {
 									})
 								}
 					          }}
-					          renderItem={(item, isHighlighted) => (
+					          renderItem={(term, isHighlighted) => (
 					            <div
-					              style={isHighlighted ? styles.highlightedItem : styles.item}
-					              key={item.abbr}
-					              id={item.abbr}
-					            >{item}</div>
+					              style={isHighlighted ? styles.highlightedItem : styles.term}
+					              key={term.abbr}
+					              id={term.abbr}
+					            >{term}</div>
 					          )}
-					          
 					        />
 						</div>
 						<div>

@@ -15,6 +15,8 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	/* Flags */
 	isCreatingSet: state.createset.isCreatingSet,
 	isUpdatingSet: state.createset.isUpdatingSet,
+	/* User */
+	user: state.user.user,
 	/* Normal state */
 	state: state.createset,
 	set: state.createset.set,
@@ -53,8 +55,9 @@ export default class CreateSetPage extends Component {
 	}
 
 	componentWillUnmount() {
-		const { clearSet } = this.props;
-		clearSet()
+		const { clearSet, reorderSet } = this.props;
+		reorderSet()
+		setTimeout(() => { clearSet() }, 5)
 	}	
 
 	render() {

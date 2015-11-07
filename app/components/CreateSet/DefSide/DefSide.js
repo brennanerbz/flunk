@@ -64,10 +64,12 @@ export default class DefSide extends Component {
 	                  getItemValue={(_item) => _item.cue}
 	                  onSelect={(value, _item) => {
 	                     this.setState({ defs: [ _item.cue ]})
-	                     console.log(association.item_id)
-	                     updateAssociation(association, {name: 'item', prop: _item}, {name: 'item_id', prop: _item.id })
+	                     updateAssociation(association, 
+	                     				  {name: 'item', prop: _item}, 
+	                     				  {name: 'item_id', prop: _item.id },
+	                     				  {name: 'adopted'})
 	                  }}
-	                  onInput={(event, value) => console.log(value)}
+	                  onInput={(event, value) => value}
 	                  onFocus={(event, value) => {
 	                     if(subjects !== undefined && subjects.length > 0 && item !== undefined) {
 	         				this.setState({loading: true})

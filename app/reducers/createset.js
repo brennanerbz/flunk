@@ -81,6 +81,7 @@ var createState = {
   subjects: [],
   creator_id: null,
   creator_username: '',
+  order: 1,
   associations: [],
   items: null,
   current_item: null,
@@ -146,7 +147,7 @@ export default function createset(state = createState, action) {
         isCreatingItem: true
       }
     case CREATE_ITEM_SUCCESS: 
-      let items = state.items || {},
+      let items = Object.assign({}, state.items) || {},
           item = action.item,
           id = item.id;
       items[id] = item;
@@ -159,10 +160,16 @@ export default function createset(state = createState, action) {
     case CREATE_ASSOCIATION_SUCCESS:
       let association = action.association,
           associations = state.associations;
-      associations.push(association)
+      association = Object.assign({...association}, {index: action.index})
+      if(associations.length === 0) {
+          associations.push(association)
+      } else {
+          associations.splice(action.index, 0, association)
+      }
       return {
         ...state,
-        associations: associations
+        associations: associations,
+        order: state.order + 1
       }
     case UPDATE_ITEM_SUCCESS:
       let _items = state.items,
@@ -175,15 +182,24 @@ export default function createset(state = createState, action) {
       }
     case UPDATE_ASSOCIATION_SUCCESS:
       let asc = action.association,
-          old_acs = state.associations[asc.order - 1],
-          _items_ = state.items,
+          _associations = state.associations.slice(0),
+          old_acs = _associations.filter(_asc => { return _asc.id == asc.id })[0],
+          index = _associations.indexOf(old_acs),
+          _items_ = Object.assign({}, state.items),
           _item = _items_[old_acs.item_id];
-      _items_[asc.item_id] = asc.item
-      _items_[_item.id] = _items_[asc.item_id]
-      delete _items_[_item.id]
+
+      _items_[asc.item_id] = asc.item;
+      _items_[asc.item_id]['adopted'] = action.adopted;
+      _items_[_item.id] = _items_[asc.item_id];
+
+      delete _items_[_item.id];
+
+      _associations[index] = asc;
+      _associations[index]['index'] = index;
+      
       return {
         ...state,
-        associations: state.associations[asc.order - 1] = asc,
+        associations: _associations,
         items: _items_
       }
     case TERM_SUGGESTIONS_SUCCESS:

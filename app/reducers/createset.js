@@ -93,8 +93,8 @@ var createState = {
   flag: false,
   title_flag: false,
   /* Old State */
-  activeRow: 0,
-  mousePos: 0,
+  activeRow: -1,
+  mousePos: -1,
   resizing: false,
   scrolling: false,
 
@@ -236,10 +236,11 @@ export default function createset(state = createState, action) {
         title_flag: action.flag
       }
     case DELETE_ROW:
+      let updated_rows = state.rows,
+          removed = updated_rows.splice(action.index, 1)
       return {
         ...state,
-        rows: state.rows.filter(_row => _row !== action.row),
-        // activeRow: state.rows.splice(-1)[0]
+        rows: updated_rows
       }
     case FLIP_ACTIVESIDE:
       const active = state.activeContext;
@@ -274,7 +275,7 @@ export default function createset(state = createState, action) {
     case SET_MOUSE_POS:
       return {
         ...state,
-        mousePos: action.row
+        mousePos: action.index
       }
     case RESIZE:
       return {
@@ -289,7 +290,7 @@ export default function createset(state = createState, action) {
     case CLEAR_SET:
       return {
         ...state = createState,
-        rows: [0, 1]
+        rows: [null, null]
       }
     case UPDATE_ASSOCIATION_FAILURE:
     case TERM_SUGGESTIONS_FAILURE:

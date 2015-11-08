@@ -585,10 +585,10 @@ export function addRow() {
 }
 
 export const DELETE_ROW = 'DELETE_ROW'
-export function deleteRow(row) {
+export function deleteRow(index) {
 	return {
 		type: DELETE_ROW,
-		row
+		index
 	}
 }
 
@@ -630,10 +630,10 @@ export function saveSet(){
 }
 
 export const SET_MOUSE_POS = 'SET_MOUSE_POS'
-export function setMousePos(row) {
+export function setMousePos(index) {
 	return {
 		type: SET_MOUSE_POS,
-		row
+		index
 	}
 }
 

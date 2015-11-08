@@ -56,7 +56,8 @@ export default class CreateSetPage extends Component {
 
 	componentWillUnmount() {
 		const { clearSet, reorderSet } = this.props;
-		reorderSet()
+		// TODO: create reorder fn()
+		// reorderSet()
 		setTimeout(() => { clearSet() }, 5)
 	}	
 

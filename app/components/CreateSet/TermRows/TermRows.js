@@ -84,7 +84,7 @@ export default class TermRows extends Component {
 	deactivateRow = () => {
 	  let { activateRow, setFlag, flag } = this.props;
 	  if(document.activeElement == document.body) {
-	  	activateRow(null)
+	  	activateRow(-1)
 	  	if(flag)setFlag(false)
 	  }
 	}
@@ -111,19 +111,19 @@ export default class TermRows extends Component {
 	        </div>
 	      </div>
 	        {     
-	            rows.map((row, i) => {
+	            rows.map((id, i) => {
 	              return (
 	                <TermRow
-	                  row={row}
-	                  isMouseOver={row === this.props.mousePos}
-	                  ref={`row${row}`}                    
+	                  asc_id={id}
+	                  isMouseOver={i === this.props.mousePos}
+	                  ref={`row${i}`}                    
 	                  activeRow={activeRow}
 	                  activeSide={this.state.activeSide}
 	                  lastIndex={Number(length)}
 	                  totalCount={length}
 	                  index={i}
-	                  key={`row${i + row}`}
-	                  termLuid={`row${i + row}`}
+	                  key={`row${i}`}
+	                  termLuid={`row${i}`}
 	                  {...this.props}
 	                />
 	              )

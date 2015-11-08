@@ -12,28 +12,29 @@ export default class TermRow extends Component {
 	}
 
 	handleDelete = () => {
-		const { row, deleteRow } = this.props;
- 		deleteRow(row)
+		const { index, deleteRow } = this.props;
+ 		deleteRow(index)
 	}	
 
 	render() {
-		const { row, 
+		const { asc_id, 
 				index,
 				items,
 				associations } = this.props,
 
-				association = associations !== (null && undefined) 
-				? associations.filter(asc => { return asc.index == index })[0] 
-				: undefined,
+				association = asc_id !== null && associations !== undefined 
+				? associations[asc_id]
+				: null,
 
-				item = association !== (undefined && null) && items !== null 
-				? items[association.item_id] 
-				: undefined;
-		return(
+				item = association !== null && items !== undefined
+				? items[association.item_id]
+				: null
+
+		return (
 			<div className="TermRow" 
-				onFocus={()=> this.props.setMousePos(row)}
-				onMouseOver={() => this.props.setMousePos(row)}
-				onMouseLeave={() => this.props.setMousePos(null)}>
+				onFocus={()=> this.props.setMousePos(index)}
+				onMouseOver={() => this.props.setMousePos(index)}
+				onMouseLeave={() => this.props.setMousePos(-1)}>
 				<a className="TermRow-counter">
 					{index + 1}
 				</a>

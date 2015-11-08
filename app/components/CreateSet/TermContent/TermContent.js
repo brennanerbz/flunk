@@ -20,30 +20,34 @@ export default class TermContent extends Component {
   }
   
   computeStyle = () => {
-    const {row, activeSide, subjects } = this.props;
-    let node;
+    const { asc_id, 
+            index, 
+            activeSide, 
+            subjects } = this.props;
+    let node, rect;
     if(subjects == (undefined || null)) {
       return;
     }
     if (activeSide === 'word') {
-      node = this.refs['termContentWord' + row];
+      node = this.refs['termContentWord' + index];
     } else {
-      node = this.refs['termContentDef' + row];
+      node = this.refs['termContentDef' + index];
     }
-    const rect = node.getBoundingClientRect();
+    rect = node.getBoundingClientRect();
     return rect;
   }
 
   handleSaveWord = (word) => { // word blur()
-    const { row,
+    const { asc_id,
+            index,
             association, 
             item, 
             createItem,
             updateItem,
-            index,
             setFlag,
             flag,
             activeRow } = this.props;
+
     setFlag(true)
 
     if((item !== undefined || null) && item.target !== null) {
@@ -69,16 +73,17 @@ export default class TermContent extends Component {
   
   handleSaveDef = (def) => { // def blur()
     const { 
-      row,
+      asc_id,
+      index,
       association,
       item,
       items,
       createItem,
       updateItem,
-      index,
       setFlag,
       user
     } = this.props;
+
     setFlag(false)
 
     if((item !== undefined || null) && item.cue !== null) {
@@ -106,30 +111,31 @@ export default class TermContent extends Component {
   }
 
   focusThatWord = () => {
-    const { row } = this.props;
-    this.refs['word' + row].autoFocus()
+    const { index } = this.props;
+    this.refs['word' + index].autoFocus()
   }
   focusThatDef = () => {
-    const { row } = this.props;
-    this.refs['def' + row].autoFocus()
+    const { index } = this.props;
+    this.refs['def' + index].autoFocus()
   }
 
   render() {
     const { activeRow, 
-            row, 
+            asc_id,
+            index, 
             lastIndex, 
             item,
             subjects } = this.props;
   	return(
 		<div className={classnames(
-                   {"TermContent-focus": activeRow === row ,
-                   "TermContent": activeRow !== row} )}>
+                   {"TermContent-focus": activeRow === index ,
+                   "TermContent": activeRow !== index} )}>
 	        <div className="TermContent-wrap">          
 	          <div className={classnames(
                            "TermContent-side",
-                           {"word-side-focus": activeRow === row,
-                            "word-side": activeRow !== row})}
-                 ref={`termContentWord${row}`}
+                           {"word-side-focus": activeRow === index,
+                            "word-side": activeRow !== index})}
+                 ref={`termContentWord${index}`}
                  onClick={this.focusThatWord}>
 	            <WordSide
                 shouldsuggest={subjects !== undefined 
@@ -139,13 +145,13 @@ export default class TermContent extends Component {
                 saveWord={(word) => this.handleSaveWord(word)}
                 rect={() => this.computeStyle()}
                 wordSide={true}
-                ref={`word${row}`}          
+                ref={`word${index}`}          
                 tabIndex={2}
                 {...this.props}
 	            />
 	          </div>
 	          <div className="TermContent-side def-side"
-                 ref={`termContentDef${row}`}
+                 ref={`termContentDef${index}`}
                  onClick={this.focusThatDef}>
 	          	<DefSide
                 shouldsuggest={item !== undefined 
@@ -156,7 +162,7 @@ export default class TermContent extends Component {
                 saveDef={(def) => this.handleSaveDef(def)}
                 rect={() => this.computeStyle()}
                 defSide={true}
-                ref={`def${row}`}          
+                ref={`def${index}`}          
                 tabIndex={2}
                 {...this.props}
 	          	/>

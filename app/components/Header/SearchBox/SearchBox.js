@@ -38,7 +38,7 @@ export default class SearchBox extends Component {
 		const { searchItems, searchSets, searchUsers } = this.props,
 			    value = this.state.value;
 		searchItems(value)
-		searchSet(value)
+		searchSets(value)
 		searchUsers(value)
 	}
 
@@ -53,7 +53,7 @@ export default class SearchBox extends Component {
 				<input className="text-input search-input input-rounded"
 					   placeholder="Search"
 					   onChange={::this.handleSearchInput}
-					   onInput={(e) => { if(e.which === 13) { ::this.handleSearchSubmit() } } }
+					   onKeyDown={(e) => { if(e.which === 13) { ::this.handleSearchSubmit() } } }
 				/>										
 			</div>
 		);

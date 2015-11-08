@@ -122,8 +122,8 @@ export default class TermRows extends Component {
 	                  lastIndex={Number(length)}
 	                  totalCount={length}
 	                  index={i}
-	                  key={`row${row}`}
-	                  termLuid={`row${row}`}
+	                  key={`row${i + row}`}
+	                  termLuid={`row${i + row}`}
 	                  {...this.props}
 	                />
 	              )

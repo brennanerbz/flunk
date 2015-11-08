@@ -81,19 +81,19 @@ var createState = {
   subjects: [],
   creator_id: null,
   creator_username: '',
-  order: 1,
-  associations: [],
+  count: 1,
+  associations: null,
   items: null,
   current_item: null,
   current_association: null,
   current_order_index: null,
   term_choices: null,
   def_choices: null,
-  rows: [0, 1],
+  rows: [null, null],
   flag: false,
   title_flag: false,
   /* Old State */
-  activeRow: null,
+  activeRow: 0,
   mousePos: 0,
   resizing: false,
   scrolling: false,
@@ -102,14 +102,13 @@ var createState = {
 
 export default function createset(state = createState, action) {
   switch (action.type) {
-
     case CREATE_SET:
       return {
         ...state,
         isCreatingSet: true
       }
     case CREATE_SET_SUCCESS:
-      let set = action.set
+      const set = action.set
       return {
         ...state,
         isCreatingSet: false,
@@ -126,7 +125,7 @@ export default function createset(state = createState, action) {
         isUpdatingSet: true
       }
     case UPDATE_SET_SUCCESS: 
-      let updated_set = action.set;
+      const updated_set = action.set;
       return {
         ...state,
         isUpdatingSet: false,
@@ -158,48 +157,47 @@ export default function createset(state = createState, action) {
         term_choices: null
       }
     case CREATE_ASSOCIATION_SUCCESS:
-      let association = action.association,
-          associations = state.associations;
-      association = Object.assign({...association}, {index: action.index})
-      if(associations.length === 0) {
-          associations.push(association)
-      } else {
-          associations.splice(action.index, 0, association)
-      }
+      let rows = state.rows, 
+          index = action.index,
+          associations = Object.assign({}, state.associations) || {},
+          association = action.association,
+          association_id = association.id;
+      associations[association_id] = association;
+      rows[index] = association_id;
       return {
         ...state,
         associations: associations,
-        order: state.order + 1
+        count: state.count + 1,
+        rows: rows
       }
     case UPDATE_ITEM_SUCCESS:
-      let _items = state.items,
-          _newitem = action.item,
-          _id = _newitem.id
-      _items[_id] = _newitem
+      let updated_items = Object.assign({}, state.items),
+          newitem = action.item,
+          newitem_id = newitem.id;
+      updated_items[newitem_id] = newitem
       return {
         ...state,
-        items: _items
+        items: items
       }
     case UPDATE_ASSOCIATION_SUCCESS:
-      let asc = action.association,
-          _associations = state.associations.slice(0),
-          old_acs = _associations.filter(_asc => { return _asc.id == asc.id })[0],
-          index = _associations.indexOf(old_acs),
+      let updated_associations = Object.assign({}, state.associations),
+          new_association = action.association,
+          naid = new_association.id, /* new association id */
           _items_ = Object.assign({}, state.items),
-          _item = _items_[old_acs.item_id];
-
-      _items_[asc.item_id] = asc.item;
-      _items_[asc.item_id]['adopted'] = action.adopted;
-      _items_[_item.id] = _items_[asc.item_id];
-
-      delete _items_[_item.id];
-
-      _associations[index] = asc;
-      _associations[index]['index'] = index;
-      
+          oid = updated_associations[naid].item_id, /* old item id */
+          old_item = _items_[oid],
+          new_item = new_association.item,
+          nid = new_association.item_id, /* new item id */
+          i = action.index;
+      /* updating the associations */
+      updated_associations[naid] = new_association;
+      /* deleting old item, replacing it with new */
+      _items_[nid] = new_item;
+      _items_[oid] = _items_[nid];
+      delete _items_[oid];
       return {
         ...state,
-        associations: _associations,
+        associations: updated_associations,
         items: _items_
       }
     case TERM_SUGGESTIONS_SUCCESS:
@@ -218,13 +216,14 @@ export default function createset(state = createState, action) {
         def_choices: null
       }
     case ADD_ROW:
-      let new_id = state.rows.slice(-1)[0] + 1,
-            _rows = state.rows;
-      _rows.push(new_id)
+      let new_rows = state.rows,
+          last_index;
+      new_rows.push(null);
+      last_index = new_rows.length;
       return {
         ...state,
-        activeRow: new_id,
-        rows: _rows
+        activeRow: last_index,
+        rows: new_rows
       }
     case SET_FLAG: 
       return {
@@ -236,50 +235,33 @@ export default function createset(state = createState, action) {
         ...state,
         title_flag: action.flag
       }
-
-    case EDIT_ROW:
-      return {
-        ...state,
-        rows: state.rows.map((_row) => {
-          return _row == action.row
-          ? action.row
-          : _row
-        })
-      }
-
     case DELETE_ROW:
       return {
         ...state,
         rows: state.rows.filter(_row => _row !== action.row),
         // activeRow: state.rows.splice(-1)[0]
       }
-
     case FLIP_ACTIVESIDE:
       const active = state.activeContext;
       return {
         ...state,
         activeContext: !active
       }
-
     case SAVE_TITLE:
       return {
         ...state,
         title: action.title
       }
-
     case SAVE_PURPOSE:
       return {
         ...state,
         purpose: action.purpose
       }
-
     case ACTIVATE_ROW:
       return {
         ...state,
-        activeRow: action.row
-        // flag: action.row == null ? false : state.flag
+        activeRow: action.index
       }
-      
     case SAVE_SET:
       const terms = JSON.stringify(state.terms, null, 2)
       alert(

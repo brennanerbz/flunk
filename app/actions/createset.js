@@ -584,16 +584,6 @@ export function addRow() {
   };
 }
 
-export const EDIT_ROW = 'EDIT_ROW'
-export function editRow(id, word, def) {
-	return {
-		type: EDIT_ROW,
-		id,
-		word,
-		def
-	}
-}
-
 export const DELETE_ROW = 'DELETE_ROW'
 export function deleteRow(row) {
 	return {
@@ -625,10 +615,10 @@ export function savePurpose(purpose) {
 }
 
 export const ACTIVATE_ROW = 'ACTIVATE_ROW'
-export function activateRow(row) {
+export function activateRow(index) {
 	return {
 		type: ACTIVATE_ROW,
-		row
+		index
 	}
 }
 

@@ -368,6 +368,7 @@ export function createItem(index, ...args) {
 					return;
 				}
 			}
+			
 			if(set == undefined) {
 				await dispatch(createSet())
 				setTimeout(() => {

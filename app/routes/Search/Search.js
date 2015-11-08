@@ -27,7 +27,7 @@ export default class Search extends Component {
 				</nav>
 				<article className={classnames("search_content", "no_sidenav_container", {'sets_page': true})}>
 					{
-						false
+						true
 						? <SearchConcepts/>
 						: null
 					}
@@ -37,7 +37,7 @@ export default class Search extends Component {
 						: null
 					}
 					{
-						true
+						false
 						? <SearchPeople />
 						: null
 					}

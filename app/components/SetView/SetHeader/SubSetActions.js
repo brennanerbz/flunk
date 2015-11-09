@@ -135,6 +135,7 @@ export default class SubSetActions extends Component {
 						<img style={_smallicon} className="share_icon" src={more_icon}/>
 					</i>					
 				</button>
+				
 				<Menu 	set={this.props.set}
 					  	isOpen={this.state.more_is_open}
 					  	side={dir}

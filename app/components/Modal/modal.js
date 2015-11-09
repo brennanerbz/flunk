@@ -23,7 +23,60 @@ export default class Modal extends Component {
 		);
 	}
 	renderSettingsBody() {
-
+		return (
+			<div className="modal-body no_footer">
+				<p className="bold no_bottom_margin">Privacy</p>
+				<p className="small_bottom_margin">Who can view?</p>
+				<p className="left_margin">
+					<label className="radio small_bottom_margin">
+						<input type="radio" className="small_right_margin"/>
+						<span className="small_left_margin">Everyone: &nbsp;</span>
+						<span className="normal">
+						All users can view this set and your progress
+						</span>
+					</label>
+					<label className="radio small_bottom_margin">
+						<input type="radio" className="small_right_margin"/>
+						<span className="small_left_margin">People with a password: &nbsp;</span>
+						<span className="normal">
+						Only people with a password can use this set
+						</span>
+					</label>
+					<label className="radio small_bottom_margin">
+						<input type="radio" className="small_right_margin"/>
+						<span className="small_left_margin">Just me: &nbsp;</span>
+						<span className="normal">
+						Only you can view and use this set
+						</span>
+					</label>
+				</p>
+				<p className="bold no_bottom_margin">Editing</p>
+				<p className="small_bottom_margin">Who can edit?</p>
+				<p className="left_margin">
+					<label className="radio small_bottom_margin">
+						<input type="radio" className="small_right_margin"/>
+						<span className="small_left_margin">Everyone: &nbsp;</span>
+						<span className="normal">
+						All users can edit this set
+						</span>
+					</label>
+					<label className="radio small_bottom_margin">
+						<input type="radio" className="small_right_margin"/>
+						<span className="small_left_margin">Administrators: &nbsp;</span>
+						<span className="normal">
+						Only admins can edit this set
+						</span>
+					</label>
+					<label className="radio small_bottom_margin">
+						<input type="radio" className="small_right_margin"/>
+						<span className="small_left_margin">Just me: &nbsp;</span>
+						<span className="normal">
+						Only you can edit this set
+						</span>
+					</label>
+				</p>
+			</div>
+		)
 	}
 	renderConfirmBody() {
 
@@ -45,13 +98,27 @@ export default class Modal extends Component {
 				<div className="modal-dialog" role="document">
 					<div className="modal-content">
 					<div className="modal-header">
-						<button type="button" 
-								className="close" 
-								data-dismiss="modal" 
-								aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-						<span className="sr-only">Close</span>
-						</button>
+						{
+							type !== 'settings'
+							? 
+							<button type="button" 
+									className="close" 
+									
+									aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							<span className="sr-only">Close</span>
+							</button>
+							: null
+						}
+						{
+							type == 'settings'
+							? <button type="button"
+									  className="button button-primary button-small float_right"
+									  data-dismiss="modal" >
+							  Done
+							  </button>
+							: null
+						}
 						<h3 className="modal-title" id="myModalLabel">
 							{
 								type == 'share'
@@ -75,18 +142,23 @@ export default class Modal extends Component {
 						? ::this.renderSettingsBody()
 						: null
 					}
-					<div className="modal-footer">
-						<button type="button" 
-								className="button button-outline" 
-								data-dismiss="modal">
-								Cancel
-						</button>
-						<button type="button" 
-								className="button button-primary" 
-								data-dismiss="modal">
-								Done
-						</button>
-					</div>
+					{
+						type !== 'settings'
+						?
+						<div className="modal-footer">
+							<button type="button" 
+									className="button button-outline" 
+									data-dismiss="modal">
+									Cancel
+							</button>
+							<button type="button" 
+									className="button button-primary" 
+									data-dismiss="modal">
+									Done
+							</button>
+						</div>
+						: null
+					}
 					</div>
 				</div>
 			</div>

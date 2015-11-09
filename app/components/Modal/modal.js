@@ -128,11 +128,32 @@ export default class Modal extends Component {
 	}
 
 	renderConfirmBody() {
-
+		return (
+			<div className="modal-body">
+				<p>Are you sure you want to delete this set permanently?</p>
+			</div>
+		)
 	}
 
 	renderTextAreaBody() {
-
+		return (
+			<div className="modal-body">
+			<p>
+				<label className="inline_block purpose_label" htmlFor="purpose_input">
+					Purpose
+					<br />
+					<span className="normal">(optional)</span>
+				</label>
+				<textarea id="purpose_input" 
+						  onChange={(event) => console.log(event.target.value)}
+						  name="purpose_input"
+						  className="textarea"
+						  type="text"
+						  autoFocus={true}/>
+				<span className="modal_input_note">Give your set a purpose that describes what it will be used for</span>
+			</p>
+			</div>
+		)
 	}
 
 	render() {
@@ -152,7 +173,7 @@ export default class Modal extends Component {
 							? 
 							<button type="button" 
 									className="close" 
-									
+									data-dismiss="modal"
 									aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 							<span className="sr-only">Close</span>
@@ -179,6 +200,16 @@ export default class Modal extends Component {
 								? `Settings` 
 								: null
 							}
+							{
+								type == 'textarea'
+								? 'Set purpose'
+								: null
+							}
+							{
+								type == 'confirm'
+								? 'Delete set'
+								: null
+							}
 						</h3>
 					</div>
 					{
@@ -192,6 +223,16 @@ export default class Modal extends Component {
 						: null
 					}
 					{
+						type == 'textarea'
+						? ::this.renderTextAreaBody()
+						: null
+					}
+					{
+						type == 'confirm'
+						? ::this.renderConfirmBody()
+						: null
+					}
+					{
 						type !== 'settings'
 						?
 						<div className="modal-footer">
@@ -200,11 +241,28 @@ export default class Modal extends Component {
 									data-dismiss="modal">
 									Cancel
 							</button>
-							<button type="button" 
-									className="button button-primary" 
-									data-dismiss="modal">
-									Done
-							</button>
+							{
+								type !== 'confirm'
+								? 
+								<button type="button" 
+										className="button button-primary" 
+										data-dismiss="modal">
+										{
+											type == 'textarea'
+											? 'Update purpose'
+											: 'Done'
+										}
+								</button>
+								: null
+							}
+							{
+								type == 'confirm'
+								?
+								<button className="button button-danger">
+									Delete set
+								</button>
+								: null
+							}
 						</div>
 						: null
 					}

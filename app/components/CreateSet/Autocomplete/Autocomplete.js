@@ -177,10 +177,27 @@ export default class Autocomplete extends Component {
 
 	componentWillReceiveProps(nextProps) {
 	  if (nextProps.rect() !== this.props.rect()) { this.setMenuPositions() }
-
 	  this._performAutoCompleteOnUpdate = true;
 	  if (this.getValue(nextProps) !== this.getValue(this.props)){
 	    this.dispatchEvent(UPDATE, true);
+	  }
+	  const { index, item, defSide, wordSide } = this.props,
+	  		  value = this.state.value;
+	  if(item !== nextProps.item) {
+	  	if(wordSide) {
+	  		if(nextProps.item !== null && nextProps.item.target !== null) {
+	  			this.setState({value: nextProps.item.target});
+	  		} else {
+	  			this.setState({value: ''});
+	  		}
+	  	}
+	  	if(defSide) {
+	  		if(nextProps.item !== null && nextProps.item.cue !== null) {
+	  			this.setState({value: nextProps.item.cue});
+	  		} else {
+	  			this.setState({value: ''});
+	  		}
+	  	}
 	  }
 	}
 
@@ -430,7 +447,7 @@ export default class Autocomplete extends Component {
 	      state: this.state
 	    })
 	  }
-	  const {index}  = this.props;
+	  const {index, item}  = this.props;
 	  return (
 	    <div className="Autocomplete-textarea" style={{display: 'inline-block'}}>
 	      <textarea

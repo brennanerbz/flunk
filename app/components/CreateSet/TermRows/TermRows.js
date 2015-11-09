@@ -92,50 +92,51 @@ export default class TermRows extends Component {
 	render() {
 	  const { rows, activeRow, addRow } = this.props;
 	  const length = rows.length - 1;
-		return(
-		<div className="TermRows"
-			 ref="term_rows"
-	         onBlur={this.deactivateRow}>
-	      <div className="TermRow">
-	        <div className="TermRow-content row-labels">
-	          <div className="TermContent">
-	            <div className="TermContent-wrap">
-	              <div className="TermContent-side word-side">
-	                <p>Terms</p>
-	              </div>
-	              <div className="TermContent-side def-side">
-	                <p>Definitions</p>
-	              </div>
-	            </div>
-	          </div>
-	        </div>
-	      </div>
-	        {     
-	            rows.map((id, i) => {
-	              return (
-	                <TermRow
-	                  asc_id={id}
-	                  isMouseOver={i === this.props.mousePos}
-	                  ref={`row${i}`}                    
-	                  activeRow={activeRow}
-	                  activeSide={this.state.activeSide}
-	                  lastIndex={Number(length)}
-	                  totalCount={length}
-	                  index={i}
-	                  key={`row${i}`}
-	                  termLuid={`row${i}`}
-	                  {...this.props}
-	                />
-	              )
-	            })	          
-	        }
-	        <i className={classnames("material-icons md-36", "icon-cursor")}
-	           ref="addButton"
-	           onClick={() => addRow()}	           
-	           title="Add a row">
-	          add_circle_outline
-	        </i>	        
-	      </div>
+	  console.log(rows)
+	  return(
+				<div className="TermRows"
+					 ref="term_rows"
+			         onBlur={this.deactivateRow}>
+			      <div className="TermRow">
+			        <div className="TermRow-content row-labels">
+			          <div className="TermContent">
+			            <div className="TermContent-wrap">
+			              <div className="TermContent-side word-side">
+			                <p>Terms</p>
+			              </div>
+			              <div className="TermContent-side def-side">
+			                <p>Definitions</p>
+			              </div>
+			            </div>
+			          </div>
+			        </div>
+			      </div>
+			        {     
+			            rows.map((id, i) => {
+			              return (
+			                <TermRow
+			                  asc_id={id}
+			                  isMouseOver={i === this.props.mousePos}
+			                  ref={`row${i}`}                    
+			                  activeRow={activeRow}
+			                  activeSide={this.state.activeSide}
+			                  lastIndex={Number(length)}
+			                  totalCount={length}
+			                  index={i}
+			                  key={`row${i}`}
+			                  termLuid={`row${i}`}
+			                  {...this.props}
+			                />
+			              )
+			            })	          
+			        }
+			        <i className={classnames("material-icons md-36", "icon-cursor")}
+			           ref="addButton"
+			           onClick={() => addRow()}	           
+			           title="Add a row">
+			          add_circle_outline
+			        </i>	        
+			      </div>
 		);
 	}
 }

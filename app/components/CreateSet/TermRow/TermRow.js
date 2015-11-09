@@ -29,7 +29,6 @@ export default class TermRow extends Component {
 				item = association !== null && items !== undefined
 				? items[association.item_id]
 				: null
-
 		return (
 			<div className="TermRow" 
 				onFocus={()=> this.props.setMousePos(index)}

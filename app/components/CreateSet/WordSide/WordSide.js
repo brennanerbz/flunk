@@ -40,6 +40,8 @@ export default class WordSide extends Component {
 	
 	render() {
 		const { index, 
+				asc_id,
+				item,
 				term_choices, 
 				subjects, 
 				getTermSuggestions } = this.props;

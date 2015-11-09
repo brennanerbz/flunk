@@ -236,11 +236,19 @@ export default function createset(state = createState, action) {
         title_flag: action.flag
       }
     case DELETE_ROW:
-      let updated_rows = state.rows,
-          removed = updated_rows.splice(action.index, 1)
+      let o_rows = state.rows,
+          updated_asc = Object.assign({}, state.associations),
+          updated_itms = Object.assign({}, state.items),
+          n_rows = o_rows.filter((x, i) => i !== action.index)
+          // removed = o_rows.splice(action.index, 1);
+      // delete updated_itms[updated_asc[removed].item_id];
+      // delete updated_asc[removed];
+      console.log(n_rows)
       return {
         ...state,
-        rows: updated_rows
+        rows: n_rows
+        // associations: updated_asc,
+        // items: updated_itms
       }
     case FLIP_ACTIVESIDE:
       const active = state.activeContext;

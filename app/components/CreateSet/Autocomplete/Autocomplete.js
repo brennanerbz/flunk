@@ -204,11 +204,9 @@ export default class Autocomplete extends Component {
 	  this.dispatchEvent(DESTROY)
 	}
 
-	// CUSTOM METHODS
-
 	getNodeId = () => {
-	  const { row } = this.props;
-	  return row
+	  const { index } = this.props;
+	  return index
 	}
 
 	dispatchEvent = (EVENT_TYPE, defer) => {
@@ -394,18 +392,18 @@ export default class Autocomplete extends Component {
 	}
 
 	handleInputFocus = () => {
-	  const { 	row, 
-	  			activateRow, 
-	  			switchToDef, 
-	  			switchToWord,
-	  			flag,
-	  			setFlag,
-	  			onFocus,
-	  			item,
-	  			items } = this.props;
+	  const { index, 
+	  		  activateRow, 
+	  		  switchToDef, 
+	  		  switchToWord,
+	  		  flag,
+	  		  setFlag,
+	  		  onFocus,
+	  		  item,
+	  		  items } = this.props;
 	  if (this._ignoreBlur)
 	    return
-	  activateRow(row)
+	  activateRow(index)
 	  if (this.props.defSide) {
 	  	switchToDef()
 	  	onFocus()
@@ -416,8 +414,8 @@ export default class Autocomplete extends Component {
 	}
 
 	handleInputClick = () => {
-	  const {activateRow, row} = this.props;
-	  activateRow(row)
+	  const {activateRow, index} = this.props;
+	  activateRow(index)
 	}
 
 	focusSide = () => {
@@ -432,7 +430,7 @@ export default class Autocomplete extends Component {
 	      state: this.state
 	    })
 	  }
-	  const {row}  = this.props;
+	  const {index}  = this.props;
 	  return (
 	    <div className="Autocomplete-textarea" style={{display: 'inline-block'}}>
 	      <textarea
@@ -444,16 +442,15 @@ export default class Autocomplete extends Component {
 	        rows="1"         
 	        {...this.props.inputProps}
 	        aria-autocomplete="both"
-	        ref={`textarea${row}`}
-	        key={`textarea${row}`}
+	        ref={`textarea${index}`}
+	        key={`textarea${index}`}
 	        onFocus={this.handleInputFocus}
 	        onBlur={this.handleInputBlur}
 	        onChange={(event) => this.handleChange(event)}
 	        onKeyDown={(event) => this.handleKeyDown(event)}
 	        onKeyUp={(event) => this.handleKeyUp(event)}
 	        onClick={this.handleInputClick}
-	        value={this.state.value}
-	      >
+	        value={this.state.value}>
 	      </textarea>
 	      {this.state.isOpen && this.renderMenu()}
 	      {this.props.debug && (

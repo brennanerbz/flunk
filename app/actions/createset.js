@@ -284,15 +284,18 @@ export function getDefSuggestions(id, target) {
 				subjects = [],
 				subs = getState().createset.subjects,
 				def_choices = getState().createset.def_choices;
-			// if(def_choices !== null && def_choices.length > 0) return;
 			if(subs == undefined || subs.length === 0) return;
 			if(id == null) {
 				term = target
 			} else {
 				term = getState().createset.items[id].target
 			}
+			term = term.toLowerCase().trim()
 			subs.forEach(sub => subjects.push(sub.name))
-			subjects.join("|")
+			subjects = subjects.join("|")
+			console.log("subjects:")
+			console.log(subjects)
+			console.log("-----")
 			await axios.get(`${api_url}/items/?target=${term}&subjects=${subjects}`)
 			.then(res => items = res.data.items)
 			dispatch({type: DEF_SUGGESTIONS_SUCCESS, items})
@@ -350,25 +353,10 @@ export function createItem(index, ...args) {
 			let item = _itemtemplate,
 				user = getState().user.user,
 				set  = getState().createset.set,
-				association, 
-				current_item;
+				rows = getState().createset.rows,
+				id,
+				association;
 
-			if(args[0].name == "child") {
-				let item = args[0].prop;
-				current_item = getState().createset.items[item.id]
-			} 
-
-			if(current_item !== undefined) {
-				if (current_item.cue || current_item.target == null) {
-					updateItem(current_item, ...args)
-					return;
-				}
-				if (current_item.adopted !== true) {
-					updateItem(current_item, ...args)
-					return;
-				}
-			}
-			
 			if(set == undefined) {
 				await dispatch(createSet())
 				setTimeout(() => {
@@ -376,13 +364,14 @@ export function createItem(index, ...args) {
 				}, 5)
 				return; 
 			}
+
 			if(args.length > 0) {
 				for(var i = 0; i < args.length; i++) {
 					let arg = args[i],
 						name = arg.name,
 						prop = arg.prop;
 					if(name == 'child') {
-						association = getState().createset.associations.filter(asc => asc.item_id == prop.id)[0]
+						association = getState().createset.associations[rows[index]]
 						item = Object.assign({...item}, {
 							parent_id: prop.id,
 							target: prop.target,
@@ -409,7 +398,9 @@ export function createItem(index, ...args) {
 												{name: 'item', prop: item}, 
 												{name: 'item_id', prop: item.id}))
 			}
-			await dispatch(getDefSuggestions(null, item.target))
+			if(item.target !== null) {
+				await dispatch(getDefSuggestions(null, item.target))
+			}
 		} catch(err) {
 			dispatch({
 				type: CREATE_ITEM_FAILURE,
@@ -493,12 +484,12 @@ export function createAssociation(item_id, index) {
 	return async(dispatch, getState) => {
 		try {
 			let set_id = getState().createset.set.id,
-				order = getState().createset.order,
+				count = getState().createset.count,
 				association;
 			association = Object.assign({..._associationtemplate}, {
 				item_id: item_id,
 				set_id: set_id,
-				order: order
+				order: count
 			})
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => association = res.data)

@@ -39,12 +39,12 @@ export default class DefSide extends Component {
 	}
 
 	autoFocus = () => {
-		const { row } = this.props;
-		this.refs['autocomplete' + row].focusSide()
+		const { index } = this.props;
+		this.refs['autocomplete' + index].focusSide()
 	}
 
 	render() {
-		const { row, 
+		const { index, 
 				def_choices, 
 				getDefSuggestions, 
 				updateAssociation,
@@ -59,7 +59,7 @@ export default class DefSide extends Component {
 				      // debug={true}
 				      switchToDef={this.switchToDef}
 					  className="AutoExpandTextArea-textarea"
-			          ref={`autocomplete${row}`}
+			          ref={`autocomplete${index}`}
 	                  items={def_choices !== undefined ? def_choices : []}
 	                  getItemValue={(_item) => _item.cue}
 	                  onSelect={(value, _item) => {
@@ -71,11 +71,9 @@ export default class DefSide extends Component {
 	                  }}
 	                  onInput={(event, value) => value}
 	                  onFocus={(event, value) => {
-	                     if(subjects !== undefined && subjects.length > 0 && item !== undefined) {
+	                     if(subjects !== undefined && subjects.length > 0 && item !== null) {
 	         				this.setState({loading: true})
-	         				getDefSuggestions(item.id, (items) => {
-	         				  this.setState({ defs: items, loading: false })
-	         				})
+	         				getDefSuggestions(item.id)
 	         			}
 	                   }}
 	                  renderItem={(_item, isHighlighted) => (

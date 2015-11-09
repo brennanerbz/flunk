@@ -34,50 +34,52 @@ export default class WordSide extends Component {
 		}
 	}
 	autoFocus = () => {
-		const { row } = this.props;
-		this.refs['autocomplete' + row].focusSide()
+		const { index } = this.props;
+		this.refs['autocomplete' + index].focusSide()
 	}
 	
 	render() {
-		const { row, term_choices, subjects, getTermSuggestions } = this.props;
-
+		const { index, 
+				term_choices, 
+				subjects, 
+				getTermSuggestions } = this.props;
 		return(
-		<div className="WordSide">
-			<div className="WordSide-textarea">				
-				<div className="AutoExpandTextArea">
-					<div className="AutoExpandTextArea-wrapper">
-							<Autocomplete
-						      {...this.props}
-						      switchToWord={this.switchToWord}
-							  className="AutoExpandTextArea-textarea"
-					          ref={`autocomplete${row}`}
-					          items={term_choices !== undefined ? term_choices : []}
-					          getItemValue={(item) => item}
-					          onSelect={(value, item) => {
-					            this.setState({ terms: [ item ] })							           
-					          }}
-					          onInput={(event, value) => {
-					            if(subjects !== undefined && subjects.length > 0) {
-									this.setState({loading: true})
-									getTermSuggestions(value, (items) => {
-									  this.setState({ terms: items, loading: false })
-									})
-								}
-					          }}
-					          renderItem={(term, isHighlighted) => (
-					            <div
-					              style={isHighlighted ? styles.highlightedItem : styles.term}
-					              key={term.abbr}
-					              id={term.abbr}
-					            >{term}</div>
-					          )}
-					        />
-						</div>
-						<div>
+				<div className="WordSide">
+					<div className="WordSide-textarea">				
+						<div className="AutoExpandTextArea">
+							<div className="AutoExpandTextArea-wrapper">
+									<Autocomplete
+								      {...this.props}
+								      switchToWord={this.switchToWord}
+									  className="AutoExpandTextArea-textarea"
+							          ref={`autocomplete${index}`}
+							          items={term_choices !== undefined ? term_choices : []}
+							          getItemValue={(item) => item}
+							          onSelect={(value, item) => {
+							            this.setState({ terms: [ item ] })							           
+							          }}
+							          onInput={(event, value) => {
+							            if(subjects !== undefined && subjects.length > 0) {
+											this.setState({loading: true})
+											getTermSuggestions(value, (items) => {
+											  this.setState({ terms: items, loading: false })
+											})
+										}
+							          }}
+							          renderItem={(term, isHighlighted) => (
+							            <div
+							              style={isHighlighted ? styles.highlightedItem : styles.term}
+							              key={term.abbr}
+							              id={term.abbr}
+							            >{term}</div>
+							          )}
+							        />
+								</div>
+								<div>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
 			
 		);
 	}

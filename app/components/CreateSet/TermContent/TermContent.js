@@ -14,8 +14,8 @@ export default class TermContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      word: '',
-      def: ''
+      word: null,
+      def: null
     }
   }
   
@@ -24,7 +24,9 @@ export default class TermContent extends Component {
             index, 
             activeSide, 
             subjects } = this.props;
+
     let node, rect;
+
     if(subjects == (undefined || null)) {
       return;
     }
@@ -46,68 +48,64 @@ export default class TermContent extends Component {
             updateItem,
             setFlag,
             flag,
+            user,
             activeRow } = this.props;
 
     setFlag(true)
 
-    if((item !== undefined || null) && item.target !== null) {
-      if(def.toLowerCase().trim() == item.target.toLowerCase().trim()) return;
-    }
+    this.setState({ word: word })
 
-    if(this.state.word.length === 0 && word.length > 0 
-      && item == undefined) {
-      this.setState({
-        word: word
-      })
-      createItem(index, {name: 'target', prop: word})
-      return;
+    if(item == null) {
+      if (word.length > 0) {
+        createItem(index, { name: 'target', prop: word })
+        return;
+      }
     }
-    if((item && association) !== (undefined && null)
-      && word.toLowerCase().trim() !== this.state.word.toLowerCase().trim()) {
-      this.setState({
-        word: word
-      });
-      createItem(index, {name: 'child', prop: item}, {name: 'target', prop: word})
+    if(item !== null) {
+      if(item.target !== null && item.target.toLowerCase().trim() !== word.toLowerCase().trim()) {
+        if(item.creator_id !== user.id) { // TODO: soon to be item.editable !== true
+          updateItem(item, { name: 'target', prop: word })
+          return;
+        }
+        if(item.creator_id === user.id) { // TODO: soon to be item.editable == true
+          createItem(index, { name: 'child', prop: item }, { name: 'target', prop: word })
+        }
+      }
     }
   }
   
   handleSaveDef = (def) => { // def blur()
-    const { 
-      asc_id,
-      index,
-      association,
-      item,
-      items,
-      createItem,
-      updateItem,
-      setFlag,
-      user
-    } = this.props;
+    const { asc_id,
+            index,
+            association,
+            item,
+            items,
+            createItem,
+            updateItem,
+            setFlag,
+            user } = this.props;
 
     setFlag(false)
 
-    if((item !== undefined || null) && item.cue !== null) {
-      if(def.toLowerCase().trim() == item.cue.toLowerCase().trim()) return;
-    }
-    
-    if(this.state.def.length === 0 && def.length > 0
-     && (item && association) == undefined) {
-      this.setState({
-        def: def
-      }); 
-      createItem(index, {name: 'cue', prop: def})
-      return;
-    } 
+    this.setState({ def: def })
 
-    if((item && association) !== (undefined && null) 
-      && def.toLowerCase().trim() !== this.state.def.toLowerCase().trim()) {
-      this.setState({
-        def: def
-      });
-      createItem(index, {name: 'child', prop: item}, {name: 'cue', prop: def})
-      return;
+    if(item == null) {
+      if (def.length > 0) {
+        createItem(index, { name: 'cue', prop: def })
+        return;
+      }
     }
-
+    if(item !== null) {
+      if(item.cue !== null && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()) {
+        if(item.creator_id !== user.id) { // TODO: soon to be item.editable !== true
+          updateItem(item, { name: 'cue', prop: def })
+          return;
+        }
+        if(item.creator_id === user.id) { // TODO: soon to be item.editable == true
+          createItem(index, {name: 'child', prop: item}, { name: 'cue', prop: def })
+        }
+      }
+    }
   }
 
   focusThatWord = () => {
@@ -126,49 +124,49 @@ export default class TermContent extends Component {
             lastIndex, 
             item,
             subjects } = this.props;
-  	return(
-		<div className={classnames(
-                   {"TermContent-focus": activeRow === index ,
-                   "TermContent": activeRow !== index} )}>
-	        <div className="TermContent-wrap">          
-	          <div className={classnames(
-                           "TermContent-side",
-                           {"word-side-focus": activeRow === index,
-                            "word-side": activeRow !== index})}
-                 ref={`termContentWord${index}`}
-                 onClick={this.focusThatWord}>
-	            <WordSide
-                shouldsuggest={subjects !== undefined 
-                              && subjects !== null
-                              && subjects.length > 0 
-                              ? true : false}
-                saveWord={(word) => this.handleSaveWord(word)}
-                rect={() => this.computeStyle()}
-                wordSide={true}
-                ref={`word${index}`}          
-                tabIndex={2}
-                {...this.props}
-	            />
-	          </div>
-	          <div className="TermContent-side def-side"
-                 ref={`termContentDef${index}`}
-                 onClick={this.focusThatDef}>
-	          	<DefSide
-                shouldsuggest={item !== undefined 
-                              && subjects !== undefined
-                              && subjects !== null
-                              && subjects.length > 0 
-                              ? true : false}
-                saveDef={(def) => this.handleSaveDef(def)}
-                rect={() => this.computeStyle()}
-                defSide={true}
-                ref={`def${index}`}          
-                tabIndex={2}
-                {...this.props}
-	          	/>
-	          </div>
-	        </div>
-      	</div>
+  	return (
+        		<div className={classnames(
+                           {"TermContent-focus": activeRow === index ,
+                           "TermContent": activeRow !== index} )}>
+        	        <div className="TermContent-wrap">          
+        	          <div className={classnames(
+                                   "TermContent-side",
+                                   {"word-side-focus": activeRow === index,
+                                    "word-side": activeRow !== index})}
+                         ref={`termContentWord${index}`}
+                         onClick={this.focusThatWord}>
+        	            <WordSide
+                        shouldsuggest={subjects !== undefined 
+                                      && subjects !== null
+                                      && subjects.length > 0 
+                                      ? true : false}
+                        saveWord={(word) => this.handleSaveWord(word)}
+                        rect={() => this.computeStyle()}
+                        wordSide={true}
+                        ref={`word${index}`}          
+                        tabIndex={2}
+                        {...this.props}
+        	            />
+        	          </div>
+        	          <div className="TermContent-side def-side"
+                         ref={`termContentDef${index}`}
+                         onClick={this.focusThatDef}>
+        	          	<DefSide
+                        shouldsuggest={item !== undefined 
+                                      && subjects !== undefined
+                                      && subjects !== null
+                                      && subjects.length > 0 
+                                      ? true : false}
+                        saveDef={(def) => this.handleSaveDef(def)}
+                        rect={() => this.computeStyle()}
+                        defSide={true}
+                        ref={`def${index}`}          
+                        tabIndex={2}
+                        {...this.props}
+        	          	/>
+        	          </div>
+        	        </div>
+          	</div>
   	);
   }
 }

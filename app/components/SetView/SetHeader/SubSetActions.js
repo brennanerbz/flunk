@@ -52,7 +52,7 @@ export default class SubSetActions extends Component {
 		modal_type: null,
 		more_is_open: false,
 		set_choices: ['Edit', 'Copy', 'Change privacy'],
-		create_choices: ['Add a purpose', '|', 'Privacy', 'Editability', '|', 'Delete set']
+		create_choices: ['Add a purpose', '|', 'Privacy', 'Editing', '|', 'Delete set']
 	}	
 
 	componentDidMount() {
@@ -135,7 +135,7 @@ export default class SubSetActions extends Component {
 						<img style={_smallicon} className="share_icon" src={more_icon}/>
 					</i>					
 				</button>
-				
+
 				<Menu 	set={this.props.set}
 					  	isOpen={this.state.more_is_open}
 					  	side={dir}

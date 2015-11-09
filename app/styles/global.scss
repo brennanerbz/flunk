@@ -818,6 +818,9 @@ textarea:hover:ms-input-placeholder {
 		    line-height: 1.3rem;
 		    margin: .3rem 0;
 		}
+		&.settings {
+			border-bottom: 1px solid #DDD;
+		}
 	}
 	.modal-body {
 		border-bottom: none;

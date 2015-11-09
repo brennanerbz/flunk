@@ -37,7 +37,7 @@ var _settemplate = {
 export const CREATE_SET = 'CREATE_SET';
 export const CREATE_SET_SUCCESS = 'CREATE_SET_SUCCESS';
 export const CREATE_SET_FAILURE = 'CREATE_SET_FAILURE';
-export function createSet(title) {
+export function createSet(title, ...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: CREATE_SET})
 		try {
@@ -47,6 +47,16 @@ export function createSet(title) {
 					creator_id: user.id,
 					title: title || 'Untitled'
 				})
+			if(args.length > 0) {
+				for(var i = 0; i < args.length; i++) {
+					let arg = args[i],
+						name = arg.name,
+						prop = arg.prop;
+					if(set.hasOwnProperty(name)) {
+						set[name] = prop
+					}
+				}
+			}
 			await axios.post(`${api_url}/sets/`, 
 				set
 			)
@@ -83,12 +93,12 @@ export function createSet(title) {
 export const UPDATE_SET = 'UPDATE_SET';
 export const UPDATE_SET_SUCCESS = 'UPDATE_SET_SUCCESS';
 export const UPDATE_SET_FAILURE = 'UPDATE_SET_FAILURE';
-export function updateSet(...args) {
+export function updateSet(_set, ...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: UPDATE_SET})
 		try {
-			let set = getState().createset.set;
-			if(args.length > 0) {
+			let set = Object.assign({}, _set);
+			if(args !== null && args.length > 0) {
 				for(var i = 0; i < args.length; i++) {
 					let arg = args[i],
 						name = arg.name,
@@ -103,7 +113,7 @@ export function updateSet(...args) {
 			)
 			.then(res => set = res.data)
 			dispatch({type: UPDATE_SET_SUCCESS, set})
-			if(set.title !== 'Untitled' || set.description.length > 0) {
+			if(set.title !== 'Untitled') {
 				dispatch(updateSetSubjects())
 			}
 		} catch(err) {

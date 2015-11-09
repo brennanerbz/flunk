@@ -92,7 +92,6 @@ export default class TermRows extends Component {
 	render() {
 	  const { rows, activeRow, addRow } = this.props;
 	  const length = rows.length - 1;
-	  console.log(rows)
 	  return(
 				<div className="TermRows"
 					 ref="term_rows"

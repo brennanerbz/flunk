@@ -420,7 +420,7 @@ export function createItem(index, ...args) {
 ‘image’: String,
 ‘message’: String,
 ‘official’: Boolean,
-‘visibility’: String,		‘public’ | ‘private’
+‘visibility’: String, ‘public’ | ‘private’
 
 */
 export const UPDATE_ITEM = 'UPDATE_ITEM';

@@ -1,14 +1,35 @@
 import React, { Component, PropTypes } from 'react';
+import classnames from 'classnames'
 require('./Menu.scss');
 
 class MenuItem extends Component {
-	render() {
-		const { choice } = this.props;
+	renderMenuItem(choice) {
 		return(
-			<li onClick={this.props.onSelect(choice)} className="menu_item">
-				<a className=""><i className="_icon"></i>{choice}</a>
+			<li onClick={() => this.props.onSelect(choice)} 
+				className={classnames("menu_item", 
+			              {'danger': choice.indexOf('Delete') !== -1})}>
+				<a className="">
+					<i className="_icon"></i>
+					{choice}
+				</a>
 			</li>
 		);
+	}
+
+	renderDivider() {
+		return(
+			<li className="divider">
+			</li>
+		);
+	}
+
+	render() {
+		const { choice } = this.props;
+		return (
+			choice == '|'
+			? ::this.renderDivider()
+			: ::this.renderMenuItem(choice)
+		)
 	}
 }
 

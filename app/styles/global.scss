@@ -863,6 +863,20 @@ textarea:hover:ms-input-placeholder {
 			padding:0;
 			overflow:hidden;
 			cursor: pointer;
+			&.divider {
+				border-bottom: 1px solid rgba(0,0,0,.15);
+				margin: .75rem 0;
+			}
+			&.danger {
+				a {
+					color: #eb4d5c;
+				}
+				&:hover {
+					a {
+						background: #eb4d5c;
+					}
+				}
+			}
 			i {
 				margin-right:.5rem;
 				color:#babbbf;
@@ -881,7 +895,8 @@ textarea:hover:ms-input-placeholder {
 				text-overflow:ellipsis;
 				white-space:nowrap;
 				outline:0;
-				border-radius:.25rem
+				border-radius:.25rem;
+				letter-spacing: 0.01em;
 			}
 			&.highlighted, &:hover {
 				a {

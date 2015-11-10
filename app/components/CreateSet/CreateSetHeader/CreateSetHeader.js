@@ -66,21 +66,25 @@ export default class CreateSetHeader extends Component {
 
 	updateSubjects() {
 		const { set, updateSetSubjects } = this.props;
-		let subjects = this.state.subjects;
-		if(subjects == undefined) {
+		let subjects = this.state.subjects,
+			subs = { subjects: null };
+		if(subjects == undefined || null) {
 			this.setState({ subject_editor_open: false});
 			return;
 		}
-		subjects = subjects.trim().split(",").map(sub => sub.replace(" ", "").trim()).join("|")
+		subjects = subjects.trim().split(",").map(sub => sub.replace(" ", "").trim())
 		this.setState({subjects: subjects, subject_editor_open: false})
-		// TODO: call and update the set subjects
-		// updateSetSubjects(subjects)
+		subs.subjects = subjects
+		// console.log(subs)
+		updateSetSubjects(subs)
 	}
 
 	render() {
 		const { saveSet, subjects } = this.props;
 		let subject_names = [];
 		subjects.forEach(sub => subject_names.push(sub.name))
+		subject_names = subject_names.map(sub => sub += " ")
+		console.log(subject_names)
 		return(
 			<div className="CreateSetHeader"> 
 	          <div className="container CreateSetHeader-container">	
@@ -98,8 +102,18 @@ export default class CreateSetHeader extends Component {
 	              		subjects !== undefined
 	              		&& subjects !== null
 	              		&& !this.state.subject_editor_open
-	              		? subjects.map((subject, i) => {
-	              			return <li key={i} className="subject"><p>{subject.name}</p></li>
+	              		? subject_names.map((subject, i) => {
+	              			return (
+	              			<li key={i} className="subject">
+	              				<p>
+	              					{
+	              						i === subjects.length - 1
+	              						? subject
+	              						: subject += ", "
+	              					}
+	              				</p>
+	              			</li>
+	              			)
 	              		})
 	              		: null
 	              	}
@@ -127,6 +141,7 @@ export default class CreateSetHeader extends Component {
 								  name="subject_text" 
 								  className="subject_text"
 								  defaultValue={subjects !== null ? subject_names : null} 
+								  onFocus={() => this.setState({subjects: subject_names })}
 								  onChange={(event) => this.setState({ subjects: event.target.value })}
 								  autoFocus={true}/>
 						<div className="button_group">

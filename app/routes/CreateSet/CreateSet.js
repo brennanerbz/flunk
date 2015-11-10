@@ -20,6 +20,7 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	/* Normal state */
 	state: state.createset,
 	set: state.createset.set,
+	assignment: state.createset.assignment,
 	title: state.createset.title,
 	id: state.createset.id,
 	purpose: state.createset.purpose,

@@ -20,7 +20,9 @@ const routes = (
     <Route path="profile/:id" component={Profile}/>     
     <Route path="createset" component={CreateSet} />
     <Route path="learn/:id" component={Learn}/>
-    <Route path="search" component={Search}/>
+    <Route path="search/concepts/:query" component={Search}/>
+    <Route path="search/sets/:query" component={Search}/>
+    <Route path="search/users/:query" component={Search}/>
   </Route>
 );
 

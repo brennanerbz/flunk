@@ -8,15 +8,16 @@ export default class ButtonGroup extends Component {
 	}
 
 	render() {
-        const { onSave } = this.props;
+        const { onSave, set } = this.props;
 		return(
 			<div className="CreateSetHeader-wrapper-buttongroup">
             	<div className="push-right">
             		<div className="Button-set">
-                        <button className="button button-primary"
-                                      onClick={onSave}
-                              >Create</button>
-            			 <SubSetActions right={true} createset={true} {...this.props} />	
+                        <button className={classnames("button button-primary", {"disaje": set == null })}
+                                onClick={onSave}>
+                                Create
+                        </button>
+            			<SubSetActions right={true} createset={true} {...this.props} />	
             		</div>	            	
             	</div>
             </div>

@@ -75,6 +75,7 @@ var createState = {
   isCreatingItem: false,
   activeContext: true,
   set: null,
+  assignment: null,
   title: '',
   id: null,
   purpose: '',
@@ -139,6 +140,11 @@ export default function createset(state = createState, action) {
         ...state,
         subjects: action.subs,
         set: Object.assign({...state.set}, {subjects: action.subs})
+      }
+    case CREATE_ASSIGNMENT_SUCCESS:
+      return {
+        ...state,
+        assignment: action.assignment
       }
     case CREATE_ITEM:
       return {

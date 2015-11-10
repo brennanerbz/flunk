@@ -20,8 +20,9 @@ export default class Modal extends Component {
 		})
 	}
 	componentDidUpdate(prevProps) {
-		if((!prevProps.open && this.props.open) && this.props.type == 'textarea') {
-			setTimeout(() => { $(this.refs.purpose_input).focus() }, 300)
+		if((!prevProps.open && this.props.open) ) {
+			if(this.props.type == 'textarea') setTimeout(() => { $(this.refs.purpose_input).focus() }, 300)
+			if(this.props.type == 'share') setTimeout(() => { $(this.refs.share_link).select() }, 300)
 		}
 	}
 

@@ -19,14 +19,15 @@ export default class CreateSetHeader extends Component {
 		this.state = {
 			title: '',
 			purpose: '',
-			subjects: '',
+			subjects: null,
+			show_edit: false,
 			subject_editor_open: false
 		}
 	}
 	componentWillReceiveProps() {
 		if(this.refs.submit_subjects !== undefined) {
 			$(this.refs.submit_subjects).tooltip({
-				delay: { show: 1000, hide: 50},
+				delay: { show: 1500, hide: 50},
 				template: '<div class="tooltip bottom_tool" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
 			})
 		}
@@ -115,92 +116,96 @@ export default class CreateSetHeader extends Component {
 		return(
 			<div className="CreateSetHeader"> 
 	          <div className="container CreateSetHeader-container">	
-	            <div className="CreateSetHeader-wrapper">	              
+	            <div className="CreateSetHeader-wrapper"
+	            	 onMouseOver={() => this.setState({ show_edit: true })}
+	              	 onMouseLeave={() => this.setState({ show_edit: false })}>	              
 	              <CreateSetTitle	              	
 	              	autoFocus={true}
 	              	indexForTab={1}
 	              	placeholder="Untitled"
 	              	onBlur={this.handleTitleBlur}
 	              	onChange={this.handleTitleChange}
-	              	onFocus={this.handleTitleFocus}
-	              />
-	              <ul className="subject_list">
-	              	{
-	              		subjects !== undefined
-	              		&& subjects !== null
-	              		&& !this.state.subject_editor_open
-	              		? subject_names.map((subject, i) => {
-	              			return (
-	              			<li key={i} className="subject">
-	              				<p>
-	              					{
-	              						i === subjects.length - 1
-	              						? subject
-	              						: subject += ", "
-	              					}
-	              				</p>
-	              			</li>
-	              			)
-	              		})
-	              		: null
-	              	}
-	              	{
-	              		subjects !== undefined
-	              		&& subjects !== null
-	              		&& subjects.length > 0
-	              		&& !this.state.subject_editor_open
-	              		? <span className="edit_link" 
-	              				onClick={() => this.setState({subject_editor_open: true})}>
-	              				<a className="link">edit</a>
-	              		  </span>
-	              		: null
-	              	}
-	              </ul> 
-	              {
-	              	this.state.subject_editor_open
-	              	?
-					<div className="subject_editor">
-						<label htmlFor="subject_text" 
-							   className="tiny_bottom_margin mini subtle_silver">
-						Edit subjects
-						</label>
-						<textarea id="subject_text" 
-								  ref="subject_text"
-								  name="subject_text" 
-								  className="subject_text"
-								  defaultValue={subjects !== null ? subject_names : null} 
-								  onFocus={() => { 
-								  	this.setState({subjects: subject_names })
-								  	setTimeout(() => { this.refs.subject_text.setSelectionRange(length, length) }, 1) 
-								  }}
-								  onChange={(event) => this.setState({ subjects: event.target.value })}
-								  autoFocus={true}/>
-						<div className="button_group">
-							<button className="button button-outline button-small"
-									onClick={() => {
-										this.setState({
-											subjects: subject_names,
-											subject_editor_open: false
-										});
-									}}
-									>Cancel
-							</button>
-							<button className="button button-primary button-small"
-									ref="submit_subjects"				   
-									title="Max subjects: 3"
-									data-toggle="tooltip" 
-									data-placement="bottom"
-									onClick={() => { 
-										if (this.state.subjects == subject_names) {
-											this.setState({subject_editor_open: false})
-											return;
-										}
-										::this.updateSubjects(subject_names)
-									}}
-									>Done
-							</button>
+	              	onFocus={this.handleTitleFocus}/>
+		              <ul className="subject_list">
+		              	{
+		              		subjects !== undefined
+		              		&& subjects !== null
+		              		&& !this.state.subject_editor_open
+		              		? subject_names.map((subject, i) => {
+		              			return (
+		              			<li key={i} className="subject">
+		              				<p>
+		              					{
+		              						i === subjects.length - 1
+		              						? subject
+		              						: subject += ", "
+		              					}
+		              				</p>
+		              			</li>
+		              			)
+		              		})
+		              		: null
+		              	}
+		              	{
+		              		subjects !== undefined
+		              		&& subjects !== null
+		              		&& subjects.length > 0
+		              		&& !this.state.subject_editor_open
+		              		? <span className="edit_link" 
+		              				style={!this.state.show_edit ? {display: "none"} : null}
+		              				onClick={() => this.setState({subject_editor_open: true})}>
+		              				<a className="link">edit</a>
+		              		  </span>
+		              		: null
+		              	}
+		              </ul> 
+		              {
+		              	this.state.subject_editor_open
+		              	?
+						<div className="subject_editor">
+							<label htmlFor="subject_text" 
+								   className="tiny_bottom_margin mini subtle_silver">
+							Edit subjects
+							</label>
+							<textarea id="subject_text" 
+									  ref="subject_text"
+									  name="subject_text" 
+									  className="subject_text"
+									  defaultValue={subjects !== null ? subject_names : null} 
+									  onFocus={() => { 
+									  	this.setState({subjects: subject_names })
+									  	if(this.state.subjects !== null 
+									  	   && typeof this.state.subjects == 'string') length = this.state.subjects.length
+									  	setTimeout(() => { this.refs.subject_text.setSelectionRange(length, length) }, 1) 
+									  }}
+									  onChange={(event) => this.setState({ subjects: event.target.value })}
+									  autoFocus={true}/>
+							<div className="button_group">
+								<button className="button button-outline button-small"
+										onClick={() => {
+											this.setState({
+												subjects: subject_names,
+												subject_editor_open: false
+											});
+										}}
+										>Cancel
+								</button>
+								<button className="button button-primary button-small"
+										ref="submit_subjects"				   
+										title="Max subjects: 3"
+										data-toggle="tooltip" 
+										data-placement="bottom"
+										onClick={() => { 
+											if (this.state.subjects == subject_names) {
+												this.setState({subject_editor_open: false})
+												return;
+											}
+											::this.updateSubjects(subject_names)
+										}}
+										>Done
+								</button>
+							</div>
 						</div>
-					</div>
 					: null
 	              }
 	            </div>

@@ -15,6 +15,11 @@ export default class Modal extends Component {
 		  	this.props.closeModal()
 		})
 	}
+	componentDidUpdate(prevProps) {
+		if((!prevProps.open && this.props.open) && this.props.type == 'textarea') {
+			setTimeout(() => { $(this.refs.purpose_input).focus() }, 300)
+		}
+	}
 
 	changeVisibilitySettings(val) {
 		const { set, updateSet, createSet } = this.props;
@@ -145,11 +150,12 @@ export default class Modal extends Component {
 					<span className="normal">(optional)</span>
 				</label>
 				<textarea id="purpose_input" 
+						  ref="purpose_input"
 						  onChange={(event) => console.log(event.target.value)}
 						  name="purpose_input"
 						  className="textarea"
 						  type="text"
-						  autoFocus={true}/>
+						  />
 				<span className="modal_input_note">Give your set a purpose that describes what it will be used for</span>
 			</p>
 			</div>

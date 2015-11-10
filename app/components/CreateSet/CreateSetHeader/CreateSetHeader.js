@@ -41,7 +41,7 @@ export default class CreateSetHeader extends Component {
 			return;
 		}                                                                       
 		if((set && title) !== null && _title !== title) {
-			updateSet({name: "title", prop: _title})
+			updateSet(set, {name: "title", prop: _title})
 			return;
 		}
 	}

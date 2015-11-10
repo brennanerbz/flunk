@@ -37,7 +37,7 @@ var _settemplate = {
 export const CREATE_SET = 'CREATE_SET';
 export const CREATE_SET_SUCCESS = 'CREATE_SET_SUCCESS';
 export const CREATE_SET_FAILURE = 'CREATE_SET_FAILURE';
-export function createSet(title) {
+export function createSet(title, ...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: CREATE_SET})
 		try {
@@ -47,6 +47,16 @@ export function createSet(title) {
 					creator_id: user.id,
 					title: title || 'Untitled'
 				})
+			if(args.length > 0) {
+				for(var i = 0; i < args.length; i++) {
+					let arg = args[i],
+						name = arg.name,
+						prop = arg.prop;
+					if(set.hasOwnProperty(name)) {
+						set[name] = prop
+					}
+				}
+			}
 			await axios.post(`${api_url}/sets/`, 
 				set
 			)
@@ -83,12 +93,12 @@ export function createSet(title) {
 export const UPDATE_SET = 'UPDATE_SET';
 export const UPDATE_SET_SUCCESS = 'UPDATE_SET_SUCCESS';
 export const UPDATE_SET_FAILURE = 'UPDATE_SET_FAILURE';
-export function updateSet(...args) {
+export function updateSet(_set, ...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: UPDATE_SET})
 		try {
-			let set = getState().createset.set;
-			if(args.length > 0) {
+			let set = Object.assign({}, _set);
+			if(args !== null && args.length > 0) {
 				for(var i = 0; i < args.length; i++) {
 					let arg = args[i],
 						name = arg.name,
@@ -103,7 +113,7 @@ export function updateSet(...args) {
 			)
 			.then(res => set = res.data)
 			dispatch({type: UPDATE_SET_SUCCESS, set})
-			if(set.title !== 'Untitled' || set.description.length > 0) {
+			if(set.title !== 'Untitled') {
 				dispatch(updateSetSubjects())
 			}
 		} catch(err) {
@@ -284,15 +294,15 @@ export function getDefSuggestions(id, target) {
 				subjects = [],
 				subs = getState().createset.subjects,
 				def_choices = getState().createset.def_choices;
-			// if(def_choices !== null && def_choices.length > 0) return;
 			if(subs == undefined || subs.length === 0) return;
 			if(id == null) {
 				term = target
 			} else {
 				term = getState().createset.items[id].target
 			}
+			term = term.toLowerCase().trim()
 			subs.forEach(sub => subjects.push(sub.name))
-			subjects.join("|")
+			subjects = subjects.join("|")
 			await axios.get(`${api_url}/items/?target=${term}&subjects=${subjects}`)
 			.then(res => items = res.data.items)
 			dispatch({type: DEF_SUGGESTIONS_SUCCESS, items})
@@ -350,25 +360,10 @@ export function createItem(index, ...args) {
 			let item = _itemtemplate,
 				user = getState().user.user,
 				set  = getState().createset.set,
-				association, 
-				current_item;
+				rows = getState().createset.rows,
+				id,
+				association;
 
-			if(args[0].name == "child") {
-				let item = args[0].prop;
-				current_item = getState().createset.items[item.id]
-			} 
-
-			if(current_item !== undefined) {
-				if (current_item.cue || current_item.target == null) {
-					updateItem(current_item, ...args)
-					return;
-				}
-				if (current_item.adopted !== true) {
-					updateItem(current_item, ...args)
-					return;
-				}
-			}
-			
 			if(set == undefined) {
 				await dispatch(createSet())
 				setTimeout(() => {
@@ -376,13 +371,14 @@ export function createItem(index, ...args) {
 				}, 5)
 				return; 
 			}
+
 			if(args.length > 0) {
 				for(var i = 0; i < args.length; i++) {
 					let arg = args[i],
 						name = arg.name,
 						prop = arg.prop;
 					if(name == 'child') {
-						association = getState().createset.associations.filter(asc => asc.item_id == prop.id)[0]
+						association = getState().createset.associations[rows[index]]
 						item = Object.assign({...item}, {
 							parent_id: prop.id,
 							target: prop.target,
@@ -409,7 +405,9 @@ export function createItem(index, ...args) {
 												{name: 'item', prop: item}, 
 												{name: 'item_id', prop: item.id}))
 			}
-			await dispatch(getDefSuggestions(null, item.target))
+			if(item.target !== null) {
+				await dispatch(getDefSuggestions(null, item.target))
+			}
 		} catch(err) {
 			dispatch({
 				type: CREATE_ITEM_FAILURE,
@@ -432,7 +430,7 @@ export function createItem(index, ...args) {
 ‘image’: String,
 ‘message’: String,
 ‘official’: Boolean,
-‘visibility’: String,		‘public’ | ‘private’
+‘visibility’: String, ‘public’ | ‘private’
 
 */
 export const UPDATE_ITEM = 'UPDATE_ITEM';
@@ -493,12 +491,12 @@ export function createAssociation(item_id, index) {
 	return async(dispatch, getState) => {
 		try {
 			let set_id = getState().createset.set.id,
-				order = getState().createset.order,
+				count = getState().createset.count,
 				association;
 			association = Object.assign({..._associationtemplate}, {
 				item_id: item_id,
 				set_id: set_id,
-				order: order
+				order: count
 			})
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => association = res.data)
@@ -584,21 +582,11 @@ export function addRow() {
   };
 }
 
-export const EDIT_ROW = 'EDIT_ROW'
-export function editRow(id, word, def) {
-	return {
-		type: EDIT_ROW,
-		id,
-		word,
-		def
-	}
-}
-
 export const DELETE_ROW = 'DELETE_ROW'
-export function deleteRow(row) {
+export function deleteRow(index) {
 	return {
 		type: DELETE_ROW,
-		row
+		index
 	}
 }
 
@@ -625,10 +613,10 @@ export function savePurpose(purpose) {
 }
 
 export const ACTIVATE_ROW = 'ACTIVATE_ROW'
-export function activateRow(row) {
+export function activateRow(index) {
 	return {
 		type: ACTIVATE_ROW,
-		row
+		index
 	}
 }
 
@@ -640,10 +628,10 @@ export function saveSet(){
 }
 
 export const SET_MOUSE_POS = 'SET_MOUSE_POS'
-export function setMousePos(row) {
+export function setMousePos(index) {
 	return {
 		type: SET_MOUSE_POS,
-		row
+		index
 	}
 }
 

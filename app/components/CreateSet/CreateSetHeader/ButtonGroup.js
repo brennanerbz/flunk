@@ -16,7 +16,7 @@ export default class ButtonGroup extends Component {
                         <button className="button button-primary"
                                       onClick={onSave}
                               >Create</button>
-            			 <SubSetActions right={true} />	
+            			 <SubSetActions right={true} createset={true} {...this.props} />	
             		</div>	            	
             	</div>
             </div>

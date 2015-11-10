@@ -22,11 +22,47 @@ ul {
 	list-style-type: none;
 }
 
+label, input {
+    font-size: 1pc;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+:global .bold {
+	font-weight: 700!important;
+}
+:global .normal {
+    font-weight: 400!important;
+}
+:global .small_left_margin {
+    margin-left: 0.80em!important;
+}
+:global .no_bottom_margin {
+	margin-bottom: 0!important;
+}
+:global .small_bottom_margin {
+    margin-bottom: .80rem!important;
+}
+:global .left_margin {
+    margin-left: 1rem!important;
+}
+:global .small_right_margin {
+    margin-right: .80rem!important;
+}
+:global .inline_block {
+    display: inline-block!important;
+}
+
+.float_right {
+	float: right;
+}
+
 :global .container {
 	clear: both;
 	margin: 0px auto;
 	max-width: 1415px;
 }
+
 
 :global .no_sidenav_container {
 	padding: 0 0 46px;
@@ -235,6 +271,8 @@ $width: 70px;
 	&:hover {		
 		-moz-transition:  0.1 ease-in-out;
 		transition: 0.1 ease-in-out;
+		box-shadow: inset 0 -2px rgba(0,0,0,.25);
+		border: none;	
 	}
 	&:focus {
 		outline: none;
@@ -251,15 +289,23 @@ $width: 70px;
 :global .button-primary {
 	background-color: #52B78A;	
 	color: #fff;
-	&:hover {
-		box-shadow: inset 0 -2px rgba(0,0,0,.25);
-		border: none;		
-	}
+}
+:global .button-danger {
+	background: #cb5234!important;
+	color: #fff;
+}
+:global .button-small {
+	font-size: 14px !important;
+	height: 32px;
+	padding: 0px 10px;
+	line-height: 32px;
+	font-size: 14px!important;
 }
 :global .button-outline {
 	border: 1px solid #C7CACD;
 	text-shadow: none!important;
 	&:hover {
+		box-shadow: none;
 		color: #32A2E6;
 		border: 1px solid #ccc;
 	}	
@@ -721,6 +767,7 @@ textarea:hover:ms-input-placeholder {
 // Modal 
 .modal {
 	z-index: 9999999;
+	letter-spacing: 0.01em;
 	&.fade {
 		top: -100%;
 		-webkit-transition: opacity .15s linear,top .15s ease-out;
@@ -735,6 +782,62 @@ textarea:hover:ms-input-placeholder {
 	}
 	&.in {
 		opacity: 1;		
+	}
+	p {
+		line-height: 1.5rem;
+	}
+	.purpose_label {
+		min-width: 5rem!important;
+	}
+	textarea {
+		width: 85%!important;
+		margin: 0;
+		font-size: 1rem;
+		line-height: 1.25rem;
+		width: 100%;
+		height: 81pt;
+		padding: .75rem .5rem .75rem .75rem;
+		vertical-align: top;
+		border: 1px solid #C5C5C5;
+		border-radius: 0.25rem!important;
+		&:hover {
+			border-color: #2780f8;
+		}
+		&:focus {
+			border: 1px solid #498DFF;
+			box-shadow: 0 0 7px rgba(39, 128, 248, .15);
+			outline: none;
+		}
+	}
+	.modal_input_note {
+		font-size: .85rem;
+		font-weight: 300;
+		color: #9e9ea6;
+		margin-left: 61pt;
+		display: block;
+		line-height: 1rem;
+		margin-top: .25rem;
+	}
+	label {
+		width: 5rem;
+		min-width: 8rem;
+		padding-right: 0.85rem;
+		margin: 0;
+		font-weight: 700!important;
+		font-size: .9rem;
+		display: inline-block;
+		text-align: right;
+		color: #555459;
+		&.radio {
+			display: inherit;
+			width: 100%;
+			text-align: left;
+			padding-left: 1.5rem;
+			cursor: pointer;
+		}
+		input {
+			cursor: pointer;
+		}
 	}
 	.modal-header {
 		padding: .75rem 1.5rem .75rem 2rem;
@@ -753,17 +856,23 @@ textarea:hover:ms-input-placeholder {
 		    line-height: 1.3rem;
 		    margin: .3rem 0;
 		}
+		&.settings {
+			border-bottom: 1px solid #DDD;
+		}
 	}
 	.modal-body {
 		border-bottom: none;
 		padding: 2rem 2rem 0;
+		&.no_footer {
+			padding: 1rem 2rem 1.5rem!important;
+		}
 	}
 	.modal-footer {
 		border-top: none;
 		background: #fff;
 		box-shadow: none;
 		border-top: none;
-		padding: 2rem;
+		padding: 0.5rem 2rem 2rem;
 		border-top-right-radius: 0;
 		border-bottom-right-radius: .5rem;
 		border-bottom-left-radius: .5rem;
@@ -863,6 +972,20 @@ textarea:hover:ms-input-placeholder {
 			padding:0;
 			overflow:hidden;
 			cursor: pointer;
+			&.divider {
+				border-bottom: 1px solid rgba(0,0,0,.15);
+				margin: .75rem 0;
+			}
+			&.danger {
+				a {
+					color: #eb4d5c;
+				}
+				&:hover {
+					a {
+						background: #eb4d5c;
+					}
+				}
+			}
 			i {
 				margin-right:.5rem;
 				color:#babbbf;
@@ -881,7 +1004,8 @@ textarea:hover:ms-input-placeholder {
 				text-overflow:ellipsis;
 				white-space:nowrap;
 				outline:0;
-				border-radius:.25rem
+				border-radius:.25rem;
+				letter-spacing: 0.01em;
 			}
 			&.highlighted, &:hover {
 				a {

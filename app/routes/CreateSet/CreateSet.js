@@ -56,7 +56,8 @@ export default class CreateSetPage extends Component {
 
 	componentWillUnmount() {
 		const { clearSet, reorderSet } = this.props;
-		reorderSet()
+		// TODO: create reorder fn()
+		// reorderSet()
 		setTimeout(() => { clearSet() }, 5)
 	}	
 
@@ -66,8 +67,7 @@ export default class CreateSetPage extends Component {
 			  <CreateSetHeader {...this.props}/>                 
 			  <div className="container">
 			    <div className="CreateSetPage-list">
-			      <TermRows {...this.props}
-			      			/>
+			      <TermRows {...this.props} />
 			    </div>
 			  </div>
 			</div>

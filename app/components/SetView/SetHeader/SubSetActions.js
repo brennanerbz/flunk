@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Menu from '../../Menu/Menu';
 import classnames from 'classnames';
+import Modal from '../../Modal/modal';
 
 //TODO: replace the inline-styles with scss file
 
@@ -47,8 +48,11 @@ export default class SubSetActions extends Component {
 	}
 
 	state = {
+		modal_open: false,
+		modal_type: null,
 		more_is_open: false,
-		choices: ['Edit', 'Copy', 'Change privacy']
+		set_choices: ['Edit', 'Copy', 'Change privacy'],
+		create_choices: ['Edit purpose', 'Settings', '|', 'Delete set']
 	}	
 
 	componentDidMount() {
@@ -82,16 +86,16 @@ export default class SubSetActions extends Component {
 		});
 	}
 
-	toggleModal() {
+	toggleModal(value) {
 		$('[data-toggle="tooltip"]').tooltip('hide')
-		$(this.refs.share_modal).modal()
-		setTimeout(() => {
-			this.refs.share_link.select()
-		}, 300)		
+		this.setState({ 
+			modal_open: true,
+			modal_type: value
+		});
 	}
 
 	render() {
-		const { set } = this.props,
+		const { set, createset } = this.props,
 			member_icon = require('../../../assets/profile_icon.png'),
 			share_icon = require('../../../assets/share_icon.png'),
 			more_icon = require('../../../assets/more_icon.png');
@@ -105,7 +109,7 @@ export default class SubSetActions extends Component {
 		return(
 			<div style={secondary_actions} className="secondary_actions">
 				<button className={classnames('toggle_btn')}
-					    onClick={::this.toggleModal}
+					    onClick={() => ::this.toggleModal('share')}
 				   		ref="share"				   
 				   		title="Share"
 				   		data-toggle="tooltip" 
@@ -115,29 +119,13 @@ export default class SubSetActions extends Component {
 					</i>					
 				</button>
 
-				<div ref="share_modal" className="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				  <div className="modal-dialog" role="document">
-				    <div className="modal-content">
-				      <div className="modal-header">
-				        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-				          <span aria-hidden="true">&times;</span>
-				          <span className="sr-only">Close</span>
-				        </button>
-				        <h3 className="modal-title" id="myModalLabel">Share study set</h3>
-				      </div>
-				      <div className="modal-body">
-				      	<input id="share_link" ref="share_link" type="text" defaultValue="https://ace.com/987389/cog-sci" />
-				      </div>
-				      <div className="modal-footer">
-				        <button type="button" className="button button-outline" data-dismiss="modal">Cancel</button>
-				        <button type="button" className="button button-primary" data-dismiss="modal">Done</button>
-				      </div>
-				    </div>
-				  </div>
-				</div>
+				<Modal  open={this.state.modal_open} 
+						closeModal={() => this.setState({ modal_open: false })}
+						type={this.state.modal_type}
+						{...this.props} />
 
 				<button onClick={::this.openMenu} 
-						onBlur={::this.closeMenu} 
+						onBlur={() => setTimeout(() => { ::this.closeMenu() }, 150)} 
 						className={classnames('toggle_btn', {'active': this.state.more_is_open})}
 						ref="more"				   
 						title="More actions"
@@ -147,14 +135,26 @@ export default class SubSetActions extends Component {
 						<img style={_smallicon} className="share_icon" src={more_icon}/>
 					</i>					
 				</button>
-				<Menu 
-					  set={this.props.set}
-					  isOpen={this.state.more_is_open}
-					  side={dir}
-					  rect={::this.findPos}
-					  ref="more_actions"
-					  choices={this.state.choices}
-					  onSelect={(choice) => console.log(choice)}/>			
+
+				<Menu 	set={this.props.set}
+					  	isOpen={this.state.more_is_open}
+					  	side={dir}
+					  	rect={::this.findPos}
+					  	ref="more_actions"
+					  	choices={createset ? this.state.create_choices : this.state.set_choices}
+						onSelect={(_choice) => {
+							let type,
+								choice = _choice.toLowerCase().trim()
+							if(choice.indexOf('settings') !== -1) type = 'settings'
+							// else if(choice.indexOf('edit') !== -1) type = 'settings'
+							else if(choice.indexOf('delete') !== -1) type = 'confirm'
+							else if(choice.indexOf('purpose') !== -1) type = 'textarea'
+							this.setState({
+								modal_open: true,
+								modal_type: type
+							})
+						}
+				  }/>			
 			</div>
 		);
 	}

@@ -242,6 +242,12 @@
 
 .input-button-group {
 	position: relative;
+    .search_button {
+        box-shadow: none;
+        &:hover {
+            box-shadow: none;
+        }
+    }
 	.search-input {
 		width: 100%;
 		box-sizing: border-box;

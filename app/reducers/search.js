@@ -13,9 +13,9 @@ import {
 
 var initial_searchstate = {
 	searching: false,
-	fetchingItems: false,
-	fetchingSets: false,
-	fetchingUsers: false
+	items: null,
+	sets: null,
+	users: null
 }
 
 export default function search(state = initial_searchstate, action) {
@@ -28,17 +28,35 @@ export default function search(state = initial_searchstate, action) {
 		case REQUEST_ITEMS:
 			return {
 				...state,
-				fetchingItems: true
+				searching: true
+			}
+		case RECEIVE_ITEMS_SUCCESS:
+			return {
+				...state,
+				searching: false,
+				items: action.items
 			}
 		case REQUEST_SETS:
 			return {
 				...state,
-				fetchingSets: true
+				searching: true
+			}
+		case RECEIVE_SETS_SUCCESS:
+			return {
+				...state,
+				searching: false,
+				sets: action.sets
 			}
 		case REQUEST_USERS:
 			return {
 				...state,
-				fetchingUsers: true
+				searching: true
+			}
+		case RECEIVE_USERS_SUCCESS:
+			return {
+				...state,
+				searching: false,
+				users: action.users
 			}
 		case RECEIVE_ITEMS_FAILURE:
 		case RECEIVE_SETS_FAILURE:

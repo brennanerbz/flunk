@@ -12,6 +12,7 @@ export const RECEIVE_ITEMS_SUCCESS = 'RECEIVE_ITEMS_SUCCESS';
 export const RECEIVE_ITEMS_FAILURE = 'RECEIVE_ITEMS_FAILURE';
 export function searchItems(term) {
 	return async(dispatch, getState) => {
+		dispatch({ type: REQUEST_ITEMS })
 		try {
 			let items;
 			await axios.get(`${api_url}/items/?search=${term}`).then(res => items = res.data.items)
@@ -31,6 +32,7 @@ export const RECEIVE_SETS_SUCCESS = 'RECEIVE_SETS_SUCCESS';
 export const RECEIVE_SETS_FAILURE = 'RECEIVE_SETS_FAILURE';
 export function searchSets(set_title) {
 	return async(dispatch, getState) => {
+		dispatch({ type: REQUEST_SETS })
 		try {
 			let sets;
 			await axios.get(`${api_url}/sets/?search=${set_title}`).then(res => sets = res.data.sets)
@@ -51,6 +53,7 @@ export const RECEIVE_USERS_SUCCESS = 'RECEIVE_USERS_SUCCESS';
 export const RECEIVE_USERS_FAILURE = 'RECEIVE_USERS_FAILURE';
 export function searchUsers(user) {
 	return async(dispatch, getState) => {
+		dispatch({ type: REQUEST_USERS })
 		try {
 			let users;
 			await axios.get(`${api_url}/users/?search=${user}`).then(res => user = res.data.user)

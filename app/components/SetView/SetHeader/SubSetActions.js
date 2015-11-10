@@ -52,7 +52,7 @@ export default class SubSetActions extends Component {
 		modal_type: null,
 		more_is_open: false,
 		set_choices: ['Edit', 'Copy', 'Change privacy'],
-		create_choices: ['Add a purpose', '|', 'Privacy', 'Editing', '|', 'Delete set']
+		create_choices: ['Edit purpose', 'Settings', '|', 'Delete set']
 	}	
 
 	componentDidMount() {
@@ -145,10 +145,10 @@ export default class SubSetActions extends Component {
 						onSelect={(_choice) => {
 							let type,
 								choice = _choice.toLowerCase().trim()
-							if(choice.indexOf('privacy') !== -1) type = 'settings'
-							else if(choice.indexOf('edit') !== -1) type = 'settings'
+							if(choice.indexOf('settings') !== -1) type = 'settings'
+							// else if(choice.indexOf('edit') !== -1) type = 'settings'
 							else if(choice.indexOf('delete') !== -1) type = 'confirm'
-							else if(choice.indexOf('add') !== -1) type = 'textarea'
+							else if(choice.indexOf('purpose') !== -1) type = 'textarea'
 							this.setState({
 								modal_open: true,
 								modal_type: type

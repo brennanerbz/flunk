@@ -7,6 +7,10 @@ export default class Modal extends Component {
 		
 	}
 
+	state = {
+		purpose: null
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if(!this.props.open && nextProps.open) {
 			$(this.refs.modal).modal()
@@ -39,6 +43,15 @@ export default class Modal extends Component {
 		} 
 		if(set !== null) {
 			updateSet(set, {name: 'editability', prop: val })
+		}
+	}
+
+	changePurpose() {
+		const { set, updateSet, createSet } = this.props;
+		let purpose = this.state.purpose;
+		if(purpose !== null && purpose.length > 0) {
+			if(set == null) createSet(null, { name: 'description', prop: purpose })
+			else if (set !== null) updateSet(set, { name: 'description', prop: purpose })
 		}
 	}
 
@@ -141,6 +154,7 @@ export default class Modal extends Component {
 	}
 
 	renderTextAreaBody() {
+		const { set } = this.props;
 		return (
 			<div className="modal-body">
 			<p>
@@ -151,10 +165,11 @@ export default class Modal extends Component {
 				</label>
 				<textarea id="purpose_input" 
 						  ref="purpose_input"
-						  onChange={(event) => console.log(event.target.value)}
+						  onChange={(event) => this.setState({ purpose: event.target.value })}
 						  name="purpose_input"
 						  className="textarea"
 						  type="text"
+						  value={set !== null && set.description !== null ? set.description : null}
 						  />
 				<span className="modal_input_note">Give your set a purpose that describes what it will be used for</span>
 			</p>
@@ -230,7 +245,7 @@ export default class Modal extends Component {
 					}
 					{
 						type == 'textarea'
-						? ::this.renderTextAreaBody()
+						? ::this.renderTextAreaBody(...this.props)
 						: null
 					}
 					{
@@ -252,7 +267,8 @@ export default class Modal extends Component {
 								? 
 								<button type="button" 
 										className="button button-primary" 
-										data-dismiss="modal">
+										data-dismiss='modal'
+										onClick={type == 'textarea' ? ::this.changePurpose : null}>
 										{
 											type == 'textarea'
 											? 'Update purpose'

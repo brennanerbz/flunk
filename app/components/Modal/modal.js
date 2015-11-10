@@ -19,6 +19,7 @@ export default class Modal extends Component {
 		  	this.props.closeModal()
 		})
 	}
+	
 	componentDidUpdate(prevProps) {
 		if((!prevProps.open && this.props.open) ) {
 			if(this.props.type == 'textarea') setTimeout(() => { $(this.refs.purpose_input).focus() }, 300)

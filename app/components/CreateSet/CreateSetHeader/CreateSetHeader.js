@@ -21,16 +21,18 @@ export default class CreateSetHeader extends Component {
 			purpose: '',
 			subjects: null,
 			show_edit: false,
-			subject_editor_open: false
+			subject_editor_open: false,
+			error_message: false
 		}
 	}
-	componentWillReceiveProps() {
+	componentWillReceiveProps(nextProps) {
 		if(this.refs.submit_subjects !== undefined) {
 			$(this.refs.submit_subjects).tooltip({
 				delay: { show: 1500, hide: 50},
 				template: '<div class="tooltip bottom_tool" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
 			})
 		}
+		if(nextProps.set !== null) this.setState({ error_message: false });
 	}
 	handleTitleChange = (e) => {
 		const title = e.target.value;
@@ -59,15 +61,15 @@ export default class CreateSetHeader extends Component {
 	handleSave() {
 		const { createSet,
 				createAssignment,
+				assignment,
 			    title,
 			    items,
 			    set } = this.props;
 		if((title || set) == null) {
-			console.log("Need at least one item or a title!")
-			// TODO: add error div for incomplete set_page
+			this.setState({ error_message: true });
 			return;
 		}
-		if(set !== null) {
+		if(set !== null && assignment == null) {
 			createAssignment(set.id, 'admin')
 			// TODO: createSequence()
 		}
@@ -105,14 +107,16 @@ export default class CreateSetHeader extends Component {
 	render() {
 		const { saveSet, subjects } = this.props;
 		let subject_names = [],
+			subs,
 			length = 0;
-		subjects.forEach(sub => subject_names.push(sub.name))
+		subs = subjects.slice(0, 3)
+		subs.forEach(sub => subject_names.push(sub.name))
 		subject_names = subject_names.map((sub, i) => { 
 			length += sub.length
 			if(i == 0) return sub
 			else return " " + sub
 		})
-		length += 2 * subjects.length;
+		length += 2 * subs.length;
 		return(
 			<div className="CreateSetHeader"> 
 	          <div className="container CreateSetHeader-container">	
@@ -126,6 +130,14 @@ export default class CreateSetHeader extends Component {
 	              	onBlur={this.handleTitleBlur}
 	              	onChange={this.handleTitleChange}
 	              	onFocus={this.handleTitleFocus}/>
+	              	{
+	              		this.state.error_message
+	              		?
+	              		<div className="error_message">
+	              			<p className="danger">Please enter a title or two terms to create your set.</p>
+	              		</div>
+	              		: null
+	              	}
 		              <ul className="subject_list">
 		              	{
 		              		subjects !== undefined

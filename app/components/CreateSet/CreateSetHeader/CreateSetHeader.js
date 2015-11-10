@@ -23,6 +23,14 @@ export default class CreateSetHeader extends Component {
 			subject_editor_open: false
 		}
 	}
+	componentWillReceiveProps() {
+		if(this.refs.submit_subjects !== undefined) {
+			$(this.refs.submit_subjects).tooltip({
+				delay: { show: 1000, hide: 50},
+				template: '<div class="tooltip bottom_tool" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+			})
+		}
+	}
 	handleTitleChange = (e) => {
 		const title = e.target.value;
 		this.setState({
@@ -64,27 +72,46 @@ export default class CreateSetHeader extends Component {
 		}
 	}
 
-	updateSubjects() {
+	updateSubjects(prev_subs) {
 		const { set, updateSetSubjects } = this.props;
 		let subjects = this.state.subjects,
-			subs = { subjects: null };
-		if(subjects == undefined || null) {
+			subs = { subjects: null },
+			compare_one,
+			compare_two;
+		compare_one = prev_subs.map(sub => sub.trim()).join("").replace(" ", "").replace(",", "")
+		compare_two = typeof subjects == 'array' 
+					  ? subjects.map(sub => sub.trim()).join("").replace(' ', "").replace(",", "") 
+					  : null
+		if(compare_one == compare_two) {
 			this.setState({ subject_editor_open: false});
 			return;
 		}
-		subjects = subjects.trim().split(",").map(sub => sub.replace(" ", "").trim())
+		if(typeof subjects == 'array') {
+			subjects = subjects.map(sub => sub.replace(" ", "").trim())
+		}
+		if(typeof subjects == 'string') {
+			subjects = subjects.trim().split(",").map(sub => sub.replace(" ", "").trim())
+		}
+		if(subjects.length > 3) {
+			$(this.refs.submit_subjects).tooltip('show')
+			return;
+		}
 		this.setState({subjects: subjects, subject_editor_open: false})
 		subs.subjects = subjects
-		// console.log(subs)
 		updateSetSubjects(subs)
 	}
 
 	render() {
 		const { saveSet, subjects } = this.props;
-		let subject_names = [];
+		let subject_names = [],
+			length = 0;
 		subjects.forEach(sub => subject_names.push(sub.name))
-		subject_names = subject_names.map(sub => sub += " ")
-		console.log(subject_names)
+		subject_names = subject_names.map((sub, i) => { 
+			length += sub.length
+			if(i == 0) return sub
+			else return " " + sub
+		})
+		length += 2 * subjects.length;
 		return(
 			<div className="CreateSetHeader"> 
 	          <div className="container CreateSetHeader-container">	
@@ -138,10 +165,14 @@ export default class CreateSetHeader extends Component {
 						Edit subjects
 						</label>
 						<textarea id="subject_text" 
+								  ref="subject_text"
 								  name="subject_text" 
 								  className="subject_text"
 								  defaultValue={subjects !== null ? subject_names : null} 
-								  onFocus={() => this.setState({subjects: subject_names })}
+								  onFocus={() => { 
+								  	this.setState({subjects: subject_names })
+								  	setTimeout(() => { this.refs.subject_text.setSelectionRange(length, length) }, 1) 
+								  }}
 								  onChange={(event) => this.setState({ subjects: event.target.value })}
 								  autoFocus={true}/>
 						<div className="button_group">
@@ -155,7 +186,17 @@ export default class CreateSetHeader extends Component {
 									>Cancel
 							</button>
 							<button className="button button-primary button-small"
-									onClick={() => ::this.updateSubjects()}
+									ref="submit_subjects"				   
+									title="Max subjects: 3"
+									data-toggle="tooltip" 
+									data-placement="bottom"
+									onClick={() => { 
+										if (this.state.subjects == subject_names) {
+											this.setState({subject_editor_open: false})
+											return;
+										}
+										::this.updateSubjects(subject_names)
+									}}
 									>Done
 							</button>
 						</div>

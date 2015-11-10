@@ -56,9 +56,11 @@
 			}
 		}
 		li {
-			// font-style: italic;
 			font-size: 14px;
 			color: #9e9ea6!important;
+			&:not(:first-child) {
+				margin-left: 4px;
+			}
 		}
 	}	
 }
@@ -445,6 +447,14 @@ textarea:hover:ms-input-placeholder {
 	position: relative;
 	margin-top: -20px!important;
 	padding-top: 0!important;
+	.textarea_note {
+		font-size: .85rem;
+		font-weight: 400;
+		color: #9e9ea6;
+		display: block;
+		line-height: 1rem;
+		margin-top: 0rem;
+	}
 	label {
 		display: block;
 		color: #9e9ea6!important;
@@ -454,6 +464,7 @@ textarea:hover:ms-input-placeholder {
 		border: 1px solid #C5C5C5;
 		padding: 0.25rem 0.5rem 0.25rem!important;
 		font-size: 0.85rem;
+		width: 23%;
 		&:hover {
 			border-color: #2780f8;
 		}

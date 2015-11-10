@@ -136,7 +136,7 @@ export function updateSetSubjects(subjects) {
 				subs = subjects;
 				await axios.put(`${api_url}/sets/${set.id}/add-subjects/`, subs)
 				.then((res) => subs = res.data.subjects)
-				dispatch({type:UPDATE_SETSUBJECTS_SUCCESS, subs})
+				dispatch({ type:UPDATE_SETSUBJECTS_SUCCESS, subs })
 				return;
 			}
 			await axios.put(`${api_url}/sets/${set.id}/subjects/`)

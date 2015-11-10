@@ -52,7 +52,17 @@ label, input {
 :global .inline_block {
     display: inline-block!important;
 }
-
+.tiny_bottom_margin {
+    margin-bottom: .1rem!important;
+}
+.mini {
+    font-size: .8rem;
+    line-height: 1.2rem;
+    color: #666;
+}
+.subtle_silver {
+	color: #9e9ea6!important;
+}
 .float_right {
 	float: right;
 }

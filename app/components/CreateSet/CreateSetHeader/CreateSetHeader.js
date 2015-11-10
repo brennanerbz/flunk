@@ -18,7 +18,9 @@ export default class CreateSetHeader extends Component {
 		super(props);
 		this.state = {
 			title: '',
-			purpose: ''
+			purpose: '',
+			subjects: '',
+			subject_editor_open: false
 		}
 	}
 	handleTitleChange = (e) => {
@@ -62,8 +64,23 @@ export default class CreateSetHeader extends Component {
 		}
 	}
 
+	updateSubjects() {
+		const { set, updateSetSubjects } = this.props;
+		let subjects = this.state.subjects;
+		if(subjects == undefined) {
+			this.setState({ subject_editor_open: false});
+			return;
+		}
+		subjects = subjects.trim().split(",").map(sub => sub.replace(" ", "").trim()).join("|")
+		this.setState({subjects: subjects, subject_editor_open: false})
+		// TODO: call and update the set subjects
+		// updateSetSubjects(subjects)
+	}
+
 	render() {
 		const { saveSet, subjects } = this.props;
+		let subject_names = [];
+		subjects.forEach(sub => subject_names.push(sub.name))
 		return(
 			<div className="CreateSetHeader"> 
 	          <div className="container CreateSetHeader-container">	
@@ -80,6 +97,7 @@ export default class CreateSetHeader extends Component {
 	              	{
 	              		subjects !== undefined
 	              		&& subjects !== null
+	              		&& !this.state.subject_editor_open
 	              		? subjects.map((subject, i) => {
 	              			return <li key={i} className="subject"><p>{subject.name}</p></li>
 	              		})
@@ -89,10 +107,46 @@ export default class CreateSetHeader extends Component {
 	              		subjects !== undefined
 	              		&& subjects !== null
 	              		&& subjects.length > 0
-	              		? <span className="edit_link"><a className="link">edit</a></span>
+	              		&& !this.state.subject_editor_open
+	              		? <span className="edit_link" 
+	              				onClick={() => this.setState({subject_editor_open: true})}>
+	              				<a className="link">edit</a>
+	              		  </span>
 	              		: null
 	              	}
-	              </ul>
+	              </ul> 
+	              {
+	              	this.state.subject_editor_open
+	              	?
+					<div className="subject_editor">
+						<label htmlFor="subject_text" 
+							   className="tiny_bottom_margin mini subtle_silver">
+						Edit subjects
+						</label>
+						<textarea id="subject_text" 
+								  name="subject_text" 
+								  className="subject_text"
+								  defaultValue={subjects !== null ? subject_names : null} 
+								  onChange={(event) => this.setState({ subjects: event.target.value })}
+								  autoFocus={true}/>
+						<div className="button_group">
+							<button className="button button-outline button-small"
+									onClick={() => {
+										this.setState({
+											subjects: subject_names,
+											subject_editor_open: false
+										});
+									}}
+									>Cancel
+							</button>
+							<button className="button button-primary button-small"
+									onClick={() => ::this.updateSubjects()}
+									>Done
+							</button>
+						</div>
+					</div>
+					: null
+	              }
 	            </div>
 	            <ButtonGroup onSave={::this.handleSave}
 	            		     {...this.props}

@@ -71,8 +71,10 @@
 		}
 	}
 	.concept_header {
-		padding-top: 0px!important;
-		padding-bottom: 0px;
+		padding-bottom: 10px;
+		&.subjects {
+			padding: 0!important;
+		}
 		h4 {
 			&.search_query {
 				font-size: 1.4em;
@@ -102,11 +104,13 @@
 	.example_list_container, .null_results_container {
 		margin-top: 15px;
 		margin-left: 20px;
-		color: #747474;
 		.example_label {
 			font-size: 17px;
 			color: #9991a0;
 		}
+	}
+	.null_results_container {
+		color: #747474;
 	}
 	span {
 		&.source {
@@ -129,6 +133,9 @@
 		}
 		&.example_list {
 			margin-left: 0px;
+			li {
+				padding-bottom: 20px;
+			}
 		}
 	}
 	.def_index {
@@ -140,9 +147,18 @@
 	}
 	.definition_item {
 		border-bottom: 1px solid #f3f3f3;
+		&:not(:first-child) {
+			padding: 20px 0;
+		}
 		&:last-child {
 			border-bottom: none;
-			margin-bottom: 2px;
+			padding: 20px 0 0 0; 
+		}
+		&:first-child {
+			padding: 0 0 20px 0;
+		}
+		&.only_child {
+			padding: 0;
 		}
 		p {
 			margin-bottom: 0!important;

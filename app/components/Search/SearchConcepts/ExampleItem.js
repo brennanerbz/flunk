@@ -1,26 +1,19 @@
 import React, { Component, PropTypes } from 'react';
+import classnames from 'classnames';
 
 export default class ExampleItem extends Component {
 	static propTypes = {
 	}
 
 	state = {
-		should_render: true
+	should_render: true
 	}
 
 	renderExample(example, term) {
-		let index = example.indexOf(term),
-			beg_example,
-			end_example;
-		if(index !== -1) {
-			beg_example = example.replace(term, "").slice(0, index),
-			end_example = example.replace(term, "").slice(index += term.length)
-		} else {
-			return;
+		example = example.replace(new RegExp('(^|\\s)(' + term + ')(\\s|$)','ig'), '$1<b>$2</b>$3')
+		return {
+			__html: example
 		}
-		return(
-			<p className="definition">{beg_example}<b>{term}</b>{end_example}</p>
-		)
 	}
 
 	render() {
@@ -30,10 +23,11 @@ export default class ExampleItem extends Component {
 				{	
 					this.state.should_render
 					? 
-					<li className="definition_item">
-						{ ::this.renderExample(content.cue, content.target) }
+					<li className={classnames("definition_item", { "only_child": solo } )}>
+						<p className="definition" 
+						   dangerouslySetInnerHTML={::this.renderExample(content.cue, content.target)}></p>
 						{ 
-							solo
+							!solo
 							?
 							<span className="source">{content.creator.username}</span>
 							: null

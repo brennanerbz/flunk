@@ -1,30 +1,25 @@
 import React, { Component, PropTypes } from 'react';
+import classnames from 'classnames';
 
 export default class DefinitionItem extends Component {
 	static propTypes = {
 	}
 
-	renderDef(def, target) {
-		let index = def.indexOf(target),
-			beg_example,
-			end_example;
-		if(index !== -1) {
-			beg_example = def.replace(target, "").slice(0, index),
-			end_example = def.replace(target, "").slice(index += target.length)
-		} else {
-			return;
+	renderDef(def, term) {
+		def = def.replace(new RegExp('(^|\\s)(' + term + ')(\\s|$)','ig'), '$1<b>$2</b>$3')
+		return {
+			__html: def
 		}
-		return(
-			<p className="definition">{beg_example}<b>{target}</b>{end_example}</p>
-		)
 	}
 
 	render() {
-		const { content, index } = this.props;
-		console.log(content)
+		const { content, index, solo } = this.props;
+		console.log(solo)
 		return(
-			<li className="definition_item">
-				<p className="definition">{content.cue}</p>
+			<li className={classnames("definition_item", 
+							 {"only_child": solo})}>
+				<p className="definition"
+				   dangerouslySetInnerHTML={::this.renderDef(content.cue, content.target)}></p>
 				<span className="source">{content.creator.username}</span>
 			</li>
 		);

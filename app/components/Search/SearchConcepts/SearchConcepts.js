@@ -41,7 +41,7 @@ export default class SearchConcepts extends Component {
 		return(
 			<div className="search_concept_container">
 				{
-					!this.state.render_definitions && !this.render_examples
+					!this.state.render_definitions && !this.state.render_examples
 					?
 					<NullSearchResults {...this.props}/>
 					: null
@@ -73,7 +73,7 @@ export default class SearchConcepts extends Component {
 						<div className="spotlight_search">
 							<ExampleItem content={examples[0]} solo={true} {...this.props}/>
 						</div>
-						<ExampleList solo={true} {...this.props}/>
+						<ExampleList {...this.props}/>
 					</div>
 					: null
 				}

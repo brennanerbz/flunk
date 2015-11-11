@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import classnames from 'classnames';
 
 export default class ConceptHeader extends Component {
 	static propTypes = {
@@ -12,10 +13,10 @@ export default class ConceptHeader extends Component {
 		term_name = term.target;
 		subjects = term.subjects;
 		return(
-			<div className="concept_header">
+			<div className={classnames("concept_header", { "subjects": subjects.length > 0 })}>
 				<h4 className="search_query">{term_name}</h4>
 				{
-					subjects !== null
+					subjects !== null && subjects.length > 0
 					?
 					<ul className="subject_list">
 						<img src={tag_icon} className="icon"/>

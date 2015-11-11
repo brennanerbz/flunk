@@ -17,7 +17,7 @@
 		&.subject_list {
 			display: block;
 			float: right;
-			margin-right: 15px;
+			margin-right: 0px;
 			margin-top: -35px;
 			margin-bottom: 15px;
 			// display: table;
@@ -45,54 +45,64 @@
 				font-size: 1.4em;
 				font-weight: 700;
 				font-family: "Lato";
+				color: #555459;
 			}
 		}
 	}
-	.definition_list_container {
-		.concept_header {
+	.concept_header {
+		color: #9991a0;
+		b {
+			color: #000;
+		}
+	}
+	.example_list_container {
+		margin-top: 15px;
+		margin-left: 20px;
+		.example_label {
+			font-size: 17px;
 			color: #9991a0;
-			b {
-				color: #000;
+		}
+	}
+	ul {
+		&.definition_list, &.example_list {
+			max-width: 540px;
+			margin-left: 0px;
+			.def_index {
+				position: absolute;
+				display: inline-block;
+				left: 20px;
+				color: #9991a0;
+				font-size: 14px;
+			}
+			.definition_item {
+				border-bottom: 1px solid #f3f3f3;
+				margin-bottom: 23px;
+				padding-bottom: 15px;
+				&:last-child {
+					border-bottom: none;
+				}
+				p {
+					&.definition {
+						font-size: 16px;
+						margin-bottom: 0;
+					}
+				}
+				span {
+					&.source {
+						margin-top: 0!important;
+						font-size: 14.5px;
+						color: #57AD67;
+						opacity: 0.8;
+						cursor: pointer;
+						&:hover {
+							opacity: 1;
+						}
+					}
+				}
 			}
 		}
-		ul {
-			&.definition_list {
-				max-width: 540px;
-				margin-left: 30px;
-				.def_index {
-					position: absolute;
-					display: inline-block;
-					left: 20px;
-					color: #9991a0;
-					font-size: 14px;
-				}
-				.definition_item {
-					border-bottom: 1px solid #f3f3f3;
-					margin-bottom: 23px;
-					padding-bottom: 15px;
-					&:last-child {
-						border-bottom: none;
-					}
-					p {
-						&.definition {
-							font-size: 16px;
-							margin-bottom: 0;
-						}
-					}
-					span {
-						&.source {
-							margin-top: 0!important;
-							font-size: 14.5px;
-							color: #57AD67;
-							opacity: 0.8;
-							cursor: pointer;
-							&:hover {
-								opacity: 1;
-							}
-						}
-					}
-				}
-			}
+		&.example_list {
+			margin-left: 0px;
 		}
 	}
 }

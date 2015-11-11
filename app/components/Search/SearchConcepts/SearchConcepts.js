@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import ConceptHeader from './ConceptHeader';
 import DefinitionList from './DefinitionList';
 
+import ExampleList from './ExampleList';
+
 /* SCSS styles */
 require('./SearchConcepts.scss');
 
@@ -22,6 +24,7 @@ export default class SearchConcepts extends Component {
 					}
 					<DefinitionList {...this.props}/>
 				</div>
+				<ExampleList {...this.props}/>
 			</div>
 		);
 	}

@@ -195,7 +195,7 @@
             + .search-input {
                 display: inline-block;
                 vertical-align: middle;
-                padding-left: 36px;
+                padding-left: 33px;
                 height: 37px;
             }
         }
@@ -384,6 +384,7 @@
         }
     }
 	.search-input {
+    padding-top: 0px;
 		width: 100%;
 		box-sizing: border-box;
 	}

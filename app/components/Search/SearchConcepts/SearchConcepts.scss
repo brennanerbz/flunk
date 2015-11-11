@@ -1,8 +1,45 @@
 .search_concept_container {
 	display: block;
 	position: relative;
+	margin-top: 20px;
+	.spotlight_search {
+		display: block;
+		position: relative;
+		width: 585px;
+		background-color: #fff;
+		box-shadow: 0 1px 10px #e3e3e3;
+		padding:13px 18px 4px 20px !important;
+		border: 1px solid #e3e3e3;
+		border-radius: 0.35em;	
+		margin-top: 10px;
+	}
+	ul {
+		&.subject_list {
+			display: block;
+			float: right;
+			margin-right: 15px;
+			margin-top: -35px;
+			margin-bottom: 15px;
+			// display: table;
+			.subject_label {
+				display: inline-block;	
+				font-size: 14.5px;
+				font-style: italic;
+				color: #9991a0;
+			}
+			.subject {
+				display: inline-block;	
+				font-size: 14.5px;
+				color: #1a0dab;				
+			}
+			:not(:first-child) {
+					margin-left: 10px;
+			}
+		}
+	}
 	.concept_header {
 		padding-top: 10px!important;
+		padding-bottom: 10px;
 		h4 {
 			&.search_query {
 				font-size: 1.4em;
@@ -10,31 +47,35 @@
 				font-family: "Lato";
 			}
 		}
-		ul {
-			&.subject_list {
-				display: table;
-				.subject {
-					display: inline-block;	
-					font-size: 14.5px;
-					color: #696969;				
-				}
-				:not(:first-child) {
-						margin-left: 10px;
-				}
-			}
-		}
 	}
 	.definition_list_container {
+		.concept_header {
+			color: #9991a0;
+			b {
+				color: #000;
+			}
+		}
 		ul {
 			&.definition_list {
-				width: 540px;
+				max-width: 540px;
+				margin-left: 30px;
+				.def_index {
+					position: absolute;
+					display: inline-block;
+					left: 20px;
+					color: #9991a0;
+					font-size: 14px;
+				}
 				.definition_item {
 					border-bottom: 1px solid #f3f3f3;
 					margin-bottom: 23px;
 					padding-bottom: 15px;
+					&:last-child {
+						border-bottom: none;
+					}
 					p {
 						&.definition {
-							font-size: 17px;
+							font-size: 16px;
 							margin-bottom: 0;
 						}
 					}

@@ -10,13 +10,6 @@ export default class ConceptHeader extends Component {
 		return(
 			<div className="concept_header">
 				<h4 className="search_query">{item.target}</h4>
-				<ul className="subject_list">
-					{
-						item.subjects.map((sub, i) => {
-							return <li key={i} className="subject">{sub.name}</li>
-						})
-					}
-				</ul>
 			</div>
 		);
 	}

@@ -13,13 +13,15 @@ export default class SearchConcepts extends Component {
 		const { items } = this.props;
 		return(
 			<div className="search_concept_container">
-				{
-					items !== undefined 
-					?
-					<ConceptHeader {...this.props} />
-					: null
-				}
-				<DefinitionList {...this.props}/>
+				<div className="spotlight_search">
+					{
+						items !== undefined 
+						?
+						<ConceptHeader {...this.props} />
+						: null
+					}
+					<DefinitionList {...this.props}/>
+				</div>
 			</div>
 		);
 	}

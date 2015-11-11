@@ -24,6 +24,13 @@ export default class SearchBox extends Component {
 		value: ''
 	}
 
+	componentDidMount() {
+		const { loc } = this.props,
+				lastSlash = loc.pathname.lastIndexOf("/"),
+				query = loc.pathname.slice(lastSlash, loc.length).replace("/", "")
+		if(loc.pathname.indexOf('search') !== -1) this.setState({value: query});
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if(nextProps.loc.pathname.indexOf('search') == -1) this.setState({value: ''});
 	}

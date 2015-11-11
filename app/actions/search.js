@@ -18,7 +18,7 @@ export const RECEIVE_ITEMS_SUCCESS = 'RECEIVE_ITEMS_SUCCESS';
 export const RECEIVE_ITEMS_FAILURE = 'RECEIVE_ITEMS_FAILURE';
 export function searchItems(term) {
 	return async(dispatch, getState) => {
-		dispatch({ type: REQUEST_ITEMS })
+		dispatch({ type: SEARCH })
 		try {
 			let items,
 				query = term;
@@ -39,7 +39,7 @@ export const RECEIVE_SETS_SUCCESS = 'RECEIVE_SETS_SUCCESS';
 export const RECEIVE_SETS_FAILURE = 'RECEIVE_SETS_FAILURE';
 export function searchSets(set_title) {
 	return async(dispatch, getState) => {
-		dispatch({ type: REQUEST_SETS })
+		dispatch({ type: SEARCH })
 		try {
 			let sets,
 				query = set_title;
@@ -61,7 +61,7 @@ export const RECEIVE_USERS_SUCCESS = 'RECEIVE_USERS_SUCCESS';
 export const RECEIVE_USERS_FAILURE = 'RECEIVE_USERS_FAILURE';
 export function searchUsers(user) {
 	return async(dispatch, getState) => {
-		dispatch({ type: REQUEST_USERS })
+		dispatch({ type: SEARCH })
 		try {
 			let users,
 				query = user;

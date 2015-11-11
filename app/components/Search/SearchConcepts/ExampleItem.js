@@ -24,7 +24,7 @@ export default class ExampleItem extends Component {
 	}
 
 	render() {
-		const { content, index } = this.props;
+		const { content, index, solo } = this.props;
 		return(
 			<div>
 				{	
@@ -32,6 +32,12 @@ export default class ExampleItem extends Component {
 					? 
 					<li className="definition_item">
 						{ ::this.renderExample(content.cue, content.target) }
+						{ 
+							solo
+							?
+							<span className="source">{content.creator.username}</span>
+							: null
+						}
 					</li>
 					: null
 				}

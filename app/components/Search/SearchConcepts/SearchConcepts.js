@@ -5,6 +5,8 @@ import DefinitionList from './DefinitionList';
 import ExampleItem from './ExampleItem';
 import ExampleList from './ExampleList';
 
+import RelatedList from './RelatedList';
+
 /* SCSS styles */
 require('./SearchConcepts.scss');
 
@@ -14,13 +16,16 @@ export default class SearchConcepts extends Component {
 
 	state = {
 		render_definitions: true,
-		render_examples: true
+		render_examples: true,
+		render_related: true
 	}
 
 	componentWillMount() {
-		const { definitions, examples } = this.props;
+		const { definitions, examples, related } = this.props;
 		if(definitions == undefined || definitions.length == 0) this.setState({ render_definitions: false });
 		if(examples == undefined || examples.length == 0) this.setState({ render_examples: false });
+		if(related == undefined || related.length == 0) this.setState({ render_related: false });
+
 	}
 
 	render() {
@@ -56,6 +61,11 @@ export default class SearchConcepts extends Component {
 						</div>
 						<ExampleList solo={true} {...this.props}/>
 					</div>
+					: null
+				}
+				{
+					this.state.render_related
+					? <RelatedList {...this.props}/>
 					: null
 				}
 			</div>

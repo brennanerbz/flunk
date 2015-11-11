@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 import { Link } from 'react-router';
+import { pushState } from 'redux-router';
 
 import * as searchactions from '../../actions/search';
 
@@ -20,6 +21,7 @@ require('./Search.scss');
 @connect(state => ({
 	loc: state.router.location,
 	searching: state.search.searching,
+	query: state.search.query,
 	items: state.search.items,
 	term: state.search.term,
 	definitions: state.search.definitions,
@@ -30,7 +32,8 @@ require('./Search.scss');
 	}),
 	dispatch => ({
 		...bindActionCreators({
-			...searchactions
+			...searchactions,
+			pushState
 		}, dispatch)
 	})
 )

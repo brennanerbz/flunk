@@ -7,7 +7,8 @@ import { pushState } from 'redux-router';
 
 @connect(state => ({
 	loc: state.router.location,
-	searching: state.search.searching
+	searching: state.search.searching,
+	query: state.search.query
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -32,7 +33,7 @@ export default class SearchBox extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if(nextProps.loc.pathname.indexOf('search') == -1) this.setState({value: ''});
+		if(nextProps.loc.pathname.indexOf('search') == -1) { this.setState({value: ''}); return; }
 	}
 
 	componentDidUpdate = () => {

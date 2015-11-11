@@ -7,6 +7,8 @@ import ExampleList from './ExampleList';
 
 import RelatedList from './RelatedList';
 
+import NullSearchResults from './NullSearchResults';
+
 /* SCSS styles */
 require('./SearchConcepts.scss');
 
@@ -25,13 +27,25 @@ export default class SearchConcepts extends Component {
 		if(definitions == undefined || definitions.length == 0) this.setState({ render_definitions: false });
 		if(examples == undefined || examples.length == 0) this.setState({ render_examples: false });
 		if(related == undefined || related.length == 0) this.setState({ render_related: false });
+	}
 
+	componentWillReceiveProps() {
+		const { definitions, examples, related } = this.props;
+		if(definitions == undefined || definitions.length == 0) this.setState({ render_definitions: false });
+		if(examples == undefined || examples.length == 0) this.setState({ render_examples: false });
+		if(related == undefined || related.length == 0) this.setState({ render_related: false });
 	}
 
 	render() {
 		const { definitions, examples } = this.props;
 		return(
 			<div className="search_concept_container">
+				{
+					!this.state.render_definitions && !this.render_examples
+					?
+					<NullSearchResults {...this.props}/>
+					: null
+				}
 				{
 					this.state.render_definitions
 					?

@@ -10,7 +10,6 @@ export default class RelatedItem extends Component {
 		return(
 			<li className="related_item">
 				<a className="link">{item.target.charAt(0).toUpperCase() + item.target.slice(1)}</a>
-				
 				<p className="cue">{item.cue}</p>
 			</li>
 		);

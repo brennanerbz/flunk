@@ -21,9 +21,10 @@ export default class DefinitionItem extends Component {
 
 	render() {
 		const { content, index } = this.props;
+		console.log(content)
 		return(
 			<li className="definition_item">
-				{::this.renderDef(content.cue, content.target)}
+				<p className="definition">{content.cue}</p>
 				<span className="source">{content.creator.username}</span>
 			</li>
 		);

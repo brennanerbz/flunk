@@ -12,7 +12,7 @@ export default class DefinitionList extends Component {
 					{
 						Array.apply(null, Array(5)).map((x, i) => {
 							return (
-								<DefinitionItem key={i} content={i} />
+								<DefinitionItem key={i} content={i} {...this.props} />
 							);
 						})
 					}

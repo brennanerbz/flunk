@@ -22,7 +22,7 @@ require('./Search.scss');
 	searching: state.search.searching,
 	items: state.search.items,
 	sets: state.search.sets,
-	user: state.search.users
+	users: state.search.users
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -34,30 +34,43 @@ export default class Search extends Component {
 	static propTypes = {
 	}
 
+	componentWillMount() {
+		const { loc, 
+				params,
+				searching, 
+				items, 
+				sets, 
+				users,
+				searchItems,
+				searchSets,
+				searchUsers } = this.props;
+		if(loc.pathname.indexOf('concepts') !== -1 && items == null) searchItems(params.query);
+		if(loc.pathname.indexOf('sets') !== -1 && items == null) searchSets(params.query);
+		if(loc.pathname.indexOf('users') !== -1 && items == null) searchUsers(params.query);
+	}
+
 	render() {
 		const { query } = this.props.params,
-			  { loc } = this.props;
-		console.log(query)
-		console.log(loc)
+			  { loc, searching, items } = this.props;
 		return(
 			<div className="search_page">
 				<nav className="search_tabs">
 					<SearchTabs {...this.props}/>
 				</nav>
 				<article className={classnames("search_content", "no_sidenav_container", {'sets_page': true})}>
-					{
-						loc.pathname.indexOf('concepts') !== -1
-						? <SearchConcepts {...this.props}/>
+				{
+						loc.pathname.indexOf('concepts') !== -1 && !searching && items !== null
+						? <SearchConcepts query={query} {...this.props}/>
 						: null
 					}
 					{
 						loc.pathname.indexOf('sets') !== -1
-						? <SearchSets {...this.props}/>
+						? <SearchSets query={query} {...this.props}/>
 						: null
 					}
 					{
 						loc.pathname.indexOf('users') !== -1
-						? <SearchPeople {...this.props}/>
+						? <SearchPeople query={query} {...this.props}/>
 						: null
 					}
 				</article>

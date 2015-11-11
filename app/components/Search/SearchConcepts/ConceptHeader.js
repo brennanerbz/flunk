@@ -5,16 +5,17 @@ export default class ConceptHeader extends Component {
 	}
 
 	render() {
+		const { items, query } = this.props,
+			    item = items[0]
 		return(
 			<div className="concept_header">
-				<h4 className="search_query">Search query</h4>
+				<h4 className="search_query">{item.target}</h4>
 				<ul className="subject_list">
-					<li className="subject">
-						subject
-					</li>
-					<li className="subject">
-						subject
-					</li>
+					{
+						item.subjects.map((sub, i) => {
+							return <li key={i} className="subject">{sub.name}</li>
+						})
+					}
 				</ul>
 			</div>
 		);

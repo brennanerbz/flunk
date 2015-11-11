@@ -6,6 +6,12 @@ const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 
 export const SEARCH = 'SEARCH';
 
+export function requestSearch() {
+	return {
+		type: SEARCH
+	}
+}
+
 // ?target=String	&cue=String
 export const REQUEST_ITEMS = 'REQUEST_ITEMS';
 export const RECEIVE_ITEMS_SUCCESS = 'RECEIVE_ITEMS_SUCCESS';
@@ -14,9 +20,10 @@ export function searchItems(term) {
 	return async(dispatch, getState) => {
 		dispatch({ type: REQUEST_ITEMS })
 		try {
-			let items;
+			let items,
+				query = term;
 			await axios.get(`${api_url}/items/?search=${term}`).then(res => items = res.data.items)
-			dispatch({type: RECEIVE_ITEMS_SUCCESS, items})
+			dispatch({type: RECEIVE_ITEMS_SUCCESS, items, query})
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_ITEMS_FAILURE,
@@ -34,9 +41,10 @@ export function searchSets(set_title) {
 	return async(dispatch, getState) => {
 		dispatch({ type: REQUEST_SETS })
 		try {
-			let sets;
+			let sets,
+				query = set_title;
 			await axios.get(`${api_url}/sets/?search=${set_title}`).then(res => sets = res.data.sets)
-			dispatch({type: RECEIVE_SETS_SUCCESS, sets})
+			dispatch({type: RECEIVE_SETS_SUCCESS, sets, query})
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_SETS_FAILURE,
@@ -55,9 +63,10 @@ export function searchUsers(user) {
 	return async(dispatch, getState) => {
 		dispatch({ type: REQUEST_USERS })
 		try {
-			let users;
+			let users,
+				query = user;
 			await axios.get(`${api_url}/users/?search=${user}`).then(res => user = res.data.user)
-			dispatch({type: RECEIVE_USERS_SUCCESS, users})
+			dispatch({type: RECEIVE_USERS_SUCCESS, users, query})
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_USERS_FAILURE,

@@ -10,10 +10,16 @@ export default class SearchConcepts extends Component {
 	}
 
 	render() {
+		const { items } = this.props;
 		return(
 			<div className="search_concept_container">
-				<ConceptHeader/>
-				<DefinitionList/>
+				{
+					items !== undefined 
+					?
+					<ConceptHeader {...this.props} />
+					: null
+				}
+				<DefinitionList {...this.props}/>
 			</div>
 		);
 	}

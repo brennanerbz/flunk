@@ -12,7 +12,7 @@ export function requestSearch() {
 	}
 }
 
-// ?target=String	&cue=String
+ // /items/search/?search=knowledge&start=0&end=10
 export const REQUEST_ITEMS = 'REQUEST_ITEMS';
 export const RECEIVE_ITEMS_SUCCESS = 'RECEIVE_ITEMS_SUCCESS';
 export const RECEIVE_ITEMS_FAILURE = 'RECEIVE_ITEMS_FAILURE';
@@ -22,7 +22,7 @@ export function searchItems(term) {
 		try {
 			let items,
 				query = term;
-			await axios.get(`${api_url}/items/?search=${term}`).then(res => items = res.data.items)
+			await axios.get(`${api_url}/items/search/?search=${term}`).then(res => items = res.data.items)
 			dispatch({type: RECEIVE_ITEMS_SUCCESS, items, query})
 		} catch(err) {
 			dispatch({
@@ -43,7 +43,7 @@ export function searchSets(set_title) {
 		try {
 			let sets,
 				query = set_title;
-			await axios.get(`${api_url}/sets/?search=${set_title}`).then(res => sets = res.data.sets)
+			await axios.get(`${api_url}/sets/search/?search=${set_title}`).then(res => sets = res.data.sets)
 			dispatch({type: RECEIVE_SETS_SUCCESS, sets, query})
 		} catch(err) {
 			dispatch({
@@ -65,7 +65,7 @@ export function searchUsers(user) {
 		try {
 			let users,
 				query = user;
-			await axios.get(`${api_url}/users/?search=${user}`).then(res => user = res.data.user)
+			await axios.get(`${api_url}/users/search/?search=${user}`).then(res => user = res.data.user)
 			dispatch({type: RECEIVE_USERS_SUCCESS, users, query})
 		} catch(err) {
 			dispatch({

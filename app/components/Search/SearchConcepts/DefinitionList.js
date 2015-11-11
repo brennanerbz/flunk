@@ -6,14 +6,16 @@ export default class DefinitionList extends Component {
 	}
 
 	render() {
-		const { items } = this.props;
-		let sliced_items = items.slice(0, 3),
-			item = sliced_items[0]
+		const { definitions } = this.props;
+		if(definitions == undefined || definitions.length == 0) return <div></div>
+		let sliced_definitions = definitions.slice(0, 3),
+			first_definition = sliced_definitions[0],
+			subjects = first_definition.subjects;
 		return(
 			<div className="definition_list_container">
 				<ul className="definition_list">
 					{
-						sliced_items.map((x, i) => {
+						sliced_definitions.map((x, i) => {
 							return (
 								<DefinitionItem index={i} key={i} content={x} {...this.props} />
 							);
@@ -21,12 +23,20 @@ export default class DefinitionList extends Component {
 					}
 				</ul>
 				<ul className="subject_list">
+				{
+					subjects !== null && subjects.length > 0
+					?
+					<div>
 					<li className="subject_label">subjects:</li>
-					{
-						item.subjects.map((sub, i) => {
-							return <li key={i} className="subject">{sub.name}</li>
-						})
-					}
+						{	
+							first_definition.subjects.map((sub, i) => {
+								return <li key={i} className="subject">{sub.name}</li>
+							})
+						}
+					</div>
+					: null
+				}
+					
 				</ul>
 			</div>
 		);

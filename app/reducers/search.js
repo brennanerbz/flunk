@@ -15,6 +15,10 @@ var initial_searchstate = {
 	searching: false,
 	query: '',
 	items: null,
+	term: null,
+	definitions: null,
+	examples: null,
+	related: null,
 	sets: null,
 	users: null,
 }
@@ -32,10 +36,21 @@ export default function search(state = initial_searchstate, action) {
 				// searching: true
 			}
 		case RECEIVE_ITEMS_SUCCESS:
+			let term = {}, definitions = [], examples = [], related = [], items = action.items, query = action.query;
+			items.forEach((item, i) => { 
+				if (item.target == query && item.cue.indexOf(query) == -1) definitions.push(item)
+				if (item.target == query && item.cue.indexOf(query) !== -1) examples.push(item)
+				if (item.target !== query) related.push(item)
+			})
+			if(definitions !== undefined && definitions[0] !== undefined) term = definitions[0]
 			return {
 				...state,
 				searching: false,
 				items: action.items,
+				term: term,
+				definitions: definitions,
+				examples: examples,
+				related: related,
 				query: action.query
 			}
 		case REQUEST_SETS:

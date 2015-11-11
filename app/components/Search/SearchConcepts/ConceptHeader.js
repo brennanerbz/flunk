@@ -5,11 +5,14 @@ export default class ConceptHeader extends Component {
 	}
 
 	render() {
-		const { items, query } = this.props,
-			    item = items[0]
+		// debugger
+		const { term } = this.props;
+		let term_name;
+		if(term == undefined) return;
+		term_name = term.target;
 		return(
 			<div className="concept_header">
-				<h4 className="search_query">{item.target}</h4>
+				<h4 className="search_query">{term_name}</h4>
 			</div>
 		);
 	}

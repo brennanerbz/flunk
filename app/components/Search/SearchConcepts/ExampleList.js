@@ -6,8 +6,7 @@ export default class ExampleList extends Component {
 	}
 
 	state = {
-		should_render_list: true,
-		tally: 0
+		should_render_list: true
 	}
 
 	render() {
@@ -28,12 +27,6 @@ export default class ExampleList extends Component {
 										<ExampleItem index={i} 
 													 key={i} 
 													 content={x}
-													 emptyExamples={() => { 
-													 	this.setState({ tally: this.state.tally += 1 })
-													 	if(this.state.tally == sliced_items.length) {
-													 		this.setState({should_render_list: false})
-													 	}
-													 }}
 													 {...this.props} />
 									);
 								})

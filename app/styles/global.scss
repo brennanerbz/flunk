@@ -100,15 +100,14 @@ label, input {
 	position: fixed;
 	top: 30.5%;
 	left: 44%;
-	.loading_label  {
-		display: table-cell;
-		position: relative;
-		font-size: 21px;
-		left: 6px;
-		top: 8px;
-	}
 }
-
+.loading_label  {
+	display: table-cell;
+	position: relative;
+	font-size: 21px;
+	left: 6px;
+	top: 8px;
+}
 @keyframes blink {
     /**
      * At the start of the animation the dot
@@ -629,6 +628,12 @@ button:focus, input[type="button"]:focus {
 	&:hover {
 		opacity: 1;
 		// text-decoration: underline;
+	}
+	&.loading_label {
+		position: relative;
+		margin-top: -10px;
+		margin-left: -10px;
+		color: #ccc;
 	}
 }
 

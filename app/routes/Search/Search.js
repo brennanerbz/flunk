@@ -21,6 +21,10 @@ require('./Search.scss');
 	loc: state.router.location,
 	searching: state.search.searching,
 	items: state.search.items,
+	term: state.search.term,
+	definitions: state.search.definitions,
+	examples: state.search.examples,
+	related: state.search.related,
 	sets: state.search.sets,
 	users: state.search.users
 	}),

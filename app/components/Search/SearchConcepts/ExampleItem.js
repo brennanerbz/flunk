@@ -8,13 +8,6 @@ export default class ExampleItem extends Component {
 		should_render: true
 	}
 
-	componentDidMount() {
-		if(this.props.content.cue.indexOf(this.props.content.target) == -1) { 
-			this.setState({ should_render: false });
-			this.props.emptyExamples()
-		}
-	}
-
 	renderExample(example, term) {
 		let index = example.indexOf(term),
 			beg_example,

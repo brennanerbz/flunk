@@ -8,8 +8,6 @@ export default class SearchTabs extends Component {
 	render() {
 		const { loc, query, pushState } = this.props,
 			    pathname = loc.pathname;
-		console.log("query")
-		console.log(query)
 		return(
 			<div className="tabs_container">
 				<ul className="tabs_list">

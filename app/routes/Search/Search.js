@@ -51,8 +51,14 @@ export default class Search extends Component {
 				searchItems,
 				searchSets,
 				searchUsers } = this.props;
-		let query = params.query.substring(0, params.query.indexOf('&')),
+		let index = params.query.indexOf('&'),
+			query,
+			page_index;
+		if(index !== -1) {
 			page_index = params.query.substring(params.query.indexOf('start') + 6);
+			query = params.query.substring(0, index)
+		} 
+		else query = params.query;
 		if(loc.pathname.indexOf('concepts') !== -1 && items == null) searchItems(query, page_index);
 		if(loc.pathname.indexOf('sets') !== -1 && items == null) searchSets(query, page_index);
 		if(loc.pathname.indexOf('users') !== -1 && items == null) searchUsers(query, page_index);
@@ -72,19 +78,21 @@ export default class Search extends Component {
 				searchUsers } = this.props;
 		let pathname = loc.pathname,
 			next_pathname = nextProps.loc.pathname,
+			index = nextProps.params.query.indexOf('&'),
+			next_query,
+			page_index;
+		if(index !== -1) {
 			next_query = nextProps.params.query.substring(0, nextProps.params.query.indexOf('&')),
 			page_index = nextProps.params.query.substring(nextProps.params.query.indexOf('start') + 6);
-
+		} else {
+			next_query = nextProps.params.query
+		}
 		if((params.query !== next_query || pathname !== next_pathname)
 			&& !searching 
 			&& next_pathname.indexOf('concepts') !== -1) {
 			searchItems(next_query, page_index) 
 			return;
 		} 
-		console.log('lookie')
-		console.log(query)
-		console.log(params.query)
-		console.log(next_query)
 		if((params.query !== next_query || pathname !== next_pathname)
 			&& !searching 
 			&& next_pathname.indexOf('sets') !== -1)  { 

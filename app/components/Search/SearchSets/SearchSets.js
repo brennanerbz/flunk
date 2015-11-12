@@ -9,15 +9,21 @@ export default class SearchSets extends Component {
 	}
 
 	render() {
+		const { query, sets } = this.props; 
 		return(
 			<div className="search_sets_container">
-				<ul className="sets_list">
-					{
-						Array.apply(null, Array(5)).map((x, i) => {
-							return <SearchSetItem key={i}/>
-						})
-					}
-				</ul>
+			 {
+			 	sets !== null
+			 	?
+			 	<ul className="sets_list">
+			 		{
+			 			sets.map((x, i) => {
+			 				return <SearchSetItem key={i} set={x} key={i} {...this.props}/>
+			 			})
+			 		}
+			 	</ul>
+			 	: null
+			 }
 			</div>
 		);
 	}

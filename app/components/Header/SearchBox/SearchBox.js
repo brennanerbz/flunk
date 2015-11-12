@@ -27,17 +27,25 @@ export default class SearchBox extends Component {
 	}
 
 	componentDidMount() {
-		const { loc } = this.props,
+		let { loc } = this.props,
 				lastSlash = loc.pathname.lastIndexOf("/"),
-				query = loc.pathname.slice(lastSlash, loc.length).replace("/", "")
+				bq = loc.pathname.slice(lastSlash, loc.length).replace("/", ""),
+				page = bq.indexOf('&'),
+				query;
+		if(page !== -1) query = bq.slice(0, page)
+		else query = bq
 		if(loc.pathname.indexOf('search') !== -1) this.setState({value: query});
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if(nextProps.loc.pathname.indexOf('search') == -1) { this.setState({value: ''}); return; }
-		const { loc } = this.props,
+		let { loc } = this.props,
 				lastSlash = loc.pathname.lastIndexOf("/"),
-				query = loc.pathname.slice(lastSlash, loc.length).replace("/", "").split("%20").map(word => word.replace("%20", "")).join(" ")
+				bq = loc.pathname.slice(lastSlash, loc.length).replace("/", "").split("%20").map(word => word.replace("%20", "")).join(" "),
+				page = bq.indexOf('&'),
+				query;
+		if(page !== -1) query = bq.slice(0, page)
+		else query = bq
 		if(loc.pathname.indexOf('search') !== -1) this.setState({value: query});
 	}
 
@@ -52,9 +60,12 @@ export default class SearchBox extends Component {
 		const { searchItems, searchSets, searchUsers, pushState, loc, requestSearch, term_name } = this.props,
 			    value = this.state.value,
 			    lastSlash = loc.pathname.lastIndexOf("/"),
-			    query = loc.pathname.slice(lastSlash, loc.length).replace("/", "")
+			    query = loc.pathname.slice(lastSlash, loc.length).replace("/", ""),
+			    pathname = loc.pathname;
 		if(query == value == term_name) return;
-		pushState(null, `/search/concepts/${value}`)
+		if(pathname.indexOf('sets') !== -1 || pathname.indexOf('search') == -1) pushState(null, `/search/sets/${value}`)
+		if(pathname.indexOf('concepts') !== -1) pushState(null, `/search/concepts/${value}`)
+		if(pathname.indexOf('users') !== -1) pushState(null, `/search/users/${value}`)
 	}
 
 	render() {

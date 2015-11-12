@@ -12,7 +12,7 @@ export default class ConceptHeader extends Component {
 		if(term == undefined) return;
 		term_name = term.target;
 		subjects = term.subjects;
-		return(
+	return(
 			<div className={classnames("concept_header", { "subjects": subjects.length > 0 })}>
 				<h4 className="search_query">{term_name}</h4>
 				{

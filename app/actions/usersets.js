@@ -10,7 +10,8 @@ export const RECEIVE_ASSIGNMENTS_SUCCESS = 'RECEIVE_ASSIGNMENTS_SUCCESS';
 export const RECEIVE_ASSINGMENTS_FAILURE = 'RECEIVE_ASSINGMENTS_FAILURE';
 
 export function fetchAssignments(user_id) {
-	return async(dispatch) => {
+	return async(dispatch, getState) => {
+		if(getState().sets.assignmentsFlag) return;
 		dispatch({type: REQUEST_ASSIGNMENTS});
 		try {
 			let assignments;

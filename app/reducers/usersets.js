@@ -8,6 +8,7 @@ import {
 
 let init_state = {
 	isFetchingAssignments: false,
+	assignmentsFlag: false,
 	assignments: [],
 	sets: []
 };
@@ -17,7 +18,8 @@ export default function sets(state = init_state, action) {
 		case REQUEST_ASSIGNMENTS:
 			return {
 				...state,
-				isFetchingAssignments: true
+				isFetchingAssignments: true,
+				assignmentsFlag: true
 			}
 		case RECEIVE_ASSIGNMENTS_SUCCESS:
 			const sets_list = [];
@@ -25,6 +27,7 @@ export default function sets(state = init_state, action) {
 			return {
 				...state,
 				isFetchingAssignments: false,
+				assignmentsFlag: false,
 				sets: sets_list,
 				assignments: action.assignments
 			}

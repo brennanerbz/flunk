@@ -51,9 +51,11 @@ export default class Search extends Component {
 				searchItems,
 				searchSets,
 				searchUsers } = this.props;
-		if(loc.pathname.indexOf('concepts') !== -1 && items == null) searchItems(params.query);
-		if(loc.pathname.indexOf('sets') !== -1 && items == null) searchSets(params.query);
-		if(loc.pathname.indexOf('users') !== -1 && items == null) searchUsers(params.query);
+		let query = params.query.substring(0, params.query.indexOf('&')),
+			page_index = params.query.substring(params.query.indexOf('start') + 6);
+		if(loc.pathname.indexOf('concepts') !== -1 && items == null) searchItems(query, page_index);
+		if(loc.pathname.indexOf('sets') !== -1 && items == null) searchSets(query, page_index);
+		if(loc.pathname.indexOf('users') !== -1 && items == null) searchUsers(query, page_index);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -68,23 +70,31 @@ export default class Search extends Component {
 				searchItems,
 				searchSets,
 				searchUsers } = this.props;
-		let pathname = loc.pathname;
-		if(params.query !== nextProps.params.query 
+		let pathname = loc.pathname,
+			next_pathname = nextProps.loc.pathname,
+			next_query = nextProps.params.query.substring(0, nextProps.params.query.indexOf('&')),
+			page_index = nextProps.params.query.substring(nextProps.params.query.indexOf('start') + 6);
+
+		if((params.query !== next_query || pathname !== next_pathname)
 			&& !searching 
-			&& pathname.indexOf('concepts') !== -1)  { 
-			searchItems(nextProps.params.query) 
+			&& next_pathname.indexOf('concepts') !== -1) {
+			searchItems(next_query, page_index) 
 			return;
 		} 
-		if(params.query !== nextProps.params.query 
+		console.log('lookie')
+		console.log(query)
+		console.log(params.query)
+		console.log(next_query)
+		if((params.query !== next_query || pathname !== next_pathname)
 			&& !searching 
-			&& pathname.indexOf('sets') !== -1)  { 
-			searchSets(nextProps.params.query) 
+			&& next_pathname.indexOf('sets') !== -1)  { 
+			searchSets(next_query, page_index) 
 			return;
 		}
-		if(params.query !== nextProps.params.query 
+		if((params.query !== next_query || pathname !== next_pathname)
 			&& !searching 
-			&& pathname.indexOf('users') !== -1)  { 
-			searchUsers(nextProps.params.query)
+			&& next_pathname.indexOf('users') !== -1)  { 
+			searchUsers(next_query, page_index)
 			return;
 		}
 	}

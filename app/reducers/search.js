@@ -14,6 +14,7 @@ import {
 
 var initial_searchstate = {
 	searching: false,
+	searchFlag: false,
 	query: '',
 	items: null,
 	term: null,
@@ -22,6 +23,8 @@ var initial_searchstate = {
 	examples: null,
 	related: null,
 	sets: null,
+	set_page: 0,
+	set_page_start_index: 0,
 	users: null,
 }
 
@@ -30,7 +33,8 @@ export default function search(state = initial_searchstate, action) {
 		case SEARCH:
 			return {
 				...state,
-				searching: true
+				searching: true,
+				searchFlag: true
 			}
 		case REQUEST_ITEMS:
 			return {
@@ -50,6 +54,7 @@ export default function search(state = initial_searchstate, action) {
 			return {
 				...state,
 				searching: false,
+				searchFlag: false,
 				items: action.items,
 				term: term,
 				term_name: term !== null ? term.target : null,
@@ -64,10 +69,17 @@ export default function search(state = initial_searchstate, action) {
 				// searching: true
 			}
 		case RECEIVE_SETS_SUCCESS:
+			let page = state.set_page,
+				next_index = Number(action.index) + 9;
+			if(action.index < 10) page = 1
+			else page = Math.ceil(action.index / 10) + 1
 			return {
 				...state,
 				searching: false,
+				searchFlag: false,
 				sets: action.sets,
+				set_page: page,
+				set_page_start_index: next_index,
 				query: action.query
 			}
 		case REQUEST_USERS:
@@ -79,6 +91,7 @@ export default function search(state = initial_searchstate, action) {
 			return {
 				...state,
 				searching: false,
+				searchFlag: false,
 				users: action.users,
 				query: action.query
 			}

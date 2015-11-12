@@ -10,9 +10,6 @@ export function requestSearch() {
 		type: SEARCH
 	}
 }
-function doSomething(func) {
-	return true;
-}
 
  // /items/search/?search=knowledge&start=0&end=10
 export const REQUEST_ITEMS = 'REQUEST_ITEMS';
@@ -20,6 +17,7 @@ export const RECEIVE_ITEMS_SUCCESS = 'RECEIVE_ITEMS_SUCCESS';
 export const RECEIVE_ITEMS_FAILURE = 'RECEIVE_ITEMS_FAILURE';
 export function searchItems(term) {
 	return async(dispatch, getState) => {
+		if(getState().search.searchFlag) return;
 		dispatch({ type: SEARCH })
 		try {
 			let items,
@@ -35,18 +33,25 @@ export function searchItems(term) {
 	}
 }
 
-// ?title=String    &description=String    &has_images=Boolean    &official=Boolean    &subject=String
+ // /sets/search/?search=knowledge&start=0&end=10
 export const REQUEST_SETS = 'REQUEST_SETS';
 export const RECEIVE_SETS_SUCCESS = 'RECEIVE_SETS_SUCCESS';
 export const RECEIVE_SETS_FAILURE = 'RECEIVE_SETS_FAILURE';
-export function searchSets(set_title) {
+export function searchSets(set_title, page_index) {
 	return async(dispatch, getState) => {
+		if(getState().search.searchFlag) return;
 		dispatch({ type: SEARCH })
 		try {
 			let sets,
-				query = set_title;
-			await axios.get(`${api_url}/sets/search/?search=${set_title}`).then(res => sets = res.data.sets)
-			dispatch({type: RECEIVE_SETS_SUCCESS, sets, query})
+				query = set_title,
+				index;
+			if(page_index !== undefined) {
+				index = page_index
+			} else {
+				index = getState().search.set_page_start_index;
+			}
+			await axios.get(`${api_url}/sets/search/?search=${set_title}&start=${index}`).then(res => sets = res.data.sets)
+			dispatch({type: RECEIVE_SETS_SUCCESS, sets, query, index})
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_SETS_FAILURE,
@@ -57,12 +62,13 @@ export function searchSets(set_title) {
 }
 
 
-// ?first_name=String		&last_name=String		&username=String		&email=String
+ // /users/search/?search=knowledge&start=0&end=10
 export const REQUEST_USERS = 'REQUEST_USERS';
 export const RECEIVE_USERS_SUCCESS = 'RECEIVE_USERS_SUCCESS';
 export const RECEIVE_USERS_FAILURE = 'RECEIVE_USERS_FAILURE';
 export function searchUsers(user) {
 	return async(dispatch, getState) => {
+		if(getState().search.searchFlag) return;
 		dispatch({ type: SEARCH })
 		try {
 			let users,

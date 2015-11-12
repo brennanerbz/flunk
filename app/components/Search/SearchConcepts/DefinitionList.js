@@ -17,7 +17,7 @@ export default class DefinitionList extends Component {
 					{
 						sliced_definitions.map((x, i) => {
 							return (
-								<DefinitionItem solo={i === sliced_definitions.length - 1} index={i} key={i} content={x} {...this.props} />
+								<DefinitionItem solo={sliced_definitions.length === 1} index={i} key={i} content={x} {...this.props} />
 							);
 						})
 					}

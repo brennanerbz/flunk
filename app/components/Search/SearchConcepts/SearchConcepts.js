@@ -73,7 +73,7 @@ export default class SearchConcepts extends Component {
 						<div className="spotlight_search">
 							<ExampleItem content={examples[0]} solo={true} {...this.props}/>
 						</div>
-						<ExampleList {...this.props}/>
+						<ExampleList spotlight={true} {...this.props}/>
 					</div>
 					: null
 				}

@@ -14,7 +14,6 @@ export default class DefinitionItem extends Component {
 
 	render() {
 		const { content, index, solo } = this.props;
-		console.log(solo)
 		return(
 			<li className={classnames("definition_item", 
 							 {"only_child": solo})}>

@@ -1,5 +1,6 @@
 import {
 	SEARCH,
+	CLEAR,
 	REQUEST_ITEMS,
 	RECEIVE_ITEMS_SUCCESS,
 	RECEIVE_ITEMS_FAILURE,
@@ -16,6 +17,7 @@ var initial_searchstate = {
 	query: '',
 	items: null,
 	term: null,
+	term_name: null,
 	definitions: null,
 	examples: null,
 	related: null,
@@ -43,11 +45,14 @@ export default function search(state = initial_searchstate, action) {
 				if (item.target !== query) related.push(item)
 			})
 			if(definitions !== undefined && definitions[0] !== undefined) term = definitions[0]
+			else if (examples !== undefined && examples[0] !== undefined) term = examples[0]
+			else term = null
 			return {
 				...state,
 				searching: false,
 				items: action.items,
 				term: term,
+				term_name: term !== null ? term.target : null,
 				definitions: definitions,
 				examples: examples,
 				related: related,
@@ -76,6 +81,10 @@ export default function search(state = initial_searchstate, action) {
 				searching: false,
 				users: action.users,
 				query: action.query
+			}
+		case CLEAR: 
+			return {
+				...state = initial_searchstate
 			}
 		case RECEIVE_ITEMS_FAILURE:
 		case RECEIVE_SETS_FAILURE:

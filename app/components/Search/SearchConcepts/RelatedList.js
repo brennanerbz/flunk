@@ -35,7 +35,7 @@ export default class RelatedList extends Component {
 							<ul className="list">
 								{second_five.map((term, i) => { 
 									return (
-										<li key={'first' + i} className="item">
+										<li key={'second' + i} className="item">
 											<a onClick={() => {
 												this.props.searchItems(term.target)
 												this.props.pushState(null, `/search/concepts/${term.target}`)

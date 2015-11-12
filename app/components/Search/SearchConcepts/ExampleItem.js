@@ -26,12 +26,7 @@ export default class ExampleItem extends Component {
 					<li className={classnames("definition_item", { "only_child": solo } )}>
 						<p className="definition" 
 						   dangerouslySetInnerHTML={::this.renderExample(content.cue, content.target)}></p>
-						{ 
-							!solo
-							?
-							<span className="source">{content.creator.username}</span>
-							: null
-						}
+						
 					</li>
 					: null
 				}
@@ -39,3 +34,10 @@ export default class ExampleItem extends Component {
 		);
 	}
 }
+
+// { 
+// 	!solo
+// 	?
+// 	<span className="source">{content.creator.username}</span>
+// 	: null
+// }

@@ -1,8 +1,7 @@
-
 import axios from 'axios';
 import moment from 'moment'; 
 
-const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
+let api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 
 export const SEARCH = 'SEARCH';
 
@@ -10,6 +9,9 @@ export function requestSearch() {
 	return {
 		type: SEARCH
 	}
+}
+function doSomething(func) {
+	return true;
 }
 
  // /items/search/?search=knowledge&start=0&end=10
@@ -73,5 +75,14 @@ export function searchUsers(user) {
 				error: Error(err)
 			})
 		}
+	}
+}
+
+
+export const CLEAR = 'CLEAR';
+
+export function clearSearch() {
+	return {
+		type: CLEAR
 	}
 }

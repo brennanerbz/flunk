@@ -7,7 +7,7 @@
 		position: relative;
 		width: 585px;
 		background-color: #fff;
-		box-shadow: 0 1px 10px #e3e3e3;
+		box-shadow: 0 2px 7px #e3e3e3;
 		padding: 20px 20px 20px 20px !important;
 		border: 1px solid #e3e3e3;
 		border-radius: 0.35em;	
@@ -71,7 +71,7 @@
 		}
 	}
 	.concept_header {
-		padding-bottom: 10px;
+		padding-bottom: 5px;
 		&.subjects {
 			padding: 0!important;
 		}
@@ -80,7 +80,7 @@
 				font-size: 1.4em;
 				font-weight: 700;
 				font-family: "Lato";
-				color: #555459;
+				color: #000;
 			}
 		}
 		.subject_list {
@@ -130,6 +130,9 @@
 			margin-left: 0px;
 			padding-bottom: 0;
 			margin-bottom: 0;
+		}
+		&.definition_list {
+			margin-top: -4px;
 		}
 		&.example_list {
 			margin-left: 0px;

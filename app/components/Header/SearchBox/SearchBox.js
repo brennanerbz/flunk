@@ -8,6 +8,7 @@ import { pushState } from 'redux-router';
 @connect(state => ({
 	loc: state.router.location,
 	searching: state.search.searching,
+	term_name: state.search.term_name,
 	query: state.search.query
 	}),
 	dispatch => ({
@@ -40,26 +41,19 @@ export default class SearchBox extends Component {
 		if(loc.pathname.indexOf('search') !== -1) this.setState({value: query});
 	}
 
-	componentDidUpdate = () => {
-		// console.log(this.props.loc.pathname)
-	}
-
 	handleSearchInput(e) {
 		const { searchItems, pushState } = this.props;
 		this.setState({
 			value: e.target.value
 		});
-		// searchItems(e.target.value)
 	}
 
 	handleSearchSubmit() {
-		const { searchItems, searchSets, searchUsers, pushState, loc, requestSearch } = this.props,
+		const { searchItems, searchSets, searchUsers, pushState, loc, requestSearch, term_name } = this.props,
 			    value = this.state.value,
 			    lastSlash = loc.pathname.lastIndexOf("/"),
 			    query = loc.pathname.slice(lastSlash, loc.length).replace("/", "")
-		if(query == value) return;
-		requestSearch()
-		searchItems(value)
+		if(query == value == term_name) return;
 		pushState(null, `/search/concepts/${value}`)
 	}
 

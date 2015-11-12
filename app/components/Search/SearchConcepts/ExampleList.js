@@ -10,9 +10,9 @@ export default class ExampleList extends Component {
 	}
 
 	componentWillMount() {
-		const { examples, solo } = this.props; // TODO: soon to be in-context-example
+		const { examples, spotlight } = this.props; // TODO: soon to be in-context-example
 		let sliced_examples, example;
-		if(solo) {
+		if(spotlight) {
 			sliced_examples = examples.slice(1, 4)
 		} else {
 			sliced_examples = examples.slice(0, 3)
@@ -21,9 +21,9 @@ export default class ExampleList extends Component {
 	}
 
 	render() {
-		const { examples, solo } = this.props; // TODO: soon to be in-context-example
+		const { examples, spotlight } = this.props; // TODO: soon to be in-context-example
 		let sliced_examples, example;
-		if(solo) {
+		if(spotlight) {
 			sliced_examples = examples.slice(1, 4)
 		} else {
 			sliced_examples = examples.slice(0, 3)

@@ -56,6 +56,44 @@ export default class Search extends Component {
 		if(loc.pathname.indexOf('users') !== -1 && items == null) searchUsers(params.query);
 	}
 
+	componentWillReceiveProps(nextProps) {
+		const { loc, 
+				params,
+				searching, 
+				term,
+				query,
+				items, 
+				sets, 
+				users,
+				searchItems,
+				searchSets,
+				searchUsers } = this.props;
+		let pathname = loc.pathname;
+		if(params.query !== nextProps.params.query 
+			&& !searching 
+			&& pathname.indexOf('concepts') !== -1)  { 
+			searchItems(nextProps.params.query) 
+			return;
+		} 
+		if(params.query !== nextProps.params.query 
+			&& !searching 
+			&& pathname.indexOf('sets') !== -1)  { 
+			searchSets(nextProps.params.query) 
+			return;
+		}
+		if(params.query !== nextProps.params.query 
+			&& !searching 
+			&& pathname.indexOf('users') !== -1)  { 
+			searchUsers(nextProps.params.query)
+			return;
+		}
+	}
+
+	componentWillUnmount() {
+		this.props.clearSearch()
+	}
+
+
 	render() {
 		const { query } = this.props.params,
 			  { loc, searching, items } = this.props;

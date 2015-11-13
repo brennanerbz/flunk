@@ -38,7 +38,7 @@ export default class Home extends Component {
 					{
 					!isFetching
 					? <h1 className="page_header">Home</h1>
-					: <div><span className="page_header loading_label">Loading</span>
+					: <div><span className="page_header loading_label"></span>
 				 	  <span className="loading"><span>.</span><span>.</span><span>.</span></span></div>
 					}
 				</div>

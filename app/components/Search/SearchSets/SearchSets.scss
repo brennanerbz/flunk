@@ -3,8 +3,10 @@
 	position: relative;
 	width: 540px!important;
 	.sets_list {
+		width: 100%;
 		.search_set_item {
-			display: table;
+			width: 100%!important;
+			display: block;
 			margin-bottom: 20px;
 			.set_icon_container {
 				display: table-cell;
@@ -26,6 +28,7 @@
 				display: table-cell;
 				position: relative;
 				margin-left: 10px;
+				width: 100%;
 				border-bottom: 1px solid #f3f3f3;
 				padding-bottom: 10px;
 				.set_title {
@@ -45,7 +48,7 @@
 					cursor: pointer;
 				}
 				.set_purpose {
-					color: #696969;
+					color: #545454;
 					font-size: 14px;
 				}
 				.set_stats {

@@ -14,6 +14,7 @@ import SearchTabs from '../../components/Search/SearchTabs/SearchTabs';
 import SearchConcepts from '../../components/Search/SearchConcepts/SearchConcepts';
 import SearchSets from '../../components/Search/SearchSets/SearchSets';
 import SearchPeople from '../../components/Search/SearchPeople/SearchPeople';
+import SearchPaging from '../../components/Search/SearchPaging/SearchPaging';
 
 /* SCSS Styles */
 require('./Search.scss');
@@ -55,10 +56,12 @@ export default class Search extends Component {
 			query,
 			page_index;
 		if(index !== -1) {
-			page_index = params.query.substring(params.query.indexOf('start') + 6);
+			page_index = params.query
+			.substring(params.query.indexOf('start') + 6);
 			query = params.query.substring(0, index)
 		} 
 		else query = params.query;
+		query = query.toLowerCase().trim()
 		if(loc.pathname.indexOf('concepts') !== -1 && items == null) searchItems(query, page_index);
 		if(loc.pathname.indexOf('sets') !== -1 && items == null) searchSets(query, page_index);
 		if(loc.pathname.indexOf('users') !== -1 && items == null) searchUsers(query, page_index);
@@ -87,6 +90,7 @@ export default class Search extends Component {
 		} else {
 			next_query = nextProps.params.query
 		}
+		next_query = next_query.toLowerCase().trim()
 		if((params.query !== next_query || pathname !== next_pathname)
 			&& !searching 
 			&& next_pathname.indexOf('concepts') !== -1) {
@@ -121,7 +125,7 @@ export default class Search extends Component {
 					<SearchTabs {...this.props}/>
 				</nav>
 				<article className={classnames("search_content", "no_sidenav_container", {'sets_page': true})}>
-				{
+					{
 						loc.pathname.indexOf('concepts') !== -1 && !searching && items !== null
 						? <SearchConcepts query={query} {...this.props}/>
 						: null
@@ -134,6 +138,11 @@ export default class Search extends Component {
 					{
 						loc.pathname.indexOf('users') !== -1
 						? <SearchPeople query={query} {...this.props}/>
+						: null
+					}
+					{
+						!searching
+						? <SearchPaging {...this.props}/>
 						: null
 					}
 				</article>

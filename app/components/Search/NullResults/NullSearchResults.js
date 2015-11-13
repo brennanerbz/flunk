@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+require('./NullResults.scss');
 
 export default class NullSearchResults extends Component {
 	static propTypes = {

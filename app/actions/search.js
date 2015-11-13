@@ -4,10 +4,15 @@ import moment from 'moment';
 let api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 
 export const SEARCH = 'SEARCH';
-
 export function requestSearch() {
 	return {
 		type: SEARCH
+	}
+}
+export const CLEAR_PAGES = 'CLEAR_PAGES';
+export function clearPages() {
+	return {
+		type: CLEAR_PAGES
 	}
 }
 
@@ -21,7 +26,7 @@ export function searchItems(term) {
 		dispatch({ type: SEARCH })
 		try {
 			let items,
-				query = term;
+				query = term.toLowerCase().trim();
 			await axios.get(`${api_url}/items/search/?search=${term}`).then(res => items = res.data.items)
 			dispatch({type: RECEIVE_ITEMS_SUCCESS, items, query})
 		} catch(err) {
@@ -43,12 +48,12 @@ export function searchSets(set_title, page_index) {
 		dispatch({ type: SEARCH })
 		try {
 			let sets,
-				query = set_title,
+				query = set_title.toLowerCase().trim(),
 				index;
 			if(page_index !== undefined) {
 				index = page_index
 			} else {
-				index = getState().search.set_page_start_index;
+				index = 0;
 			}
 			await axios.get(`${api_url}/sets/search/?search=${set_title}&start=${index}`).then(res => sets = res.data.sets)
 			dispatch({type: RECEIVE_SETS_SUCCESS, sets, query, index})
@@ -72,7 +77,7 @@ export function searchUsers(user) {
 		dispatch({ type: SEARCH })
 		try {
 			let users,
-				query = user;
+				query = user.toLowerCase().trim();
 			await axios.get(`${api_url}/users/search/?search=${user}`).then(res => user = res.data.user)
 			dispatch({type: RECEIVE_USERS_SUCCESS, users, query})
 		} catch(err) {
@@ -86,7 +91,6 @@ export function searchUsers(user) {
 
 
 export const CLEAR = 'CLEAR';
-
 export function clearSearch() {
 	return {
 		type: CLEAR

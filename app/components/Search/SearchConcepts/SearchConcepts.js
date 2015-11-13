@@ -7,7 +7,7 @@ import ExampleList from './ExampleList';
 
 import RelatedList from './RelatedList';
 
-import NullSearchResults from './NullSearchResults';
+import NullSearchResults from '../NullResults/NullSearchResults';
 
 /* SCSS styles */
 require('./SearchConcepts.scss');

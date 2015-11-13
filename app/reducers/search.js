@@ -1,6 +1,7 @@
 import {
 	SEARCH,
 	CLEAR,
+	CLEAR_PAGES,
 	REQUEST_ITEMS,
 	RECEIVE_ITEMS_SUCCESS,
 	RECEIVE_ITEMS_FAILURE,
@@ -24,7 +25,7 @@ var initial_searchstate = {
 	related: null,
 	sets: null,
 	set_page: 0,
-	set_page_start_index: 0,
+	set_page_next_index: 0,
 	users: null,
 }
 
@@ -69,7 +70,7 @@ export default function search(state = initial_searchstate, action) {
 				// searching: true
 			}
 		case RECEIVE_SETS_SUCCESS:
-			let page = state.set_page,
+			let page,
 				next_index = Number(action.index) + 9;
 			if(action.index < 10) page = 1
 			else page = Math.ceil(action.index / 10) + 1
@@ -78,8 +79,8 @@ export default function search(state = initial_searchstate, action) {
 				searching: false,
 				searchFlag: false,
 				sets: action.sets,
-				set_page: page,
-				set_page_start_index: next_index,
+				set_page: state.query == action.query ? page : 1,
+				set_page_next_index: state.query == action.query ? next_index : 0,
 				query: action.query
 			}
 		case REQUEST_USERS:
@@ -94,6 +95,13 @@ export default function search(state = initial_searchstate, action) {
 				searchFlag: false,
 				users: action.users,
 				query: action.query
+			}
+		case CLEAR_PAGES:
+			return {
+				...state,
+				set_page: 0,
+				set_page_next_index: 0,
+				// TODO: Add other pages
 			}
 		case CLEAR: 
 			return {

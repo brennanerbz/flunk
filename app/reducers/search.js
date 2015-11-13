@@ -33,7 +33,7 @@ var initial_searchstate = {
 	set_page_next_index: 0,
 	users: null,
 	user_page: 0,
-	user_page_next_index: 0,
+	user_page_prev_index: 0,
 	user_page_next_index: 0
 }
 
@@ -83,17 +83,19 @@ export default function search(state = initial_searchstate, action) {
 			let page,
 				prev_index = action.index > 9 ? Number(action.index) - 9 : 0,
 				next_index = Number(action.index) + 9;
-			if(action.index < 10) page = 1
+			if(action.index < 9) page = 1
 			else page = Math.ceil(action.index / 10) + 1
+			console.log(prev_index)
+			console.log(next_index)
 			return {
 				...state,
 				searching: false,
 				searchFlag: false,
 				noResults: action.sets.length === 0,
 				sets: action.sets,
-				set_page: state.query == action.query ? page : 1,
-				set_page_prev_index: state.query == action.query ? prev_index : 0,
-				set_page_next_index: state.query == action.query ? next_index : 0,
+				set_page: page,
+				set_page_prev_index: prev_index,
+				set_page_next_index: next_index,
 				query: action.query
 			}
 		case REQUEST_USERS:
@@ -114,6 +116,7 @@ export default function search(state = initial_searchstate, action) {
 			return {
 				...state,
 				set_page: 0,
+				set_page_prev_index: 0,
 				set_page_next_index: 0,
 				// TODO: Add other pages
 			}

@@ -66,7 +66,7 @@ export default class SearchPaging extends Component {
 		return(
 			<div className="search_paging">
 				<a className={classnames("page_backward", { "disabled": !p_active })}
-				   onMouseOver={() => this.setState({back_hover: true})}
+				   onMouseEnter={() => this.setState({back_hover: true})}
 				   onMouseLeave={() => this.setState({back_hover: false})}
 				   onClick={() => ::this.prevPage(pushState, tab, query, prev_index)}>
 					{
@@ -84,7 +84,7 @@ export default class SearchPaging extends Component {
 				<span className="page_text">Page {page}</span>
 
 				<a className={classnames("page_forward", { "disabled": !n_active })}
-				   onMouseOver={() => this.setState({next_hover: true})}
+				   onMouseEnter={() => this.setState({next_hover: true})}
 				   onMouseLeave={() => this.setState({next_hover: false})}
 				   onClick={() => ::this.nextPage(pushState, tab, query, next_index)}>
 					<img src={n_active ? next_active : next_disabled} 

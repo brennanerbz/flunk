@@ -146,7 +146,6 @@ export default class Search extends Component {
 		this.props.clearSearch()
 	}
 
-
 	render() {
 		const { query } = this.props.params,
 			  { loc, searching, items, noResults } = this.props;
@@ -155,7 +154,7 @@ export default class Search extends Component {
 				<nav className="search_tabs">
 					<SearchTabs changeTab={(tab) => this.setState({current_tab: tab})} {...this.props}/>
 				</nav>
-				<article className={classnames("search_content", "no_sidenav_container", {'sets_page': true})}>
+				<article className={classnames("search_content", "no_sidenav_container", {'sets_page': true}, {"searching": searching})}>
 					{
 						loc.pathname.indexOf('concepts') !== -1 && !searching && items !== null
 						? <SearchConcepts query={query} {...this.props}/>

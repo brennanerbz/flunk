@@ -8,13 +8,20 @@ export default class SearchPeople extends Component {
 	}
 
 	render() {
+		const { users, query, searching } = this.props;
 		return(
 			<div className="search_people_container">
 				<ul className="people_list">
 					{
-						Array.apply(null, Array(5)).map((x, i) => {
-							return <SearchPersonItem/>
+						users !== null && users.length > 0
+						?
+						users.map((x, i) => {
+							return <SearchPersonItem key={i} 
+												     user={x} 
+												     {...this.props}/>
 						})
+						: null
+						
 					}
 				</ul>
 			</div>

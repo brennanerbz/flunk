@@ -6,7 +6,7 @@
 		margin-top: -15px;
 		.search_user_item {
 			display: table;
-			margin-bottom: 20px;
+			margin-bottom: 0px!important;
 			.user_pic_container {
 				display: table-cell;
 				position: relative;
@@ -17,6 +17,7 @@
 						cursor: pointer;
 						padding-top: 30px;
 						height: 85px;	
+						opacity: 0.6;
 					}
 				}				
 				&:hover {

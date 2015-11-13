@@ -22,6 +22,7 @@ require('./Search.scss');
 @connect(state => ({
 	loc: state.router.location,
 	searching: state.search.searching,
+	noResults: state.search.noResults,
 	query: state.search.query,
 	items: state.search.items,
 	term: state.search.term,
@@ -29,7 +30,17 @@ require('./Search.scss');
 	examples: state.search.examples,
 	related: state.search.related,
 	sets: state.search.sets,
-	users: state.search.users
+	users: state.search.users,
+	/* Pagination state */
+	item_page: state.search.item_page,
+	item_page_prev_index: state.search.item_page_prev_index,
+	item_page_next_index: state.search.item_page_next_index,
+	set_page: state.search.set_page,
+	set_page_prev_index: state.search.set_page_prev_index,
+	set_page_next_index: state.search.set_page_next_index,
+	user_page: state.search.user_page,
+	user_page_prev_index: state.search.user_page_prev_index,
+	user_page_next_index: state.search.user_page_next_index
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -40,6 +51,10 @@ require('./Search.scss');
 )
 export default class Search extends Component {
 	static propTypes = {
+	}
+
+	state = {
+		current_tab: 'sets'
 	}
 
 	componentWillMount() {
@@ -62,9 +77,18 @@ export default class Search extends Component {
 		} 
 		else query = params.query;
 		query = query.toLowerCase().trim()
-		if(loc.pathname.indexOf('concepts') !== -1 && items == null) searchItems(query, page_index);
-		if(loc.pathname.indexOf('sets') !== -1 && items == null) searchSets(query, page_index);
-		if(loc.pathname.indexOf('users') !== -1 && items == null) searchUsers(query, page_index);
+		if(loc.pathname.indexOf('concepts') !== -1 && items == null) { 
+			searchItems(query, page_index);
+			this.setState({current_tab: 'concepts'});
+		}
+		if(loc.pathname.indexOf('sets') !== -1 && items == null) {
+			searchSets(query, page_index);
+			this.setState({current_tab: 'sets'});
+		} 
+		if(loc.pathname.indexOf('users') !== -1 && items == null) {
+			searchUsers(query, page_index);
+			this.setState({current_tab: 'users'});
+		} 
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -118,11 +142,11 @@ export default class Search extends Component {
 
 	render() {
 		const { query } = this.props.params,
-			  { loc, searching, items } = this.props;
+			  { loc, searching, items, noResults } = this.props;
 		return(
 			<div className="search_page">
 				<nav className="search_tabs">
-					<SearchTabs {...this.props}/>
+					<SearchTabs changeTab={(tab) => this.setState({current_tab: tab})} {...this.props}/>
 				</nav>
 				<article className={classnames("search_content", "no_sidenav_container", {'sets_page': true})}>
 					{
@@ -141,8 +165,8 @@ export default class Search extends Component {
 						: null
 					}
 					{
-						!searching
-						? <SearchPaging {...this.props}/>
+						!searching && !noResults
+						? <SearchPaging tab={this.state.current_tab} {...this.props}/>
 						: null
 					}
 				</article>

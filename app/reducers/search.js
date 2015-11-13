@@ -16,8 +16,12 @@ import {
 var initial_searchstate = {
 	searching: false,
 	searchFlag: false,
+	noResults: false,
 	query: '',
 	items: null,
+	item_page: 0,
+	item_page_prev_index: 0,
+	item_page_next_index: 0,
 	term: null,
 	term_name: null,
 	definitions: null,
@@ -25,8 +29,12 @@ var initial_searchstate = {
 	related: null,
 	sets: null,
 	set_page: 0,
+	set_page_prev_index: 0,
 	set_page_next_index: 0,
 	users: null,
+	user_page: 0,
+	user_page_next_index: 0,
+	user_page_next_index: 0
 }
 
 export default function search(state = initial_searchstate, action) {
@@ -35,7 +43,8 @@ export default function search(state = initial_searchstate, action) {
 			return {
 				...state,
 				searching: true,
-				searchFlag: true
+				searchFlag: true,
+				noResults: false
 			}
 		case REQUEST_ITEMS:
 			return {
@@ -56,6 +65,7 @@ export default function search(state = initial_searchstate, action) {
 				...state,
 				searching: false,
 				searchFlag: false,
+				noResults: action.items.length === 0,
 				items: action.items,
 				term: term,
 				term_name: term !== null ? term.target : null,
@@ -71,6 +81,7 @@ export default function search(state = initial_searchstate, action) {
 			}
 		case RECEIVE_SETS_SUCCESS:
 			let page,
+				prev_index = action.index > 9 ? Number(action.index) - 9 : 0,
 				next_index = Number(action.index) + 9;
 			if(action.index < 10) page = 1
 			else page = Math.ceil(action.index / 10) + 1
@@ -78,8 +89,10 @@ export default function search(state = initial_searchstate, action) {
 				...state,
 				searching: false,
 				searchFlag: false,
+				noResults: action.sets.length === 0,
 				sets: action.sets,
 				set_page: state.query == action.query ? page : 1,
+				set_page_prev_index: state.query == action.query ? prev_index : 0,
 				set_page_next_index: state.query == action.query ? next_index : 0,
 				query: action.query
 			}
@@ -93,6 +106,7 @@ export default function search(state = initial_searchstate, action) {
 				...state,
 				searching: false,
 				searchFlag: false,
+				noResults: action.users.length === 0,
 				users: action.users,
 				query: action.query
 			}

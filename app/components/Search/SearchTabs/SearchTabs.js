@@ -6,24 +6,33 @@ export default class SearchTabs extends Component {
 	}
 
 	render() {
-		const { loc, query, pushState } = this.props,
+		const { loc, query, pushState, changeTab } = this.props,
 			    pathname = loc.pathname;
 		return(
 			<div className="tabs_container">
 				<ul className="tabs_list">
 					<li className={classnames("tab_item concepts_tab", 
 								   			 {"active": pathname.indexOf('concepts') !== -1})}
-						onClick={() => pushState(null, `/search/concepts/${query}`)}>
+						onClick={() => { 
+							pushState(null, `/search/concepts/${query}`) 
+							changeTab('concepts') 
+						}}>
 						Concepts
 					</li>
 					<li className={classnames("tab_item sets_tab", 
 											 {"active": pathname.indexOf('sets') !== -1})}
-						onClick={() => pushState(null, `/search/sets/${query}`)}>
+						onClick={() => { 
+							pushState(null, `/search/sets/${query}`)
+							changeTab('sets') 
+						}}>
 						Sets
 					</li>
 					<li className={classnames("tab_item people_tab", 
 											 {"active": pathname.indexOf('users') !== -1})}
-						onClick={() => pushState(null, `/search/users/${query}`)}>
+						onClick={() => { 
+							pushState(null, `/search/users/${query}`)
+							changeTab('users') 
+						}}>
 						People
 					</li>
 				</ul>

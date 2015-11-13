@@ -8,7 +8,7 @@ export default class SearchPaging extends Component {
 
 	state = {
 		back_hover: false,
-		next_hover: true
+		next_hover: false
 	}
 
 	prevPage(pushState, tab, query, index) {

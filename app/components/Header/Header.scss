@@ -182,8 +182,6 @@
             }
         }
     }
-    
-     
     .button .svg-icon {
     	vertical-align: middle;
     	color: #85898D;
@@ -197,6 +195,10 @@
                 vertical-align: middle;
                 padding-left: 33px;
                 height: 37px;
+                &:focus {
+                  border-color: rgba(214,214,214,.74);
+                  box-shadow: inset 0 1px 1px rgba(0,0,0, .075)
+                }
             }
         }
 

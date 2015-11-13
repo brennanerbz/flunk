@@ -20,15 +20,21 @@ export function clearPages() {
 export const REQUEST_ITEMS = 'REQUEST_ITEMS';
 export const RECEIVE_ITEMS_SUCCESS = 'RECEIVE_ITEMS_SUCCESS';
 export const RECEIVE_ITEMS_FAILURE = 'RECEIVE_ITEMS_FAILURE';
-export function searchItems(term) {
+export function searchItems(term, page_index) {
 	return async(dispatch, getState) => {
 		if(getState().search.searchFlag) return;
 		dispatch({ type: SEARCH })
 		try {
 			let items,
-				query = term.toLowerCase().trim();
-			await axios.get(`${api_url}/items/search/?search=${term}`).then(res => items = res.data.items)
-			dispatch({type: RECEIVE_ITEMS_SUCCESS, items, query})
+				query = term.toLowerCase().trim(),
+				index;
+			if(page_index !== undefined) {
+				index = page_index
+			} else {
+				index = 0;
+			}
+			await axios.get(`${api_url}/items/search/?search=${term}&start=${index}`).then(res => items = res.data.items)
+			dispatch({type: RECEIVE_ITEMS_SUCCESS, items, query, index})
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_ITEMS_FAILURE,
@@ -71,15 +77,21 @@ export function searchSets(set_title, page_index) {
 export const REQUEST_USERS = 'REQUEST_USERS';
 export const RECEIVE_USERS_SUCCESS = 'RECEIVE_USERS_SUCCESS';
 export const RECEIVE_USERS_FAILURE = 'RECEIVE_USERS_FAILURE';
-export function searchUsers(user) {
+export function searchUsers(user, page_index) {
 	return async(dispatch, getState) => {
 		if(getState().search.searchFlag) return;
 		dispatch({ type: SEARCH })
 		try {
 			let users,
-				query = user.toLowerCase().trim();
-			await axios.get(`${api_url}/users/search/?search=${user}`).then(res => user = res.data.user)
-			dispatch({type: RECEIVE_USERS_SUCCESS, users, query})
+				query = user.toLowerCase().trim(),
+				index;
+			if(page_index !== undefined) {
+				index = page_index
+			} else {
+				index = 0;
+			}
+			await axios.get(`${api_url}/users/search/?search=${user}&start=${index}`).then(res => users = res.data.users)
+			dispatch({type: RECEIVE_USERS_SUCCESS, users, query, index})
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_USERS_FAILURE,

@@ -37,6 +37,19 @@ var initial_searchstate = {
 	user_page_next_index: 0
 }
 
+function pages(index) {
+	let page,
+		prev_index = index > 9 ? Number(index) - 9 : 0,
+		next_index = Number(index) + 9;
+	if(index < 9) page = 1
+	else page = Math.ceil(index / 10) + 1
+	return {
+		page: page,
+		prev_index: prev_index,
+		next_index: next_index
+	}
+}
+
 export default function search(state = initial_searchstate, action) {
 	switch(action.type) {
 		case SEARCH:
@@ -61,6 +74,7 @@ export default function search(state = initial_searchstate, action) {
 			if(definitions !== undefined && definitions[0] !== undefined) term = definitions[0]
 			else if (examples !== undefined && examples[0] !== undefined) term = examples[0]
 			else term = null
+			let item_pages = pages(action.index)
 			return {
 				...state,
 				searching: false,
@@ -72,6 +86,9 @@ export default function search(state = initial_searchstate, action) {
 				definitions: definitions,
 				examples: examples,
 				related: related,
+				item_page: item_pages.page,
+				item_page_prev_index: item_pages.prev_index,
+				item_page_next_index: item_pages.next_index,
 				query: action.query
 			}
 		case REQUEST_SETS:
@@ -80,22 +97,16 @@ export default function search(state = initial_searchstate, action) {
 				// searching: true
 			}
 		case RECEIVE_SETS_SUCCESS:
-			let page,
-				prev_index = action.index > 9 ? Number(action.index) - 9 : 0,
-				next_index = Number(action.index) + 9;
-			if(action.index < 9) page = 1
-			else page = Math.ceil(action.index / 10) + 1
-			console.log(prev_index)
-			console.log(next_index)
+			let set_pages = pages(action.index)
 			return {
 				...state,
 				searching: false,
 				searchFlag: false,
 				noResults: action.sets.length === 0,
 				sets: action.sets,
-				set_page: page,
-				set_page_prev_index: prev_index,
-				set_page_next_index: next_index,
+				set_page: set_pages.page,
+				set_page_prev_index: set_pages.prev_index,
+				set_page_next_index: set_pages.next_index,
 				query: action.query
 			}
 		case REQUEST_USERS:
@@ -104,21 +115,30 @@ export default function search(state = initial_searchstate, action) {
 				// searching: true
 			}
 		case RECEIVE_USERS_SUCCESS:
+			let user_pages = pages(action.index)
 			return {
 				...state,
 				searching: false,
 				searchFlag: false,
-				noResults: action.users.length === 0,
+				noResults: action.users !== undefined ? action.users.length === 0 : true,
 				users: action.users,
+				user_page: user_pages.page,
+				user_page_prev_index: user_pages.prev_index,
+				user_page_next_index: user_pages.next_index,
 				query: action.query
 			}
 		case CLEAR_PAGES:
 			return {
 				...state,
+				item_page: 0,
+				item_page_prev_index: 0,
+				item_page_next_index: 0,
 				set_page: 0,
 				set_page_prev_index: 0,
 				set_page_next_index: 0,
-				// TODO: Add other pages
+				user_page: 0,
+				user_page_prev_index: 0,
+				user_page_next_index: 0
 			}
 		case CLEAR: 
 			return {

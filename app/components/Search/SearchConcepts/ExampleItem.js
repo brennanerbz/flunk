@@ -6,7 +6,7 @@ export default class ExampleItem extends Component {
 	}
 
 	state = {
-	should_render: true
+		should_render: true
 	}
 
 	renderExample(example, term) {
@@ -21,12 +21,11 @@ export default class ExampleItem extends Component {
 		return(
 			<div>
 				{	
-					this.state.should_render
+					content !== null 
 					? 
 					<li className={classnames("definition_item", { "only_child": solo } )}>
 						<p className="definition" 
 						   dangerouslySetInnerHTML={::this.renderExample(content.cue, content.target)}></p>
-						
 					</li>
 					: null
 				}

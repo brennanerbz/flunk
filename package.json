@@ -40,7 +40,8 @@
     "redux": "^3.0.2",
     "redux-logger": "^1.0.5",
     "redux-router": "^1.0.0-beta3",
-    "redux-thunk": "^1.0.0"
+    "redux-thunk": "^1.0.0",
+    "superagent": "^1.4.0"
   },
   "devDependencies": {
     "babel-core": "^5.4.7",

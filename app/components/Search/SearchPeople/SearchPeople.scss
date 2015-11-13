@@ -3,10 +3,12 @@
 	position: relative;
 	width: 540px!important;
 	.people_list {
-		margin-top: -15px;
 		.search_user_item {
 			display: table;
 			margin-bottom: 0px!important;
+			&:first-child {
+				margin-top: -20px;
+			}
 			.user_pic_container {
 				display: table-cell;
 				position: relative;

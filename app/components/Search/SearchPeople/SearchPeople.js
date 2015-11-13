@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import SearchPersonItem from './SearchPersonItem';
+import NullSearchResults from '../NullResults/NullSearchResults';
 
 require('./SearchPeople.scss');
 export default class SearchPeople extends Component {
@@ -22,6 +23,11 @@ export default class SearchPeople extends Component {
 						})
 						: null
 						
+					}
+					{
+						users.length == 0  || users == undefined
+						? <NullSearchResults {...this.props}/>
+						: null
 					}
 				</ul>
 			</div>

@@ -156,7 +156,7 @@ export default class Search extends Component {
 				</nav>
 				<article className={classnames("search_content", "no_sidenav_container", {'sets_page': true}, {"searching": searching})}>
 					{
-						loc.pathname.indexOf('concepts') !== -1 
+						loc.pathname.indexOf('concepts') !== -1 && items !== null
 						? <SearchConcepts query={query} {...this.props}/>
 						: null
 					}

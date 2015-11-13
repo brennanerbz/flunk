@@ -16,38 +16,18 @@ export default class SearchConcepts extends Component {
 	static propTypes = {
 	}
 
-	state = {
-		render_definitions: true,
-		render_examples: true,
-		render_related: true
-	}
-
-	componentWillMount() {
-		const { definitions, examples, related } = this.props;
-		if(definitions == undefined || definitions.length == 0) this.setState({ render_definitions: false });
-		if(examples == undefined || examples.length == 0) this.setState({ render_examples: false });
-		if(related == undefined || related.length == 0) this.setState({ render_related: false });
-	}
-
-	componentWillReceiveProps() {
-		const { definitions, examples, related } = this.props;
-		if(definitions == undefined || definitions.length == 0) this.setState({ render_definitions: false });
-		if(examples == undefined || examples.length == 0) this.setState({ render_examples: false });
-		if(related == undefined || related.length == 0) this.setState({ render_related: false });
-	}
-
 	render() {
-		const { definitions, examples } = this.props;
+		const { definitions, examples, related } = this.props;
 		return(
 			<div className="search_concept_container">
 				{
-					!this.state.render_definitions && !this.state.render_examples
+					(definitions == null || definitions.length === 0) && (examples == null || examples.length === 0)
 					?
 					<NullSearchResults {...this.props}/>
 					: null
 				}
 				{
-					this.state.render_definitions
+					definitions !== null && definitions.length > 0
 					?
 					<div className="spotlight_search">
 						{
@@ -61,13 +41,13 @@ export default class SearchConcepts extends Component {
 					: null
 				}
 				{
-					this.state.render_examples && this.state.render_definitions
+					(examples !== null && examples.length > 0) &&  (definitions !== null && definitions.length > 0) 
 					?
 					<ExampleList {...this.props}/>
 					: null
 				}
 				{
-					this.state.render_examples && !this.state.render_definitions
+					(examples !== null && examples.length > 0) && (definitions == null || definitions.length === 0)
 					? 
 					<div>
 						<div className="spotlight_search">
@@ -78,7 +58,7 @@ export default class SearchConcepts extends Component {
 					: null
 				}
 				{
-					this.state.render_related
+					related !== null && related.length > 0
 					? <RelatedList {...this.props}/>
 					: null
 				}

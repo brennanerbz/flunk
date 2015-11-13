@@ -6,6 +6,7 @@ export default class DefinitionItem extends Component {
 	}
 
 	renderDef(def, term) {
+		if (def == null) return { __html: null}
 		def = def.replace(new RegExp('(^|\\s)(' + term + ')(\\s|$)','ig'), '$1<b>$2</b>$3')
 		return {
 			__html: def

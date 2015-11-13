@@ -31,13 +31,6 @@ request
 */
  // /items/search/?search=knowledge&start=0&end=10
 
-function _request(api_url, term, index) {
-	var req = request.get(`${api_url}/items/search/?search=${term}&start=${index}`)
-	console.log(req._callbacks = () => {})
-	req.timeout(1000)
-	console.log(req)
-}
-
 export const REQUEST_ITEMS = 'REQUEST_ITEMS';
 export const RECEIVE_ITEMS_SUCCESS = 'RECEIVE_ITEMS_SUCCESS';
 export const RECEIVE_ITEMS_FAILURE = 'RECEIVE_ITEMS_FAILURE';
@@ -54,15 +47,15 @@ export function searchItems(term, page_index) {
 			} else {
 				index = 0;
 			}
-			_request(api_url, term, index)
 			request
 			.get(`${api_url}/items/search/?search=${term}&start=${index}`)
 			.end((err, res) => { 
+				console.log('us')
+				console.log(res.body)
 				items = res.body.items 
 				dispatch({type: RECEIVE_ITEMS_SUCCESS, items, query, index})
 			})
 			// await axios.get(`${api_url}/items/search/?search=${term}&start=${index}`).then(res => items = res.data.items)
-			
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_ITEMS_FAILURE,
@@ -91,6 +84,7 @@ export function searchSets(set_title, page_index) {
 			}
 			request
 			.get(`${api_url}/sets/search/?search=${set_title}&start=${index}`)
+			// .set('Access-Control-Allow-Origin', '*')
 			.end((err, res) => { 
 				sets = res.body.sets 
 				dispatch({type: RECEIVE_SETS_SUCCESS, sets, query, index})
@@ -105,7 +99,6 @@ export function searchSets(set_title, page_index) {
 		}
 	}
 }
-
 
  // /users/search/?search=knowledge&start=0&end=10
 export const REQUEST_USERS = 'REQUEST_USERS';

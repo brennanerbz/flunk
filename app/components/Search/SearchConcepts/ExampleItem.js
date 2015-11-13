@@ -10,6 +10,7 @@ export default class ExampleItem extends Component {
 	}
 
 	renderExample(example, term) {
+		if(example == null) return { __html: null }
 		example = example.replace(new RegExp('(^|\\s)(' + term + ')(\\s|$)','ig'), '$1<b>$2</b>$3')
 		return {
 			__html: example

@@ -5,6 +5,7 @@ export default class SearchSetItem extends Component {
 	}
 
 	renderPurpose(def, query) {
+		if(def == null) return { __html: null }
 		let holder,
 			purpose;
 		holder = def.replace(/ *\([^)]*\) */g, "").split(".")[0]

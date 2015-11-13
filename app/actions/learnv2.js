@@ -1,6 +1,6 @@
 import axios from 'axios';
 import moment from 'moment'; 
-
+import request from 'superagent';
 const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 
 /*
@@ -116,6 +116,17 @@ export function newSequence(prevsequence, user_id, set_id, assignment_id) {
 					})
 				} 
 			}
+			// request
+			// .post(`${api_url}/sequences/`)
+			// .send(new_sequence)
+			// .end((err, res) => {
+			// 	let sequence = res.data				
+			// 	dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
+			// 	let slots = res.data.slots['slots']
+			// 	dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
+			// 	dispatch({type: CREATE__MINISEQS, slots})
+			// 	dispatch(fetchTrials())
+			// })
 			await axios.post(`${api_url}/sequences/`, 
 				new_sequence
 			).then(res => {				

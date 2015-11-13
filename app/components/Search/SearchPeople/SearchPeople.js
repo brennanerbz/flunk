@@ -25,7 +25,7 @@ export default class SearchPeople extends Component {
 						
 					}
 					{
-						users.length == 0  || users == undefined
+						users !== null && users.length == 0  
 						? <NullSearchResults {...this.props}/>
 						: null
 					}

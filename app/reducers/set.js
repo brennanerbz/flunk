@@ -93,7 +93,7 @@ export default function setView(state = initial_setstate, action) {
 			let assignment = action.assignment,
 				_associations = [],
 				_items = [];
-			assignment.set.associations.forEach(asc => { 
+			assignment.set.associations.associations.forEach(asc => { 
 				_associations.push(asc) 
 				_items.push(asc.item)
 			})

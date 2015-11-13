@@ -67,8 +67,12 @@ export default function search(state = initial_searchstate, action) {
 		case RECEIVE_ITEMS_SUCCESS:
 			let term = {}, definitions = [], examples = [], related = [], items = action.items, query = action.query;
 			items.forEach((item, i) => { 
-				if (item.target == query && item.cue.indexOf(query) == -1) definitions.push(item)
-				if (item.target == query && item.cue.indexOf(query) !== -1) examples.push(item)
+				if (item.target == query) {
+					if(item.cue !== null) {
+						if(item.cue.indexOf(query) == -1) definitions.push(item)
+						if(item.cue.indexOf(query) !== -1) examples.push(item)
+					}
+				}
 				if (item.target !== query) related.push(item)
 			})
 			if(definitions !== undefined && definitions[0] !== undefined) term = definitions[0]

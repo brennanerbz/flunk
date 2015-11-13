@@ -47,7 +47,8 @@ export function fetchSet(set_id) {
 				type: RECEIVE_SET_SUCCESS,
 				set
 			})
-			if(assignment !== null) {
+			console.log(assignment)
+			if(assignment !== null && undefined) {
 				dispatch(fetchAssignment(assignment.id))
 				return;
 			} else {
@@ -71,10 +72,12 @@ export const RECEIVE_ASSOCIATIONS_SUCCESS = 'RECEIVE_ASSOCIATIONS_SUCCESS';
 export const RECEIVE_ASSOCIATIONS_FAILURE = 'RECEIVE_ASSOCIATIONS_FAILURE';
 export function fetchAssociations(set_id) {
 	return async(dispatch, getState) => {
+		dispatch({type: REQUEST_ASSOCIATIONS})
 		try {
 			let associations;
 			await axios.get(`${api_url}/sets/${set_id}/associations/`)
 			.then((res) => associations = res.data.associations)
+			console.log(associations)
 			dispatch({
 				type: RECEIVE_ASSOCIATIONS_SUCCESS,
 				associations
@@ -103,6 +106,7 @@ export function fetchAssignment(id) {
 		try {
 			let assignment;
 			await axios.get(`${api_url}/assignments/${id}`).then((res) => assignment = res.data)
+			console.log(assignment)
 			dispatch({type: RECEIVE_ASSIGNMENT_SUCCESS, assignment})
 		} catch(err) {
 			dispatch({

@@ -57,6 +57,10 @@ export default class Search extends Component {
 		current_tab: 'sets'
 	}
 
+	scrollTop() {
+		window.scrollTo(0, 0)
+	}
+	    
 	componentWillMount() {
 		const { loc, 
 				params,
@@ -118,19 +122,22 @@ export default class Search extends Component {
 		if((params.query !== next_query || pathname !== next_pathname)
 			&& !searching 
 			&& next_pathname.indexOf('concepts') !== -1) {
-			searchItems(next_query, page_index) 
+			searchItems(next_query, page_index)
+			::this.scrollTop() 
 			return;
 		} 
 		if((params.query !== next_query || pathname !== next_pathname)
 			&& !searching 
 			&& next_pathname.indexOf('sets') !== -1)  { 
 			searchSets(next_query, page_index) 
+			::this.scrollTop()
 			return;
 		}
 		if((params.query !== next_query || pathname !== next_pathname)
 			&& !searching 
 			&& next_pathname.indexOf('users') !== -1)  { 
 			searchUsers(next_query, page_index)
+			::this.scrollTop()
 			return;
 		}
 	}

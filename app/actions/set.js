@@ -1,6 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import keyMirror from 'key-mirror';
+import request from 'superagent';
 
 const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 

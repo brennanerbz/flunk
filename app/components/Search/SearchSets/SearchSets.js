@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import SearchSetItem from './SearchSetItem';
 
+import NullSearchResults from '../NullResults/NullSearchResults';
+
 /* SCSS Styles */
 require('./SearchSets.scss');
 
@@ -8,16 +10,36 @@ export default class SearchSets extends Component {
 	static propTypes = {
 	}
 
+	state = {
+		should_render_results: true
+	}
+
+	componentWillUnmount() {
+		const { clearPages } = this.props;
+		clearPages()
+	}
+
 	render() {
+		const { query, sets, searching } = this.props; 
 		return(
 			<div className="search_sets_container">
-				<ul className="sets_list">
-					{
-						Array.apply(null, Array(5)).map((x, i) => {
-							return <SearchSetItem key={i}/>
-						})
-					}
-				</ul>
+			 {
+			 	sets !== null && sets.length > 0
+			 	?
+			 	<ul className="sets_list">
+			 		{
+			 			sets.map((x, i) => {
+			 				return <SearchSetItem key={i} set={x} key={i} {...this.props}/>
+			 			})
+			 		}
+			 	</ul>
+			 	: null
+			 }
+			 {
+			 	(sets == null || sets.length == 0) && !searching
+			 	? <NullSearchResults {...this.props}/>
+			 	: null
+			 }
 			</div>
 		);
 	}

@@ -31,11 +31,16 @@ export default class Home extends Component {
 	}	
 	
 	render() {	
-		const { sets } = this.props;	 
+		const { sets, isFetching } = this.props;	 
 		return(
 			<div className="main_content">
 				<div className="page_header_wrapper">
-					<h1 className="page_header">Home</h1>
+					{
+					!isFetching
+					? <h1 className="page_header">Home</h1>
+					: <div><span className="page_header loading_label"></span>
+				 	  <span className="loading"><span>.</span><span>.</span><span>.</span></span></div>
+					}
 				</div>
 				<div className="row">
 					<div className="col-sm-12 col-md-11 col-lg-12">	

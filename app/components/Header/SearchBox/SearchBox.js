@@ -6,7 +6,10 @@ import * as searchactions from '../../../actions/search'
 import { pushState } from 'redux-router';
 
 @connect(state => ({
-	searching: state.search.searching
+	loc: state.router.location,
+	searching: state.search.searching,
+	term_name: state.search.term_name,
+	query: state.search.query
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -18,38 +21,92 @@ import { pushState } from 'redux-router';
 export default class SearchBox extends Component {
 	static propTypes = {
 	}
+
 	state = {
 		value: ''
 	}
 
-	componentDidUpdate = () => {
-		// console.log(this.props.loc.pathname)
+	componentDidMount() {
+		let { loc } = this.props,
+				lastSlash = loc.pathname.lastIndexOf("/"),
+				bq = loc.pathname.slice(lastSlash, loc.length).replace("/", ""),
+				page = bq.indexOf('&'),
+				query;
+		if(page !== -1) query = bq.slice(0, page)
+		else query = bq
+		if(loc.pathname.indexOf('search') !== -1) this.setState({value: query});
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if(nextProps.loc.pathname.indexOf('search') == -1) { this.setState({value: ''}); return; }
+			let { loc } = this.props,
+				lastSlash = loc.pathname.lastIndexOf("/"),
+				bq = loc.pathname.slice(lastSlash, loc.length)
+				.replace("/", "")
+				.split("%20")
+				.map(word => word.replace("%20", ""))
+				.join(" "),
+				page = bq.indexOf('&'),
+				query;
+		if(page !== -1) query = bq.slice(0, page)
+		else query = bq
+		if(loc.pathname.indexOf('search') !== -1) this.setState({value: query});
 	}
 
 	handleSearchInput(e) {
-		// console.log(e.target.value)
+		const { searchItems, pushState } = this.props;
 		this.setState({
 			value: e.target.value
 		});
 	}
 
 	handleSearchSubmit() {
-		const { searchItems, searchSets, searchUsers, pushState } = this.props,
-			    value = this.state.value;
-		searchItems(value)
-		pushState(null, `/search/concepts/${value}`)
+		const { searchItems, searchSets, searchUsers, pushState, loc, requestSearch, term_name } = this.props,
+			    value = this.state.value,
+			    lastSlash = loc.pathname.lastIndexOf("/"),
+			    query = loc.pathname.slice(lastSlash, loc.length).replace("/", ""),
+			    pathname = loc.pathname;
+		if(query == value == term_name) return;
+		if(pathname.indexOf('sets') !== -1 || pathname.indexOf('search') == -1) pushState(null, `/search/sets/${value}`)
+		if(pathname.indexOf('concepts') !== -1) pushState(null, `/search/concepts/${value}`)
+		if(pathname.indexOf('users') !== -1) pushState(null, `/search/users/${value}`)
 	}
 
 	render() {
-		const { loc } = this.props;
+		const { loc, searching } = this.props;
 		const searchIcon = require('../assets/SearchIcon.png');
 		return(
 			<div className="input-button-group predictive-search">
 				<button className="button button-inline button-with-icon iconisInNav search_button">
-					<img className="search-icon svg-icon" src={searchIcon}></img>
+					{
+						searching
+						?
+						<div className="sk-fading-circle">
+						  <div className="sk-circle1 sk-circle"></div>
+						  <div className="sk-circle2 sk-circle"></div>
+						  <div className="sk-circle3 sk-circle"></div>
+						  <div className="sk-circle4 sk-circle"></div>
+						  <div className="sk-circle5 sk-circle"></div>
+						  <div className="sk-circle6 sk-circle"></div>
+						  <div className="sk-circle7 sk-circle"></div>
+						  <div className="sk-circle8 sk-circle"></div>
+						  <div className="sk-circle9 sk-circle"></div>
+						  <div className="sk-circle10 sk-circle"></div>
+						  <div className="sk-circle11 sk-circle"></div>
+						  <div className="sk-circle12 sk-circle"></div>
+						</div>
+						: null
+					}
+					{
+						!searching
+						?
+						<img className="search-icon svg-icon" src={searchIcon}></img>
+						: null
+					}
 				</button>
 				<input className="text-input search-input input-rounded"
 					   placeholder="Search"
+					   value={this.state.value}
 					   onChange={::this.handleSearchInput}
 					   onKeyDown={(e) => { if(e.which === 13) { ::this.handleSearchSubmit() } } }
 				/>										

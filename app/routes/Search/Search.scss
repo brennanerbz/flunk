@@ -20,7 +20,7 @@
 				ul {
 					&.tabs_list {
 						margin-bottom: -1px;
-						padding-left: 145px;
+						padding-left: 141px;
 					}
 					li {
 						display: inline-block;
@@ -51,6 +51,9 @@
 			&.sets_page {
 				margin-left: 139px!important;
 			}
+		}
+		&.searching {
+			opacity: 0.4;
 		}
 	}
 }

@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import classnames from 'classnames'; 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { pushState } from 'redux-router';
 const styles = require('./CreateSet.scss');
 
 import * as createactions from '../../actions/createset';
@@ -40,7 +41,8 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	}),
 	dispatch => ({
 		...bindActionCreators({
-			...createactions
+			...createactions,
+			pushState
 		}, dispatch)
 	})
 )
@@ -53,6 +55,13 @@ export default class CreateSetPage extends Component {
 	}
 	static contextTypes = {
 		
+	}
+
+	componentWillMount() {
+		const { params } = this.props;
+		if(params !== null && undefined) {
+			console.log(params)
+		}
 	}
 
 	componentWillUnmount() {

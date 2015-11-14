@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
+import { pushState } from 'redux-router';
 require('./Set.scss')
 
 import * as setactions from '../../actions/set';
@@ -28,7 +29,8 @@ import QuickPractice from '../../components/SetView/QuickPractice/QuickPractice'
 	}),
 	dispatch => ({
 		...bindActionCreators({
-			...setactions
+			...setactions,
+			pushState
 		}, dispatch)
 	})
 )

@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import classnames from 'classnames'; 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { pushState } from 'redux-router';
 const styles = require('./CreateSet.scss');
 
 import * as createactions from '../../actions/createset';
@@ -12,7 +13,13 @@ import TermRows from '../../components/CreateSet/TermRows/TermRows';
 import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSetHeader';
 
 @connect(state => ({
+	/* Router state */
+	router: state.router,
+	loc: state.router.location,
+	/* Transfer state */
+	transfer: state.transfer,
 	/* Flags */
+	isLoadingSet: state.createset.isLoadingSet,
 	isCreatingSet: state.createset.isCreatingSet,
 	isUpdatingSet: state.createset.isUpdatingSet,
 	/* User */
@@ -40,7 +47,8 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	}),
 	dispatch => ({
 		...bindActionCreators({
-			...createactions
+			...createactions,
+			pushState
 		}, dispatch)
 	})
 )
@@ -55,6 +63,19 @@ export default class CreateSetPage extends Component {
 		
 	}
 
+	componentWillMount() {
+		const { params, transfer, loadEditing } = this.props;
+		if(Object.keys(params).length !== 0) loadEditing(params.id)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		// console.log(nextProps.loc)
+	}
+
+	componentDidUpdate() {
+
+	}
+
 	componentWillUnmount() {
 		const { clearSet, reorderSet } = this.props;
 		// TODO: create reorder fn()
@@ -63,14 +84,22 @@ export default class CreateSetPage extends Component {
 	}	
 
 	render() {
+		const { isLoadingSet } = this.props;
 		return(
 			<div className="CreateSetPage no_sidenav_container">
-			  <CreateSetHeader {...this.props}/>                 
-			  <div className="container">
-			    <div className="CreateSetPage-list">
-			      <TermRows {...this.props} />
-			    </div>
-			  </div>
+			{
+				isLoadingSet
+				? null
+				: 
+				<div>
+					<CreateSetHeader {...this.props}/>                 
+					<div className="container">
+						<div className="CreateSetPage-list">
+						<TermRows {...this.props} />
+					</div>
+					</div>
+				</div>
+			}
 			</div>
 		);
 	}

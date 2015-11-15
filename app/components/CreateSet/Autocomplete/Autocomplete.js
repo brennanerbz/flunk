@@ -159,6 +159,15 @@ export default class Autocomplete extends Component {
 	  this._ignoreBlur = false
 	  this._performAutoCompleteOnUpdate = false
 	  this._performAutoCompleteOnKeyUp = false
+	  const { item, wordSide, defSide } = this.props;
+	  if(item == null) return;
+	  if(item !== undefined) 
+	  	if(defSide) { 
+	  		this.setState({ value: item.cue }) 
+	  	}
+	  	if(wordSide) { 
+	  		this.setState({ value: item.target })
+	  	}
 	}
 
 	componentDidMount() {  

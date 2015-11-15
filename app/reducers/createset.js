@@ -62,7 +62,11 @@ import {
   SET_FLAG,
   TITLE_FLAG,
 
-  CLEAR_DEF_CHOICES
+  CLEAR_DEF_CHOICES,
+
+  LOAD_EDITING,
+  LOAD_EDITING_SUCCESS,
+  LOAD_EDITING_FAILURE
 	
 } from '../actions/createset';
 
@@ -98,7 +102,9 @@ var createState = {
   mousePos: -1,
   resizing: false,
   scrolling: false,
-
+  /* Editing */
+  editing: false,
+  isLoadingSet: false
 };
 
 export default function createset(state = createState, action) {
@@ -107,6 +113,27 @@ export default function createset(state = createState, action) {
       return {
         ...state,
         isCreatingSet: true
+      }
+    case LOAD_EDITING: 
+      return {
+        ...state,
+        isLoadingSet: true
+      }
+    case LOAD_EDITING_SUCCESS:
+      return {
+        ...state,
+        editing: true,
+        isLoadingSet: false,
+        set: action.set,
+        id: action.set.id,
+        title: action.set.title,
+        creator_id: action.set.creator_id,
+        creator_username: action.set.creator.username,
+        subjects: action.set.subjects,
+        assignment: action.assignment,
+        items: action.items,
+        associations: action.associations,
+        rows: action.rows
       }
     case CREATE_SET_SUCCESS:
       const set = action.set

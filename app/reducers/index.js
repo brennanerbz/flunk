@@ -6,6 +6,7 @@ import learn from './learnv2';
 import profile from './profile';
 import user from './user';
 import search from './search';
+import transfer from './transfer';
 import { routerStateReducer } from 'redux-router';
 
 const reducers = combineReducers({
@@ -16,6 +17,7 @@ const reducers = combineReducers({
 	profile,
 	user,
 	search,
+	transfer,
 	router: routerStateReducer
 });
 

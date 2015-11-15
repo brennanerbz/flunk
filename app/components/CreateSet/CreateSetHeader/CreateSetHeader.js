@@ -25,6 +25,10 @@ export default class CreateSetHeader extends Component {
 			error_message: false
 		}
 	}
+	componentWillMount() {
+		const { title } = this.props;
+		if(title !== undefined && title.length > 0) this.setState({title: title});
+	}
 	componentWillReceiveProps(nextProps) {
 		if(this.refs.submit_subjects !== undefined) {
 			$(this.refs.submit_subjects).tooltip({
@@ -126,6 +130,7 @@ export default class CreateSetHeader extends Component {
 	              <CreateSetTitle	              	
 	              	autoFocus={true}
 	              	indexForTab={1}
+	              	defaultValue={this.state.title}
 	              	placeholder="Untitled"
 	              	onBlur={this.handleTitleBlur}
 	              	onChange={this.handleTitleChange}

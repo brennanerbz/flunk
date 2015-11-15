@@ -171,7 +171,7 @@ export default class Modal extends Component {
 						  name="purpose_input"
 						  className="textarea"
 						  type="text"
-						  value={set !== null && set.description !== null ? set.description : null}
+						  defaultValue={set !== null && set.description !== null ? set.description : null}
 						  />
 				<span className="modal_input_note">Give your set a purpose that describes what it will be used for</span>
 			</p>

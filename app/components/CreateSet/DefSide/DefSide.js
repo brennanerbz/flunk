@@ -51,6 +51,7 @@ export default class DefSide extends Component {
 				item, 
 				association,
 				subjects } = this.props;
+		// console.log(item.cue)
 		return(
 			<div className="DefSide">
 				<div className="DefSide-textarea">

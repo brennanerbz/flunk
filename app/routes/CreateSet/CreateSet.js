@@ -13,7 +13,13 @@ import TermRows from '../../components/CreateSet/TermRows/TermRows';
 import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSetHeader';
 
 @connect(state => ({
+	/* Router state */
+	router: state.router,
+	loc: state.router.location,
+	/* Transfer state */
+	transfer: state.transfer,
 	/* Flags */
+	isLoadingSet: state.createset.isLoadingSet,
 	isCreatingSet: state.createset.isCreatingSet,
 	isUpdatingSet: state.createset.isUpdatingSet,
 	/* User */
@@ -58,10 +64,16 @@ export default class CreateSetPage extends Component {
 	}
 
 	componentWillMount() {
-		const { params } = this.props;
-		if(params !== null && undefined) {
-			console.log(params)
-		}
+		const { params, transfer, loadEditing } = this.props;
+		if(Object.keys(params).length !== 0) loadEditing(params.id)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		// console.log(nextProps.loc)
+	}
+
+	componentDidUpdate() {
+
 	}
 
 	componentWillUnmount() {
@@ -72,14 +84,22 @@ export default class CreateSetPage extends Component {
 	}	
 
 	render() {
+		const { isLoadingSet } = this.props;
 		return(
 			<div className="CreateSetPage no_sidenav_container">
-			  <CreateSetHeader {...this.props}/>                 
-			  <div className="container">
-			    <div className="CreateSetPage-list">
-			      <TermRows {...this.props} />
-			    </div>
-			  </div>
+			{
+				isLoadingSet
+				? null
+				: 
+				<div>
+					<CreateSetHeader {...this.props}/>                 
+					<div className="container">
+						<div className="CreateSetPage-list">
+						<TermRows {...this.props} />
+					</div>
+					</div>
+				</div>
+			}
 			</div>
 		);
 	}

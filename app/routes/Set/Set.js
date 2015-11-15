@@ -7,6 +7,7 @@ import { pushState } from 'redux-router';
 require('./Set.scss')
 
 import * as setactions from '../../actions/set';
+import * as transfer from '../../actions/transfer';
 
 /* Components */
 import SetHeader from '../../components/SetView/SetHeader/SetHeader';
@@ -15,6 +16,7 @@ import ItemList from '../../components/SetView/ItemList/ItemList';
 import QuickPractice from '../../components/SetView/QuickPractice/QuickPractice';
 
 @connect(state => ({
+	loc: state.router.location,
 	isFetching: state.setView.isFetchingSet,
 	set: state.setView.set,
 	creator_username: state.setView.creator_username,
@@ -30,6 +32,7 @@ import QuickPractice from '../../components/SetView/QuickPractice/QuickPractice'
 	dispatch => ({
 		...bindActionCreators({
 			...setactions,
+			...transfer,
 			pushState
 		}, dispatch)
 	})
@@ -52,7 +55,8 @@ export default class Set extends Component {
 	}
 
 	componentWillUnmount() {
-		const { clearSet } = this.props;
+		const { clearSet, transfer } = this.props;
+		transfer()
 		clearSet()
 	}
 

@@ -3,6 +3,79 @@ import moment from 'moment';
 
 const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 
+
+// /sets/<int: set_id>/associations/
+// /users/<int: user_id>/assignments/					GET
+// /assignments/<int: assignment_id>	
+export const FETCH_CREATE_SET = 'FETCH_CREATE_SET';
+export function fetchSet(user_id, set_id) {
+	return async(dispatch, getState) => {
+		dispatch({type: FETCH_CREATE_SET})
+		try {
+			let set = {}, items = {}, associations = {}, rows = [],
+			assignment = getState().sets.assignments.filter(assign => assign.set_id == set_id)[0]
+			if(assignment == undefined) {
+				setTimeout(() => {
+					dispatch(fetchSet(user_id, set_id))
+				}, 150)
+			}
+			await axios.get(`${api_url}/sets/${set_id}`).then(res => { 
+				set = res.data 
+			})
+			await axios.get(`${api_url}/assignments/${assignment.id}`).then((res) => {
+				assignment = res.data
+			})
+			assignment.set.associations.associations.forEach(asc => {
+				items[asc.item_id] = asc.item
+				associations[asc.id] = asc
+				rows.push(asc.id)
+			})
+			dispatch({type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows})
+			// console.log(set, assignment, items, associations, rows)
+		} catch(err) {
+			dispatch({
+				type: LOAD_EDITING_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
+
+
+/*
+---Load the transfer state if editing ----
+*/
+export const LOAD_EDITING = 'LOAD_EDITING';
+export const LOAD_EDITING_SUCCESS = 'LOAD_EDITING_SUCCESS';
+export const LOAD_EDITING_FAILURE = 'LOAD_EDITING_FAILURE';
+export function loadEditing(set_id) {
+	return async(dispatch, getState) => {
+		dispatch({ type: LOAD_EDITING })
+		try {
+			let transferState = getState().transfer,
+				user = getState().user.user,
+				set, assignment, items, associations, rows;
+			if(transferState.set !== null && undefined) {
+				set = transferState.set
+				assignment = transferState.assignment
+				items = transferState.items
+				associations = transferState.associations
+				associations.forEach(asc => rows.push(asc.id))
+				dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows })
+			} else {
+				dispatch(fetchSet(user.id, set_id))
+			}	
+		} catch(err) {
+			dispatch({
+				type: LOAD_EDITING_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
+
+
+
 /*
 @params: { 	
 

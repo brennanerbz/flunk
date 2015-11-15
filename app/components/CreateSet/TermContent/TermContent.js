@@ -63,11 +63,11 @@ export default class TermContent extends Component {
     }
     if(item !== null) {
       if(item.target !== null && item.target.toLowerCase().trim() !== word.toLowerCase().trim()) {
-        if(item.creator_id !== user.id) { // TODO: soon to be item.editable !== true
+        if(item.finalized == null) { 
           updateItem(item, { name: 'target', prop: word })
           return;
         }
-        if(item.creator_id === user.id) { // TODO: soon to be item.editable == true
+        if(item.finalized !== null) { 
           createItem(index, { name: 'child', prop: item }, { name: 'target', prop: word })
         }
       }
@@ -97,11 +97,11 @@ export default class TermContent extends Component {
     }
     if(item !== null) {
       if(item.cue !== null && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()) {
-        if(item.creator_id !== user.id) { // TODO: soon to be item.editable !== true
+        if(item.finalized == null) { // TODO: soon to be item.editable !== true
           updateItem(item, { name: 'cue', prop: def })
           return;
         }
-        if(item.creator_id === user.id) { // TODO: soon to be item.editable == true
+        if(item.finalized !== null) { // TODO: soon to be item.editable == true
           createItem(index, {name: 'child', prop: item}, { name: 'cue', prop: def })
         }
       }

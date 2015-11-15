@@ -54,13 +54,16 @@ export function loadEditing(set_id) {
 		try {
 			let transferState = getState().transfer,
 				user = getState().user.user,
-				set, assignment, items, associations, rows;
-			if(transferState.set !== null && undefined) {
+				set, assignment, items = {}, associations = {}, rows = [];
+			console.log(transferState)
+			if(transferState.set !== null) {
 				set = transferState.set
 				assignment = transferState.assignment
-				items = transferState.items
-				associations = transferState.associations
-				associations.forEach(asc => rows.push(asc.id))
+				transferState.associations.forEach(asc => {
+					items[asc.item_id] = asc.item
+					associations[asc.id] = asc
+					rows.push(asc.id)
+				})
 				dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows })
 			} else {
 				dispatch(fetchSet(user.id, set_id))
@@ -524,12 +527,10 @@ export function updateItem(_item, ...args) {
 					}
 				}
 			}
-			await axios.put(`${api_url}/items/${item_id}`, item)
+			await axios.put(`${api_url}/items/${item.id}`, item)
 			.then(res => item = res.data)
 			dispatch({type: UPDATE_ITEM_SUCCESS, item})
-			if(item.subjects !== getState().createset.items[item_id].subjects) {
-				dispatch(updateSetSubjects())
-			}
+			dispatch(updateSetSubjects())
 		} catch(err) {
 			dispatch({
 				type: UPDATE_ITEM_FAILURE,

@@ -210,7 +210,7 @@ export default function createset(state = createState, action) {
       updated_items[newitem_id] = newitem
       return {
         ...state,
-        items: items
+        items: updated_items
       }
     case UPDATE_ASSOCIATION_SUCCESS:
       let updated_associations = Object.assign({}, state.associations),

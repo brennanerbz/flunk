@@ -19,6 +19,7 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	/* Transfer state */
 	transfer: state.transfer,
 	/* Flags */
+	editing: state.createset.editing,
 	isLoadingSet: state.createset.isLoadingSet,
 	isCreatingSet: state.createset.isCreatingSet,
 	isUpdatingSet: state.createset.isUpdatingSet,

@@ -18,7 +18,7 @@ export default class ButtonGroup extends Component {
                             ? 
                             <button className={classnames("button button-primary", {"disaje": set == null })}
                                     onClick={() => "Done"}>
-                                    Test run
+                                    Done
                             </button>
                             : null
                         }

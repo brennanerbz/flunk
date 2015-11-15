@@ -55,7 +55,6 @@ export function loadEditing(set_id) {
 			let transferState = getState().transfer,
 				user = getState().user.user,
 				set, assignment, items = {}, associations = {}, rows = [];
-			console.log(transferState)
 			if(transferState.set !== null) {
 				set = transferState.set
 				assignment = transferState.assignment
@@ -64,7 +63,9 @@ export function loadEditing(set_id) {
 					associations[asc.id] = asc
 					rows.push(asc.id)
 				})
-				dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows })
+				setTimeout(() => {
+					dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows })
+				}, 50)
 			} else {
 				dispatch(fetchSet(user.id, set_id))
 			}	
@@ -316,6 +317,28 @@ export function updateAssignment(...args) {
 		} catch(err) {
 			dispatch({
 				type: UPDATE_ASSIGNMENT_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
+
+
+// /assignments/<int: assignment_id>
+export const DELETE_ASSIGNMENT = 'DELETE_ASSIGNMENT';
+export const DELETE_ASSIGNMENT_SUCCESS = 'DELETE_ASSIGNMENT_SUCCESS';
+export const DELETE_ASSIGNMENT_FAILURE = 'DELETE_ASSIGNMENT_FAILURE';
+export function deleteAssignment(assignment_id, pushState) {
+	return async(dispatch, getState) => {
+		dispatch({ type: DELETE_ASSIGNMENT })
+		try {
+			await axios.delete(`${api_url}/assignments/${assignment_id}`).then(res => {
+				dispatch({type: DELETE_ASSIGNMENT_SUCCESS})
+				pushState(null, '/')
+			})
+		} catch(err) {
+			dispatch({
+				type: DELETE_ASSIGNMENT_FAILURE,
 				error: Error(err)
 			})
 		}
@@ -606,7 +629,7 @@ export function updateAssociation(asc, ...args) {
 					let arg = args[i],
 						name = arg.name,
 						prop = arg.prop;
-					if(name == 'adopted') {
+					if(name == 'item_adopted') {
 						adopted = true;
 					}
 					if(association.hasOwnProperty(name)) {
@@ -620,6 +643,44 @@ export function updateAssociation(asc, ...args) {
 		} catch(err) {
 			dispatch({
 				type: UPDATE_ASSOCIATION_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
+
+/*/sets/<int: set_id>/associations/reorder	
+{ 	
+‘associations’: [
+				{
+		 			‘association_id’: Integer,
+					‘order’: Integer
+				}, ...
+			]
+}
+*/
+export const REORDER = 'REORDER';
+export const REORDER_SUCCESS = 'REORDER_SUCCESS';
+export const REORDER_FAILURE = 'REORDER_FAILURE';
+export function reorder() {
+	return async(dispatch, getState) => {
+		dispatch({type: REORDER})
+		try {
+			let acs = { associations: [] }
+			let rows = getState().createset.rows,
+				set_id = getState().createset.id
+			for(var i = 0; i < rows.length; i++) {
+				if(rows[i] == null) return;
+				acs.associations.push({
+					id: rows[i],
+					order: i + 1
+				})
+			}
+			console.log(acs)
+			await axios.put(`${api_url}/sets/${set_id}/associations/reorder`, acs)
+		} catch(err) {
+			dispatch({
+				type: REORDER_FAILURE,
 				error: Error(err)
 			})
 		}

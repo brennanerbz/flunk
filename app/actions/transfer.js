@@ -7,10 +7,10 @@ export function transfer() {
 		try {
 			let setView = getState().setView,
 				set = setView.set,
-				assignment= setView.assignment,
+				assignment = setView.assignment,
 				items = setView.items,
 				associations = setView.associations
-			dispatch({ type: TRANSFER_STATE_SUCCESS, setView })
+			dispatch({ type: TRANSFER_STATE_SUCCESS, set, assignment, items, associations})
 		} catch(err) {
 			dispatch({
 				type: TRANSFER_STATE_FAILURE,

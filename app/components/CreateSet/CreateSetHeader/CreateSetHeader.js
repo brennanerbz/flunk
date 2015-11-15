@@ -22,14 +22,39 @@ export default class CreateSetHeader extends Component {
 			subjects: null,
 			show_edit: false,
 			subject_editor_open: false,
-			error_message: false
+			full_error_message: false,
+			item_error_message: false
 		}
 	}
 	componentWillMount() {
-		const { title } = this.props;
+		const { title, subjects } = this.props;
+		let subject_names = [],
+			subs,
+			length = 0;
 		if(title !== undefined && title.length > 0) this.setState({title: title});
+		if(subjects !== undefined && subjects.length > 0) { 
+			subs = subjects.slice(0, 3)
+			subs.forEach(sub => subject_names.push(sub.name))
+			subject_names = subject_names.map((sub, i) => { 
+				if(i == 0) return sub
+				else return " " + sub
+			})
+			this.setState({subjects: subject_names})
+		}
+	}
+	componentWillUnmount() {
+		this.setState({
+			title: '',
+			purpose: '',
+			subjects: null,
+			show_edit: false,
+			subject_editor_open: false,
+			full_error_message: false,
+			item_error_message: false
+		});
 	}
 	componentWillReceiveProps(nextProps) {
+		const { title } = this.props;
 		if(this.refs.submit_subjects !== undefined) {
 			$(this.refs.submit_subjects).tooltip({
 				delay: { show: 1500, hide: 50},
@@ -38,8 +63,7 @@ export default class CreateSetHeader extends Component {
 		}
 		if(nextProps.set !== null) this.setState({ error_message: false });
 	}
-	handleTitleChange = (e) => {
-		const title = e.target.value;
+	handleTitleChange = (title) => {
 		this.setState({
 			title: title
 		});
@@ -68,14 +92,22 @@ export default class CreateSetHeader extends Component {
 				assignment,
 			    title,
 			    items,
+			    associations,
 			    set } = this.props;
-		if((title || set) == null) {
-			this.setState({ error_message: true });
+		if(title == null && (associations !== undefined  || Object.keys(associations).length < 1)) {
+			this.setState({ full_error_message: true });
+			return;
+		}
+		if(associations !== undefined || Object.keys(associations.length < 1)) {
+			this.setState({item_error_message: true})
 			return;
 		}
 		if(set !== null && assignment == null) {
 			createAssignment(set.id, 'admin')
 			// TODO: createSequence()
+		}
+		if((set && assignment) !== null) {
+			pushState(null, `/set/${set.id}`)
 		}
 	}
 
@@ -126,20 +158,26 @@ export default class CreateSetHeader extends Component {
 	          <div className="container CreateSetHeader-container">	
 	            <div className="CreateSetHeader-wrapper"
 	            	 onMouseOver={() => this.setState({ show_edit: true })}
-	              	 onMouseLeave={() => this.setState({ show_edit: false })}>	              
-	              <CreateSetTitle	              	
-	              	autoFocus={true}
-	              	indexForTab={1}
-	              	defaultValue={this.state.title}
-	              	placeholder="Untitled"
-	              	onBlur={this.handleTitleBlur}
-	              	onChange={this.handleTitleChange}
-	              	onFocus={this.handleTitleFocus}/>
+	              	 onMouseLeave={() => this.setState({ show_edit: false })}>	  
+	              {
+	              	!this.props.isLoadingSet
+	              	?
+	              	<CreateSetTitle	              	
+	              		autoFocus={true}
+	              		indexForTab={1}
+	              		titleSide={true}
+	              		placeholder="Untitled"
+	              		titleBlur={this.handleTitleBlur}
+	              		titleChange={(title) => this.handleTitleChange(title)}
+	              		onFocus={this.handleTitleFocus}
+	              		{...this.props}/>
+	              	: null
+	              }            
 	              	{
-	              		this.state.error_message
+	              		this.state.full_error_message
 	              		?
 	              		<div className="error_message">
-	              			<p className="danger">Please enter a title or two terms to create your set.</p>
+	              			<p className="danger">Please enter a title and two terms to create your set.</p>
 	              		</div>
 	              		: null
 	              	}
@@ -154,7 +192,7 @@ export default class CreateSetHeader extends Component {
 		              				<p>
 		              					{
 		              						i === subjects.length - 1
-		              						? subject
+		              						? subject 
 		              						: subject += ", "
 		              					}
 		              				</p>
@@ -188,9 +226,9 @@ export default class CreateSetHeader extends Component {
 									  ref="subject_text"
 									  name="subject_text" 
 									  className="subject_text"
-									  defaultValue={subjects !== null ? subject_names : null} 
+									  value={subjects !== null ? this.state.subjects : null} 
 									  onFocus={() => { 
-									  	this.setState({subjects: subject_names })
+									  	this.setState({subjects: subject_names})
 									  	if(this.state.subjects !== null 
 									  	   && typeof this.state.subjects == 'string') length = this.state.subjects.length
 									  	setTimeout(() => { this.refs.subject_text.setSelectionRange(length, length) }, 1) 
@@ -225,7 +263,16 @@ export default class CreateSetHeader extends Component {
 						</div>
 					: null
 	              }
+	              {
+	              	this.state.item_error_message
+	              	?
+	              	<div className="error_message">
+	              		<p className="danger">Please enter at least two terms to create your set.</p>
+	              	</div>
+	              	: null
+	              }
 	            </div>
+
 	            <ButtonGroup onSave={::this.handleSave}
 	            		     {...this.props}
 	            />	                        

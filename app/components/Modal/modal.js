@@ -180,7 +180,8 @@ export default class Modal extends Component {
 	}
 
 	render() {
-		const { type } = this.props;
+		const { type, assignment, pushState, deleteAssignment } = this.props;
+		console.log(assignment)
 		return(
 			<div ref="modal" 
 				 className="modal fade" 
@@ -282,7 +283,9 @@ export default class Modal extends Component {
 							{
 								type == 'confirm'
 								?
-								<button className="button button-danger">
+								<button className="button button-danger" 
+										data-dismiss="modal"
+										onClick={() => deleteAssignment(assignment.id, pushState)}>
 									Delete set
 								</button>
 								: null

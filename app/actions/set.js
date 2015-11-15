@@ -48,7 +48,7 @@ export function fetchSet(set_id) {
 				type: RECEIVE_SET_SUCCESS,
 				set
 			})
-			if(assignment !== null && undefined) {
+			if(assignment !== (null && undefined)) {
 				dispatch(fetchAssignment(assignment.id))
 				return;
 			} else {

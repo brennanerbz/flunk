@@ -68,7 +68,7 @@ export default class DefSide extends Component {
 	                     updateAssociation(association, 
 	                     				  {name: 'item', prop: _item}, 
 	                     				  {name: 'item_id', prop: _item.id },
-	                     				  {name: 'adopted'})
+	                     				  {name: 'item_adopted', prop: true})
 	                  }}
 	                  onInput={(event, value) => value}
 	                  onFocus={(event, value) => {

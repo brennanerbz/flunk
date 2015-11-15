@@ -219,7 +219,7 @@ export function fetchSlots(sequence_id) {
 		try {
 			let current_sequence = getState().learn.current_sequence,
 				slots;
-			await axios.get(`${api_url}/sequences/${sequence_id}/slots`).then(res => slots = res.data.slots)
+			await axios.get(`${api_url}/sequences/${sequence_id}/slots/`).then(res => slots = res.data.slots)
 			if(slots !== undefined) {
 				let unfinished_slots = slots.filter(slot => slot.completed !== true)
 				if(unfinished_slots.length === 0) {

@@ -7,6 +7,7 @@ import { pushState } from 'redux-router';
 const styles = require('./CreateSet.scss');
 
 import * as createactions from '../../actions/createset';
+import * as transfer from '../../actions/transfer';
 
 /* Components */
 import TermRows from '../../components/CreateSet/TermRows/TermRows';
@@ -20,6 +21,7 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	transfer: state.transfer,
 	/* Flags */
 	editing: state.createset.editing,
+	deleted: state.createset.deleted,
 	isLoadingSet: state.createset.isLoadingSet,
 	isCreatingSet: state.createset.isCreatingSet,
 	isUpdatingSet: state.createset.isUpdatingSet,
@@ -49,6 +51,7 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	dispatch => ({
 		...bindActionCreators({
 			...createactions,
+			...transfer,
 			pushState
 		}, dispatch)
 	})
@@ -78,10 +81,32 @@ export default class CreateSetPage extends Component {
 	}
 
 	componentWillUnmount() {
-		const { clearSet, reorderSet } = this.props;
-		// TODO: create reorder fn()
-		// reorderSet()
-		setTimeout(() => { clearSet() }, 5)
+		const { set, 
+				updateSet, 
+				clearSet, 
+				assignment, 
+				createAssignment,
+				associations,
+				reorder, 
+				clearTransferState,
+				deleted				 
+				} = this.props;
+		clearTransferState()
+
+		if(set !== null) {
+			if(assignment !== null) reorder()
+			if(assignment == null && !deleted) {
+				updateSet(set, {name: 'finalized', prop: false})
+				createAssignment(set.id)
+				if(associations !== (null)) {
+					if(Object.keys(associations).length > 1) reorder()
+				} 
+			}
+		}
+
+		setTimeout(() => { 
+			clearSet()  
+		}, 5)
 	}	
 
 	render() {

@@ -19,10 +19,13 @@ export default function transfer (state = transferstate, action) {
 			return {
 				...state
 			}
-		
 		case TRANSFER_STATE_SUCCESS:
 			return {
-				...state
+				...state,
+				set: action.set,
+				assignment: action.assignment,
+				items: action.items,
+				associations: action.associations
 			}
 		case CLEAR_TRANSFER_STATE:
 			return {

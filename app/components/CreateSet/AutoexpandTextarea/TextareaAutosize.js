@@ -21,13 +21,24 @@ export default class TextareaAutosize extends Component {
 		rows: 1
 	}
 
+	state = {
+		title: '',
+		blurred: false
+	}
+
+	componentWillMount() {
+		const { title } = this.props;
+		if(title !== undefined) this.setState({ title: title }) 
+	}
+
 	componentDidMount() {
-	  const { tabIndex } = this.props;
+	  const { tabIndex, title } = this.props;
 	  const node = this.refs["textarea" + tabIndex];
 	  autosize(node);
 	  if (this.props.onResize) {
 	    node.addEventListener(RESIZED, this.props.onResize);
 	  }	  
+	  if(title !== undefined) this.setState({ title: title }) 
 	}
 	
 
@@ -66,10 +77,29 @@ export default class TextareaAutosize extends Component {
 	}
 
 	render() {
-	  const { tabIndex, defSide } = this.props;    
+	  const { tabIndex, defSide, title } = this.props;    
 	  return (
 	    <div>
-	      <textarea {...this.props}
+	      <textarea 
+	      		  {...this.props}
+	      		  rows="1" 
+	      		  value={this.state.title}
+	      		  onChange={(e) => { 
+	      		  	this.setState({title: e.target.value}) 
+	      		  	this.props.titleChange(e.target.value)
+	      		  }}
+	      		  onFocus={() => {
+	      		  	let length;
+	      		  	this.setState({blurred: true})
+	      		  	if(this.state.title !== undefined 
+	      		  	   && !this.state.blurred) {
+	      		  		length = this.state.title.length
+	      		  		setTimeout(() => { 
+	      		  			this.refs[`textarea${tabIndex}`].setSelectionRange(length, length) 
+	      		  		}, 5) 
+	      		  	}
+	      		  }}
+      		  	  onBlur={() => this.props.titleBlur()}
 	              onKeyDown={this.handleKeyDown} 
 	              tabIndex={tabIndex}
 	              ref={`textarea${tabIndex}`}>

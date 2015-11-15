@@ -18,18 +18,33 @@ export function fetchAssignments(user_id) {
 			let assignments;
 			request
 			.get(`${api_url}/users/${user_id}/assignments/`)
-			// .set('Access-Control-Allow-Origin', '*')
 			.end((err, res) => { 
 				assignments = res.body.assignments 
 				dispatch({type: RECEIVE_ASSIGNMENTS_SUCCESS, assignments })
 			})
-			// await axios.get(`${api_url}/users/${user_id}/assignments/`)
-			// .then((res) => assignments = res.data.assignments)
-			// dispatch({type: RECEIVE_ASSIGNMENTS_SUCCESS, assignments})
 		} catch (err) {
 			dispatch({
 				type: RECEIVE_ASSINGMENTS_FAILURE,
 				error: Error('Can\'t fetch sets')
+			})
+		}
+	}
+}
+
+export function pollAssignments(user_id) {
+	return async(dispatch, getState) => {
+		try {
+			let assignments;
+			request
+			.get(`${api_url}/users/${user_id}/assignments/`)
+			.end((err, res) => { 
+				assignments = res.body.assignments 
+				dispatch({type: RECEIVE_ASSIGNMENTS_SUCCESS, assignments })
+			})
+		} catch(err) {
+			dispatch({
+				type: RECEIVE_ASSINGMENTS_FAILURE,
+				error: Error(err)
 			})
 		}
 	}

@@ -18,6 +18,8 @@ import {
   UPDATE_ASSIGNMENT_SUCCESS,
   UPDATE_ASSIGNMENT_FAILURE,
 
+  DELETE_ASSIGNMENT_SUCCESS,
+
   GET_TERM_SUGGESTIONS,
   TERM_SUGGESTIONS_SUCCESS,
   TERM_SUGGESTIONS_FAILURE,
@@ -80,6 +82,7 @@ var createState = {
   activeContext: true,
   set: null,
   assignment: null,
+  deleted: false,
   title: '',
   id: null,
   purpose: '',
@@ -133,7 +136,8 @@ export default function createset(state = createState, action) {
         assignment: action.assignment,
         items: action.items,
         associations: action.associations,
-        rows: action.rows
+        rows: action.rows.length > 1 ? action.rows : [null, null],
+        count: action.associations.length > 0 ? action.associations[action.rows.slice(-1)[0]].order + 1 : 1
       }
     case CREATE_SET_SUCCESS:
       const set = action.set
@@ -172,6 +176,12 @@ export default function createset(state = createState, action) {
       return {
         ...state,
         assignment: action.assignment
+      }
+    case DELETE_ASSIGNMENT_SUCCESS:
+      return {
+        ...state,
+        assignment: null,
+        deleted: true
       }
     case CREATE_ITEM:
       return {
@@ -224,10 +234,14 @@ export default function createset(state = createState, action) {
           i = action.index;
       /* updating the associations */
       updated_associations[naid] = new_association;
-      /* deleting old item, replacing it with new */
-      _items_[nid] = new_item;
-      _items_[oid] = _items_[nid];
-      delete _items_[oid];
+      /* check if adopting same item */
+      if(_items_[nid] == _items_[oid]) console.log("good")
+      else {
+        /* deleting old item, replacing it with new */
+        _items_[nid] = new_item;
+        _items_[oid] = _items_[nid];
+        delete _items_[oid];
+      }
       return {
         ...state,
         associations: updated_associations,

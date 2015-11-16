@@ -50,7 +50,9 @@ import {
 
 	ADD_ROW,
 	EDIT_ROW,
+
 	DELETE_ROW,
+  DELETE_ROW_SUCCESS,
 
 	FLIP_ACTIVESIDE,
 	ACTIVATE_ROW,
@@ -127,7 +129,9 @@ export function createset(state = createState, action) {
           length = action.rows.length;
       if(length > 0) {
         if(length === 1) load_rows.splice(0, 1, action.rows[0])
-        if(length > 1) load_rows = action.rows
+        if(length > 1) load_rows = action.rows.sort((a, b) => {
+          return action.associations[a].order - action.associations[b].order
+        })
       } 
       return {
         ...state,
@@ -143,7 +147,9 @@ export function createset(state = createState, action) {
         items: action.items,
         associations: action.associations,
         rows: load_rows,
-        count: action.associations.length > 0 ? action.associations[action.rows.slice(-1)[0]].order + 1 : 1,
+        count: Object.keys(action.associations).length > 0 
+               ? action.associations[action.rows.slice(-1)[0]].order + 1 
+               : 1,
         deleted: false
       }
     case CREATE_SET_SUCCESS:
@@ -301,20 +307,13 @@ export function createset(state = createState, action) {
         ...state,
         title_flag: action.flag
       }
-    case DELETE_ROW:
+    case DELETE_ROW_SUCCESS:
       let o_rows = state.rows,
-          updated_asc = Object.assign({}, state.associations),
-          updated_itms = Object.assign({}, state.items),
-          n_rows = o_rows.filter((x, i) => i !== action.index)
-          // removed = o_rows.splice(action.index, 1);
-      // delete updated_itms[updated_asc[removed].item_id];
-      // delete updated_asc[removed];
+          n_rows = o_rows.filter((x, i) => x !== action.asc.id)
       console.log(n_rows)
       return {
         ...state,
         rows: n_rows
-        // associations: updated_asc,
-        // items: updated_itms
       }
     case FLIP_ACTIVESIDE:
       const active = state.activeContext;

@@ -26,7 +26,7 @@ import QuickPractice from '../../components/SetView/QuickPractice/QuickPractice'
 	item_count: state.setView.item_count,
 	subjects: state.setView.subjects,
 	doc: state.setView.doc,
-	associations: state.setView.assocations,
+	associations: state.setView.associations,
 	items: state.setView.items
 	}),
 	dispatch => ({
@@ -61,7 +61,7 @@ export default class Set extends Component {
 	}
 
 	render() {
-		const { isFetching } = this.props;
+		const { isFetching, associations } = this.props;
 		return(
 			<div className="set_view main_content">
 				{

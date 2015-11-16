@@ -75,6 +75,9 @@ export default class DefSide extends Component {
 	                     if(subjects !== undefined && subjects.length > 0 && item !== null) {
 	         				this.setState({loading: true})
 	         				getDefSuggestions(item.id)
+	         				setTimeout(() => {
+	         					getDefSuggestions(item.id)
+	         				}, 250)
 	         			}
 	                   }}
 	                  renderItem={(_item, isHighlighted) => (

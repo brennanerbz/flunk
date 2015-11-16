@@ -61,7 +61,8 @@ export default class CreateSetHeader extends Component {
 				template: '<div class="tooltip bottom_tool" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
 			})
 		}
-		if(nextProps.set !== null) this.setState({ error_message: false });
+		if(nextProps.title.length > 0) this.setState({ full_error_message: false });
+		if(nextProps.associations !== null && nextProps.associations.length > 1) this.setState({item_error_message: false});
 	}
 	handleTitleChange = (title) => {
 		this.setState({
@@ -93,17 +94,19 @@ export default class CreateSetHeader extends Component {
 			    title,
 			    items,
 			    associations,
+			    pushState,
 			    set } = this.props;
-		if(title == null && (associations !== undefined  || Object.keys(associations).length < 1)) {
+		if(title.length === 0 && (associations == null  || Object.keys(associations).length < 1)) {
 			this.setState({ full_error_message: true });
 			return;
 		}
-		if(associations !== undefined || Object.keys(associations.length < 1)) {
+		if(associations == null || Object.keys(associations).length < 1) {
 			this.setState({item_error_message: true})
 			return;
 		}
 		if(set !== null && assignment == null) {
 			createAssignment(set.id, 'admin')
+			return;
 			// TODO: createSequence()
 		}
 		if((set && assignment) !== null) {

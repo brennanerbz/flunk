@@ -54,6 +54,8 @@ export default class TermContent extends Component {
     setFlag(true)
 
     this.setState({ word: word })
+    console.log("word")
+    console.log(item)
     if(item == null) {
       if (word.length > 0) {
         console.log("creating target")
@@ -65,7 +67,7 @@ export default class TermContent extends Component {
       if(item.target == null || 
         (item.target !== null 
         && item.target.toLowerCase().trim() !== word.toLowerCase().trim()
-        && item.finalized == (null || false))) {
+        && item.finalized == null)) {
         console.log("updating target")
         updateItem(item, { name: 'target', prop: word })
         return;
@@ -92,7 +94,8 @@ export default class TermContent extends Component {
     setFlag(false)
 
     this.setState({ def: def })
-
+    console.log("def")
+    console.log(item)
     if(item == null) {
       if (def.length > 0) {
         console.log("creating cue")
@@ -104,7 +107,7 @@ export default class TermContent extends Component {
       if(item.cue == null || 
         (item.cue !== null 
         && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
-        && item.finalized == (null || false))) {
+        && item.finalized == null )) {
         console.log("updating cue")
         updateItem(item, { name: 'cue', prop: def })
         return;

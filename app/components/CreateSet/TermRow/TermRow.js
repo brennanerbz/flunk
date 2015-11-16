@@ -12,8 +12,9 @@ export default class TermRow extends Component {
 	}
 
 	handleDelete = () => {
-		const { index, deleteRow } = this.props;
- 		deleteRow(index)
+		const { index, deleteRow, asc_id, associations } = this.props,
+			    association = associations[asc_id]
+ 		deleteRow(index, association)
 	}	
 
 	render() {

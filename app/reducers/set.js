@@ -97,6 +97,7 @@ export default function setView(state = initial_setstate, action) {
 				_associations.push(asc) 
 				_items.push(asc.item)
 			})
+			console.log(_associations)
 			return {
 				...state,
 				assignment: assignment,

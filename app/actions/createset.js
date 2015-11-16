@@ -599,6 +599,7 @@ export function createAssociation(item_id, index) {
 				set_id: set_id,
 				order: count
 			})
+			console.log(association)
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => association = res.data)
 			dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index})
@@ -671,16 +672,14 @@ export function reorder() {
 		dispatch({type: REORDER})
 		try {
 			let acs = { associations: [] }
-			let rows = getState().createset.rows,
+			let rows = getState().createset.rows.filter(row => row !== null),
 				set_id = getState().createset.id
 			for(var i = 0; i < rows.length; i++) {
-				if(rows[i] == null) return;
 				acs.associations.push({
 					id: rows[i],
 					order: i + 1
 				})
 			}
-			console.log(acs)
 			await axios.put(`${api_url}/sets/${set_id}/associations/reorder`, acs)
 		} catch(err) {
 			dispatch({
@@ -726,11 +725,24 @@ export function addRow() {
   };
 }
 
+// /associations/<int: association_id>	
 export const DELETE_ROW = 'DELETE_ROW'
-export function deleteRow(index) {
-	return {
-		type: DELETE_ROW,
-		index
+export const DELETE_ROW_SUCCESS = 'DELETE_ROW_SUCCESS'
+export const DELETE_ROW_FAILURE = 'DELETE_ROW_FAILURE'
+export function deleteRow(index, asc) {
+	return async(dispatch, getState) => {
+		dispatch({type: DELETE_ROW})
+		try {
+			console.log(asc)
+			await axios.delete(`${api_url}/associations/${asc.id}`).then(() => {
+				dispatch({type: DELETE_ROW_SUCCESS, index, asc})
+			})
+		} catch(err) {
+			dispatch({
+				type: DELETE_ASSIGNMENT_FAILURE,
+				error: Error(err)
+			})
+		}
 	}
 }
 

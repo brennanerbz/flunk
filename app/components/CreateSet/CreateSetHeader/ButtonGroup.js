@@ -17,7 +17,7 @@ export default class ButtonGroup extends Component {
                             editing
                             ? 
                             <button className={classnames("button button-primary", {"disaje": set == null })}
-                                    onClick={() => "Done"}>
+                                    onClick={onSave}>
                                     Done
                             </button>
                             : null

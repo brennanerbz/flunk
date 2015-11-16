@@ -127,6 +127,7 @@ export function newSequence(prevsequence, user_id, set_id, assignment_id) {
 			// 	dispatch({type: CREATE__MINISEQS, slots})
 			// 	dispatch(fetchTrials())
 			// })
+			console.log(new_sequence)
 			await axios.post(`${api_url}/sequences/`, 
 				new_sequence
 			).then(res => {				

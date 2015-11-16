@@ -18,7 +18,7 @@ export default class ItemList extends Component {
 				   onClick={() => pushState(null, `/createset/${set.id}`)}>Edit</a>
 				<ul className="item_list">
 					{sorted_asssociations.map((asc, i) => {
-						return <Item key={i} item={asc.item}/>
+						return <Item key={i} item={asc.item} {...this.props}/>
 					})}
 				</ul>
 			</div>

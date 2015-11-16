@@ -5,9 +5,13 @@ export default class Item extends Component {
 	}
 
 	renderTarget(target) {
+		const { pushState } = this.props;
 		let new_target = target !== null ? target.charAt(0).toUpperCase() + target.slice(1) : "..."
 		return (
-			<a className="item_target link">{new_target}</a>
+			<a className="item_target link"
+			   onClick={() => pushState(null, `/search/concepts/${new_target}`)}>
+			   {new_target}
+			</a>
 		)
 	}
 

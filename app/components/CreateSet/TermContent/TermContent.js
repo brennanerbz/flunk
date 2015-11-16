@@ -54,22 +54,26 @@ export default class TermContent extends Component {
     setFlag(true)
 
     this.setState({ word: word })
-
     if(item == null) {
       if (word.length > 0) {
+        console.log("creating target")
         createItem(index, { name: 'target', prop: word })
         return;
       }
     }
     if(item !== null) {
-      if(item.target !== null && item.target.toLowerCase().trim() !== word.toLowerCase().trim()) {
-        if(item.finalized == null) { 
-          updateItem(item, { name: 'target', prop: word })
-          return;
-        }
-        if(item.finalized !== null) { 
-          createItem(index, { name: 'child', prop: item }, { name: 'target', prop: word })
-        }
+      if(item.target == null || 
+        (item.target !== null 
+        && item.target.toLowerCase().trim() !== word.toLowerCase().trim()
+        && item.finalized == (null || false))) {
+        console.log("updating target")
+        updateItem(item, { name: 'target', prop: word })
+        return;
+      }
+      if(item.target !== null 
+        && item.target.toLowerCase().trim() !== word.toLowerCase().trim()
+        && item.finalized) { 
+        createItem(index, {name: 'child', prop: item}, { name: 'target', prop: word })
       }
     }
   }
@@ -91,19 +95,24 @@ export default class TermContent extends Component {
 
     if(item == null) {
       if (def.length > 0) {
+        console.log("creating cue")
         createItem(index, { name: 'cue', prop: def })
         return;
       }
     }
     if(item !== null) {
-      if(item.cue !== null && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()) {
-        if(item.finalized == null) { // TODO: soon to be item.editable !== true
-          updateItem(item, { name: 'cue', prop: def })
-          return;
-        }
-        if(item.finalized !== null) { // TODO: soon to be item.editable == true
-          createItem(index, {name: 'child', prop: item}, { name: 'cue', prop: def })
-        }
+      if(item.cue == null || 
+        (item.cue !== null 
+        && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
+        && item.finalized == (null || false))) {
+        console.log("updating cue")
+        updateItem(item, { name: 'cue', prop: def })
+        return;
+      }
+      if(item.cue !== null 
+        && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
+        && item.finalized) { 
+        createItem(index, {name: 'child', prop: item}, { name: 'cue', prop: def })
       }
     }
   }

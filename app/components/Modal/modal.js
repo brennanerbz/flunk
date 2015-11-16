@@ -181,7 +181,6 @@ export default class Modal extends Component {
 
 	render() {
 		const { type, assignment, pushState, deleteAssignment } = this.props;
-		console.log(assignment)
 		return(
 			<div ref="modal" 
 				 className="modal fade" 

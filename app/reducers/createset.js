@@ -75,7 +75,7 @@ import {
 import _ from 'lodash';
 import assign from 'lodash/object/assign';
 
-var createState = {
+export var createState = {
   isCreatingSet: false,
   isUpdatingSet: false,
   isCreatingItem: false,
@@ -110,7 +110,7 @@ var createState = {
   isLoadingSet: false
 };
 
-export default function createset(state = createState, action) {
+export function createset(state = createState, action) {
   switch (action.type) {
     case CREATE_SET:
       return {
@@ -123,6 +123,12 @@ export default function createset(state = createState, action) {
         isLoadingSet: true
       }
     case LOAD_EDITING_SUCCESS:
+      let load_rows = [null, null],
+          length = action.rows.length;
+      if(length > 0) {
+        if(length === 1) load_rows.splice(0, 1, action.rows[0])
+        if(length > 1) load_rows = action.rows
+      } 
       return {
         ...state,
         editing: true,
@@ -136,8 +142,9 @@ export default function createset(state = createState, action) {
         assignment: action.assignment,
         items: action.items,
         associations: action.associations,
-        rows: action.rows.length > 1 ? action.rows : [null, null],
-        count: action.associations.length > 0 ? action.associations[action.rows.slice(-1)[0]].order + 1 : 1
+        rows: load_rows,
+        count: action.associations.length > 0 ? action.associations[action.rows.slice(-1)[0]].order + 1 : 1,
+        deleted: false
       }
     case CREATE_SET_SUCCESS:
       const set = action.set
@@ -215,12 +222,24 @@ export default function createset(state = createState, action) {
       }
     case UPDATE_ITEM_SUCCESS:
       let updated_items = Object.assign({}, state.items),
+          _associations = state.associations,
           newitem = action.item,
           newitem_id = newitem.id;
       updated_items[newitem_id] = newitem
+      for(var prop in _associations) {
+        let p = _associations[prop];
+        for(var key in p) {
+          if(key == 'item') {
+            if(p[key].id == newitem_id) {
+              p[key] = newitem
+            }
+          }
+        }
+      }
       return {
         ...state,
-        items: updated_items
+        items: updated_items,
+        associations: _associations
       }
     case UPDATE_ASSOCIATION_SUCCESS:
       let updated_associations = Object.assign({}, state.associations),

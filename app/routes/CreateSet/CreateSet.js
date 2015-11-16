@@ -69,15 +69,7 @@ export default class CreateSetPage extends Component {
 
 	componentWillMount() {
 		const { params, transfer, loadEditing } = this.props;
-		if(Object.keys(params).length !== 0) loadEditing(params.id)
-	}
-
-	componentWillReceiveProps(nextProps) {
-		// console.log(nextProps.loc)
-	}
-
-	componentDidUpdate() {
-
+		if(Object.keys(params).length !== 0) loadEditing(params.id) 
 	}
 
 	componentWillUnmount() {
@@ -89,7 +81,7 @@ export default class CreateSetPage extends Component {
 				associations,
 				reorder, 
 				clearTransferState,
-				deleted				 
+				deleted	 
 				} = this.props;
 		clearTransferState()
 
@@ -103,10 +95,7 @@ export default class CreateSetPage extends Component {
 				} 
 			}
 		}
-
-		setTimeout(() => { 
-			clearSet()  
-		}, 5)
+		setTimeout(() => { clearSet() }, 500)
 	}	
 
 	render() {

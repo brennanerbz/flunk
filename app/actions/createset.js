@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moment from 'moment'; 
+import _ from 'lodash';
 
 const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 
@@ -209,6 +210,7 @@ export function updateSetSubjects(subjects) {
 		try {
 			var subs,
 				set = getState().createset.set;
+			console.log(subjects)
 			if(subjects !== undefined) {
 				subs = subjects;
 				await axios.put(`${api_url}/sets/${set.id}/edit-subjects/`, subs)
@@ -456,7 +458,7 @@ export function createItem(index, ...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: CREATE_ITEM})
 		try {                                                                                                            
-			let item = _itemtemplate,
+			let item = Object.assign({}, _itemtemplate),
 				user = getState().user.user,
 				set  = getState().createset.set,
 				rows = getState().createset.rows,
@@ -553,7 +555,9 @@ export function updateItem(_item, ...args) {
 			await axios.put(`${api_url}/items/${item.id}`, item)
 			.then(res => item = res.data)
 			dispatch({type: UPDATE_ITEM_SUCCESS, item})
-			dispatch(updateSetSubjects())
+			if(item.subjects.length > 0 && getState().createset.subjects !== item.subjects) {
+				dispatch(updateSetSubjects())
+			}
 		} catch(err) {
 			dispatch({
 				type: UPDATE_ITEM_FAILURE,
@@ -703,10 +707,15 @@ export function setTitleFlag(flag) {
 	}
 }
 
+import { createState } from '../reducers/createset';
 export const CLEAR_SET = 'CLEAR_SET';
 export function clearSet() {
-	return {
-		type: CLEAR_SET
+	return (dispatch, getState) => {
+		if(!_.isEqual(createState, getState().createset)) {
+			dispatch({type: CLEAR_SET}) 
+			dispatch(clearSet()) 
+		}
+		// dispatch({type: CLEAR_SET})
 	}
 }
 

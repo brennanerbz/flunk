@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import createset from './createset';
+import { createset } from './createset';
 import sets from './usersets';
 import setView from './set';
 import learn from './learnv2';

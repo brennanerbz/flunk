@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 import { Link } from 'react-router';
+import { pushState } from 'redux-router';
 require('./Home.scss');
 
 import * as actionCreators from '../../actions/usersets';
@@ -17,7 +18,8 @@ import OnlineUserList from '../../components/OnlineUserList/OnlineUserList';
 	}), 
 	dispatch => ({
 		...bindActionCreators({
-			...actionCreators
+			...actionCreators,
+			pushState,
 		}, dispatch)
 	})
 )

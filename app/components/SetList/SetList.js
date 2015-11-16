@@ -47,11 +47,8 @@ export default class SetList extends Component {
 		let rows = [], _sets = [], finalized_sets = sorted_sets.filter(set => set.finalized == null)
 		sorted_sets = sorted_sets.filter(set => set.finalized !== null)
 		_sets = finalized_sets.concat(sorted_sets)
-		console.log(_sets)
 		let last_time_ago = null, finalized = null;
 		for(var i = 0; i < _sets.length; i++) {
-			console.log(_sets[i])
-			console.log(finalized)
 			if(_sets[i].finalized !== finalized) {
 				rows.push(<DayDivider set={_sets[i]}
 									  studyDivider={true}
@@ -69,38 +66,21 @@ export default class SetList extends Component {
 									   draft={false}							   
 									   setActiveRow={this.setActiveRow}
 									   activeRow={this.state.activeRow}
-									   key={'item' + i}/>)
+									   key={'item' + i}
+									   {...this.props}/>)
 			} else {
 				rows.push(<SetListItem set={_sets[i]}
 									   draft={true}							   
 									   setActiveRow={this.setActiveRow}
 									   activeRow={this.state.activeRow}
-									   key={'item' + i}/>)
+									   key={'item' + i}
+									   {...this.props}/>)
 			}
 			finalized = _sets[i].finalized
 			last_time_ago = _sets[i].time_ago;
 		}
-		// _sets.forEach((set, i) => {
-			
-		// })
-		// let draft_rows = [],
-		// 	rendered_rows = [],
-		// 	draft_index;
-		// for(var i = 0; i < rows.length; i++) {
-		// 	if(rows[i].props.draft) {
-		// 		draft_rows.push(rows[i])
-		// 	}
-		// 	if(rows[i].props.draftDivider) {
-		// 		draft_index = i;
-		// 	}
-		// }
-		// draft_rows.unshift(rows[draft_index])
-		// rows = rows.filter(row => !row.props.draft && !row.props.draftDivider)
-		// rendered_rows.push(draft_rows)
-		// rendered_rows.push(rows)
 		return rows;
 	}
-
 
 	render() {	
 		const { sets, isFetching } = this.props;

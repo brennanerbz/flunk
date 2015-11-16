@@ -27,7 +27,7 @@ export default class SetListItem extends Component {
 		const set_icon = require('../../assets/set_icon.png'),
 			  share_icon = require('../../assets/share_icon.png'),
 			  more_icon = require('../../assets/more_icon.png'),
-			  { set, draft } = this.props;
+			  { set, draft, pushState } = this.props;
 		const last_studied = moment(set.last_studied).fromNow();
 		return(
 			
@@ -37,12 +37,12 @@ export default class SetListItem extends Component {
 		        <div className="col-sm-1 col-md-1 set_col row_icon">
 		        	<img className="home_set_icon active" src={set_icon}/>
 		        </div>
-		        <div className="col-sm-6 col-md-6 col-lg-7 set_col set_name">
+		        <div className="col-sm-6 col-md-6 col-lg-7 set_col set_name"
+		        	 onClick={() => pushState(null, draft ? `/createset/${set.id}` : `/set/${set.id}`)}>
 		        	<span className="overflow_ellipsis">
-		        		<Link className={classnames("link", {'draft': draft })}
-		        			  to={draft ? `/createset/${set.id}` : `/set/${set.id}`}>
+		        		<a className={classnames("link", {'draft': draft })}>
 		        			  {set.title}
-		        		</Link>
+		        		</a>
 		        		{
 		        			draft
 		        			?
@@ -51,9 +51,9 @@ export default class SetListItem extends Component {
 		        		}
 		        	</span>
 		        </div>
-		        <div className="col-sm-5 col-md-5 col-lg-3 set_col set_author">
-		        	<span className="overflow_ellipsis">
-		        		
+		        <div className="col-sm-5 col-md-5 col-lg-3 set_col set_author"
+		        	 onClick={() => pushState(null, `/profile/${set.creator_id}`)}>
+		        	<span className="overflow_ellipsis">		        		
 		        		by <span className="link_name">{set.creator_id}</span>
 		        	</span>
 		        </div>		        

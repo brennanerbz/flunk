@@ -143,9 +143,9 @@ export function updateAssignent(id) {
 
 
  
-export const CLEAR_SET = 'CLEAR_SET';
-export function clearSet() {
+export const CLEAR_SETVIEW = 'CLEAR_SETVIEW';
+export function clearSetView() {
 	return {
-		type: CLEAR_SET
+		type: CLEAR_SETVIEW
 	}
 }

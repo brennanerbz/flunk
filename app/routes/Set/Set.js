@@ -55,9 +55,9 @@ export default class Set extends Component {
 	}
 
 	componentWillUnmount() {
-		const { clearSet, transfer } = this.props;
+		const { clearSetView, transfer } = this.props;
 		transfer()
-		clearSet()
+		clearSetView()
 	}
 
 	render() {

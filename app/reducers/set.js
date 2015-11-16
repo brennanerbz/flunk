@@ -27,7 +27,7 @@ import {
 	UPDATE_ASSIGNMENT_SUCCESS,
 	UPDATE_ASSIGNMENT_FAILURE,
 
-	CLEAR_SET
+	CLEAR_SETVIEW
 } from '../actions/set';
 
 const initial_setstate = {
@@ -116,7 +116,7 @@ export default function setView(state = initial_setstate, action) {
 				...state,
 				isFetchingSet: false
 			}
-		case CLEAR_SET:
+		case CLEAR_SETVIEW:
 			return {
 				...state = initial_setstate
 			}

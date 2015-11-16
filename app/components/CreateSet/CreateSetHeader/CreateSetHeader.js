@@ -89,6 +89,7 @@ export default class CreateSetHeader extends Component {
 	}
 	handleSave() {
 		const { createSet,
+				updateSet,
 				createAssignment,
 				assignment,
 			    title,
@@ -106,6 +107,7 @@ export default class CreateSetHeader extends Component {
 		}
 		if(set !== null && assignment == null) {
 			createAssignment(set.id, 'admin', {name: 'navigate', prop: true}, pushState)
+			updateSet(set, {name: 'finalized', prop: true})
 			return;
 			// TODO: createSequence()
 		}

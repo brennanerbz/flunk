@@ -86,9 +86,11 @@ export default class CreateSetPage extends Component {
 		clearTransferState()
 
 		if(set !== null) {
+			console.log("assignment")
+			console.log(assignment)
 			if(assignment !== null) reorder()
 			if(assignment == null && !deleted) {
-				updateSet(set, {name: 'finalized', prop: false})
+				updateSet(set, {name: 'finalized', prop: null})
 				createAssignment(set.id)
 				if(associations !== (null)) {
 					if(Object.keys(associations).length > 1) reorder()

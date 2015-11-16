@@ -42,8 +42,6 @@ export default class SetListItem extends Component {
 		        		<Link className={classnames("link", {'draft': draft })}
 		        			  to={draft ? `/createset/${set.id}` : `/set/${set.id}`}>
 		        			  {set.title}
-
-		        			  
 		        		</Link>
 		        		{
 		        			draft

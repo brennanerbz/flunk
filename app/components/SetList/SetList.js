@@ -49,13 +49,13 @@ export default class SetList extends Component {
 		sorted_sets.forEach((set, i) => {
 			if(set.finalized !== finalized) {
 				rows.push(<DayDivider set={set}
-									  draft={true}
+									  draftDivider={true}
 									  key={'draft' + set.id + i}
 									  {...this.props}/>)
 			}
 			else if (set.time_ago !== last_time_ago) {
 				rows.push(<DayDivider set={set}
-									  studied={true} 
+									  studyDivider={true} 
 					                  key={'day' + set.id + i}
 					                  {...this.props}/>)
 			}
@@ -75,7 +75,22 @@ export default class SetList extends Component {
 			finalized = set.finalized
 			last_time_ago = set.time_ago;
 		})
-		return rows;
+		let draft_rows = [],
+			rendered_rows = [],
+			draft_index;
+		for(var i = 0; i < rows.length; i++) {
+			if(rows[i].props.draft) {
+				draft_rows.push(rows[i])
+			}
+			if(rows[i].props.draftDivider) {
+				draft_index = i;
+			}
+		}
+		draft_rows.unshift(rows[draft_index])
+		rows = rows.filter(row => !row.props.draft && !row.props.draftDivider)
+		rendered_rows.push(draft_rows)
+		rendered_rows.push(rows)
+		return rendered_rows;
 	}
 
 
@@ -102,19 +117,19 @@ export default class SetList extends Component {
 
 class DayDivider extends Component { 
 	render() {
-		const { set, draft, studied } = this.props	
+		const { set, draftDivider, studyDivider } = this.props	
 		return (
 			<div className={classnames("day_divider", {'profile_divider': this.props.profile})}>
 				<hr className="separator"/>
 				<i className="copy_only"/>
 					<div className="day_divider_label">
 						{
-							studied
+							studyDivider
 							? set.time_ago
 							: null
 						}
 						{
-							draft
+							draftDivider
 							? 'In progress'
 							: null
 						}

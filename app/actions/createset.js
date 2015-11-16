@@ -25,7 +25,7 @@ export function fetchSet(user_id, set_id) {
 			})
 			await axios.get(`${api_url}/assignments/${assignment.id}`).then((res) => {
 				assignment = res.data
-			})
+			}) 
 			assignment.set.associations.associations.forEach(asc => {
 				items[asc.item_id] = asc.item
 				associations[asc.id] = asc
@@ -177,7 +177,8 @@ var set_update_values = {
 	has_images: null,
 	official: null,
 	visibility: null,
-	editability: null
+	editability: null,
+	finalized: null
 }
 
 export const UPDATE_SET = 'UPDATE_SET';
@@ -203,6 +204,7 @@ export function updateSet(_set, ...args) {
 					}
 				}
 			}
+			console.log("over here...")
 			console.log(set)
 			await axios.put(`${api_url}/sets/${_set.id}`, 
 				set 
@@ -293,7 +295,9 @@ export function createAssignment(set_id, permission, ...args) {
 			dispatch({type: CREATE_ASSIGNMENT_SUCCESS, assignment})
 			if(args.length > 0 && args[0].name == 'navigate' && args[0].prop) {
 				let pushState = args[1]
-				pushState(null, `/set/${assignment.set_id}`)
+				setTimeout(() => {
+					pushState(null, `/set/${assignment.set_id}`)
+				}, 5)
 			}
 		} catch(err) {
 			dispatch({

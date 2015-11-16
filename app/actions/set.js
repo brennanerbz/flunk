@@ -24,6 +24,7 @@ export function fetchSetView(user_id, set_id) {
 export const REQUEST_SET = 'REQUEST_SET';
 export const RECEIVE_SET_SUCCESS = 'RECEIVE_SET_SUCCESS';
 export const RECEIVE_SET_FAILURE = 'RECEIVE_SET_FAILURE';
+export const RECEIVE_ASSIGNMENTS_SUCCESS = 'RECEIVE_ASSIGNMENTS_SUCCESS';
 
 /*
 @params set_id
@@ -39,16 +40,24 @@ export function fetchSet(set_id) {
 		dispatch({type: REQUEST_SET})
 		try {
 			let set,
-				assignments = await getState().sets.assignments,
-				assignment = assignments !== undefined 
-				? assignments.filter(asg => asg.set_id === Number(set_id))[0] 
-				: null;
+				user = getState().user.user,
+				assignments,
+				assignment;
+			console.log(user)
+			await axios.get(`${api_url}/users/${user.id}/assignments/`)
+			.then((res) => { 
+				assignments = res.data.assignments 
+				dispatch({type: RECEIVE_ASSIGNMENTS_SUCCESS, assignments })
+			})
 			await axios.get(`${api_url}/sets/${set_id}`).then((res) => set = res.data)
 			dispatch({
 				type: RECEIVE_SET_SUCCESS,
 				set
 			})
-			if(assignment !== (null && undefined)) {
+			assignment = assignments.filter(assignment => assignment.set_id == Number(set_id))[0]
+			console.log("assignment")
+			console.log(assignment)
+			if(assignment !== undefined) {
 				dispatch(fetchAssignment(assignment.id))
 				return;
 			} else {

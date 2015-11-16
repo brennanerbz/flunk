@@ -168,6 +168,18 @@ export function createSet(title, ...args) {
 ‘editability’: String,			‘group’ | ‘admin’ | ‘creator’
 
 */
+var set_update_values = {
+	source_id: null,
+	targets_lang_id: null,
+	cues_lang_id: null,
+	title: null,
+	description: null,
+	has_images: null,
+	official: null,
+	visibility: null,
+	editability: null
+}
+
 export const UPDATE_SET = 'UPDATE_SET';
 export const UPDATE_SET_SUCCESS = 'UPDATE_SET_SUCCESS';
 export const UPDATE_SET_FAILURE = 'UPDATE_SET_FAILURE';
@@ -175,7 +187,12 @@ export function updateSet(_set, ...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: UPDATE_SET})
 		try {
-			let set = Object.assign({}, _set);
+			let set = Object.assign({}, set_update_values);
+			for(var key in set) {
+				if(_set[key]) {
+					set[key] = _set[key]
+				}
+			}
 			if(args !== null && args.length > 0) {
 				for(var i = 0; i < args.length; i++) {
 					let arg = args[i],
@@ -186,7 +203,7 @@ export function updateSet(_set, ...args) {
 					}
 				}
 			}
-			await axios.put(`${api_url}/sets/${set.id}`, 
+			await axios.put(`${api_url}/sets/${_set.id}`, 
 				set 
 			)
 			.then(res => set = res.data)
@@ -258,7 +275,7 @@ var _assignmenttemplate = {
 export const CREATE_ASSIGNMENT = 'CREATE_ASSIGNMENT';
 export const CREATE_ASSIGNMENT_SUCCESS = 'CREATE_ASSIGNMENT_SUCCESS';
 export const CREATE_ASSIGNMENT_FAILURE = 'CREATE_ASSIGNMENT_FAILURE';
-export function createAssignment(set_id, permission) {
+export function createAssignment(set_id, permission, ...args) {
 	return async(dispatch, getState) => {
 		dispatch({type: CREATE_ASSIGNMENT})
 		try {
@@ -273,6 +290,10 @@ export function createAssignment(set_id, permission) {
 			)
 			.then(res => assignment = res.data)
 			dispatch({type: CREATE_ASSIGNMENT_SUCCESS, assignment})
+			if(args[0].name == 'navigate' && args[0].prop) {
+				let pushState = args[1]
+				pushState(null, `/set/${assignment.set_id}`)
+			}
 		} catch(err) {
 			dispatch({
 				type: CREATE_ASSIGNMENT_FAILURE,
@@ -712,9 +733,10 @@ export function clearSet() {
 	return (dispatch, getState) => {
 		if(!_.isEqual(createState, getState().createset)) {
 			dispatch({type: CLEAR_SET}) 
-			dispatch(clearSet()) 
+			setTimeout(() => {
+				dispatch(clearSet()) 
+			}, 250)
 		}
-		// dispatch({type: CLEAR_SET})
 	}
 }
 
@@ -733,7 +755,6 @@ export function deleteRow(index, asc) {
 	return async(dispatch, getState) => {
 		dispatch({type: DELETE_ROW})
 		try {
-			console.log(asc)
 			await axios.delete(`${api_url}/associations/${asc.id}`).then(() => {
 				dispatch({type: DELETE_ROW_SUCCESS, index, asc})
 			})

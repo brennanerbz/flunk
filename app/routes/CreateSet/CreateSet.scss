@@ -485,6 +485,12 @@ textarea:hover:ms-input-placeholder {
 
 .error_message {
 	margin-top: 20px!important;
+	&.item_error {
+		margin-top: 40px!important;
+		p {
+			margin-bottom: 0!important;
+		}
+	}
 }
 
 

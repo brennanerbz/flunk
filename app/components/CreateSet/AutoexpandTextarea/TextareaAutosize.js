@@ -39,9 +39,14 @@ export default class TextareaAutosize extends Component {
 	    node.addEventListener(RESIZED, this.props.onResize);
 	  }	  
 	  if(title !== undefined) this.setState({ title: title }) 
+	  let length;
+	  if(this.state.title !== undefined 
+	     && !this.state.blurred) {
+	  	length = this.state.title.length
+	 	 this.refs[`textarea${tabIndex}`].setSelectionRange(length, length) 
+	  }
 	}
 	
-
 	componentWillReceiveProps(nextProps) {
 	  if (this.getValue(nextProps) !== this.getValue(this.props)) {
 	    this.dispatchEvent(UPDATE, true);
@@ -89,16 +94,9 @@ export default class TextareaAutosize extends Component {
 	      		  	this.props.titleChange(e.target.value)
 	      		  }}
 	      		  onFocus={() => {
-	      		  	let length;
 	      		  	this.setState({blurred: true})
-	      		  	if(this.state.title !== undefined 
-	      		  	   && !this.state.blurred) {
-	      		  		length = this.state.title.length
-	      		  		setTimeout(() => { 
-	      		  			this.refs[`textarea${tabIndex}`].setSelectionRange(length, length) 
-	      		  		}, 5) 
 	      		  	}
-	      		  }}
+	      		  }
       		  	  onBlur={() => this.props.titleBlur()}
 	              onKeyDown={this.handleKeyDown} 
 	              tabIndex={tabIndex}

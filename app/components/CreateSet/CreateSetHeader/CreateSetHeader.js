@@ -269,7 +269,7 @@ export default class CreateSetHeader extends Component {
 	              {
 	              	this.state.item_error_message
 	              	?
-	              	<div className="error_message">
+	              	<div className="item_error error_message">
 	              		<p className="danger">Please enter at least two terms to create your set.</p>
 	              	</div>
 	              	: null

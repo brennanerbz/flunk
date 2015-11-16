@@ -9,6 +9,8 @@ import { getStates,
 		 styles,
 		 fakeRequest } from '../Autocomplete/Utils';
 
+require('../Autocomplete/Autocomplete.scss');		 
+
 export default class WordSide extends Component {
 	static propTypes = {	
 		onBlur: PropTypes.func,
@@ -68,9 +70,10 @@ export default class WordSide extends Component {
 											})
 										}
 							          }}
-							          renderItem={(term, isHighlighted) => (
+							          renderItem={(term, isHighlighted, index) => (
 							            <div
-							              style={isHighlighted ? styles.highlightedItem : styles.term}
+							              className={classnames({ 'first_item': index == 0 } )}
+							              style={isHighlighted ? styles.highlightedItem : styles.item}
 							              key={term.abbr}
 							              id={term.abbr}
 							            >{term}</div>

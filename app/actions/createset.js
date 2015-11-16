@@ -203,6 +203,7 @@ export function updateSet(_set, ...args) {
 					}
 				}
 			}
+			console.log(set)
 			await axios.put(`${api_url}/sets/${_set.id}`, 
 				set 
 			)
@@ -620,7 +621,6 @@ export function createAssociation(item_id, index) {
 				set_id: set_id,
 				order: count
 			})
-			console.log(association)
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => association = res.data)
 			dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index})
@@ -735,7 +735,7 @@ export function clearSet() {
 			dispatch({type: CLEAR_SET}) 
 			setTimeout(() => {
 				dispatch(clearSet()) 
-			}, 250)
+			}, 500)
 		}
 	}
 }

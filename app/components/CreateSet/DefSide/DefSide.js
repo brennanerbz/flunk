@@ -1,4 +1,3 @@
-
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 
@@ -8,6 +7,8 @@ import { getStates,
 		 sortStates,
 		 styles,
 		 fakeRequest } from '../Autocomplete/Utils';
+
+require('../Autocomplete/Autocomplete.scss');
 
 export default class DefSide extends Component {
 	static propTypes = {	
@@ -80,9 +81,10 @@ export default class DefSide extends Component {
 	         				}, 250)
 	         			}
 	                   }}
-	                  renderItem={(_item, isHighlighted) => (
+	                  renderItem={(_item, isHighlighted, index) => (
 	                     <div
-	                       style={isHighlighted ? styles.highlightedItem : styles._item}
+	                       className={classnames({ 'first_item': index == 0 })}
+	                       style={isHighlighted ? styles.highlightedItem : styles.item}
 	                       key={_item.abbr}
 	                       id={_item.abbr}>
 	                       {_item.cue}

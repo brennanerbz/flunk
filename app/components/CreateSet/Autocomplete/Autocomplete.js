@@ -39,11 +39,16 @@ export default class Autocomplete extends Component {
 	  },
 	  shouldItemRender () { return true },
 	  menuStyle: {
-	    borderRadius: '0px',
-	    boxShadow: '0px 1px 1px 0px rgba(156,156,156,0.50)',
+	    borderRadius: '0.25em',
+	    borderTopLeftRadius: '0',
+	    borderTopRightRadius: '0',
+	    borderTop: '1px solid',
+	    borderTopColor: '#d9d9d9',
+	    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+	    WebkitBoxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
 	    background: '#FFFFFF',
 	    padding: '2px 0',
-	    fontSize: '90%',
+	    fontSize: '95%',
 	    position: 'fixed',
 	    overflow: 'auto',
 	    maxHeight: '50%',
@@ -279,12 +284,17 @@ export default class Autocomplete extends Component {
 	  const { subjects, onInput, getTermSuggestions } = this.props;
 	  this._performAutoCompleteOnKeyUp = true
 	  var text = event.target.value;
-	  // text = text.replace(/\s+/g, '');
-	  this.setState({
-	    value: text,
-	  }, () => {
-	    onInput(event, this.state.value)
-	  })
+	  if(text.length == 0) {
+	  	this.setState({
+	  		isOpen: false
+	  	});
+	  } else {
+	  	this.setState({
+	  	  value: text,
+	  	}, () => {
+	  	  onInput(event, this.state.value)
+	  	})
+	  }
 	}
 
 	handleKeyUp = (event) => {
@@ -378,11 +388,12 @@ export default class Autocomplete extends Component {
 
 	renderMenu = () => {
 	  var items = this.getFilteredItems();
-	  if(items == undefined || null) return;
+	  if(items == (undefined || null) || items.length == 0) return;
 	  items = items.map((item, index) => {
 	    var element = this.props.renderItem(
 	      item,
 	      this.state.highlightedIndex === index,
+	      index,
 	      {cursor: 'default'}
 	    )
 	    return React.cloneElement(element, {

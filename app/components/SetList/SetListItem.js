@@ -27,7 +27,7 @@ export default class SetListItem extends Component {
 		const set_icon = require('../../assets/set_icon.png'),
 			  share_icon = require('../../assets/share_icon.png'),
 			  more_icon = require('../../assets/more_icon.png'),
-			  { set } = this.props;
+			  { set, draft } = this.props;
 		const last_studied = moment(set.last_studied).fromNow();
 		return(
 			
@@ -39,8 +39,18 @@ export default class SetListItem extends Component {
 		        </div>
 		        <div className="col-sm-6 col-md-6 col-lg-7 set_col set_name">
 		        	<span className="overflow_ellipsis">
-		        		<Link className="link" 
-		        			  to={`/set/${set.id}`}>{set.title}</Link>
+		        		<Link className={classnames("link", {'draft': draft })}
+		        			  to={draft ? `/createset/${set.id}` : `/set/${set.id}`}>
+		        			  {set.title}
+
+		        			  
+		        		</Link>
+		        		{
+		        			draft
+		        			?
+		        			<span className="draft_label">Draft</span>
+		        			: null
+		        		}
 		        	</span>
 		        </div>
 		        <div className="col-sm-5 col-md-5 col-lg-3 set_col set_author">

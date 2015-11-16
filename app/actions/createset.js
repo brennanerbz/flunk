@@ -291,7 +291,7 @@ export function createAssignment(set_id, permission, ...args) {
 			)
 			.then(res => assignment = res.data)
 			dispatch({type: CREATE_ASSIGNMENT_SUCCESS, assignment})
-			if(args[0].name == 'navigate' && args[0].prop) {
+			if(args.length > 0 && args[0].name == 'navigate' && args[0].prop) {
 				let pushState = args[1]
 				pushState(null, `/set/${assignment.set_id}`)
 			}

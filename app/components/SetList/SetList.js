@@ -45,17 +45,34 @@ export default class SetList extends Component {
 		    }
 		})
 		let rows = [];
-		let last_time_ago = null;
+		let last_time_ago = null, finalized = true;
 		sorted_sets.forEach((set, i) => {
-			if (set.time_ago !== last_time_ago) {
-				rows.push(<DayDivider set={set} 
+			if(set.finalized !== finalized) {
+				rows.push(<DayDivider set={set}
+									  draft={true}
+									  key={'draft' + set.id + i}
+									  {...this.props}/>)
+			}
+			else if (set.time_ago !== last_time_ago) {
+				rows.push(<DayDivider set={set}
+									  studied={true} 
 					                  key={'day' + set.id + i}
 					                  {...this.props}/>)
 			}
-			rows.push(<SetListItem set={set}							   
-								   setActiveRow={this.setActiveRow}
-								   activeRow={this.state.activeRow}
-								   key={'item' + set.id + i}/>)
+			if(set.finalized !== null) {
+				rows.push(<SetListItem set={set}
+									   draft={false}							   
+									   setActiveRow={this.setActiveRow}
+									   activeRow={this.state.activeRow}
+									   key={'item' + set.id + i}/>)
+			} else {
+				rows.push(<SetListItem set={set}
+									   draft={true}							   
+									   setActiveRow={this.setActiveRow}
+									   activeRow={this.state.activeRow}
+									   key={'item' + set.id + i}/>)
+			}
+			finalized = set.finalized
 			last_time_ago = set.time_ago;
 		})
 		return rows;
@@ -85,13 +102,22 @@ export default class SetList extends Component {
 
 class DayDivider extends Component { 
 	render() {
-		const set = this.props.set;		
+		const { set, draft, studied } = this.props	
 		return (
 			<div className={classnames("day_divider", {'profile_divider': this.props.profile})}>
 				<hr className="separator"/>
 				<i className="copy_only"/>
 					<div className="day_divider_label">
-						{set.time_ago}
+						{
+							studied
+							? set.time_ago
+							: null
+						}
+						{
+							draft
+							? 'In progress'
+							: null
+						}
 					</div> 
 			</div>
 		);

@@ -112,6 +112,7 @@ export default class CreateSetHeader extends Component {
 			// TODO: createSequence()
 		}
 		if((set && assignment) !== null) {
+			if(set.finalized == null) updateSet(set, {name: 'finalized', prop: true})
 			pushState(null, `/set/${set.id}`)
 		}
 	}

@@ -44,53 +44,61 @@ export default class SetList extends Component {
 		        return assign({}, set, {time_ago: '3 weeks ago'})
 		    }
 		})
-		let rows = [];
-		let last_time_ago = null, finalized = true;
-		sorted_sets.forEach((set, i) => {
-			if(set.finalized !== finalized) {
-				rows.push(<DayDivider set={set}
-									  draftDivider={true}
-									  key={'draft' + set.id + i}
+		let rows = [], _sets = [], finalized_sets = sorted_sets.filter(set => set.finalized == null)
+		sorted_sets = sorted_sets.filter(set => set.finalized !== null)
+		_sets = finalized_sets.concat(sorted_sets)
+		console.log(_sets)
+		let last_time_ago = null, finalized = null;
+		for(var i = 0; i < _sets.length; i++) {
+			console.log(_sets[i])
+			console.log(finalized)
+			if(_sets[i].finalized !== finalized) {
+				rows.push(<DayDivider set={_sets[i]}
+									  studyDivider={true}
+									  key={'draft' + i}
 									  {...this.props}/>)
 			}
-			else if (set.time_ago !== last_time_ago) {
-				rows.push(<DayDivider set={set}
-									  studyDivider={true} 
-					                  key={'day' + set.id + i}
+			else if (_sets[i].time_ago !== last_time_ago) {
+				rows.push(<DayDivider set={_sets[i]}
+									  draftDivider={true} 
+					                  key={'day' + i}
 					                  {...this.props}/>)
 			}
-			if(set.finalized !== null) {
-				rows.push(<SetListItem set={set}
+			if(_sets[i].finalized !== null) {
+				rows.push(<SetListItem set={_sets[i]}
 									   draft={false}							   
 									   setActiveRow={this.setActiveRow}
 									   activeRow={this.state.activeRow}
-									   key={'item' + set.id + i}/>)
+									   key={'item' + i}/>)
 			} else {
-				rows.push(<SetListItem set={set}
+				rows.push(<SetListItem set={_sets[i]}
 									   draft={true}							   
 									   setActiveRow={this.setActiveRow}
 									   activeRow={this.state.activeRow}
-									   key={'item' + set.id + i}/>)
+									   key={'item' + i}/>)
 			}
-			finalized = set.finalized
-			last_time_ago = set.time_ago;
-		})
-		let draft_rows = [],
-			rendered_rows = [],
-			draft_index;
-		for(var i = 0; i < rows.length; i++) {
-			if(rows[i].props.draft) {
-				draft_rows.push(rows[i])
-			}
-			if(rows[i].props.draftDivider) {
-				draft_index = i;
-			}
+			finalized = _sets[i].finalized
+			last_time_ago = _sets[i].time_ago;
 		}
-		draft_rows.unshift(rows[draft_index])
-		rows = rows.filter(row => !row.props.draft && !row.props.draftDivider)
-		rendered_rows.push(draft_rows)
-		rendered_rows.push(rows)
-		return rendered_rows;
+		// _sets.forEach((set, i) => {
+			
+		// })
+		// let draft_rows = [],
+		// 	rendered_rows = [],
+		// 	draft_index;
+		// for(var i = 0; i < rows.length; i++) {
+		// 	if(rows[i].props.draft) {
+		// 		draft_rows.push(rows[i])
+		// 	}
+		// 	if(rows[i].props.draftDivider) {
+		// 		draft_index = i;
+		// 	}
+		// }
+		// draft_rows.unshift(rows[draft_index])
+		// rows = rows.filter(row => !row.props.draft && !row.props.draftDivider)
+		// rendered_rows.push(draft_rows)
+		// rendered_rows.push(rows)
+		return rows;
 	}
 
 

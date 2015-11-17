@@ -32,20 +32,18 @@ export function fetchAssignments(user_id) {
 }
 
 export function pollAssignments(user_id) {
-	return async(dispatch, getState) => {
-		try {
-			let assignments;
-			request
-			.get(`${api_url}/users/${user_id}/assignments/`)
-			.end((err, res) => { 
+	return (dispatch, getState) => {
+		let assignments;
+		request
+		.get(`${api_url}/users/${user_id}/assignments/`)
+		.end((err, res) => {
+			if(res.ok) {
 				assignments = res.body.assignments 
 				dispatch({type: RECEIVE_ASSIGNMENTS_SUCCESS, assignments })
-			})
-		} catch(err) {
-			dispatch({
-				type: RECEIVE_ASSINGMENTS_FAILURE,
-				error: Error(err)
-			})
-		}
+			} else {
+				dispatch({type: RECEIVE_ASSINGMENTS_FAILURE})
+			}
+		})
 	}
 }
+

@@ -9,17 +9,12 @@ const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 // /users/<int: user_id>/assignments/					GET
 // /assignments/<int: assignment_id>	
 export const FETCH_CREATE_SET = 'FETCH_CREATE_SET';
-export function fetchSet(user_id, set_id) {
+export function fetchSet(user_id, set_id, pushState) {
 	return async(dispatch, getState) => {
 		dispatch({type: FETCH_CREATE_SET})
 		try {
 			let set = {}, items = {}, associations = {}, rows = [],
-			assignment = getState().sets.assignments.filter(assign => assign.set_id == set_id)[0]
-			if(assignment == undefined) {
-				setTimeout(() => {
-					dispatch(fetchSet(user_id, set_id))
-				}, 150)
-			}
+			assignment = await getState().sets.assignments.filter(assign => assign.set_id == set_id)[0]
 			await axios.get(`${api_url}/sets/${set_id}`).then(res => { 
 				set = res.data 
 			})
@@ -31,8 +26,13 @@ export function fetchSet(user_id, set_id) {
 				associations[asc.id] = asc
 				rows.push(asc.id)
 			})
+			if(set.editability == 'creator' && set.creator_id !== getState().user.user.id) {
+				pushState(null, '/error')
+				return;
+			}
 			dispatch({type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows})
 		} catch(err) {
+			pushState(null, '/error')
 			dispatch({
 				type: LOAD_EDITING_FAILURE,
 				error: Error(err)
@@ -48,7 +48,7 @@ export function fetchSet(user_id, set_id) {
 export const LOAD_EDITING = 'LOAD_EDITING';
 export const LOAD_EDITING_SUCCESS = 'LOAD_EDITING_SUCCESS';
 export const LOAD_EDITING_FAILURE = 'LOAD_EDITING_FAILURE';
-export function loadEditing(set_id) {
+export function loadEditing(set_id, pushState) {
 	return async(dispatch, getState) => {
 		dispatch({ type: LOAD_EDITING })
 		try {
@@ -63,11 +63,15 @@ export function loadEditing(set_id) {
 					associations[asc.id] = asc
 					rows.push(asc.id)
 				})
+				if(set.editability == 'creator' && set.creator_id !== user.id) {
+					pushState(null, '/error')
+					return;
+				}
 				setTimeout(() => {
 					dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows })
 				}, 50)
 			} else {
-				dispatch(fetchSet(user.id, set_id))
+				dispatch(fetchSet(user.id, set_id, pushState))
 			}	
 		} catch(err) {
 			dispatch({

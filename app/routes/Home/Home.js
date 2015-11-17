@@ -28,26 +28,29 @@ export default class Home extends Component {
 		
 	}
 
-	intervalPoll = {}
+	// intervalPoll = {}
 
 	componentWillMount() {
 		this.props.fetchAssignments(1)
 	}	
 
-	assignmentPoll() {
-		const { pollAssignments } = this.props;
-		pollAssignments(1)
-	}
+	// assignmentPoll() {
+	// 	const { pollAssignments } = this.props;
+	// 	pollAssignments(1)
+	// }
 
 	componentDidMount() {
-		this.intervalPoll = setInterval(() => {
-			::this.assignmentPoll(1)
-		}, 2500)
+		setTimeout(() => {
+			this.props.pollAssignments(1)
+		}, 1000)
+		// this.intervalPoll = setInterval(() => {
+		// 	::this.assignmentPoll(1)
+		// }, 2500)
 	}
 
-	componentWillUnmount() {
-		clearInterval(this.intervalPoll)
-	}
+	// componentWillUnmount() {
+	// 	clearInterval(this.intervalPoll)
+	// }
 	
 	render() {	
 		const { sets, isFetching } = this.props;	 

@@ -28,15 +28,20 @@ export default class FlunkApp extends Component {
 		error: PropTypes.string
 	}
 
-	renderSideNav(){
+	renderSideNav() {
 		const route = this.props.router.location.pathname;
-		if (route.indexOf('/createset') !== -1 
-			|| route.indexOf('learn') !== -1 
-			|| route.indexOf('search') !== -1
-			|| route.indexOf('error') !== -1) { return; }
-		return (
-			<SideNav {...this.props} />
-		);
+		if     (route.indexOf('createset') !== -1 
+			 || route.indexOf('learn') !== -1 
+			 || route.indexOf('search') !== -1
+			 || route.indexOf('error') !== -1) { return; }
+		else if(route.indexOf('set') !== -1
+			 || route.indexOf('profile') !== -1
+			 || route == '/') {
+			return (
+				<SideNav {...this.props} />
+			);
+		}
+		else if(route !== '/') { return }
 	}
 
 	componentWillMount() {

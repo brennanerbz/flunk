@@ -68,9 +68,9 @@ export default class CreateSetPage extends Component {
 	}
 
 	componentWillMount() {
-		const { params, transfer, loadEditing, loadSetFlag } = this.props;
+		const { params, transfer, loadEditing, loadSetFlag, pushState } = this.props;
 		loadSetFlag()
-		if(Object.keys(params).length !== 0) loadEditing(params.id) 
+		if(Object.keys(params).length !== 0) loadEditing(params.id, pushState) 
 	}
 
 	componentWillUnmount() {

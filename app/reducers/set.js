@@ -66,8 +66,6 @@ export default function setView(state = initial_setstate, action) {
 			let set = action.set,
 				subjects = [];
 			set.subjects.forEach(sub => subjects.push(sub.name))
-			console.log("set")
-			console.log(set)
 			return {
 				...state,
 				set: set,
@@ -99,7 +97,6 @@ export default function setView(state = initial_setstate, action) {
 				_associations.push(asc) 
 				_items.push(asc.item)
 			})
-			console.log(_associations)
 			return {
 				...state,
 				assignment: assignment,

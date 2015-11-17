@@ -70,7 +70,9 @@ import {
 
   LOAD_EDITING,
   LOAD_EDITING_SUCCESS,
-  LOAD_EDITING_FAILURE
+  LOAD_EDITING_FAILURE,
+
+  LOADING_SET
 	
 } from '../actions/createset';
 
@@ -78,6 +80,7 @@ import _ from 'lodash';
 import assign from 'lodash/object/assign';
 
 export var createState = {
+  cleared: false,
   isCreatingSet: false,
   isUpdatingSet: false,
   isCreatingItem: false,
@@ -109,7 +112,8 @@ export var createState = {
   scrolling: false,
   /* Editing */
   editing: false,
-  isLoadingSet: false
+  isLoadingSet: false,
+
 };
 
 export function createset(state = createState, action) {
@@ -153,6 +157,7 @@ export function createset(state = createState, action) {
         deleted: false
       }
     case CREATE_SET_SUCCESS:
+      if(state.cleared) return { ...state }
       const set = action.set
       return {
         ...state,
@@ -171,6 +176,7 @@ export function createset(state = createState, action) {
       }
     case UPDATE_SET_SUCCESS: 
       const updated_set = action.set;
+      if(state.cleared) return { ...state }
       return {
         ...state,
         isUpdatingSet: false,
@@ -180,6 +186,7 @@ export function createset(state = createState, action) {
         subjects: updated_set.subjects
       }
     case UPDATE_SETSUBJECTS_SUCCESS:
+      if(state.cleared) return { ...state }
       return {
         ...state,
         subjects: action.subs,
@@ -213,6 +220,7 @@ export function createset(state = createState, action) {
         term_choices: null
       }
     case CREATE_ASSOCIATION_SUCCESS:
+      if(state.cleared) return { ...state }
       let rows = state.rows, 
           index = action.index,
           associations = Object.assign({}, state.associations) || {},
@@ -227,6 +235,7 @@ export function createset(state = createState, action) {
         rows: rows
       }
     case UPDATE_ITEM_SUCCESS:
+      if(state.cleared) return { ...state }
       let updated_items = Object.assign({}, state.items),
           _associations = state.associations,
           newitem = action.item,
@@ -248,6 +257,7 @@ export function createset(state = createState, action) {
         associations: _associations
       }
     case UPDATE_ASSOCIATION_SUCCESS:
+      if(state.cleared) return { ...state }
       let updated_associations = Object.assign({}, state.associations),
           new_association = action.association,
           naid = new_association.id, /* new association id */
@@ -363,7 +373,13 @@ export function createset(state = createState, action) {
     case CLEAR_SET:
       return {
         ...state = createState,
-        rows: [null, null]
+        rows: [null, null],
+        cleared: true
+      }
+    case LOADING_SET: 
+      return {
+        ...state,
+        cleared: false
       }
     case UPDATE_ASSOCIATION_FAILURE:
     case TERM_SUGGESTIONS_FAILURE:

@@ -25,7 +25,7 @@ export default class Main extends Component {
 					</span>
 				</h2>				
 				<ul className="sidenav_list">
-					<li className={classnames("sidenav_setitem", {"active": loc.pathname === '/'})}>
+					<li className={classnames("sidenav_setitem", {"active": loc.pathname === '/' && loc.pathname.indexOf('set') == -1})}>
 						<Link to="/" className="sidenav_setitem_name">
 							<span className="overflow_ellipsis">
 								<span className="prefix_icon">

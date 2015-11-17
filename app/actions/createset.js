@@ -32,7 +32,6 @@ export function fetchSet(user_id, set_id) {
 				rows.push(asc.id)
 			})
 			dispatch({type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows})
-			// console.log(set, assignment, items, associations, rows)
 		} catch(err) {
 			dispatch({
 				type: LOAD_EDITING_FAILURE,
@@ -56,7 +55,7 @@ export function loadEditing(set_id) {
 			let transferState = getState().transfer,
 				user = getState().user.user,
 				set, assignment, items = {}, associations = {}, rows = [];
-			if(transferState.set !== null) {
+			if(transferState.set !== null && transferState.set.id == set_id) {
 				set = transferState.set
 				assignment = transferState.assignment
 				transferState.associations.forEach(asc => {
@@ -141,7 +140,7 @@ export function createSet(title, ...args) {
 			.then(res => set = res.data)
 			dispatch({type: CREATE_SET_SUCCESS, set})
 			if(set.title !== 'Untitled') {
-				dispatch(updateSetSubjects())
+				// dispatch(updateSetSubjects())
 			}
 		} catch(err) {
 			dispatch({
@@ -204,15 +203,13 @@ export function updateSet(_set, ...args) {
 					}
 				}
 			}
-			console.log("over here...")
-			console.log(set)
 			await axios.put(`${api_url}/sets/${_set.id}`, 
 				set 
 			)
 			.then(res => set = res.data)
 			dispatch({type: UPDATE_SET_SUCCESS, set})
 			if(set.title !== 'Untitled') {
-				dispatch(updateSetSubjects())
+				// dispatch(updateSetSubjects(undefined, set))
 			}
 		} catch(err) {
 			dispatch({
@@ -224,13 +221,12 @@ export function updateSet(_set, ...args) {
 }
 export const UPDATE_SETSUBJECTS_SUCCESS = 'UPDATE_SETSUBJECTS_SUCCESS';
 export const UPDATE_SETSUBJECTS_FAILURE = 'UPDATE_SETSUBJECTS_FAILURE';
-export function updateSetSubjects(subjects) {
+export function updateSetSubjects(subjects, set) {
 	return async(dispatch, getState) => {
 		dispatch({type: UPDATE_SET})
 		try {
 			var subs,
-				set = getState().createset.set;
-			console.log(subjects)
+				set = set == undefined ? getState().createset.set : set;
 			if(subjects !== undefined) {
 				subs = subjects;
 				await axios.put(`${api_url}/sets/${set.id}/edit-subjects/`, subs)
@@ -582,7 +578,7 @@ export function updateItem(_item, ...args) {
 			.then(res => item = res.data)
 			dispatch({type: UPDATE_ITEM_SUCCESS, item})
 			if(item.subjects.length > 0 && getState().createset.subjects !== item.subjects) {
-				dispatch(updateSetSubjects())
+				// dispatch(updateSetSubjects())
 			}
 		} catch(err) {
 			dispatch({
@@ -628,7 +624,7 @@ export function createAssociation(item_id, index) {
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => association = res.data)
 			dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index})
-			dispatch(updateSetSubjects())
+			// dispatch(updateSetSubjects())
 		} catch(err) {
 			dispatch({
 				type: CREATE_ASSOCIATION_FAILURE,
@@ -735,12 +731,20 @@ import { createState } from '../reducers/createset';
 export const CLEAR_SET = 'CLEAR_SET';
 export function clearSet() {
 	return (dispatch, getState) => {
-		if(!_.isEqual(createState, getState().createset)) {
-			dispatch({type: CLEAR_SET}) 
+		let current_state = getState().createset,
+			copy_state = Object.assign({...createState}, {cleared: true})
+		dispatch({type: CLEAR_SET}) 
+		if(!_.isEqual(copy_state, current_state)) {
 			setTimeout(() => {
 				dispatch(clearSet()) 
 			}, 500)
 		}
+	}
+}
+export const LOADING_SET = 'LOADING_SET';
+export function loadSetFlag() {
+	return (dispatch, getState) => {
+		dispatch({ type: LOADING_SET})
 	}
 }
 

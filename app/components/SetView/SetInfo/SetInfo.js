@@ -41,7 +41,13 @@ export default class SetInfo extends Component {
 				<div className="set_details">
 					<div className="purpose">
 						<p className="info_header">Purpose</p>
-						<p className="info_purpose">{purpose}</p>
+						<p className="info_purpose">
+							{
+								purpose !== null && purpose.length > 0
+								? purpose
+								: "No purpose given"
+							}
+						</p>
 					</div>
 					<div className="subject_list">
 						<p className="info_header">Subjects</p>

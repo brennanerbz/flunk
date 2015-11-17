@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import pushState from 'redux-router';
+import { bindActionCreators } from 'redux';
+import { pushState } from 'redux-router';
 const styles = require('./Header.scss');
 
 import Notifications from './Notifications/Notifications';
@@ -14,13 +15,20 @@ import Menu from '../Menu/Menu';
 @connect(state => ({
 	loc: state.router.location,
 	sets: state.sets.sets,
+	user: state.user.user,
 	current_sequence: state.learn.current_sequence,
 	learn_set: state.learn.current_sequence.set,
 	set_id: state.learn.current_sequence.set_id,
 	isFetching: state.sets.isFetchingAssignments,
 	fetchingLearn: state.learn.isFetchingLearn,
 	current_sequence: state.learn.current_sequence
-}))
+	}),
+	dispatch => ({
+		...bindActionCreators({
+			pushState
+		}, dispatch)
+	})
+)
 export default class Header extends Component {
 	static propTypes = {
 		loc: PropTypes.object
@@ -77,7 +85,8 @@ export default class Header extends Component {
 			  	current_sequence, 
 			  	fetchingLearn,
 			  	learn_set,
-			  	set_id
+			  	set_id,
+			  	pushState
 			  } = this.props;
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
@@ -105,13 +114,15 @@ export default class Header extends Component {
 								? null
 								: <SearchBox {...this.props}/>
 							}
-							
 							{
 								loc.pathname.indexOf('/learn') !== -1 || loc.pathname.indexOf('/createset') !==  -1
 								? null
-								: <button className="create_set_btn_group">
+								: <button className="create_set_btn_group"
+										  onClick={() => { 
+										  	pushState(null, '/createset') 
+										  }}>
 										<img className="create_icon" src={create_icon}/>
-										<Link className="button create-set-button button-outline" to="/createset">
+										<Link className="button create-set-button button-outline" to="">
 														Create a study set					
 										</Link>	
 								  </button>
@@ -135,15 +146,7 @@ export default class Header extends Component {
 						: null } 
 						<span className="header-block header-right">
 							<div className="button-group">
-								{  
-									loc.pathname.indexOf('/learn') !== -1 || loc.pathname == '/createset'
-									? null 									
-									: 
-									<span>										
-										<Notifications {...this.props}/>	
-									</span>						
-								}
-								<Avatar/>								
+								<Avatar {...this.props}/>								
 							</div>
 						</span>
 					</div>
@@ -153,6 +156,15 @@ export default class Header extends Component {
 	}
 }
 
+
+// {  
+// 	loc.pathname.indexOf('/learn') !== -1 || loc.pathname == '/createset'
+// 	? null 									
+// 	: 
+// 	<span>										
+// 		<Notifications {...this.props}/>	
+// 	</span>						
+// }
 
 // <Menu learn={true}
 // 	  bounding={true}

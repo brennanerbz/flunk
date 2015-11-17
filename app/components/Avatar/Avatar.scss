@@ -8,6 +8,11 @@
 }
 .inline-avatar {
 	display: table-cell;
+	.link {
+		&:hover {
+			text-decoration: none!important;
+		}
+	}
 }
 .avatar-table {
 	display: table;
@@ -61,11 +66,15 @@
 
 .user_name {
 	color: #555549;
-	opacity: 0.6;
+	opacity: 0.8;
 	margin-left: 10px;
 	&:hover {
 		color: #555459;
 		opacity: 1;
+		text-decoration: none!important;
+	}
+	img {
+		margin-right: 10px;
 	}
 }
 

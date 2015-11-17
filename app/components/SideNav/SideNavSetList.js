@@ -29,11 +29,12 @@ export default class SetList extends Component {
 	}
 
 	render() {
-		const { sets, params, assignments} = this.props,
+		let { sets, params, assignments } = this.props,
 			  add_circle_icon = require('../../assets/add_circle_icon.png');
 		sets.sort((set1, set2) => {
 			return (moment(set1.creation).isBefore(set2.creation)) ? 1 : -1
 		})
+		assignments = assignments.filter(ass => ass.set.finalized !== null)
 		let id = params !== undefined ? params.id : ''
 		return(
 			<div className="sidenav_sets_wrapper">

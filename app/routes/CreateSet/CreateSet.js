@@ -68,7 +68,8 @@ export default class CreateSetPage extends Component {
 	}
 
 	componentWillMount() {
-		const { params, transfer, loadEditing } = this.props;
+		const { params, transfer, loadEditing, loadSetFlag } = this.props;
+		loadSetFlag()
 		if(Object.keys(params).length !== 0) loadEditing(params.id) 
 	}
 
@@ -86,9 +87,7 @@ export default class CreateSetPage extends Component {
 		clearTransferState()
 
 		if(set !== null) {
-			console.log("assignment")
-			console.log(assignment)
-			if(assignment !== null) reorder()
+			if(assignment !== null && Object.keys(associations).length > 1) reorder()
 			if(assignment == null && !deleted) {
 				updateSet(set, {name: 'finalized', prop: null})
 				createAssignment(set.id)
@@ -97,7 +96,9 @@ export default class CreateSetPage extends Component {
 				} 
 			}
 		}
-		setTimeout(() => { clearSet() }, 500)
+		setTimeout(() => {
+			clearSet()
+		}, 50)
 	}	
 
 	render() {
@@ -106,7 +107,23 @@ export default class CreateSetPage extends Component {
 			<div className="CreateSetPage no_sidenav_container">
 			{
 				isLoadingSet
-				? null
+				?
+				<div className="big_spinner">
+					<div className="sk-fading-circle">
+					  <div className="sk-circle1 sk-circle"></div>
+					  <div className="sk-circle2 sk-circle"></div>
+					  <div className="sk-circle3 sk-circle"></div>
+					  <div className="sk-circle4 sk-circle"></div>
+					  <div className="sk-circle5 sk-circle"></div>
+					  <div className="sk-circle6 sk-circle"></div>
+					  <div className="sk-circle7 sk-circle"></div>
+					  <div className="sk-circle8 sk-circle"></div>
+					  <div className="sk-circle9 sk-circle"></div>
+					  <div className="sk-circle10 sk-circle"></div>
+					  <div className="sk-circle11 sk-circle"></div>
+					  <div className="sk-circle12 sk-circle"></div>
+					</div>
+				</div>
 				: 
 				<div>
 					<CreateSetHeader {...this.props}/>                 

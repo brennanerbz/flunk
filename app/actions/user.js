@@ -10,6 +10,7 @@ export const RECEIVE_USER_SUCCESS = 'RECEIVE_USER_SUCCESS'
 export const RECEIVE_USER_FAILURE = 'RECEIVE_USER_FAILURE'
 export function fetchUser(user_id, username) {
 	return async(dispatch, getState) => {
+		dispatch({type: REQUEST_USER})
 		try {
 			let user;
 			await axios.get(`${api_url}/users/${user_id}`)

@@ -27,11 +27,11 @@ export const RECEIVE_SET_FAILURE = 'RECEIVE_SET_FAILURE';
 export const RECEIVE_ASSIGNMENTS_SUCCESS = 'RECEIVE_ASSIGNMENTS_SUCCESS';
 
 /*
-@params set_id
+@params set_id 
 */
 export function fetchSet(set_id) {
 	return async(dispatch, getState) => {
-		if(getState().sets.isFetchingAssignments) {
+		if(getState().sets.isFetchingAssignments || getState().user.isFetchingUser) {
 			setTimeout(() => {
 				dispatch(fetchSet(set_id))
 			}, 5)
@@ -43,7 +43,6 @@ export function fetchSet(set_id) {
 				user = getState().user.user,
 				assignments,
 				assignment;
-			console.log(user)
 			await axios.get(`${api_url}/users/${user.id}/assignments/`)
 			.then((res) => { 
 				assignments = res.data.assignments 
@@ -55,8 +54,6 @@ export function fetchSet(set_id) {
 				set
 			})
 			assignment = assignments.filter(assignment => assignment.set_id == Number(set_id))[0]
-			console.log("assignment")
-			console.log(assignment)
 			if(assignment !== undefined) {
 				dispatch(fetchAssignment(assignment.id))
 				return;

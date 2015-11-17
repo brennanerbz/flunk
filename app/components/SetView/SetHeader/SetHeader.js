@@ -12,14 +12,18 @@ export default class SetHeader extends Component {
 
 	render() {
 		const image = require('../../../assets/set_profile_image.png');
-		const { title, item_count, creator_username, id } = this.props;
+		const { title, item_count, creator_username, creator_id, id, pushState } = this.props;
 		return(
 			<span className="set_header">				
 				<div className="page_header_wrapper header_info inline_info">
 					<h1 className="page_header set_title">{title}</h1>
 					<span>
 						<p className="set_author">
-							{item_count} terms by <a className="link">{creator_username}</a>
+							{item_count} terms by 
+							<a className="link creator_link"
+							   onClick={() => pushState(null, `/profile/${creator_id}`)}>
+								{creator_username}
+							</a>
 						</p>
 					</span>
 				</div>

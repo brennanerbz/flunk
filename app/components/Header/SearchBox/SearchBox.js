@@ -38,16 +38,17 @@ export default class SearchBox extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if(nextProps.loc.pathname.indexOf('search') == -1) { this.setState({value: ''}); return; }
-			let { loc } = this.props,
-				lastSlash = loc.pathname.lastIndexOf("/"),
-				bq = loc.pathname.slice(lastSlash, loc.length)
-				.replace("/", "")
-				.split("%20")
-				.map(word => word.replace("%20", ""))
-				.join(" "),
-				page = bq.indexOf('&'),
-				query;
+		if(this.props.loc.pathname.indexOf('search') !== -1 
+			&& nextProps.loc.pathname.indexOf('search') == -1) { this.setState({value: ''}); return; }
+		let { loc } = this.props,
+			lastSlash = loc.pathname.lastIndexOf("/"),
+			bq = loc.pathname.slice(lastSlash, loc.length)
+			.replace("/", "")
+			.split("%20")
+			.map(word => word.replace("%20", ""))
+			.join(" "),
+			page = bq.indexOf('&'),
+			query;
 		if(page !== -1) query = bq.slice(0, page)
 		else query = bq
 		if(loc.pathname.indexOf('search') !== -1) this.setState({value: query});
@@ -66,6 +67,7 @@ export default class SearchBox extends Component {
 			    lastSlash = loc.pathname.lastIndexOf("/"),
 			    query = loc.pathname.slice(lastSlash, loc.length).replace("/", ""),
 			    pathname = loc.pathname;
+		if(value.length === 0) return;
 		if(query == value == term_name) return;
 		if(pathname.indexOf('sets') !== -1 || pathname.indexOf('search') == -1) pushState(null, `/search/sets/${value}`)
 		if(pathname.indexOf('concepts') !== -1) pushState(null, `/search/concepts/${value}`)

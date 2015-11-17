@@ -31,6 +31,9 @@
 				&:first-child {
 					padding-top: 0.65em;
 				}
+				&:last-child {
+					padding-bottom: 0;
+				}
 			}
 		}
 		.error_logo {
@@ -41,7 +44,10 @@
 				right: 0;
 				margin-right: -20px!important;
 				padding-right: 0!important;
+				margin-bottom: 0;
 			}
+			padding-bottom: 0;
+			margin-bottom: 0;
 		}
 	}
 }

@@ -15,7 +15,7 @@ export default class ErrorPage extends Component {
 					<div className="error_card">
 						<div className="error_msg">
 							<img src={brand_logo} className="brand_logo"/>
-							<p className="error"><b>404. </b>That's an error</p>
+							<p className="error"><b>404. </b>That's an error.</p>
 							<p className="error">To learn more about website errors, &nbsp;
 							<Link className="link"
 							   	  to="/search/concepts/error"> 

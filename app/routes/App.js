@@ -30,7 +30,10 @@ export default class FlunkApp extends Component {
 
 	renderSideNav(){
 		const route = this.props.router.location.pathname;
-		if (route.indexOf('/createset') !== -1 || route.indexOf('learn') !== -1 || route.indexOf('search') !== -1) { return; }
+		if (route.indexOf('/createset') !== -1 
+			|| route.indexOf('learn') !== -1 
+			|| route.indexOf('search') !== -1
+			|| route.indexOf('error') !== -1) { return; }
 		return (
 			<SideNav {...this.props} />
 		);

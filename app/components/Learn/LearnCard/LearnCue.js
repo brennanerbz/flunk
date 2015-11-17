@@ -12,11 +12,12 @@ export default class LearnCue extends Component {
 
 	renderCue(cue, target) {
 		if(cue == null) return { __html: null }
-		if(cue.toLowerCase().indexOf(target.toLowerCase()) == 0) {
-			cue = cue.replace(new RegExp('(^|\\s)(' + target + ')(\\s|$)','ig'), 'What is ')
-			cue = cue.replace(cue.slice(-1)[0], '?').replace("is is", 'is')
-		}
+		// if(cue.toLowerCase().indexOf(target.toLowerCase()) == 0) {
+		// 	cue = cue.replace(new RegExp('(^|\\s)(' + target + ')(\\s|$)','ig'), 'What is ')
+		// 	cue = cue.replace(cue.slice(-1)[0], '?').replace("is is", 'is')
+		// }
 		if(cue.toLowerCase().indexOf(target.toLowerCase()) !== -1) {
+			cue = cue.replace(new RegExp(target + ',', "gi"), target);
 			cue = cue.replace(new RegExp('(^|\\s)(' + target + ')(\\s|$)','ig'), '$1<b class="blurry_text">&nbsp;$2&nbsp;</b>$3')
 		}
 		return {

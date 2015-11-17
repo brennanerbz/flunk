@@ -1,25 +1,47 @@
 .error_page {
-	position: relative;
-	display: block;
-	top: 100px;
 	text-align: center;
-	h1 {
-		font-family: "Lato";
-		font-weight: 900!important;
-		letter-spacing: 0.01em;
-		color: #555459;
-		&.error {
-			font-size: 7.5em!important;
+	padding-top: 150px;
+	.error_card {
+		display: table;
+		position: relative;
+		margin: 0 auto;
+		width: 700px;
+		height: 200px;
+		border: 1px solid #E4E4E4;
+		border-radius: 0.35em;
+		padding: 2em;
+		padding-top: 2.5em;
+		.error_msg, .error_logo {
+			display: table-cell;
 		}
-		&.not_found {
-			font-weight: 400!important;
-			font-size: 3em!important;
+		.error_msg {
+			position: relative;
+			text-align: left;
+			padding-top: 0!important;
+			margin-top: 0!important;
+			img {
+				position: absolute;
+				top: 0;
+				height: 35px;
+			}
+			p {
+				position: relative;
+				display: block;
+				padding: 0.25em 0;
+				&:first-child {
+					padding-top: 0.65em;
+				}
+			}
 		}
-	}
-	.error_message {
-		font-size: 17px;
-		&.head {
-			font-weight: 700!important;
+		.error_logo {
+			img {
+				height: 150px;
+				position: relative;
+				display: inline-block;
+				right: 0;
+				margin-right: -20px!important;
+				padding-right: 0!important;
+			}
 		}
 	}
 }

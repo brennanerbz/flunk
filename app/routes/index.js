@@ -10,6 +10,7 @@ import Profile from './Profile/Profile';
 import Learn from './Learn/Learn';
 import SetView from './Set/Set';
 import Search from './Search/Search';
+import ErrorPage from './ErrorPage/ErrorPage';
 
 import fillStore from '../utils/fillStore';
 
@@ -28,6 +29,8 @@ const routes = (
     <Route path="search/concepts/:query" component={Search}/>
     <Route path="search/sets/:query" component={Search}/>
     <Route path="search/users/:query" component={Search}/>
+
+    <Route path="*" component={ErrorPage}/>
   </Route>
 );
 

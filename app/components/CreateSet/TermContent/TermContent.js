@@ -152,7 +152,7 @@ export default class TermContent extends Component {
                         ref={`word${index}`}          
                         tabIndex={2}
                         {...this.props}
-        	            />
+                      />
         	          </div>
         	          <div className="TermContent-side def-side"
                          ref={`termContentDef${index}`}
@@ -169,10 +169,14 @@ export default class TermContent extends Component {
                         ref={`def${index}`}          
                         tabIndex={2}
                         {...this.props}
-        	          	/>
+                      />
         	          </div>
         	        </div>
           	</div>
   	);
   }
 }
+
+             
+
+              //               

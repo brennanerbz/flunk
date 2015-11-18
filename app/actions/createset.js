@@ -833,31 +833,9 @@ export function activateRow(index) {
 	}
 }
 
-export const SAVE_SET = 'SAVE_SET'
-export function saveSet(){
-	return {
-		type: SAVE_SET
-	}
-}
-
-export const SET_MOUSE_POS = 'SET_MOUSE_POS'
-export function setMousePos(index) {
-	return {
-		type: SET_MOUSE_POS,
-		index
-	}
-}
-
 export const RESIZE = 'RESIZE'
 export function resize() {
 	return {
 		type: RESIZE
-	}
-}
-
-export const SCROLL = 'SCROLL'
-export function adjustScroll() {
-	return {
-		type: SCROLL
 	}
 }

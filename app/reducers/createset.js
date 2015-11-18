@@ -43,7 +43,6 @@ import {
   UPDATE_ASSOCIATION,
   UPDATE_ASSOCIATION_SUCCESS,
   UPDATE_ASSOCIATION_FAILURE,
-	SAVE_SET,
 
 	SAVE_TITLE,
 	SAVE_PURPOSE,
@@ -57,9 +56,7 @@ import {
 	FLIP_ACTIVESIDE,
 	ACTIVATE_ROW,
 
-	SET_MOUSE_POS,
 	RESIZE,
-	SCROLL,
 
   CLEAR_SET,
 
@@ -106,6 +103,7 @@ export var createState = {
   def_choices: null,
   // rows: Array.from(Array())
   rows: [null, null],
+  row_length: 1,
   flag: false,
   title_flag: false,
   /* Old State */
@@ -346,7 +344,8 @@ export function createset(state = createState, action) {
       return {
         ...state,
         activeRow: last_index,
-        rows: new_rows
+        rows: new_rows,
+        row_length: new_rows.length
       }
     case SET_FLAG: 
       return {
@@ -371,7 +370,8 @@ export function createset(state = createState, action) {
       return {
         ...state,
         rows: n_rows,
-        count: new_count
+        count: new_count,
+        row_length: n_rows.length
       }
     case FLIP_ACTIVESIDE:
       const active = state.activeContext;
@@ -394,29 +394,10 @@ export function createset(state = createState, action) {
         ...state,
         activeRow: action.index
       }
-    case SAVE_SET:
-      const terms = JSON.stringify(state.terms, null, 2)
-      alert(
-        "Title:" + state.title + "\n" + 
-        "Purpose:" + state.purpose + "\n" + 
-        "Items:" + terms
-        );
-      return state;
-
-    case SET_MOUSE_POS:
-      return {
-        ...state,
-        mousePos: action.index
-      }
     case RESIZE:
       return {
         ...state,
         resizing: !state.resizing
-      }
-    case SCROLL:
-      return {
-        ...state,
-        scrolling: !state.scrolling
       }
     case UNMOUNTING_CREATE:
       return {

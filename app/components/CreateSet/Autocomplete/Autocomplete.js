@@ -26,7 +26,7 @@ export default class Autocomplete extends Component {
 		// menuStyle: PropTypes.object,
 		inputProps: PropTypes.object,
 		index: PropTypes.number,
-		lastIndex: PropTypes.number
+		totalCount: PropTypes.number
 	}
 
 	// static defaultProps = {
@@ -67,12 +67,12 @@ export default class Autocomplete extends Component {
 
 	keyUpHandlers = {
 		Tab() {
-		  const { addRow, index, lastIndex, activeSide, flag, setFlag, activateRow } = this.props;
+		  const { addRow, index, totalCount, activeSide, flag, setFlag, activateRow } = this.props;
 		  if(flag) {
 		  	setFlag(false)
 		  	return;
 		  }
-		  if (index !== lastIndex) return;
+		  if (index !== totalCount) return;
 		  if (activeSide == 'def') {
 		    addRow()
 		  }
@@ -82,8 +82,8 @@ export default class Autocomplete extends Component {
 	keyDownHandlers = {
 	    
 	    Tab(event) {
-	    	const { addRow, index, lastIndex, activeSide, flag } = this.props;
-	    	if (index == lastIndex && activeSide == 'def') event.preventDefault();
+	    	const { addRow, index, totalCount, activeSide, flag } = this.props;
+	    	if (index == totalCount && activeSide == 'def') event.preventDefault();
 	    },
 
 	    // ArrowDown() {
@@ -176,14 +176,14 @@ export default class Autocomplete extends Component {
 	}
 
 	componentDidMount() {  
-	  const { index, lastIndex, wordSide } = this.props;
+	  const { index, totalCount, wordSide } = this.props;
 	  const node = this.refs['textarea' + this.getNodeId()];
 	  // autosize(node);
 	  // if (this.props.onResize) {
 	  //   node.addEventListener(RESIZED, this.props.onResize);
 	  // }
 	  if (document.activeElement == document.body) {
-	    if (index === lastIndex && wordSide) {
+	    if (index === totalCount && wordSide) {
 	      node.focus()
 	    }
 	  }
@@ -473,7 +473,7 @@ export default class Autocomplete extends Component {
 	    <div className="Autocomplete-textarea" style={{display: 'inline-block'}}>
 	      <textarea
 	      	autoFocus={this.props.wordSide 
-	      			  && this.props.index == this.props.lastIndex
+	      			  && this.props.index == this.props.totalCount
 	      			  && this.props.title_flag
 	      			  ? true : false}
 	        tabIndex={this.props.tabIndex}

@@ -12,9 +12,9 @@ import TermRow from '../TermRow/TermRow';
 	state => ({
 		activeContext: state.createset.activeContext,
 		activeRow: state.createset.activeRow,
-		mousePos: state.createset.mousePos,
 		resizing: state.createset.resizing,
-		scrolling: state.createset.scrolling
+		/* New state */
+		row_length: state.createset.row_length
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -42,13 +42,11 @@ export default class TermRows extends Component {
 	}
 
 	componentDidMount = () => {
-	  // window.addEventListener('resize', this.handleResize);
-	  // window.addEventListener('scroll', this.handleScroll);	  
+	  window.addEventListener('resize', this.handleResize); 
 	}
 
 	componentWillUnmount = () => {
-	  // window.removeEventListener('resize', this.handleResize)
-	  // window.removeEventListener('scroll', this.handleScroll);
+	  window.removeEventListener('resize', this.handleResize)
 	}
 
 	componentWillReceiveProps = (nextProps) => {
@@ -62,24 +60,20 @@ export default class TermRows extends Component {
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
-	  const { activeRow, rows } = this.props;
-	  if (prevProps.activeRow !== this.props.activeRow && activeRow === rows.length - 1) {
+	  const { activeRow, row_length } = this.props;
+	  if (prevProps.activeRow !== this.props.activeRow && activeRow === row_length - 1) {
 	    this.scrollToBottom()
 	  }
 	}
 
-	// handleResize = () => {
-	//   this.props.resize()
-	// }
+	handleResize = () => {
+	  this.props.resize()
+	}
 
 	scrollToBottom = () => {
 	  const node = document.body;
 	  node.scrollTop = node.scrollHeight;
 	} 
-
-	// handleScroll = () => {
-	//   this.props.adjustScroll()
-	// }
 
 	deactivateRow = () => {
 	  let { activateRow, setFlag, flag } = this.props;
@@ -90,45 +84,40 @@ export default class TermRows extends Component {
 	}
 
 	render() {
-	  const { rows, activeRow, addRow } = this.props;
-	  const length = rows.length - 1;
-	  // console.log(rows)
+	  const { rows, activeRow, addRow, row_length } = this.props;
 	  return(
 				<div className="TermRows"
 					 ref="term_rows"
 			         onBlur={this.deactivateRow}>
-			      <div className="TermRow">
-			        <div className="TermRow-content row-labels">
-			          <div className="TermContent">
-			            <div className="TermContent-wrap">
-			              <div className="TermContent-side word-side">
-			                <p>Terms</p>
-			              </div>
-			              <div className="TermContent-side def-side">
-			                <p>Definitions</p>
-			              </div>
-			            </div>
-			          </div>
-			        </div>
-			      </div>
+				      <div className="TermRow">
+				        <div className="TermRow-content row-labels">
+				          <div className="TermContent">
+				            <div className="TermContent-wrap">
+				              <div className="TermContent-side word-side">
+				                <p>Terms</p>
+				              </div>
+				              <div className="TermContent-side def-side">
+				                <p>Definitions</p>
+				              </div>
+				            </div>
+				          </div>
+				        </div>
+				      </div>
 			        {     
 			            rows.map((id, i) => {
 			              return (
 			                <TermRow
 			                  asc_id={id}
-			                  // isMouseOver={i === this.props.mousePos}
 			                  ref={`row${i}`}                    
 			                  activeRow={activeRow}
 			                  activeSide={this.state.activeSide}
-			                  lastIndex={Number(length)}
-			                  totalCount={length}
+			                  totalCount={row_length}
 			                  index={i}
 			                  key={`row${i}`}
 			                  termLuid={`row${i}`}
 			                  {...this.props}
 			                />
-			              )
-			            })	          
+			            )})	          
 			        }
 			        <div className="TermRow add_row"
 			        	 ref="add_row"
@@ -136,15 +125,7 @@ export default class TermRows extends Component {
 			        	 title="Add a row">
 			        	<span className="add_icon">+</span>
 			        </div>
-			      </div>
+			    </div>
 		);
 	}
 }
-
-
-// <i className={classnames("material-icons md-36", "icon-cursor")}
-//    ref="addButton"
-//    onClick={() => addRow()}	           
-//    title="Add a row">
-//   add_circle_outline
-// </i>

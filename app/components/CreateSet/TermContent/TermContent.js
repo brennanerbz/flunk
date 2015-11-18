@@ -8,7 +8,7 @@ export default class TermContent extends Component {
 		editRow: PropTypes.func,
 		actions: PropTypes.object,
 		activeSide: PropTypes.string,
-		lastIndex: PropTypes.number
+		totalCount: PropTypes.number
 	}
 
   constructor(props) {
@@ -127,7 +127,6 @@ export default class TermContent extends Component {
     const { activeRow, 
             asc_id,
             index, 
-            lastIndex, 
             item,
             subjects } = this.props;
   	return (

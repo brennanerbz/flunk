@@ -122,6 +122,22 @@ export var createState = {
 
 };
 
+/* ---- Remove duplicates ----*/
+function uniq_fast(a) {
+    var seen = {};
+    var out = [];
+    var len = a.length;
+    var j = 0;
+    for(var i = 0; i < len; i++) {
+         var item = a[i];
+         if(seen[item] !== 1) {
+               seen[item] = 1;
+               out[j++] = item;
+         }
+    }
+    return out;
+}
+
 export function createset(state = createState, action) {
   switch (action.type) {
     case CREATE_SET:
@@ -196,7 +212,8 @@ export function createset(state = createState, action) {
       if(state.cleared) return { ...state }
       let _subs = [];
       if(action.subs !== undefined) {
-        action.subs.forEach(sub => _subs.push("#" + sub.name.toLowerCase()))
+        action.subs.forEach(sub => _subs.push("#" + sub.name.toLowerCase().replace(" ", "")))
+        _subs = uniq_fast(_subs)
       } else {
         _subs = state.subs
       }

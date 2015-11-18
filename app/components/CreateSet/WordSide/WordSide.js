@@ -57,27 +57,27 @@ export default class WordSide extends Component {
 									      switchToWord={this.switchToWord}
 										  className="AutoExpandTextArea-textarea"
 								          ref={`autocomplete${index}`}
-								          // items={term_choices !== undefined ? term_choices : []}
-								          // getItemValue={(item) => item}
-								          // onSelect={(value, item) => {
-								          //   this.setState({ terms: [ item ] })							           
-								          // }}
-								   //        onInput={(event, value) => {
-								   //          if(subjects !== undefined && subjects.length > 0) {
-											// 	this.setState({loading: true})
-											// 	getTermSuggestions(value, (items) => {
-											// 	  this.setState({ terms: items, loading: false })
-											// 	})
-											// }
-								   //        }}
-								          // renderItem={(term, isHighlighted, index) => (
-								          //   <div
-								          //     className={classnames({ 'first_item': index == 0 } )}
-								          //     style={isHighlighted ? styles.highlightedItem : styles.item}
-								          //     key={term.abbr}
-								          //     id={term.abbr}
-								          //   >{term}</div>
-								          // )}
+								          items={term_choices !== undefined ? term_choices : []}
+								          getItemValue={(item) => item}
+								          onSelect={(value, item) => {
+								            this.setState({ terms: [ item ] })							           
+								          }}
+								          onInput={(event, value) => {
+								            if(subjects !== undefined && subjects.length > 0) {
+												this.setState({loading: true})
+												getTermSuggestions(value, (items) => {
+												  this.setState({ terms: items, loading: false })
+												})
+											}
+								          }}
+								          renderItem={(term, isHighlighted, index) => (
+								            <div
+								              className={classnames({ 'first_item': index == 0 } )}
+								              style={isHighlighted ? styles.highlightedItem : styles.item}
+								              key={term.abbr}
+								              id={term.abbr}
+								            >{term}</div>
+								          )}
 								        />
 								</div>
 							</div>

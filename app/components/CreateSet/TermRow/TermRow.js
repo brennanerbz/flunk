@@ -13,8 +13,14 @@ export default class TermRow extends Component {
 	}
 
 	state = {
-		isMouseOver: false,
+		isMouseOver: false, 
+		activeRow: false,
+		activeSide: 0, /* 0 = 'term' & 1 = 'definition' */
+		terms: null,
 		item: null,
+		word: null,
+		definitions: null,
+		definition: null,
 		association: null,
 		association_id: null,
 		index: null

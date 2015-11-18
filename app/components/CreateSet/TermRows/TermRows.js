@@ -41,15 +41,15 @@ export default class TermRows extends Component {
 		}
 	}
 
-	// componentDidMount = () => {
-	//   window.addEventListener('resize', this.handleResize);
-	//   window.addEventListener('scroll', this.handleScroll);	  
-	// }
+	componentDidMount = () => {
+	  // window.addEventListener('resize', this.handleResize);
+	  // window.addEventListener('scroll', this.handleScroll);	  
+	}
 
-	// componentWillUnmount = () => {
-	//   window.removeEventListener('resize', this.handleResize)
-	//   window.removeEventListener('scroll', this.handleScroll);
-	// }
+	componentWillUnmount = () => {
+	  // window.removeEventListener('resize', this.handleResize)
+	  // window.removeEventListener('scroll', this.handleScroll);
+	}
 
 	componentWillReceiveProps = (nextProps) => {
 	  const { activeContext, setFlag, flag, activeRow } = this.props;
@@ -72,10 +72,10 @@ export default class TermRows extends Component {
 	//   this.props.resize()
 	// }
 
-	// scrollToBottom = () => {
-	//   const node = document.body;
-	//   node.scrollTop = node.scrollHeight;
-	// } 
+	scrollToBottom = () => {
+	  const node = document.body;
+	  node.scrollTop = node.scrollHeight;
+	} 
 
 	// handleScroll = () => {
 	//   this.props.adjustScroll()

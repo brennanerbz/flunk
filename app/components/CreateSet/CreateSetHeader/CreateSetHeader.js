@@ -28,6 +28,7 @@ export default class CreateSetHeader extends Component {
 	}
 	componentWillMount() {
 		const { title, subjects } = this.props;
+		if(title !== undefined && title.length > 0) this.setState({title: title});
 		if(subjects !== undefined && subjects.length > 0) this.setState({subjects: subjects})
 	}
 	componentWillReceiveProps(nextProps) {
@@ -44,7 +45,6 @@ export default class CreateSetHeader extends Component {
 		_subs = subjects
 		.map((sub, i) => { 
 			return sub.replace(",", "")
-			
 		})
 		.join("")
 		.replace(new RegExp(/#/g), " #")
@@ -225,7 +225,7 @@ export default class CreateSetHeader extends Component {
 										data-toggle="tooltip" 
 										data-placement="bottom"
 										onClick={() => {::this.updateSubjects()}}
-										>Done
+										>Save changes
 								</button>
 							</div>
 						</div>

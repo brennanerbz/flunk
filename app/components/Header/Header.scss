@@ -126,6 +126,9 @@
        
     .site-icon {
     	width: 85px;
+        &.mini {
+            width: 30px;
+        }
     }
     .search-icon {
     	width: 17px;

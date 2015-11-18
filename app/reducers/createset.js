@@ -160,6 +160,13 @@ export function createset(state = createState, action) {
           return action.associations[a].order - action.associations[b].order
         })
       } 
+      let _subjects = [];
+      if(action.set.subjects !== undefined) {
+        action.set.subjects.forEach(sub => _subjects.push("#" + sub.name.toLowerCase().replace(" ", "")))
+        _subjects = uniq_fast(_subjects)
+      } else {
+        _subjects = state.subs
+      }
       return {
         ...state,
         editing: true,
@@ -169,7 +176,6 @@ export function createset(state = createState, action) {
         title: action.set.title,
         creator_id: action.set.creator_id,
         creator_username: action.set.creator.username,
-        subjects: action.set.subjects,
         assignment: action.assignment,
         items: action.items,
         associations: action.associations,
@@ -177,7 +183,8 @@ export function createset(state = createState, action) {
         count: Object.keys(action.associations).length > 0 
                ? action.associations[action.rows.slice(-1)[0]].order + 1 
                : 1,
-        deleted: false
+        deleted: false,
+        subjects: _subjects
       }
     case CREATE_SET_SUCCESS:
       if(state.cleared) return { ...state }

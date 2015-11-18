@@ -26,8 +26,9 @@ export function fetchSet(user_id, set_id, pushState) {
 				associations[asc.id] = asc
 				rows.push(asc.id)
 			})
-			if(set.editability == 'creator' && set.creator_id !== getState().user.user.id) {
-				pushState(null, '/error')
+
+			if(set.editability == 'creator' && set.creator_id !== user_id) {
+				pushState(null, '/')
 				return;
 			}
 			dispatch({type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows})

@@ -98,8 +98,11 @@ export default class CreateSetPage extends Component {
 				associations,
 				reorder, 
 				clearTransferState,
+				unMountingCreate,
 				deleted	 
 				} = this.props;
+				
+		unMountingCreate()
 
 		clearTransferState()
 

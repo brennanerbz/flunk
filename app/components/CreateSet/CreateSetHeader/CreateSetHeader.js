@@ -32,7 +32,7 @@ export default class CreateSetHeader extends Component {
 			subs,
 			length = 0;
 		if(title !== undefined && title.length > 0) this.setState({title: title});
-		if(subjects !== undefined && subjects.length > 0) { 
+		if(subjects !== null &&  subjects !== undefined  && subjects.length > 0) { 
 			subs = subjects.slice(0, 3)
 			subs.forEach(sub => subject_names.push(sub.name))
 			subject_names = subject_names.map((sub, i) => { 
@@ -151,14 +151,16 @@ export default class CreateSetHeader extends Component {
 		let subject_names = [],
 			subs,
 			length = 0;
-		subs = subjects.slice(0, 3)
-		subs.forEach(sub => subject_names.push(sub.name))
-		subject_names = subject_names.map((sub, i) => { 
-			length += sub.length
-			if(i == 0) return sub
-			else return " " + sub
-		})
-		length += 2 * subs.length;
+		subs = subjects !== null &&  subjects !== undefined ? subjects.slice(0, 3) : null
+		if(subs !== null) {
+			subs.forEach(sub => subject_names.push(sub.name))
+			subject_names = subject_names.map((sub, i) => { 
+				length += sub.length
+				if(i == 0) return sub
+				else return " " + sub
+			})
+			length += 2 * subs.length;
+		}
 		return(
 			<div className="CreateSetHeader"> 
 	          <div className="container CreateSetHeader-container">	

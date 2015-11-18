@@ -226,21 +226,23 @@ export function updateSet(_set, ...args) {
 export const UPDATE_SETSUBJECTS_SUCCESS = 'UPDATE_SETSUBJECTS_SUCCESS';
 export const UPDATE_SETSUBJECTS_FAILURE = 'UPDATE_SETSUBJECTS_FAILURE';
 export function updateSetSubjects(subjects, set) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		dispatch({type: UPDATE_SET})
 		try {
 			var subs,
 				set = set == undefined ? getState().createset.set : set;
 			if(subjects !== undefined) {
 				subs = subjects;
-				await axios.put(`${api_url}/sets/${set.id}/edit-subjects/`, subs)
+				axios.put(`${api_url}/sets/${set.id}/edit-subjects/`, subs)
 				.then((res) => subs = res.data.subjects)
 				dispatch({ type: UPDATE_SETSUBJECTS_SUCCESS, subs })
 				return;
 			}
-			await axios.put(`${api_url}/sets/${set.id}/subjects/`)
-			.then((res) => subs = res.data.subjects)
-			dispatch({type: UPDATE_SETSUBJECTS_SUCCESS, subs})
+			axios.put(`${api_url}/sets/${set.id}/subjects/`)
+			.then((res) => { 
+				subs = res.data.subjects
+				dispatch({type: UPDATE_SETSUBJECTS_SUCCESS, subs})
+			})
 		} catch(err) {
 			dispatch({
 				type: UPDATE_SETSUBJECTS_FAILURE,

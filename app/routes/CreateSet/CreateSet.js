@@ -25,6 +25,7 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	isLoadingSet: state.createset.isLoadingSet,
 	isCreatingSet: state.createset.isCreatingSet,
 	isUpdatingSet: state.createset.isUpdatingSet,
+	check_subjects: state.createset.check_subjects,
 	/* User */
 	user: state.user.user,
 	/* Normal state */
@@ -65,12 +66,30 @@ export default class CreateSetPage extends Component {
 	}
 	static contextTypes = {
 		
+	} 
+
+	subPoll = {}
+
+	subjectPoll() {
+		const { updateSetSubjects, check_subjects, set } = this.props;
+		if(check_subjects && set !== null) {
+			console.log("---")
+			console.log("Check Subjects")
+			updateSetSubjects(undefined, set.id)
+		}
+		// updateSetSubjects()
 	}
 
 	componentWillMount() {
 		const { params, transfer, loadEditing, loadSetFlag, pushState } = this.props;
 		loadSetFlag()
 		if(Object.keys(params).length !== 0) loadEditing(params.id, pushState) 
+	}
+
+	componentDidMount() {
+		this.subPoll = setInterval(() => {
+			::this.subjectPoll()
+		}, 2500)
 	}
 
 	componentWillUnmount() {
@@ -84,6 +103,7 @@ export default class CreateSetPage extends Component {
 				clearTransferState,
 				deleted	 
 				} = this.props;
+				
 		clearTransferState()
 
 		if(set !== null) {
@@ -99,6 +119,8 @@ export default class CreateSetPage extends Component {
 		setTimeout(() => {
 			clearSet()
 		}, 50)
+
+		clearInterval(this.subPoll)
 	}	
 
 	render() {

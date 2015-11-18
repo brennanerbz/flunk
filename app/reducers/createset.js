@@ -114,6 +114,8 @@ export var createState = {
   editing: false,
   isLoadingSet: false,
 
+  check_subjects: false
+
 };
 
 export function createset(state = createState, action) {
@@ -167,7 +169,7 @@ export function createset(state = createState, action) {
         title: set.title,
         creator_id: set.creator_id,
         creator_username: set.creator.username,
-        subjects: set.subjects !== undefined ? set.subjects : null
+        check_subjects: true
       }
     case UPDATE_SET:
       return {
@@ -183,14 +185,16 @@ export function createset(state = createState, action) {
         set: updated_set,
         title: updated_set.title,
         purpose: updated_set.description,
-        subjects: updated_set.subjects
+        check_subjects: true
       }
     case UPDATE_SETSUBJECTS_SUCCESS:
       if(state.cleared) return { ...state }
+      let _subs = action.subs !== undefined ? action.subs : null
       return {
         ...state,
-        subjects: action.subs,
-        set: Object.assign({...state.set}, {subjects: action.subs})
+        subjects: _subs,
+        set: Object.assign({...state.set}, {subjects: _subs}),
+        check_subjects: false
       }
     case CREATE_ASSIGNMENT_SUCCESS:
       return {
@@ -217,7 +221,8 @@ export function createset(state = createState, action) {
         ...state,
         isCreatingItem: false,
         items: items,
-        term_choices: null
+        term_choices: null,
+        check_subjects: true
       }
     case CREATE_ASSOCIATION_SUCCESS:
       if(state.cleared) return { ...state }
@@ -254,7 +259,8 @@ export function createset(state = createState, action) {
       return {
         ...state,
         items: updated_items,
-        associations: _associations
+        associations: _associations,
+        check_subjects: true
       }
     case UPDATE_ASSOCIATION_SUCCESS:
       if(state.cleared) return { ...state }

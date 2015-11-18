@@ -73,11 +73,8 @@ export default class CreateSetPage extends Component {
 	subjectPoll() {
 		const { updateSetSubjects, check_subjects, set } = this.props;
 		if(check_subjects && set !== null) {
-			console.log("---")
-			console.log("Check Subjects")
 			updateSetSubjects(undefined, set.id)
 		}
-		// updateSetSubjects()
 	}
 
 	componentWillMount() {
@@ -103,7 +100,7 @@ export default class CreateSetPage extends Component {
 				clearTransferState,
 				deleted	 
 				} = this.props;
-				
+
 		clearTransferState()
 
 		if(set !== null) {

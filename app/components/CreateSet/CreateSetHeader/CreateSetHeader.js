@@ -28,39 +28,29 @@ export default class CreateSetHeader extends Component {
 	}
 	componentWillMount() {
 		const { title, subjects } = this.props;
-		let subject_names = [],
-			subs,
-			length = 0;
-		if(title !== undefined && title.length > 0) this.setState({title: title});
-		if(subjects !== null &&  subjects !== undefined  && subjects.length > 0) { 
-			subs = subjects.slice(0, 3)
-			subs.forEach(sub => subject_names.push(sub.name))
-			subject_names = subject_names.map((sub, i) => { 
-				if(i == 0) return sub
-				else return " " + sub
-			})
-			this.setState({subjects: subject_names})
-		}
-	}
-	componentWillUnmount() {
-		this.setState({
-			title: '',
-			purpose: '',
-			subjects: null,
-			show_edit: false,
-			subject_editor_open: false,
-			full_error_message: false,
-			item_error_message: false
-		});
+		if(subjects !== undefined && subjects.length > 0) this.setState({subjects: subjects})
 	}
 	componentWillReceiveProps(nextProps) {
-		const { title } = this.props;
+		const { title } = this.props,
+			  { subjects } = nextProps;
 		if(this.refs.submit_subjects !== undefined) {
 			$(this.refs.submit_subjects).tooltip({
 				delay: { show: 1500, hide: 50},
 				template: '<div class="tooltip bottom_tool" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
 			})
 		}
+		/* --- Subject check -----*/
+		let _subs;
+		_subs = subjects
+		.map((sub, i) => { 
+			return sub.replace(",", "")
+			
+		})
+		.join("")
+		.replace(new RegExp(/#/g), " #")
+		_subs = _subs.substr(1)
+		if(this.state.subjects !== _subs) this.setState({subjects: _subs});
+		/* ---------------------- */
 		if(nextProps.title.length > 0) this.setState({ full_error_message: false });
 		if(nextProps.associations !== null && nextProps.associations.length > 1) this.setState({item_error_message: false});
 	}
@@ -117,50 +107,28 @@ export default class CreateSetHeader extends Component {
 		}
 	}
 
-	updateSubjects(prev_subs) {
+	updateSubjects() {
 		const { set, updateSetSubjects } = this.props;
-		let subjects = this.state.subjects,
-			subs = { subjects: null },
-			compare_one,
-			compare_two;
-		compare_one = prev_subs.map(sub => sub.trim()).join("").replace(" ", "").replace(",", "")
-		compare_two = typeof subjects == 'array' 
-					  ? subjects.map(sub => sub.trim()).join("").replace(' ', "").replace(",", "") 
-					  : null
-		if(compare_one == compare_two) {
-			this.setState({ subject_editor_open: false});
-			return;
+		let subjects = this.state.subjects;
+		if(typeof subjects == 'object' || typeof subjects == 'array') {
+			if(subjects == this.props.subjects) { 
+				this.setState({subject_editor_open: false})
+				return;
+			}
+			else {
+				subjects = subjects.map(sub => sub = sub.replace("#", ""))
+			}
+		} else if (typeof subjects == 'string') {
+			subjects = subjects.split("#")
+			subjects = subjects.filter(sub => sub !== '').map(sub => sub.replace(" ", ""))
 		}
-		if(typeof subjects == 'array') {
-			subjects = subjects.map(sub => sub.replace(" ", "").trim())
-		}
-		if(typeof subjects == 'string') {
-			subjects = subjects.trim().split(",").map(sub => sub.replace(" ", "").trim())
-		}
-		if(subjects.length > 3) {
-			$(this.refs.submit_subjects).tooltip('show')
-			return;
-		}
-		this.setState({subjects: subjects, subject_editor_open: false})
-		subs.subjects = subjects
-		updateSetSubjects(subs)
+		updateSetSubjects(subjects, set)
+		this.setState({ subject_editor_open: false})
 	}
 
 	render() {
 		const { saveSet, subjects } = this.props;
-		let subject_names = [],
-			subs,
-			length = 0;
-		subs = subjects !== null &&  subjects !== undefined ? subjects.slice(0, 3) : null
-		if(subs !== null) {
-			subs.forEach(sub => subject_names.push(sub.name))
-			subject_names = subject_names.map((sub, i) => { 
-				length += sub.length
-				if(i == 0) return sub
-				else return " " + sub
-			})
-			length += 2 * subs.length;
-		}
+		let length = subjects.join("#").length + subjects.length 
 		return(
 			<div className="CreateSetHeader"> 
 	          <div className="container CreateSetHeader-container">	
@@ -194,14 +162,12 @@ export default class CreateSetHeader extends Component {
 		              		subjects !== undefined
 		              		&& subjects !== null
 		              		&& !this.state.subject_editor_open
-		              		? subject_names.map((subject, i) => {
+		              		? subjects.map((subject, i) => {
 		              			return (
 		              			<li key={i} className="subject">
 		              				<p>
 		              					{
-		              						i === subjects.length - 1
-		              						? subject 
-		              						: subject += ", "
+		              						subject 
 		              					}
 		              				</p>
 		              			</li>
@@ -236,18 +202,18 @@ export default class CreateSetHeader extends Component {
 									  className="subject_text"
 									  value={subjects !== null ? this.state.subjects : null} 
 									  onFocus={() => { 
-									  	this.setState({subjects: subject_names})
+									  	// this.setState({subjects: subjects});
 									  	if(this.state.subjects !== null 
 									  	   && typeof this.state.subjects == 'string') length = this.state.subjects.length
 									  	setTimeout(() => { this.refs.subject_text.setSelectionRange(length, length) }, 1) 
 									  }}
-									  onChange={(event) => this.setState({ subjects: event.target.value })}
+									  onChange={(event) => this.setState({subjects: event.target.value})}
 									  autoFocus={true}/>
 							<div className="button_group">
 								<button className="button button-outline button-small"
 										onClick={() => {
 											this.setState({
-												subjects: subject_names,
+												subjects: subjects,
 												subject_editor_open: false
 											});
 										}}
@@ -258,13 +224,7 @@ export default class CreateSetHeader extends Component {
 										title="Max subjects: 3"
 										data-toggle="tooltip" 
 										data-placement="bottom"
-										onClick={() => { 
-											if (this.state.subjects == subject_names) {
-												this.setState({subject_editor_open: false})
-												return;
-											}
-											::this.updateSubjects(subject_names)
-										}}
+										onClick={() => {::this.updateSubjects()}}
 										>Done
 								</button>
 							</div>

@@ -104,6 +104,7 @@ export var createState = {
   current_order_index: null,
   term_choices: null,
   def_choices: null,
+  // rows: Array.from(Array())
   rows: [null, null],
   flag: false,
   title_flag: false,
@@ -359,11 +360,18 @@ export function createset(state = createState, action) {
       }
     case DELETE_ROW_SUCCESS:
       let o_rows = state.rows,
-          n_rows = o_rows.filter((x, i) => x !== action.asc.id)
-      console.log(n_rows)
+          n_rows,
+          new_count = state.count;
+      if(action.asc !== null && action.asc !== undefined) {
+        n_rows = o_rows.filter((x, i) => x !== action.asc.id)
+        new_count--;
+      } else {
+        n_rows = o_rows.filter((x, i) => i !== action.index)
+      }
       return {
         ...state,
-        rows: n_rows
+        rows: n_rows,
+        count: new_count
       }
     case FLIP_ACTIVESIDE:
       const active = state.activeContext;

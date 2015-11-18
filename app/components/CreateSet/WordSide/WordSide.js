@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import AutoexpandTextarea from '../AutoexpandTextarea/AutoexpandTextarea';
 import Autocomplete from '../Autocomplete/Autocomplete';
 
-import { getStates,
+import { getStates, 
 		 matchStateToTerm,
 		 sortStates,
 		 styles,
@@ -52,35 +52,33 @@ export default class WordSide extends Component {
 					<div className="WordSide-textarea">				
 						<div className="AutoExpandTextArea">
 							<div className="AutoExpandTextArea-wrapper">
-									<Autocomplete
-								      {...this.props}
-								      switchToWord={this.switchToWord}
-									  className="AutoExpandTextArea-textarea"
-							          ref={`autocomplete${index}`}
-							          items={term_choices !== undefined ? term_choices : []}
-							          getItemValue={(item) => item}
-							          onSelect={(value, item) => {
-							            this.setState({ terms: [ item ] })							           
-							          }}
-							          onInput={(event, value) => {
-							            if(subjects !== undefined && subjects.length > 0) {
-											this.setState({loading: true})
-											getTermSuggestions(value, (items) => {
-											  this.setState({ terms: items, loading: false })
-											})
-										}
-							          }}
-							          renderItem={(term, isHighlighted, index) => (
-							            <div
-							              className={classnames({ 'first_item': index == 0 } )}
-							              style={isHighlighted ? styles.highlightedItem : styles.item}
-							              key={term.abbr}
-							              id={term.abbr}
-							            >{term}</div>
-							          )}
-							        />
-								</div>
-								<div>
+										<Autocomplete
+									      {...this.props}
+									      switchToWord={this.switchToWord}
+										  className="AutoExpandTextArea-textarea"
+								          ref={`autocomplete${index}`}
+								          // items={term_choices !== undefined ? term_choices : []}
+								          // getItemValue={(item) => item}
+								          // onSelect={(value, item) => {
+								          //   this.setState({ terms: [ item ] })							           
+								          // }}
+								   //        onInput={(event, value) => {
+								   //          if(subjects !== undefined && subjects.length > 0) {
+											// 	this.setState({loading: true})
+											// 	getTermSuggestions(value, (items) => {
+											// 	  this.setState({ terms: items, loading: false })
+											// 	})
+											// }
+								   //        }}
+								          // renderItem={(term, isHighlighted, index) => (
+								          //   <div
+								          //     className={classnames({ 'first_item': index == 0 } )}
+								          //     style={isHighlighted ? styles.highlightedItem : styles.item}
+								          //     key={term.abbr}
+								          //     id={term.abbr}
+								          //   >{term}</div>
+								          // )}
+								        />
 								</div>
 							</div>
 						</div>
@@ -89,3 +87,6 @@ export default class WordSide extends Component {
 		);
 	}
 }
+
+
+		

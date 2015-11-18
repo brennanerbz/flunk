@@ -11,9 +11,13 @@ export default class TermRow extends Component {
 		isMouseOver: PropTypes.bool
 	}
 
+	state = {
+		isMouseOver: false
+	}
+
 	handleDelete = () => {
 		const { index, deleteRow, asc_id, associations } = this.props,
-			    association = associations[asc_id]
+			    association = asc_id !== null && associations !== undefined ? associations[asc_id] : null
  		deleteRow(index, association)
 	}	
 
@@ -30,11 +34,13 @@ export default class TermRow extends Component {
 				item = association !== null && items !== undefined
 				? items[association.item_id]
 				: null
+				// onMouseLeave={() => this.props.setMousePos(-1)}
 		return (
 			<div className="TermRow" 
 				onFocus={()=> this.props.setMousePos(index)}
-				onMouseOver={() => this.props.setMousePos(index)}
-				onMouseLeave={() => this.props.setMousePos(-1)}>
+				onMouseOver={() => this.setState({isMouseOver: true})}
+				onMouseLeave={() => this.setState({isMouseOver: false})}
+				>
 				<a className="TermRow-counter">
 					{index + 1}
 				</a>
@@ -47,7 +53,7 @@ export default class TermRow extends Component {
 				</div>
 				<div className="TermRow-operations">	
 					{	
-						this.props.isMouseOver 
+						this.state.isMouseOver 
 						&& this.props.lastIndex > 1
 						&&
 						<a className="TermRow-control material-icons"

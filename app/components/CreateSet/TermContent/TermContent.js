@@ -19,25 +19,25 @@ export default class TermContent extends Component {
     }
   }
   
-  computeStyle = () => {
-    const { asc_id, 
-            index, 
-            activeSide, 
-            subjects } = this.props;
+  // computeStyle = () => {
+  //   const { asc_id, 
+  //           index, 
+  //           activeSide, 
+  //           subjects } = this.props;
 
-    let node, rect;
+  //   let node, rect;
 
-    if(subjects == (undefined || null)) {
-      return;
-    }
-    if (activeSide === 'word') {
-      node = this.refs['termContentWord' + index];
-    } else {
-      node = this.refs['termContentDef' + index];
-    }
-    rect = node.getBoundingClientRect();
-    return rect;
-  }
+  //   if(subjects == (undefined || null)) {
+  //     return;
+  //   }
+  //   if (activeSide === 'word') {
+  //     node = this.refs['termContentWord' + index];
+  //   } else {
+  //     node = this.refs['termContentDef' + index];
+  //   }
+  //   rect = node.getBoundingClientRect();
+  //   return rect;
+  // }
 
   handleSaveWord = (word) => { // word blur()
     const { asc_id,
@@ -54,11 +54,9 @@ export default class TermContent extends Component {
     setFlag(true)
 
     this.setState({ word: word })
-    console.log("word")
-    console.log(item)
+
     if(item == null) {
       if (word.length > 0) {
-        console.log("creating target")
         createItem(index, { name: 'target', prop: word })
         return;
       }
@@ -68,7 +66,6 @@ export default class TermContent extends Component {
         (item.target !== null 
         && item.target.toLowerCase().trim() !== word.toLowerCase().trim()
         && item.finalized == null)) {
-        console.log("updating target")
         updateItem(item, { name: 'target', prop: word })
         return;
       }
@@ -94,11 +91,9 @@ export default class TermContent extends Component {
     setFlag(false)
 
     this.setState({ def: def })
-    console.log("def")
-    console.log(item)
+
     if(item == null) {
       if (def.length > 0) {
-        console.log("creating cue")
         createItem(index, { name: 'cue', prop: def })
         return;
       }
@@ -108,7 +103,6 @@ export default class TermContent extends Component {
         (item.cue !== null 
         && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
         && item.finalized == null )) {
-        console.log("updating cue")
         updateItem(item, { name: 'cue', prop: def })
         return;
       }
@@ -148,37 +142,41 @@ export default class TermContent extends Component {
                          ref={`termContentWord${index}`}
                          onClick={this.focusThatWord}>
         	            <WordSide
-                        shouldsuggest={subjects !== undefined 
-                                      && subjects !== null
-                                      && subjects.length > 0 
-                                      ? true : false}
+                        // shouldsuggest={subjects !== undefined 
+                        //               && subjects !== null
+                        //               && subjects.length > 0 
+                        //               ? true : false}
                         saveWord={(word) => this.handleSaveWord(word)}
-                        rect={() => this.computeStyle()}
+                        // rect={() => this.computeStyle()}
                         wordSide={true}
                         ref={`word${index}`}          
                         tabIndex={2}
                         {...this.props}
-        	            />
+                      />
         	          </div>
         	          <div className="TermContent-side def-side"
                          ref={`termContentDef${index}`}
                          onClick={this.focusThatDef}>
         	          	<DefSide
-                        shouldsuggest={item !== undefined 
-                                      && subjects !== undefined
-                                      && subjects !== null
-                                      && subjects.length > 0 
-                                      ? true : false}
+                        // shouldsuggest={item !== undefined 
+                        //               && subjects !== undefined
+                        //               && subjects !== null
+                        //               && subjects.length > 0 
+                        //               ? true : false}
                         saveDef={(def) => this.handleSaveDef(def)}
-                        rect={() => this.computeStyle()}
+                        // rect={() => this.computeStyle()}
                         defSide={true}
                         ref={`def${index}`}          
                         tabIndex={2}
                         {...this.props}
-        	          	/>
+                      />
         	          </div>
         	        </div>
           	</div>
   	);
   }
 }
+
+             
+
+              //               

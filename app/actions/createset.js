@@ -544,9 +544,9 @@ export function createItem(index, ...args) {
 												{name: 'item', prop: item}, 
 												{name: 'item_id', prop: item.id}))
 			}
-			if(item.target !== null) {
-				await dispatch(getDefSuggestions(null, item.target))
-			}
+			// if(item.target !== null) {
+			// 	await dispatch(getDefSuggestions(null, item.target))
+			// }
 		} catch(err) {
 			dispatch({
 				type: CREATE_ITEM_FAILURE,
@@ -593,9 +593,6 @@ export function updateItem(_item, ...args) {
 			await axios.put(`${api_url}/items/${item.id}`, item)
 			.then(res => item = res.data)
 			dispatch({type: UPDATE_ITEM_SUCCESS, item})
-			if(item.subjects.length > 0 && getState().createset.subjects !== item.subjects) {
-				// dispatch(updateSetSubjects())
-			}
 		} catch(err) {
 			dispatch({
 				type: UPDATE_ITEM_FAILURE,
@@ -638,13 +635,16 @@ export function createAssociation(item_id, index) {
 				order: count
 			})
 			await axios.post(`${api_url}/associations/`, association)
-			.then(res => association = res.data)
-			dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index})
-			// dispatch(updateSetSubjects())
+			.then(res => { 
+				console.log(res)
+				association = res.data
+				dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index})
+			})
 		} catch(err) {
 			dispatch({
 				type: CREATE_ASSOCIATION_FAILURE,
-				error: Error(err)
+				error: Error(err),
+				err: err
 			})
 		}
 	}
@@ -779,12 +779,17 @@ export function deleteRow(index, asc) {
 	return async(dispatch, getState) => {
 		dispatch({type: DELETE_ROW})
 		try {
-			await axios.delete(`${api_url}/associations/${asc.id}`).then(() => {
+			if(asc !== null && asc !== undefined) {
+				await axios.delete(`${api_url}/associations/${asc.id}`).then(() => {
+					dispatch({type: DELETE_ROW_SUCCESS, index, asc})
+				})
+			}
+			else {
 				dispatch({type: DELETE_ROW_SUCCESS, index, asc})
-			})
+			}
 		} catch(err) {
 			dispatch({
-				type: DELETE_ASSIGNMENT_FAILURE,
+				type: DELETE_ROW_FAILURE,
 				error: Error(err)
 			})
 		}

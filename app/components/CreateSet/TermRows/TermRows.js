@@ -42,13 +42,13 @@ export default class TermRows extends Component {
 	}
 
 	componentDidMount = () => {
-	  window.addEventListener('resize', this.handleResize);
-	  window.addEventListener('scroll', this.handleScroll);	  
+	  // window.addEventListener('resize', this.handleResize);
+	  // window.addEventListener('scroll', this.handleScroll);	  
 	}
 
 	componentWillUnmount = () => {
-	  window.removeEventListener('resize', this.handleResize)
-	  window.removeEventListener('scroll', this.handleScroll);
+	  // window.removeEventListener('resize', this.handleResize)
+	  // window.removeEventListener('scroll', this.handleScroll);
 	}
 
 	componentWillReceiveProps = (nextProps) => {
@@ -68,18 +68,18 @@ export default class TermRows extends Component {
 	  }
 	}
 
-	handleResize = () => {
-	  this.props.resize()
-	}
+	// handleResize = () => {
+	//   this.props.resize()
+	// }
 
 	scrollToBottom = () => {
 	  const node = document.body;
 	  node.scrollTop = node.scrollHeight;
 	} 
 
-	handleScroll = () => {
-	  this.props.adjustScroll()
-	}
+	// handleScroll = () => {
+	//   this.props.adjustScroll()
+	// }
 
 	deactivateRow = () => {
 	  let { activateRow, setFlag, flag } = this.props;
@@ -92,6 +92,7 @@ export default class TermRows extends Component {
 	render() {
 	  const { rows, activeRow, addRow } = this.props;
 	  const length = rows.length - 1;
+	  // console.log(rows)
 	  return(
 				<div className="TermRows"
 					 ref="term_rows"
@@ -115,7 +116,7 @@ export default class TermRows extends Component {
 			              return (
 			                <TermRow
 			                  asc_id={id}
-			                  isMouseOver={i === this.props.mousePos}
+			                  // isMouseOver={i === this.props.mousePos}
 			                  ref={`row${i}`}                    
 			                  activeRow={activeRow}
 			                  activeSide={this.state.activeSide}
@@ -129,13 +130,21 @@ export default class TermRows extends Component {
 			              )
 			            })	          
 			        }
-			        <i className={classnames("material-icons md-36", "icon-cursor")}
-			           ref="addButton"
-			           onClick={() => addRow()}	           
-			           title="Add a row">
-			          add_circle_outline
-			        </i>	        
+			        <div className="TermRow add_row"
+			        	 ref="add_row"
+			        	 onClick={() => addRow()}
+			        	 title="Add a row">
+			        	<span className="add_icon">+</span>
+			        </div>
 			      </div>
 		);
 	}
 }
+
+
+// <i className={classnames("material-icons md-36", "icon-cursor")}
+//    ref="addButton"
+//    onClick={() => addRow()}	           
+//    title="Add a row">
+//   add_circle_outline
+// </i>

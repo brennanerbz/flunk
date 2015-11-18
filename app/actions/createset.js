@@ -437,11 +437,14 @@ export function getDefSuggestions(id, target) {
 				term = getState().createset.items[id].target
 			}
 			term = term.toLowerCase().trim()
-			subs.forEach(sub => subjects.push(sub.name))
-			subjects = subjects.join("|")
-			await axios.get(`${api_url}/items/?target=${term}&subjects=${subjects}`)
-			.then(res => items = res.data.items)
-			dispatch({type: DEF_SUGGESTIONS_SUCCESS, items})
+			subs = subs.join("|").replace(new RegExp(/#/g), "")
+			// TODO: Use subjects for filtering
+			// &subjects=${subs}
+			await axios.get(`${api_url}/items/?target=${term}`)
+			.then(res => { 
+				items = res.data.items
+				dispatch({type: DEF_SUGGESTIONS_SUCCESS, items})
+			})
 		} catch(err) {
 			dispatch({
 				type: DEF_SUGGESTIONS_FAILURE,

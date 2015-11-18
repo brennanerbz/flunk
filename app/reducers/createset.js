@@ -103,7 +103,7 @@ export var createState = {
   def_choices: null,
   // rows: Array.from(Array())
   rows: [null, null],
-  row_length: 1,
+  row_length: 2,
   flag: false,
   title_flag: false,
   /* Old State */

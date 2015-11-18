@@ -52,17 +52,17 @@ export default class TermRow extends Component {
 	render() {
 		return (
 			<div className="TermRow" 
-				onFocus={()=> this.props.setMousePos(index)}
-				onMouseOver={() => this.setState({isMouseOver: true})}
-				onMouseLeave={() => this.setState({isMouseOver: false})}>
+				 onFocus={()=> this.props.setMousePos(index)}
+				 onMouseOver={() => this.setState({isMouseOver: true})}
+				 onMouseLeave={() => this.setState({isMouseOver: false})}>
 				<a className="TermRow-counter">
 					{this.state.index + 1}
 				</a>
 				<div className="TermRow-content">
-					<TermContent
-						item={this.state.item}
-						association={this.state.association}			
-						{...this.props}/>
+					<TermContent item={this.state.item}
+							     association={this.state.association}			
+								 {...this.props}
+					/>
 				</div>
 				<div className="TermRow-operations">	
 					{	

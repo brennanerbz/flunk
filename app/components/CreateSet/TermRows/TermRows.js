@@ -60,10 +60,8 @@ export default class TermRows extends Component {
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
-	  const { activeRow, row_length } = this.props;
-	  if (prevProps.activeRow !== this.props.activeRow && activeRow === row_length - 1) {
-	    this.scrollToBottom()
-	  }
+		const { row_length } = this.props;
+		if(prevProps.row_length !== row_length) this.scrollToBottom()
 	}
 
 	handleResize = () => {

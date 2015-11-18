@@ -72,7 +72,9 @@ import {
   LOAD_EDITING_SUCCESS,
   LOAD_EDITING_FAILURE,
 
-  LOADING_SET
+  LOADING_SET,
+
+  UNMOUNTING_CREATE
 	
 } from '../actions/createset';
 
@@ -114,9 +116,27 @@ export var createState = {
   editing: false,
   isLoadingSet: false,
 
-  check_subjects: false
+  check_subjects: false,
+
+  unmounting: false
 
 };
+
+/* ---- Remove duplicates ----*/
+function uniq_fast(a) {
+    var seen = {};
+    var out = [];
+    var len = a.length;
+    var j = 0;
+    for(var i = 0; i < len; i++) {
+         var item = a[i];
+         if(seen[item] !== 1) {
+               seen[item] = 1;
+               out[j++] = item;
+         }
+    }
+    return out;
+}
 
 export function createset(state = createState, action) {
   switch (action.type) {
@@ -128,7 +148,8 @@ export function createset(state = createState, action) {
     case LOAD_EDITING: 
       return {
         ...state,
-        isLoadingSet: true
+        isLoadingSet: true,
+        unmounting: false
       }
     case LOAD_EDITING_SUCCESS:
       let load_rows = [null, null],
@@ -139,6 +160,13 @@ export function createset(state = createState, action) {
           return action.associations[a].order - action.associations[b].order
         })
       } 
+      let _subjects = [];
+      if(action.set.subjects !== undefined) {
+        action.set.subjects.forEach(sub => _subjects.push("#" + sub.name.toLowerCase().replace(" ", "")))
+        _subjects = uniq_fast(_subjects)
+      } else {
+        _subjects = state.subs
+      }
       return {
         ...state,
         editing: true,
@@ -148,7 +176,6 @@ export function createset(state = createState, action) {
         title: action.set.title,
         creator_id: action.set.creator_id,
         creator_username: action.set.creator.username,
-        subjects: action.set.subjects,
         assignment: action.assignment,
         items: action.items,
         associations: action.associations,
@@ -156,7 +183,8 @@ export function createset(state = createState, action) {
         count: Object.keys(action.associations).length > 0 
                ? action.associations[action.rows.slice(-1)[0]].order + 1 
                : 1,
-        deleted: false
+        deleted: false,
+        subjects: _subjects
       }
     case CREATE_SET_SUCCESS:
       if(state.cleared) return { ...state }
@@ -189,7 +217,13 @@ export function createset(state = createState, action) {
       }
     case UPDATE_SETSUBJECTS_SUCCESS:
       if(state.cleared) return { ...state }
-      let _subs = action.subs !== undefined ? action.subs : null
+      let _subs = [];
+      if(action.subs !== undefined) {
+        action.subs.forEach(sub => _subs.push("#" + sub.name.toLowerCase().replace(" ", "")))
+        _subs = uniq_fast(_subs)
+      } else {
+        _subs = state.subs
+      }
       return {
         ...state,
         subjects: _subs,
@@ -375,6 +409,11 @@ export function createset(state = createState, action) {
       return {
         ...state,
         scrolling: !state.scrolling
+      }
+    case UNMOUNTING_CREATE:
+      return {
+        ...state,
+        unmounting: true
       }
     case CLEAR_SET:
       return {

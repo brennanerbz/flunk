@@ -26,8 +26,9 @@ export function fetchSet(user_id, set_id, pushState) {
 				associations[asc.id] = asc
 				rows.push(asc.id)
 			})
-			if(set.editability == 'creator' && set.creator_id !== getState().user.user.id) {
-				pushState(null, '/error')
+
+			if(set.editability == 'creator' && set.creator_id !== user_id) {
+				pushState(null, '/')
 				return;
 			}
 			dispatch({type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows})
@@ -223,6 +224,9 @@ export function updateSet(_set, ...args) {
 		}
 	}
 }
+
+
+// { "subjects": [name, name name] }
 export const UPDATE_SETSUBJECTS_SUCCESS = 'UPDATE_SETSUBJECTS_SUCCESS';
 export const UPDATE_SETSUBJECTS_FAILURE = 'UPDATE_SETSUBJECTS_FAILURE';
 export function updateSetSubjects(subjects, set) {
@@ -232,11 +236,14 @@ export function updateSetSubjects(subjects, set) {
 			var subs,
 				set = set == undefined ? getState().createset.set : set;
 			if(subjects !== undefined) {
-				subs = subjects;
+				subs = { subjects: subjects };
+				console.log(subs)
 				axios.put(`${api_url}/sets/${set.id}/edit-subjects/`, subs)
-				.then((res) => subs = res.data.subjects)
-				dispatch({ type: UPDATE_SETSUBJECTS_SUCCESS, subs })
-				return;
+				.then((res) => {
+					subs = res.data.subjects
+					dispatch({ type: UPDATE_SETSUBJECTS_SUCCESS, subs })
+					return;
+				})
 			}
 			axios.put(`${api_url}/sets/${set.id}/subjects/`)
 			.then((res) => { 
@@ -430,11 +437,14 @@ export function getDefSuggestions(id, target) {
 				term = getState().createset.items[id].target
 			}
 			term = term.toLowerCase().trim()
-			subs.forEach(sub => subjects.push(sub.name))
-			subjects = subjects.join("|")
-			await axios.get(`${api_url}/items/?target=${term}&subjects=${subjects}`)
-			.then(res => items = res.data.items)
-			dispatch({type: DEF_SUGGESTIONS_SUCCESS, items})
+			subs = subs.join("|").replace(new RegExp(/#/g), "")
+			// TODO: Use subjects for filtering
+			// &subjects=${subs}
+			await axios.get(`${api_url}/items/?target=${term}`)
+			.then(res => { 
+				items = res.data.items
+				dispatch({type: DEF_SUGGESTIONS_SUCCESS, items})
+			})
 		} catch(err) {
 			dispatch({
 				type: DEF_SUGGESTIONS_FAILURE,
@@ -778,6 +788,13 @@ export function deleteRow(index, asc) {
 				error: Error(err)
 			})
 		}
+	}
+}
+
+export const UNMOUNTING_CREATE = 'UNMOUNTING_CREATE'
+export function unMountingCreate() {
+	return (dispatch, getState) => {
+		dispatch({type: UNMOUNTING_CREATE})
 	}
 }
 

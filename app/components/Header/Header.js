@@ -77,6 +77,7 @@ export default class Header extends Component {
 
 	render() {
 		const logo = require('./assets/FlunkLogo.png'),
+			  mini_logo = require('../../assets/color_hash.png'),
 			  create_icon = require('../../assets/create_new_pencil.png'),
 			  dropdown_icon = require('../../assets/dropdown_arrow.png'),
 			  { loc, 
@@ -106,7 +107,8 @@ export default class Header extends Component {
 					<div className="container">
 						<span className="header-block header-left float-left">
 							<Link className="site-logo" to="/">						
-									<img className="site-icon" src={logo} />
+									<img className={classnames("site-icon")} 
+										 src={logo} />
 							</Link>
 							
 							{

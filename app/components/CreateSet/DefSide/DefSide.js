@@ -62,34 +62,34 @@ export default class DefSide extends Component {
 				      switchToDef={this.switchToDef}
 					  className="AutoExpandTextArea-textarea"
 			          ref={`autocomplete${index}`}
-	                  items={def_choices !== undefined ? def_choices : []}
-	                  getItemValue={(_item) => _item.cue}
-	                  onSelect={(value, _item) => {
-	                     this.setState({ defs: [ _item.cue ]})
-	                     updateAssociation(association, 
-	                     				  {name: 'item', prop: _item}, 
-	                     				  {name: 'item_id', prop: _item.id },
-	                     				  {name: 'item_adopted', prop: true})
-	                  }}
-	                  onInput={(event, value) => value}
-	                  onFocus={(event, value) => {
-	                     if(subjects !== undefined && subjects.length > 0 && item !== null) {
-	         				this.setState({loading: true})
-	         				getDefSuggestions(item.id)
-	         				setTimeout(() => {
-	         					getDefSuggestions(item.id)
-	         				}, 250)
-	         			}
-	                   }}
-	                  renderItem={(_item, isHighlighted, index) => (
-	                     <div
-	                       className={classnames({ 'first_item': index == 0 })}
-	                       style={isHighlighted ? styles.highlightedItem : styles.item}
-	                       key={_item.abbr}
-	                       id={_item.abbr}>
-	                       {_item.cue}
-	                     </div>
-	                   )}					          
+	                  // items={def_choices !== undefined ? def_choices : []}
+	                  // getItemValue={(_item) => _item.cue}
+	                  // onSelect={(value, _item) => {
+	                  //    this.setState({ defs: [ _item.cue ]})
+	                  //    updateAssociation(association, 
+	                  //    				  {name: 'item', prop: _item}, 
+	                  //    				  {name: 'item_id', prop: _item.id },
+	                  //    				  {name: 'item_adopted', prop: true})
+	                  // }}
+	                  // onInput={(event, value) => value}
+	            //       onFocus={(event, value) => {
+	            //          if(subjects !== undefined && subjects.length > 0 && item !== null) {
+	         			// 	this.setState({loading: true})
+	         			// 	getDefSuggestions(item.id)
+	         			// 	setTimeout(() => {
+	         			// 		getDefSuggestions(item.id)
+	         			// 	}, 250)
+	         			// }
+	            //        }}
+	                  // renderItem={(_item, isHighlighted, index) => (
+	                  //    <div
+	                  //      className={classnames({ 'first_item': index == 0 })}
+	                  //      style={isHighlighted ? styles.highlightedItem : styles.item}
+	                  //      key={_item.abbr}
+	                  //      id={_item.abbr}>
+	                  //      {_item.cue}
+	                  //    </div>
+	                  //  )}					          
 			        />
 				</div>
 			</div>

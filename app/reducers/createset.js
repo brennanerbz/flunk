@@ -53,9 +53,6 @@ import {
 	DELETE_ROW,
   DELETE_ROW_SUCCESS,
 
-	FLIP_ACTIVESIDE,
-	ACTIVATE_ROW,
-
 	RESIZE,
 
   CLEAR_SET,
@@ -373,12 +370,6 @@ export function createset(state = createState, action) {
         count: new_count,
         row_length: n_rows.length
       }
-    case FLIP_ACTIVESIDE:
-      const active = state.activeContext;
-      return {
-        ...state,
-        activeContext: !active
-      }
     case SAVE_TITLE:
       return {
         ...state,
@@ -388,11 +379,6 @@ export function createset(state = createState, action) {
       return {
         ...state,
         purpose: action.purpose
-      }
-    case ACTIVATE_ROW:
-      return {
-        ...state,
-        activeRow: action.index
       }
     case RESIZE:
       return {

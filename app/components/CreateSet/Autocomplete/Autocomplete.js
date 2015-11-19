@@ -59,7 +59,6 @@ export default class Autocomplete extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			value: this.props.initialValue || '',
 			// isOpen: false,
 			// highlightedIndex: null
 		}
@@ -72,20 +71,10 @@ export default class Autocomplete extends Component {
 		  	setFlag(false)
 		  	return;
 		  }
-		  if (index !== totalCount) return;
-		  if (activeSide == 'def') {
-		    addRow()
-		  }
-		}
 	}
 
 	keyDownHandlers = {
 	    
-	    Tab(event) {
-	    	const { addRow, index, totalCount, activeSide, flag } = this.props;
-	    	if (index == totalCount && activeSide == 'def') event.preventDefault();
-	    },
-
 	    // ArrowDown() {
 	    //   // event.preventDefault()
 	    //   const { shouldsuggest } = this.props;
@@ -414,47 +403,18 @@ export default class Autocomplete extends Component {
 	//   return React.cloneElement(menu, { ref: 'menu' })
 	// }
 
-	handleInputBlur = () => {
-	  // if (this._ignoreBlur) 
-	  //   return
-	  // this.setState({
-	  //   isOpen: false,
-	  //   highlightedIndex: null
-	  // })
-	  if(this.props.wordSide) {
-	    this.props.saveWord(this.state.value)
-	  } else {
-	    this.props.saveDef(this.state.value)
-	    // this.props.clearDefChoices()
-	  }
-	}
+	// handleInputBlur = () => {
+	//   if (this._ignoreBlur) 
+	//     return
+	//   this.setState({
+	//     isOpen: false,
+	//     highlightedIndex: null
+	//   })
+	// }
 
-	handleInputFocus = () => {
-	  const { index, 
-	  		  activateRow, 
-	  		  switchToDef, 
-	  		  switchToWord,
-	  		  flag,
-	  		  setFlag,
-	  		  // onFocus,
-	  		  item,
-	  		  items } = this.props;
-	  // if (this._ignoreBlur)
-	  //   return
-	  activateRow(index)
-	  if (this.props.defSide) {
-	  	switchToDef()
-	  	// onFocus()
-	  	this.setState({ isOpen: true })
-	  } else {
-	    switchToWord()
-	  }
-	}
-
-	handleInputClick = () => {
-	  const {activateRow, index} = this.props;
-	  activateRow(index)
-	}
+	// handleInputFocus = () => {
+	//   	this.setState({ isOpen: true })
+	// }
 
 	focusSide = () => {
 	  const node = this.refs['textarea' + this.getNodeId()]
@@ -462,12 +422,6 @@ export default class Autocomplete extends Component {
 	}
 
 	render () {
-	  // if (this.props.debug) { // you don't like it, you love it
-	  //   _debugStates.push({
-	  //     id: _debugStates.length,
-	  //     state: this.state
-	  //   })
-	  // }
 	  const {index, item}  = this.props;
 	  return (
 	    <div className="Autocomplete-textarea" style={{display: 'inline-block'}}>

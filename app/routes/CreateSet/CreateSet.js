@@ -47,7 +47,11 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	def_choices: state.createset.def_choices,
 	rows: state.createset.rows,
 	flag: state.createset.flag,
-	title_flag: state.createset.title_flag
+	title_flag: state.createset.title_flag,
+
+	resizing: state.createset.resizing,
+	/* New state */
+	row_length: state.createset.row_length
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -151,8 +155,8 @@ export default class CreateSetPage extends Component {
 					<CreateSetHeader {...this.props}/>                 
 					<div className="container">
 						<div className="CreateSetPage-list">
-						<TermRows {...this.props} />
-					</div>
+							<TermRows {...this.props} />
+						</div>
 					</div>
 				</div>
 			}

@@ -1,44 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
-import _ from 'lodash';
-
-import * as actionCreators from '../../../actions/createset';
 
 import TermRow from '../TermRow/TermRow';
 
-@connect(
-	state => ({
-		activeContext: state.createset.activeContext,
-		activeRow: state.createset.activeRow,
-		resizing: state.createset.resizing,
-		/* New state */
-		row_length: state.createset.row_length
-	}),
-	dispatch => ({
-		...bindActionCreators({
-		  ...actionCreators
-		}, dispatch)
-	})
-)
 export default class TermRows extends Component {
 	static propTypes = {
 		dispatch: PropTypes.func,
 		addRow: PropTypes.func,
 		resize: PropTypes.func,
 		adjustScroll: PropTypes.func,
-		activateRow: PropTypes.func,
-		activeRow: PropTypes.number,
-		mousePos: PropTypes.number,
-		activeContext: PropTypes.bool
-	}
-
-	constructor(props) {
-		super(props)
-		this.state = {
-			activeSide: this.props.activeContext ? 'word' : 'def'
-		}
 	}
 
 	componentDidMount = () => {
@@ -50,13 +20,10 @@ export default class TermRows extends Component {
 	}
 
 	componentWillReceiveProps = (nextProps) => {
-	  const { activeContext, setFlag, flag, activeRow } = this.props;
-	  this.setState({
-	    activeSide: nextProps.activeContext ? 'word' : 'def'
-	  });
-	  if(document.activeElement == document.body) {
-	  	if(flag)setFlag(false)
-	  }
+		const { setFlag, flag } = this.props;
+		if(document.activeElement == document.body) {
+			if(flag) setFlag(false)
+		}
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
@@ -74,11 +41,10 @@ export default class TermRows extends Component {
 	} 
 
 	deactivateRow = () => {
-	  let { activateRow, setFlag, flag } = this.props;
-	  if(document.activeElement == document.body) {
-	  	activateRow(-1)
-	  	if(flag)setFlag(false)
-	  }
+		let { setFlag, flag } = this.props;
+		if(document.activeElement == document.body) {
+			if(flag)setFlag(false)
+		}
 	}
 
 	render() {
@@ -108,12 +74,20 @@ export default class TermRows extends Component {
 			                  asc_id={id}
 			                  ref={`row${i}`}                    
 			                  activeRow={activeRow}
-			                  activeSide={this.state.activeSide}
-			                  totalCount={row_length}
+			                  total_count={row_length}
 			                  index={i}
 			                  key={`row${i}`}
 			                  termLuid={`row${i}`}
-			                  {...this.props}
+			                  id={this.props.id}
+			                  associations={this.props.associations}
+			                  items={this.props.items}
+			                  rows={this.props.items}
+			                  flag={this.props.flag}
+			                  /* Functions */
+			                  createItem={this.props.createItem}
+			                  updateItem={this.props.updateItem}
+			                  addRow={addRow}
+			                  setFlag={this.props.setFlag}
 			                />
 			            )})	          
 			        }

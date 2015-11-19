@@ -1,98 +1,117 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
-import Autocomplete from '../Autocomplete/Autocomplete';
+// import Autocomplete from '../Autocomplete/Autocomplete';
 
 export default class TermContent extends Component {
 	static propTypes = {
 		
 	}
 
-    computeStyle = () => {
-        let { index, activeSide, subjects } = this.props,
-              node, rect;
-        if(subjects == (undefined || null)) return;
-
-        if (activeSide === 'word') { node = this.refs['termContentWord' + index] } 
-        else { node = this.refs['termContentDef' + index] }
-
-        rect = node.getBoundingClientRect();
-        return rect;
+    state = {
+        term: null,
+        definition: null
     }
 
-    handleSaveWord = (word) => { 
-        const { index, association, item, createItem, updateItem, setFlag, flag, user } = this.props;
-
-        setFlag(true)
-
-        this.setState({ word: word })
-
-        if(item == null) {
-            if (word.length > 0) {
-                createItem(index, { name: 'target', prop: word })
-                return;
-            }
-        }
-        if(item !== null) {
-            if(item.target == null || 
-            (item.target !== null 
-            && item.target.toLowerCase().trim() !== word.toLowerCase().trim()
-            && item.finalized == null)) {
-                updateItem(item, { name: 'target', prop: word })
-                return;
-        }
-        if(item.target !== null 
-            && item.target.toLowerCase().trim() !== word.toLowerCase().trim()
-            && item.finalized) { 
-                createItem(index, {name: 'child', prop: item}, { name: 'target', prop: word })
-            }
+    loadItem(item) {
+        if(item !== undefined && item !== null) {
+            if(item.target !== null) this.setState({term: item.target})
+            if(item.cue !== null) this.setState({definition: item.cue})
         }
     }
-  
-    handleSaveDef = (def) => { 
-        const { index, association, item, items, createItem, updateItem, setFlag, user } = this.props;
 
-        setFlag(false)
-
-        this.setState({ def: def })
-
-        if(item == null) {
-            if (def.length > 0) {
-                createItem(index, { name: 'cue', prop: def })
-                return;
-            }
-        }
-        if(item !== null) {
-            if(item.cue == null || 
-            (item.cue !== null 
-            && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
-            && item.finalized == null )) {
-                updateItem(item, { name: 'cue', prop: def })
-                return;
-            }
-            if(item.cue !== null 
-            && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
-            && item.finalized) { 
-                createItem(index, {name: 'child', prop: item}, { name: 'cue', prop: def })
-            }
-        }
+    componentDidMount() {
+        const { item } = this.props;
+        this.loadItem(item)
     }
+
+    componentWillReceiveProps() {
+        const { item } = this.props;
+        this.loadItem(item)
+    }
+
+    // computeStyle = () => {
+    //     let { index, active_side, subjects } = this.props,
+    //           node, rect;
+    //     if(subjects == (undefined || null)) return;
+
+    //     if (active_side === 0) { node = this.refs['termContentWord' + index] } 
+    //     else { node = this.refs['termContentDef' + index] }
+
+    //     rect = node.getBoundingClientRect();
+    //     return rect;
+    // }
 
     render() {
-        const { activeRow, index, item, subjects } = this.props;
+        const { active_row, index } = this.props;
       	return (
-            <div className={classnames({"TermContent-focus": activeRow === index, "TermContent": activeRow !== index} )}>
+            <div className={classnames({"TermContent-focus": active_row, "TermContent": !active_row} )}>
                 <div className="TermContent-wrap">          
                     <div className="TermContent-side word-side" ref={`termContentWord${index}`}>
                         <div className="WordSide">
-                            <div className="WordSide-textarea">  
-                                <textarea className="AutoExpandTextArea-textarea"/>
+                            <div className="WordSide-textarea"> 
+                                <div className="Autocomplete-textarea"> 
+                                    <textarea
+                                        className="AutoExpandTextArea-textarea"
+                                        ref={`autocomplete${index}`}
+                                        // rect={() => this.computeStyle()}
+                                        tabIndex={2}
+                                        rows="1"
+                                        onFocus={() => { 
+                                            this.props.activateRow()
+                                            this.props.focusSide(0) 
+                                        }}
+                                        onKeyDown={(e) => {
+
+                                        }}
+                                        onKeyUp={() => {}}
+                                        onChange={(e) =>{
+                                            this.setState({term: e.target.value});
+                                        }}
+                                        onBlur={() => {
+                                            this.props.saveTerm(this.state.term)
+                                            this.props.deactivateRow()
+                                        }}
+                                        onClick={() => {}} 
+                                        onSelect={() => {}}
+                                        onInput={() => {}}
+                                        value={ this.state.term }
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div className="TermContent-side def-side" ref={`termContentDef${index}`}>
                         <div className="DefSide">
                             <div className="DefSide-textarea">
-                                <textarea className="AutoExpandTextArea-textarea"/>
+                                <div className="Autocomplete-textarea"> 
+                                    <textarea
+                                        className="AutoExpandTextArea-textarea"
+                                        ref={`autocomplete${index}`}
+                                        // rect={() => this.computeStyle()}
+                                        tabIndex={2}
+                                        rows="1"
+                                        onFocus={() => {
+                                            this.props.activateRow()
+                                            this.props.focusSide(1) 
+                                        }}
+                                        onKeyDown={(e) => {
+                                            if(this.props.index == this.props.total_count - 1 && e.which == 9) 
+                                                this.props.addRow()
+                                        }}
+                                        onKeyUp={() => {}}
+                                        onChange={(e) =>{
+                                            this.setState({definition: e.target.value});
+                                        }}
+                                        onBlur={() => {
+                                            this.props.saveDefinition(this.state.definition)
+                                            this.props.deactivateRow()
+                                        }}
+                                        onClick={() => {}}
+                                        onSelect={() => {}}
+                                        onInput={() => {}}
+                                        value={ this.state.definition }
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -103,25 +122,11 @@ export default class TermContent extends Component {
 }
 
 /*           
-<Autocomplete
-    {...this.props}
-    rect={() => this.computeStyle()}
-    tabIndex={2}
-    switchToWord={this.switchToWord}
-    className="AutoExpandTextArea-textarea"
-    ref={`autocomplete${index}`}
-/>
+
 */
 
 /*
-<Autocomplete
-    {...this.props}
-    rect={() => this.computeStyle()}
-    tabIndex={2}
-    switchToDef={this.switchToDef}
-    className="AutoExpandTextArea-textarea"
-    ref={`autocomplete${index}`}
-/>
+
 */
 
 /*  --------- Definition ------------

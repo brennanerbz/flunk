@@ -9,32 +9,29 @@ export default class TermRow extends Component {
 		association: PropTypes.object,
 		index: PropTypes.number,
 		totalCount: PropTypes.number,
-		isMouseOver: PropTypes.bool
+		is_mouse_over: PropTypes.bool
 	}
 
 	state = {
-		isMouseOver: false, 
-		activeRow: false,
-		activeSide: 0, /* 0 = 'term' & 1 = 'definition' */
-		terms: null,
-		item: null,
-		word: null,
+		is_mouse_over: false, 
+		active_row: false,
+		active_side: 0, /* 0 = 'term' & 1 = 'definition' */
+		terms: null,	
 		definitions: null,
-		definition: null,
+		item: null,
 		association: null,
 		association_id: null,
 		index: null
 	}
 
 	componentDidMount() {
+		const { index } = this.props;
 		this.setState({
-			index: this.props.index
+			index: index
 		});
 	}
 
-	componentWillReceiveProps() {
-		if(this.state.association !== null) return;
-		const { index, asc_id, items, associations } = this.props;
+	loadData(asc_id, associations, items) {
 		if(asc_id !== null  && associations !== undefined) {
 			let association = associations[asc_id]
 			this.setState({ 
@@ -45,6 +42,73 @@ export default class TermRow extends Component {
 		}
 	}
 
+	componentDidMount() {
+		const { index, asc_id, items, associations } = this.props;
+		this.setState({index: index})
+		this.loadData(asc_id, associations, items)
+	}
+
+	componentWillReceiveProps() {
+		if(document.activeElement == document.body) this.setState({ active_row: false })
+		if(this.state.association !== null) return;
+		const { index, asc_id, items, associations } = this.props;
+		this.loadData(asc_id, associations, items)
+	}
+
+	saveTerm = (term) => { 
+	    const { association, item, createItem, updateItem, setFlag, flag, user } = this.props;
+	    let index = this.state.index;
+	    setFlag(true)
+	    this.setState({ term: term })
+	    if(item == null && term !== null) {
+	        if (term.length > 0) {
+	            createItem(index, { name: 'target', prop: term })
+	            return;
+	        }
+	    }
+	    if(item !== null) {
+	        if(item.target == null || 
+	        (item.target !== null 
+	        && item.target.toLowerCase().trim() !== term.toLowerCase().trim()
+	        && item.finalized == null)) {
+	            updateItem(item, { name: 'target', prop: term })
+	            return;
+	    }
+	    if(item.target !== null 
+	        && item.target.toLowerCase().trim() !== term.toLowerCase().trim()
+	        && item.finalized) { 
+	            createItem(index, {name: 'child', prop: item}, { name: 'target', prop: term })
+	        }
+	    }
+	}
+
+	saveDefinition = (def) => { 
+	    const { association, item, items, createItem, updateItem, setFlag, user } = this.props;
+	    let index = this.state.index;
+	    setFlag(false)
+	    this.setState({ def: def })
+	    if(item == null) {
+	        if (def.length > 0 && def !== null) {
+	            createItem(index, { name: 'cue', prop: def })
+	            return;
+	        }
+	    }
+	    if(item !== null) {
+	        if(item.cue == null || 
+	        (item.cue !== null 
+	        && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
+	        && item.finalized == null )) {
+	            updateItem(item, { name: 'cue', prop: def })
+	            return;
+	        }
+	        if(item.cue !== null 
+	        && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
+	        && item.finalized) { 
+	            createItem(index, {name: 'child', prop: item}, { name: 'cue', prop: def })
+	        }
+	    }
+	}
+
 	handleDelete = () => {
  		deleteRow(this.state.index, this.state.association)
 	}	
@@ -52,22 +116,32 @@ export default class TermRow extends Component {
 	render() {
 		return (
 			<div className="TermRow" 
-				 onFocus={()=> this.props.setMousePos(index)}
-				 onMouseOver={() => this.setState({isMouseOver: true})}
-				 onMouseLeave={() => this.setState({isMouseOver: false})}>
+				 onMouseOver={() => this.setState({is_mouse_over: true})}
+				 onMouseLeave={() => this.setState({is_mouse_over: false})}>
 				<a className="TermRow-counter">
 					{this.state.index + 1}
 				</a>
 				<div className="TermRow-content">
 					<TermContent item={this.state.item}
-							     association={this.state.association}			
-								 {...this.props}
+							     association={this.state.association}
+							     index={this.state.index}
+							     total_count={this.props.total_count}
+							     active_row={this.state.active_row}
+							     active_side={this.state.active_side}
+							     activateRow={() => this.setState({ active_row: true })}
+							     deactivateRow={() => this.setState({ active_row: false })}
+							     focusSide={(value) => this.setState({ active_side: value })}
+							     enterTerm={(term) => this.setState({ term: term}) }
+							     saveTerm={this.saveTerm}
+							     enterDefinition={(def) => this.setState({definition: def})}
+							     saveDefinition={this.saveDefinition}
+							     addRow={this.props.addRow}			
 					/>
 				</div>
 				<div className="TermRow-operations">	
 					{	
-						this.state.isMouseOver 
-						&& this.props.totalCount > 1 &&
+						this.state.is_mouse_over 
+						&& this.props.totalCount > 2 &&
 						<a className="TermRow-control material-icons"
 					   		onClick={this.handleDelete}>
 							clear

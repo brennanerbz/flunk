@@ -803,13 +803,6 @@ export function unMountingCreate() {
 	}
 }
 
-export const FLIP_ACTIVESIDE = 'FLIP_ACTIVESIDE'
-export function flipActiveSide() {
-	return {
-		type: FLIP_ACTIVESIDE
-	}
-}
-
 export const SAVE_TITLE = 'SAVE_TITLE'
 export function saveTitle(title) {
 	return {
@@ -822,14 +815,6 @@ export function savePurpose(purpose) {
 	return {
 		type: SAVE_PURPOSE,
 		purpose
-	}
-}
-
-export const ACTIVATE_ROW = 'ACTIVATE_ROW'
-export function activateRow(index) {
-	return {
-		type: ACTIVATE_ROW,
-		index
 	}
 }
 

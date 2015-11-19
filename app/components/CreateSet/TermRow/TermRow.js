@@ -30,28 +30,38 @@ export default class TermRow extends Component {
 		}
 	}
 
+	sparkNewRow(index, total_count) {
+		if(this.state.total_count !== total_count && index == total_count - 1) {
+			this.setState({ 
+				active_row: true,
+				active_side: 0
+			})
+		}
+	}
+
 	componentWillMount() {
-		const { asc_id, associations, items, index } = this.props;
+		const { asc_id, associations, items, index, total_count } = this.props;
 		this.setState({index: index});
 		this.loadData(asc_id, associations, items)
+		if(total_count > 2) {
+			this.sparkNewRow(index, total_count)
+		}
 	}
 
 	componentDidMount() {
 		
 	}
 
-	componentWillReceiveProps() {
+	componentWillReceiveProps(nextProps) {
 		if(document.activeElement == document.body) this.setState({ active_row: false })
-		if(this.state.association !== null) return;
-		const { index, asc_id, items, associations } = this.props;
+		const { index, asc_id, items, associations, total_count } = this.props;
 		this.loadData(asc_id, associations, items)
+		/* TODO: change to changeDate method */
 	}
 
 	saveTerm = (term) => { 
-	    const { association, item, createItem, updateItem, setFlag, flag, user } = this.props;
-	    let index = this.state.index;
-	    setFlag(true)
-	    this.setState({ term: term })
+	    const { createItem, updateItem } = this.props,
+	    	  { index, item, association } = this.state;
 	    if(item == null && term !== null) {
 	        if (term.length > 0) {
 	            createItem(index, { name: 'target', prop: term })
@@ -75,10 +85,8 @@ export default class TermRow extends Component {
 	}
 
 	saveDefinition = (def) => { 
-	    const { association, item, items, createItem, updateItem, setFlag, user } = this.props;
-	    let index = this.state.index;
-	    setFlag(false)
-	    this.setState({ def: def })
+	    const { createItem, updateItem } = this.props,
+	    	  { index, item, association } = this.state;
 	    if(item == null && def !== null) {
 	        if (def.length > 0 && def !== null) {
 	            createItem(index, { name: 'cue', prop: def })
@@ -106,6 +114,7 @@ export default class TermRow extends Component {
 	}	
 
 	render() {
+		const { flag } = this.props;
 		return (
 			<div className="TermRow" 
 				 onMouseOver={() => this.setState({is_mouse_over: true})}
@@ -122,11 +131,11 @@ export default class TermRow extends Component {
 						     activateRow={() => this.setState({ active_row: true })}
 						     deactivateRow={() => this.setState({ active_row: false })}
 						     focusSide={(value) => this.setState({ active_side: value })}
-						     enterTerm={(term) => this.setState({ term: term}) }
 						     saveTerm={this.saveTerm}
-						     enterDefinition={(def) => this.setState({definition: def})}
 						     saveDefinition={this.saveDefinition}
-						     addRow={this.props.addRow}			
+						     addRow={this.props.addRow}	
+						     flag={this.props.flag}
+						     setFlag={this.props.setFlag}		
 				/>
 				<div className="TermRow-operations">	
 					{	

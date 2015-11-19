@@ -19,13 +19,15 @@ export default class TermContent extends Component {
     }
 
     componentDidMount() {
-        const { item } = this.props;
+        const { item, active_row, active_side, index } = this.props;
         this.loadItem(item)
+        if(active_row && active_side == 0) {
+            this.refs[`autocomplete_term_${index}`].focus()
+        }
     }
 
-    componentWillReceiveProps() {
-        const { item } = this.props;
-        this.loadItem(item)
+    componentWillReceiveProps(nextProps) {
+        
     }
 
     render() {
@@ -33,13 +35,20 @@ export default class TermContent extends Component {
       	return (
             <div className={classnames({"TermContent-focus": active_row, "TermContent": !active_row} )}>
                 <div className="TermContent-wrap">          
-                    <div className="TermContent-side word-side" ref={`termContentWord${index}`}>
+                    <div className="TermContent-side word-side" 
+                         ref={`termContentWord${index}`}
+                         onClick={() => { 
+                            this.props.activateRow()
+                            this.props.focusSide(0)
+                            this.refs[`autocomplete_term_${index}`].focus()
+                        }}>
                         <textarea
                             className="AutoExpandTextArea-textarea"
-                            ref={`autocomplete${index}`}
+                            ref={`autocomplete_term_${index}`}
                             tabIndex={2}
                             rows="1"
                             onFocus={() => { 
+                                console.log('focus')
                                 this.props.activateRow()
                                 this.props.focusSide(0) 
                             }}
@@ -47,18 +56,25 @@ export default class TermContent extends Component {
                                 this.setState({term: e.target.value});
                             }}
                             onBlur={() => {
+                                this.props.setFlag(true)
                                 if(this.state.term !== null && this.state.term.length > 0) {
-                                   this.props.saveTerm(this.state.term) 
+                                    this.props.saveTerm(this.state.term) 
                                 }
                                 this.props.deactivateRow()
                             }}
                             value={ this.state.term }
                         />                                
                     </div>
-                    <div className="TermContent-side def-side" ref={`termContentDef${index}`}>
+                    <div className="TermContent-side def-side" 
+                         ref={`termContentDef${index}`}
+                         onClick={() => { 
+                            this.props.activateRow()
+                            this.props.focusSide(1)
+                            this.refs[`autocomplete_def_${index}`].focus()
+                         }}>
                         <textarea
                             className="AutoExpandTextArea-textarea"
-                            ref={`autocomplete${index}`}
+                            ref={`autocomplete_def_${index}`}
                             tabIndex={2}
                             rows="1"
                             onFocus={() => {
@@ -73,6 +89,7 @@ export default class TermContent extends Component {
                                 this.setState({definition: e.target.value});
                             }}
                             onBlur={() => {
+                                this.props.setFlag(false)
                                 if(this.state.definition !== null && this.state.definition.length > 0){
                                    this.props.saveDefinition(this.state.definition) 
                                 }

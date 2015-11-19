@@ -747,10 +747,9 @@ import { createState } from '../reducers/createset';
 export const CLEAR_SET = 'CLEAR_SET';
 export function clearSet() {
 	return (dispatch, getState) => {
-		let current_state = getState().createset,
-			copy_state = Object.assign({...createState}, {cleared: true})
+		let current_state = getState().createset;
 		dispatch({type: CLEAR_SET}) 
-		if(!_.isEqual(copy_state, current_state)) {
+		if(!_.isEqual(current_state, current_state)) {
 			setTimeout(() => {
 				dispatch(clearSet()) 
 			}, 500)

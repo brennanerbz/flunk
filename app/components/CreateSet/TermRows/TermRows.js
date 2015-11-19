@@ -22,7 +22,7 @@ export default class TermRows extends Component {
 	componentWillReceiveProps = (nextProps) => {
 		const { setFlag, flag } = this.props;
 		if(document.activeElement == document.body) {
-			if(flag) setFlag(false)
+			if(flag)setFlag(false)
 		}
 	}
 

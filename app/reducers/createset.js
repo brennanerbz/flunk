@@ -72,9 +72,6 @@ import {
 	
 } from '../actions/createset';
 
-import _ from 'lodash';
-import assign from 'lodash/object/assign';
-
 export var createState = {
   cleared: false,
   isCreatingSet: false,
@@ -344,7 +341,8 @@ export function createset(state = createState, action) {
         rows: new_rows,
         row_length: new_rows.length
       }
-    case SET_FLAG: 
+    case SET_FLAG:
+      console.log('setting flag') 
       return {
         ...state,
         flag: action.flag

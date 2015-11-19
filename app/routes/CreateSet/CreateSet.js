@@ -48,10 +48,10 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	rows: state.createset.rows,
 	flag: state.createset.flag,
 	title_flag: state.createset.title_flag,
-
 	resizing: state.createset.resizing,
 	/* New state */
-	row_length: state.createset.row_length
+	row_length: state.createset.row_length,
+	rendered: state.createset.rendered
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -128,9 +128,9 @@ export default class CreateSetPage extends Component {
 	}	
 
 	render() {
-		const { isLoadingSet } = this.props;
+		const { isLoadingSet, rendered } = this.props;
 		return(
-			<div className="CreateSetPage no_sidenav_container">
+			<div className={classnames("CreateSetPage no_sidenav_container", {"rendering": !rendered })}>
 			{
 				isLoadingSet
 				?
@@ -173,6 +173,7 @@ export default class CreateSetPage extends Component {
 						updateAssignment={this.props.updateAssignment}
 						createSet={this.props.createSet}
 						updateSet={this.props.updateSet}
+						updateSetSubjects={this.props.updateSetSubjects}
 						user={this.props.user}
 						pushState={this.props.pushState}
 					/>                 
@@ -195,6 +196,7 @@ export default class CreateSetPage extends Component {
 								rows={this.props.rows}
 								row_length={this.props.row_length}
 								setFlag={this.props.setFlag}
+								finishedRendering={this.props.finishedRendering}
 							/>
 						</div>
 					</div>

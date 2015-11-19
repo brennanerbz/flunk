@@ -802,6 +802,13 @@ export function deleteRow(index, asc) {
 	}
 }
 
+export const FINISHED_RENDERING = 'FINISHED_RENDERING';
+export function finishedRendering() {
+	return {
+		type: FINISHED_RENDERING
+	}
+}
+
 export const UNMOUNTING_CREATE = 'UNMOUNTING_CREATE'
 export function unMountingCreate() {
 	return (dispatch, getState) => {

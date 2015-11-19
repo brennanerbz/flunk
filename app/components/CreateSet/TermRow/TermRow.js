@@ -135,7 +135,9 @@ export default class TermRow extends Component {
 						     saveDefinition={this.saveDefinition}
 						     addRow={this.props.addRow}	
 						     flag={this.props.flag}
-						     setFlag={this.props.setFlag}		
+						     setFlag={this.props.setFlag}
+						     resizing={this.props.resizing}	
+						     finishedRendering={this.props.finishedRendering}	
 				/>
 				<div className="TermRow-operations">	
 					{	

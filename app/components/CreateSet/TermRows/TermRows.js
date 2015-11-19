@@ -70,7 +70,8 @@ export default class TermRows extends Component {
 			                  updateItem={this.props.updateItem}
 			                  deleteRow={this.props.deleteRow}
 			                  addRow={this.props.addRow}
-			                  setFlag={this.props.setFlag}
+			                  resizing={this.props.resizing}
+			                  finishedRendering={this.props.finishedRendering}
 			                />
 			            )})	          
 			        }

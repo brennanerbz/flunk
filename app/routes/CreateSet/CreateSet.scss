@@ -21,6 +21,11 @@
 .CreateSetPage {
 	margin-top: 6rem;
 	min-width: 790px;
+	-webkit-transition: opacity 0.15s cubic-bezier(0.42, 0.0, 0.58, 1.0);
+	transition: opacity 0.15s cubic-bezier(0.42, 0.0, 0.58, 1.0);
+	&.rendering {
+		opacity: 0.45
+	}
 }
 
 // /*Header*/
@@ -239,6 +244,7 @@
 	position: relative;
 	padding-top: 7px;
     padding-left: 7px;
+    overflow-y: hidden;
 }
 .TermContent-side.word-side {
 	border-right: 1px solid black;

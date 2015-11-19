@@ -68,7 +68,9 @@ import {
 
   LOADING_SET,
 
-  UNMOUNTING_CREATE
+  UNMOUNTING_CREATE,
+
+  FINISHED_RENDERING
 	
 } from '../actions/createset';
 
@@ -95,7 +97,6 @@ export var createState = {
   current_order_index: null,
   term_choices: null,
   def_choices: null,
-  // rows: Array.from(Array())
   rows: [null, null],
   row_length: 2,
   flag: false,
@@ -108,11 +109,9 @@ export var createState = {
   /* Editing */
   editing: false,
   isLoadingSet: false,
-
   check_subjects: false,
-
-  unmounting: false
-
+  unmounting: false,
+  rendered: false
 };
 
 /* ---- Remove duplicates ----*/
@@ -397,6 +396,11 @@ export function createset(state = createState, action) {
       return {
         ...state,
         cleared: false
+      }
+    case FINISHED_RENDERING:
+      return {
+        ...state,
+        rendered: true
       }
     case UPDATE_ASSOCIATION_FAILURE:
     case TERM_SUGGESTIONS_FAILURE:

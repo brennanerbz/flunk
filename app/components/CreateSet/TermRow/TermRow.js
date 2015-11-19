@@ -4,12 +4,7 @@ import TermContent from '../TermContent/TermContent';
 
 export default class TermRow extends Component {
 	static propTypes = {
-		deleteRow: PropTypes.func,
-		item: PropTypes.object,
-		association: PropTypes.object,
-		index: PropTypes.number,
-		totalCount: PropTypes.number,
-		is_mouse_over: PropTypes.bool
+		/* TODO: Fill in propTypes */
 	}
 
 	state = {
@@ -24,13 +19,6 @@ export default class TermRow extends Component {
 		index: null
 	}
 
-	componentDidMount() {
-		const { index } = this.props;
-		this.setState({
-			index: index
-		});
-	}
-
 	loadData(asc_id, associations, items) {
 		if(asc_id !== null  && associations !== undefined) {
 			let association = associations[asc_id]
@@ -42,10 +30,14 @@ export default class TermRow extends Component {
 		}
 	}
 
-	componentDidMount() {
-		const { index, asc_id, items, associations } = this.props;
-		this.setState({index: index})
+	componentWillMount() {
+		const { asc_id, associations, items, index } = this.props;
+		this.setState({index: index});
 		this.loadData(asc_id, associations, items)
+	}
+
+	componentDidMount() {
+		
 	}
 
 	componentWillReceiveProps() {

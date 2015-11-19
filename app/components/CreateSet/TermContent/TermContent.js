@@ -13,8 +13,8 @@ export default class TermContent extends Component {
 
     loadItem(item) {
         if(item !== undefined && item !== null) {
-            if(item.target !== null) this.setState({term: item.target})
-            if(item.cue !== null) this.setState({definition: item.cue})
+            if(item.target !== null) this.setState({ term: item.target })
+            if(item.cue !== null) this.setState({ definition: item.cue })
         }
     }
 

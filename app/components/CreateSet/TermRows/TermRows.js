@@ -48,7 +48,7 @@ export default class TermRows extends Component {
 	}
 
 	render() {
-	  const { rows, addRow, row_length } = this.props;
+	  const { rows } = this.props;
 	  return(
 				<div className="TermRows"
 					 ref="term_rows"
@@ -73,7 +73,7 @@ export default class TermRows extends Component {
 			                <TermRow
 			                  asc_id={id}
 			                  ref={`row${i}`}                    
-			                  total_count={row_length}
+			                  total_count={this.props.row_length}
 			                  index={i}
 			                  key={`row${i}`}
 			                  id={this.props.id}
@@ -84,14 +84,14 @@ export default class TermRows extends Component {
 			                  createItem={this.props.createItem}
 			                  updateItem={this.props.updateItem}
 			                  deleteRow={this.props.deleteRow}
-			                  addRow={addRow}
+			                  addRow={this.props.addRow}
 			                  setFlag={this.props.setFlag}
 			                />
 			            )})	          
 			        }
 			        <div className="TermRow add_row"
 			        	 ref="add_row"
-			        	 onClick={() => addRow()}
+			        	 onClick={() => this.props.addRow()}
 			        	 title="Add a row">
 			        	<span className="add_icon">+</span>
 			        </div>

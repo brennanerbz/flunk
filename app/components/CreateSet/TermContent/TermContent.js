@@ -27,7 +27,7 @@ export default class TermContent extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        
+       
     }
 
     render() {
@@ -47,16 +47,16 @@ export default class TermContent extends Component {
                             ref={`autocomplete_term_${index}`}
                             tabIndex={2}
                             rows="1"
-                            onFocus={() => { 
-                                console.log('focus')
+                            onFocus={() => {
+                                console.log('focus') 
                                 this.props.activateRow()
-                                this.props.focusSide(0) 
+                                this.props.focusSide(0)
                             }}
                             onChange={(e) =>{
                                 this.setState({term: e.target.value});
                             }}
                             onBlur={() => {
-                                this.props.setFlag(true)
+                                console.log('blur')
                                 if(this.state.term !== null && this.state.term.length > 0) {
                                     this.props.saveTerm(this.state.term) 
                                 }
@@ -79,9 +79,10 @@ export default class TermContent extends Component {
                             rows="1"
                             onFocus={() => {
                                 this.props.activateRow()
-                                this.props.focusSide(1) 
+                                this.props.focusSide(1)
                             }}
                             onKeyDown={(e) => {
+                                e.preventDefault()
                                 if(this.props.index == this.props.total_count - 1 && e.which == 9) 
                                     this.props.addRow()
                             }}
@@ -89,7 +90,6 @@ export default class TermContent extends Component {
                                 this.setState({definition: e.target.value});
                             }}
                             onBlur={() => {
-                                this.props.setFlag(false)
                                 if(this.state.definition !== null && this.state.definition.length > 0){
                                    this.props.saveDefinition(this.state.definition) 
                                 }

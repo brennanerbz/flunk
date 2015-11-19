@@ -341,8 +341,7 @@ export function createset(state = createState, action) {
         rows: new_rows,
         row_length: new_rows.length
       }
-    case SET_FLAG:
-      console.log('setting flag') 
+    case SET_FLAG: 
       return {
         ...state,
         flag: action.flag

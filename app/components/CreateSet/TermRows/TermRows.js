@@ -19,13 +19,6 @@ export default class TermRows extends Component {
 	  window.removeEventListener('resize', this.handleResize)
 	}
 
-	componentWillReceiveProps = (nextProps) => {
-		const { setFlag, flag } = this.props;
-		if(document.activeElement == document.body) {
-			if(flag)setFlag(false)
-		}
-	}
-
 	componentDidUpdate = (prevProps, prevState) => {
 		const { row_length } = this.props;
 		if(prevProps.row_length !== row_length) this.scrollToBottom()
@@ -40,19 +33,11 @@ export default class TermRows extends Component {
 	  node.scrollTop = node.scrollHeight;
 	} 
 
-	deactivateRow = () => {
-		let { setFlag, flag } = this.props;
-		if(document.activeElement == document.body) {
-			if(flag)setFlag(false)
-		}
-	}
-
 	render() {
 	  const { rows } = this.props;
 	  return(
 				<div className="TermRows"
-					 ref="term_rows"
-			         onBlur={this.deactivateRow}>
+					 ref="term_rows">
 				      <div className="TermRow">
 				        <div className="TermRow-content row-labels">
 				          <div className="TermContent">

@@ -66,7 +66,7 @@ export default class TermRow extends Component {
 	            return;
 	        }
 	    }
-	    if(item !== null) {
+	    if(item !== null && item.target !== undefined) {
 	        if(item.target == null || 
 	        (item.target !== null 
 	        && item.target.toLowerCase().trim() !== term.toLowerCase().trim()
@@ -93,7 +93,7 @@ export default class TermRow extends Component {
 	            return;
 	        }
 	    }
-	    if(item !== null) {
+	    if(item !== null && item.cue !== undefined) {
 	        if(item.cue == null || 
 	        (item.cue !== null 
 	        && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()

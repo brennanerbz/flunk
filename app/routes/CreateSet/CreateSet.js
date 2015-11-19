@@ -193,6 +193,7 @@ export default class CreateSetPage extends Component {
 								resize={this.props.resize}
 								resizing={this.props.resizing}
 								rows={this.props.rows}
+								row_length={this.props.row_length}
 								setFlag={this.props.setFlag}
 							/>
 						</div>

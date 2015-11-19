@@ -68,7 +68,9 @@ export default class TermContent extends Component {
                                             this.setState({term: e.target.value});
                                         }}
                                         onBlur={() => {
-                                            this.props.saveTerm(this.state.term)
+                                            if(this.state.term !== null && this.state.term.length > 0) {
+                                               this.props.saveTerm(this.state.term) 
+                                            }
                                             this.props.deactivateRow()
                                         }}
                                         onClick={() => {}} 
@@ -95,6 +97,8 @@ export default class TermContent extends Component {
                                             this.props.focusSide(1) 
                                         }}
                                         onKeyDown={(e) => {
+                                            console.log(this.props.index)
+                                            console.log(this.props.total_count)
                                             if(this.props.index == this.props.total_count - 1 && e.which == 9) 
                                                 this.props.addRow()
                                         }}
@@ -103,7 +107,9 @@ export default class TermContent extends Component {
                                             this.setState({definition: e.target.value});
                                         }}
                                         onBlur={() => {
-                                            this.props.saveDefinition(this.state.definition)
+                                            if(this.state.definition !== null && this.state.definition.length > 0){
+                                               this.props.saveDefinition(this.state.definition) 
+                                            }
                                             this.props.deactivateRow()
                                         }}
                                         onClick={() => {}}

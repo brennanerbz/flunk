@@ -48,7 +48,7 @@ export default class TermRows extends Component {
 	}
 
 	render() {
-	  const { rows, activeRow, addRow, row_length } = this.props;
+	  const { rows, addRow, row_length } = this.props;
 	  return(
 				<div className="TermRows"
 					 ref="term_rows"
@@ -73,7 +73,6 @@ export default class TermRows extends Component {
 			                <TermRow
 			                  asc_id={id}
 			                  ref={`row${i}`}                    
-			                  activeRow={activeRow}
 			                  total_count={row_length}
 			                  index={i}
 			                  key={`row${i}`}
@@ -86,6 +85,7 @@ export default class TermRows extends Component {
 			                  /* Functions */
 			                  createItem={this.props.createItem}
 			                  updateItem={this.props.updateItem}
+			                  deleteRow={this.props.deleteRow}
 			                  addRow={addRow}
 			                  setFlag={this.props.setFlag}
 			                />

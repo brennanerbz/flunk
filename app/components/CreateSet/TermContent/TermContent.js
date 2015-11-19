@@ -48,7 +48,6 @@ export default class TermContent extends Component {
                             tabIndex={2}
                             rows="1"
                             onFocus={() => {
-                                console.log('focus') 
                                 this.props.activateRow()
                                 this.props.focusSide(0)
                             }}
@@ -56,7 +55,6 @@ export default class TermContent extends Component {
                                 this.setState({term: e.target.value});
                             }}
                             onBlur={() => {
-                                console.log('blur')
                                 if(this.state.term !== null && this.state.term.length > 0) {
                                     this.props.saveTerm(this.state.term) 
                                 }
@@ -82,6 +80,7 @@ export default class TermContent extends Component {
                                 this.props.focusSide(1)
                             }}
                             onKeyDown={(e) => {
+                                if(this.props.index !== this.props.total_count -1) return;
                                 e.preventDefault()
                                 if(this.props.index == this.props.total_count - 1 && e.which == 9) 
                                     this.props.addRow()

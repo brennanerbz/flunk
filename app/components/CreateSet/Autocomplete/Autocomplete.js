@@ -181,9 +181,9 @@ export default class Autocomplete extends Component {
 	componentWillReceiveProps(nextProps) {
 	  // if (nextProps.rect() !== this.props.rect()) { this.setMenuPositions() }
 	  // this._performAutoCompleteOnUpdate = true;
-	  // if (this.getValue(nextProps) !== this.getValue(this.props)){
-	  //   this.dispatchEvent(UPDATE, true);
-	  // }
+	  if (this.getValue(nextProps) !== this.getValue(this.props)){
+	    this.dispatchEvent(UPDATE, true);
+	  }
 	  const { index, item, defSide, wordSide } = this.props,
 	  		  value = this.state.value;
 	  if(item !== nextProps.item) {
@@ -204,48 +204,48 @@ export default class Autocomplete extends Component {
 	  }
 	}
 
-	// componentDidUpdate(prevProps, prevState) {
-	//   // if (this.state.isOpen === true && prevState.isOpen === false)
-	//     // this.setMenuPositions()
-	//   // if(this.state.value !== prevState.value)
-	//   // 	this.setMenuPositions()    
-	//   // if (this.state.isOpen && this._performAutoCompleteOnUpdate) 
-	//   //   this._performAutoCompleteOnUpdate = false
-	//   if (prevState.value !== this.state.value){
-	//     this.dispatchEvent(UPDATE, true);
-	//   }
-	// }
+	componentDidUpdate(prevProps, prevState) {
+	  // if (this.state.isOpen === true && prevState.isOpen === false)
+	    // this.setMenuPositions()
+	  // if(this.state.value !== prevState.value)
+	  // 	this.setMenuPositions()    
+	  // if (this.state.isOpen && this._performAutoCompleteOnUpdate) 
+	  //   this._performAutoCompleteOnUpdate = false
+	  if (prevState.value !== this.state.value){
+	    this.dispatchEvent(UPDATE, true);
+	  }
+	}
 
-	// componentWillUnmount() {
-	//   const node = this.refs['textarea' + this.getNodeId()];
-	//   if (this.props.onResize) {
-	//     node.removeEventListener(RESIZED);
-	//   }
-	//   this.dispatchEvent(DESTROY)
-	// }
+	componentWillUnmount() {
+	  const node = this.refs['textarea' + this.getNodeId()];
+	  if (this.props.onResize) {
+	    node.removeEventListener(RESIZED);
+	  }
+	  this.dispatchEvent(DESTROY)
+	}
 
 	getNodeId = () => {
 	  const { index } = this.props;
 	  return index
 	}
 
-	// dispatchEvent = (EVENT_TYPE, defer) => {
-	//   const event = document.createEvent('Event');
-	//   const node = this.refs['textarea' + this.getNodeId()];
-	//   event.initEvent(EVENT_TYPE, true, false); 
-	//   const dispatch = () => node.dispatchEvent(event);
-	//   if (defer) {
-	//     setTimeout(dispatch)
-	//   } else {
-	//     dispatch()
-	//   }
-	// }
+	dispatchEvent = (EVENT_TYPE, defer) => {
+	  const event = document.createEvent('Event');
+	  const node = this.refs['textarea' + this.getNodeId()];
+	  event.initEvent(EVENT_TYPE, true, false); 
+	  const dispatch = () => node.dispatchEvent(event);
+	  if (defer) {
+	    setTimeout(dispatch)
+	  } else {
+	    dispatch()
+	  }
+	}
 
-	// getValue = (props) => {
-	//   if (props) {
-	//     return props.valueLink ? props.valueLink.value : props.value;
-	//   }
-	// }
+	getValue = (props) => {
+	  if (props) {
+	    return props.valueLink ? props.valueLink.value : props.value;
+	  }
+	}
 
 	// maybeScrollItemIntoView = () => {
 	//   if (this.state.isOpen === true && this.state.highlightedIndex !== null) {

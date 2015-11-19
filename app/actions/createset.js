@@ -26,17 +26,17 @@ export function fetchSet(user_id, set_id, pushState) {
 				associations[asc.id] = asc
 				rows.push(asc.id)
 			})
-
 			if(set.editability == 'creator' && set.creator_id !== user_id) {
 				pushState(null, '/')
 				return;
 			}
 			dispatch({type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows})
 		} catch(err) {
-			pushState(null, '/error')
+			if(err.status == 404) pushState(null, '/error')
 			dispatch({
 				type: LOAD_EDITING_FAILURE,
-				error: Error(err)
+				error: Error(err),
+				err: err
 			})
 		}
 	}
@@ -56,25 +56,32 @@ export function loadEditing(set_id, pushState) {
 			let transferState = getState().transfer,
 				user = getState().user.user,
 				set, assignment, items = {}, associations = {}, rows = [];
-			if(transferState.set !== null && transferState.set.id == set_id) {
-				set = transferState.set
-				assignment = transferState.assignment
-				transferState.associations.forEach(asc => {
-					items[asc.item_id] = asc.item
-					associations[asc.id] = asc
-					rows.push(asc.id)
-				})
-				if(set.editability == 'creator' && set.creator_id !== user.id) {
-					pushState(null, '/error')
-					return;
+			if(Object.keys(user).length == 0) { setTimeout(() => { 
+				dispatch(loadEditing(set_id, pushState))
+				return;
+			}, 250)}
+			if(transferState.set !== null && transferState.set !== undefined) {
+				if(transferState.set.id == set_id) {
+					set = transferState.set
+					assignment = transferState.assignment
+					transferState.associations.forEach(asc => {
+						items[asc.item_id] = asc.item
+						associations[asc.id] = asc
+						rows.push(asc.id)
+					})
+					if(set.editability == 'creator' && set.creator_id !== user.id) {
+						pushState(null, '/error')
+						return;
+					}
+					setTimeout(() => {
+						dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows })
+					}, 50)
 				}
-				setTimeout(() => {
-					dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows })
-				}, 50)
 			} else {
 				dispatch(fetchSet(user.id, set_id, pushState))
 			}	
 		} catch(err) {
+			pushState(null, '/error')
 			dispatch({
 				type: LOAD_EDITING_FAILURE,
 				error: Error(err)

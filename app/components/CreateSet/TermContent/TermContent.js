@@ -1,14 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 
+import autosize from 'autosize';
+
+const UPDATE = 'autosize:update',
+      DESTROY = 'autosize:destroy',
+      RESIZED = 'autosize:resized';
+
 export default class TermContent extends Component {
 	static propTypes = {
-		
+		/* TODO: add all propTypes */
 	}
 
     state = {
         term: null,
-        definition: null
+        term_node: null,
+        definition: null,
+        def_node: null
     }
 
     loadItem(item) {
@@ -18,16 +26,61 @@ export default class TermContent extends Component {
         }
     }
 
+    dispatchEvent = (EVENT_TYPE, defer) => {
+        const event = document.createEvent('Event');
+        event.initEvent(EVENT_TYPE, true, false); 
+        const term_dispatch = () => this.state.term_node.dispatchEvent(event);
+        const def_dispatch = () => this.state.def_node.dispatchEvent(event);
+        if (defer) {
+            setTimeout(term_dispatch)
+            setTimeout(def_dispatch)
+        } else {
+            term_dispatch()
+            def_dispatch()
+        }
+    }
+
     componentDidMount() {
         const { item, active_row, active_side, index } = this.props;
-        this.loadItem(item)
+        this.loadItem(item) 
+        let term_node = this.refs[`autocomplete_term_${index}`], 
+            def_node = this.refs[`autocomplete_def_${index}`];
         if(active_row && active_side == 0) {
-            this.refs[`autocomplete_term_${index}`].focus()
+            term_node.focus()
+        }
+        this.setState({
+            term_node: term_node,
+            def_node: def_node
+        });
+        /* Autosizing textarea */
+        autosize(term_node), autosize(def_node);
+        if (this.props.onResize) {
+            term_node.addEventListener(RESIZED, this.props.onResize);
+            def_node.addEventListener(RESIZED, this.props.onResize);
         }
     }
 
     componentWillReceiveProps(nextProps) {
-       
+        if (nextProps.item !== this.props.item){
+            this.dispatchEvent(UPDATE, true);
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.term !== this.state.term){
+            this.dispatchEvent(UPDATE, true);
+        }
+        if(prevState.def !== this.state.def) {
+            this.dispatchEvent(UPDATE, true)
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.props.onResize) {
+            this.state.term_node.removeEventListener(RESIZED);
+            this.state.def_node.removeEventListener(RESIZED);
+        }
+        this.dispatchEvent(DESTROY)
     }
 
     render() {

@@ -87,7 +87,7 @@ export default class TermRow extends Component {
 	    let index = this.state.index;
 	    setFlag(false)
 	    this.setState({ def: def })
-	    if(item == null) {
+	    if(item == null && def !== null) {
 	        if (def.length > 0 && def !== null) {
 	            createItem(index, { name: 'cue', prop: def })
 	            return;

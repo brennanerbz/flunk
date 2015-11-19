@@ -152,10 +152,49 @@ export default class CreateSetPage extends Component {
 				</div>
 				: 
 				<div>
-					<CreateSetHeader {...this.props}/>                 
+					<CreateSetHeader 
+						assignment={this.props.assignment}
+						associations={this.props.associations}
+						check_subjects={this.props.check_subjects}
+						deleted={this.props.deleted}
+						editing={this.props.editing}
+						isLoadingSet={this.props.isLoadingSet}
+						isUpdatingSet={this.props.isUpdatingSet}
+						items={this.props.items}
+						loadSetFlag={this.props.loadSetFlag}
+						purpose={this.props.purpose}
+						set={this.props.set}
+						id={this.props.id}
+						setTitleFlag={this.props.setTitleFlag}
+						subjects={this.props.subjects}
+						title={this.props.title}
+						title_flag={this.props.title_flag}
+						createAssignment={this.props.createAssignment}
+						updateAssignment={this.props.updateAssignment}
+						createSet={this.props.createSet}
+						updateSet={this.props.updateSet}
+						user={this.props.user}
+						pushState={this.props.pushState}
+					/>                 
 					<div className="container">
 						<div className="CreateSetPage-list">
-							<TermRows {...this.props} />
+							<TermRows
+								addRow={this.props.addRow}
+								assignment={this.props.assignment}
+								associations={this.props.associations}
+								check_subjects={this.props.check_subjects}
+								createAssociation={this.props.createAssociation}
+								updateAssociation={this.props.updateAssociation}
+								createItem={this.props.createItem}
+								updateItem={this.props.updateItem}
+								deleteRow={this.props.deleteRow}
+								flag={this.props.flag}
+								items={this.props.items}
+								resize={this.props.resize}
+								resizing={this.props.resizing}
+								rows={this.props.rows}
+								setFlag={this.props.setFlag}
+							/>
 						</div>
 					</div>
 				</div>

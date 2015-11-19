@@ -121,23 +121,21 @@ export default class TermRow extends Component {
 				<a className="TermRow-counter">
 					{this.state.index + 1}
 				</a>
-				<div className="TermRow-content">
-					<TermContent item={this.state.item}
-							     association={this.state.association}
-							     index={this.state.index}
-							     total_count={this.props.total_count}
-							     active_row={this.state.active_row}
-							     active_side={this.state.active_side}
-							     activateRow={() => this.setState({ active_row: true })}
-							     deactivateRow={() => this.setState({ active_row: false })}
-							     focusSide={(value) => this.setState({ active_side: value })}
-							     enterTerm={(term) => this.setState({ term: term}) }
-							     saveTerm={this.saveTerm}
-							     enterDefinition={(def) => this.setState({definition: def})}
-							     saveDefinition={this.saveDefinition}
-							     addRow={this.props.addRow}			
-					/>
-				</div>
+				<TermContent className="TermRow-content"
+							 item={this.state.item}
+						     index={this.state.index}
+						     total_count={this.props.total_count}
+						     active_row={this.state.active_row}
+						     active_side={this.state.active_side}
+						     activateRow={() => this.setState({ active_row: true })}
+						     deactivateRow={() => this.setState({ active_row: false })}
+						     focusSide={(value) => this.setState({ active_side: value })}
+						     enterTerm={(term) => this.setState({ term: term}) }
+						     saveTerm={this.saveTerm}
+						     enterDefinition={(def) => this.setState({definition: def})}
+						     saveDefinition={this.saveDefinition}
+						     addRow={this.props.addRow}			
+				/>
 				<div className="TermRow-operations">	
 					{	
 						this.state.is_mouse_over 

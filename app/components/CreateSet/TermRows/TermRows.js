@@ -76,13 +76,11 @@ export default class TermRows extends Component {
 			                  total_count={row_length}
 			                  index={i}
 			                  key={`row${i}`}
-			                  termLuid={`row${i}`}
 			                  id={this.props.id}
 			                  associations={this.props.associations}
 			                  items={this.props.items}
 			                  rows={this.props.items}
 			                  flag={this.props.flag}
-			                  /* Functions */
 			                  createItem={this.props.createItem}
 			                  updateItem={this.props.updateItem}
 			                  deleteRow={this.props.deleteRow}

@@ -147,12 +147,16 @@
 		height: 48px;
 		-webkit-transition: background 0.1s ease-in-out;
 		transition: background 0.1s ease-in-out;
+		outline: none!important;
+		-moz-appearance:none;
+		-webkit-appearance:none;
 		&:hover {
 			background: rgba(251, 250, 248, 0.70);
 			border-color: rgba(213,213,211,0.85)
 		}
 		&:active {
 			box-shadow: inset 0px 1px 2px 0px rgba(81,79,79,0.20);
+			outline: none;
 		}
 		span {
 			display: block;
@@ -161,6 +165,21 @@
 			font-size: 32px;
 			padding: 0em 0.35em;
 			margin-top: -2px;
+			outline: none!important;
+			-moz-appearance:none;
+			-webkit-appearance:none;
+			-webkit-touch-callout: none;
+		    -webkit-user-select: none;
+		    -khtml-user-select: none;
+		    -moz-user-select: none;
+		    -ms-user-select: none;
+		    user-select: none;
+			&:focus {
+				outline: none;
+			}
+			&:active {
+				outline: none;
+			}
 		}
 	}
 }

@@ -44,29 +44,29 @@ function requestSequence() {
 	}
 }
 export function fetchSequence(user_id, set_id, assignment_id, mode) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		dispatch(requestSequence())
-		try {
-			let sequences;
-			await axios.get(`${api_url}/sequences/?user_id=${Number(user_id)}&set_id=${Number(set_id)}`).then(res => sequences = res.data.sequences)
-			sequences = sequences.filter(seq => !seq.completed)
+		let sequences;
+		axios.get(`${api_url}/sequences/?user_id=${Number(user_id)}&set_id=${Number(set_id)}`)
+		.then(res => {
+			sequences = res.data.sequences.filter(seq => !seq.completed)
 			if(sequences !== undefined && sequences.length > 0) {
 				const sorted_sequences = sequences.sort((s1, s2) => {
 					return new Date(s2.creation) - new Date(s1.creation)
 				})
 				const sequence = sorted_sequences[0]
 				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
-				dispatch(fetchSlots(sequence.id))
 			} else {
 				let sequence = { type: 'noprior' }
 				dispatch(newSequence(sequence, user_id, set_id, assignment_id))
-			}			
-		} catch(err) {
+			}
+		}).catch(err => {
 			dispatch({
 				type: RECEIVE_SEQUENCE_FAILURE,
 				error: Error(err)
-			})
-		}
+			}) 
+		})
+					
 	}
 }
 
@@ -90,61 +90,43 @@ var _default_sequence = {
 	difficulty_chosen_by_user: false
 }
 export function newSequence(prevsequence, user_id, set_id, assignment_id) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		dispatch({type: REQUEST_LEARN})
-		try {
-			let new_sequence,
-				current_sequence = getState().learn.current_sequence;
-			if(prevsequence == null) {
-				new_sequence = Object.assign({..._default_sequence}, {
-					user_id: current_sequence.user_id,
-					set_id: current_sequence.set_id,
-					assignment_id: current_sequence.assignment_id !== undefined ? current_sequence.assignment_id : null
-				})
-			} else {
-				if(prevsequence.type == 'noprior') {
-					new_sequence = Object.assign({..._default_sequence}, {
-						user_id: user_id,
-						set_id: set_id,
-						assignment_id: assignment_id !== undefined ? assignment_id : null
-					})
-				} else if(prevsequence.type == 'completed') {
-					new_sequence = Object.assign({..._default_sequence}, {
-						user_id: prevsequence.user_id,
-						set_id: prevsequence.set_id,
-						assignment_id: prevsequence.assignment_id !== undefined ? prevsequence.assignment_id : null
-					})
-				} 
-			}
-			// request
-			// .post(`${api_url}/sequences/`)
-			// .send(new_sequence)
-			// .end((err, res) => {
-			// 	let sequence = res.data				
-			// 	dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
-			// 	let slots = res.data.slots['slots']
-			// 	dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
-			// 	dispatch({type: CREATE__MINISEQS, slots})
-			// 	dispatch(fetchTrials())
-			// })
-			console.log(new_sequence)
-			await axios.post(`${api_url}/sequences/`, 
-				new_sequence
-			).then(res => {				
-				let sequence = res.data				
-				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
-				let slots = res.data.slots['slots']
-				dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
-				dispatch({type: CREATE__MINISEQS, slots})
-			}).then(() => {
-				dispatch(fetchTrials())
+		let new_sequence,
+			current_sequence = getState().learn.current_sequence;
+		if(prevsequence == null) {
+			new_sequence = Object.assign({..._default_sequence}, {
+				user_id: current_sequence.user_id,
+				set_id: current_sequence.set_id,
+				assignment_id: current_sequence.assignment_id !== undefined ? current_sequence.assignment_id : null
 			})
-		} catch(err) {
+		} else {
+			if(prevsequence.type == 'noprior') {
+				new_sequence = Object.assign({..._default_sequence}, {
+					user_id: user_id,
+					set_id: set_id,
+					assignment_id: assignment_id !== undefined ? assignment_id : null
+				})
+			} else if(prevsequence.type == 'completed') {
+				new_sequence = Object.assign({..._default_sequence}, {
+					user_id: prevsequence.user_id,
+					set_id: prevsequence.set_id,
+					assignment_id: prevsequence.assignment_id !== undefined ? prevsequence.assignment_id : null
+				})
+			} 
+		}
+		axios.post(`${api_url}/sequences/no-slots/`, 
+			new_sequence
+		).then(res => {				
+			let sequence = res.data				
+			dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
+		})
+		.catch((err) => {
 			dispatch({
 				type: NEW_SEQUENCE_FAILURE,
 				error: Error(err)
 			})
-		}
+		})
 	}
 }
 
@@ -206,33 +188,68 @@ export function updateSequence(_sequence) {
 @params: sequence_id
 @purpose: send a GET request to collect the list of slots. include checker methods to make sure all haven't been completed.
 */
+
+export const CREATE_SLOTS = 'CREATE_SLOTS';
+export const CREATE_SLOTS_SUCCESS = 'CREATE_SLOTS_SUCCESS';
+export const CREATE_SLOTS_FAILURE = 'CREATE_SLOTS_FAILURE';
+export function createSlots(sequence_id) {
+	return(dispatch, getState) => {
+		dispatch({type: CREATE_SLOTS})
+		axios.post(`${api_url}/sequences/${sequence_id}/slots/`)
+		.then(res => {
+			let data = res.data;
+			dispatch({type: CREATE_SLOTS_SUCCESS, data})
+		})
+		.catch(err => {
+			dispatch({
+				type: CREATE_SLOTS_FAILURE,
+				error: Error(err),
+				err: err
+			})
+		})
+	}
+}
+
 export const REQUEST_SLOTS = 'REQUEST_SLOTS';
 export const RECEIVE_SLOTS_SUCCESS = 'RECEIVE_SLOTS_SUCCESS';
 export const RECEIVE_SLOTS_FAILURE = 'RECEIVE_SLOTS_FAILURE';
-function requestSlots() {
-	return {
-		type: REQUEST_SLOTS
-	}
-}
 export function fetchSlots(sequence_id) {
 	return async(dispatch, getState) => {
-		dispatch(requestSlots())
+		dispatch({type: REQUEST_SLOTS})
 		try {
-			let current_sequence = getState().learn.current_sequence,
-				slots;
-			await axios.get(`${api_url}/sequences/${sequence_id}/slots/`).then(res => slots = res.data.slots)
-			if(slots !== undefined) {
+			let slots, start, end, seq_id;
+			if(sequence_id == undefined) {
+				seq_id = await getState().learn.current_sequence.id;
+				if(seq_id == undefined) {
+					setTimeout(() => {
+						dispatch(fetchSlots())
+						return;
+					}, 5)
+				}
+			} else {
+				seq_id = sequence_id
+			}
+			start = await getState().learn.start;
+			end = await getState().learn.end
+			await axios.get(`${api_url}/sequences/${seq_id}/slots/?start=${start}&end=${end}`)
+			.then(res => {
+				seq_id = current_sequence.id;
+				slots = res.data.slots
+				if(res.data.total_slots_count === 0) {
+					dispatch(fetchSlots(seq_id))
+					return;
+				}
 				let unfinished_slots = slots.filter(slot => slot.completed !== true)
 				if(unfinished_slots.length === 0) {
 					current_sequence['type'] = 'completed';
 					dispatch(updateSequence(current_sequence))
 					dispatch({type: SHOW_COMPLETED_SEQUENCE})
 				}
-				await dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
+				dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
 
-				await dispatch({type: CREATE__MINISEQS, slots})
-				await dispatch(fetchTrials())
-			}			
+				dispatch({type: CREATE__MINISEQS, slots})
+				dispatch(fetchTrials())
+			})
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_SLOTS_FAILURE,

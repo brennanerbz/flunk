@@ -21,7 +21,7 @@ export default class TermRows extends Component {
 
 	componentDidUpdate = (prevProps, prevState) => {
 		const { row_length } = this.props;
-		if(prevProps.row_length !== row_length) this.scrollToBottom()
+		if(prevProps.row_length < row_length) this.scrollToBottom()
 	}
 
 	handleResize = () => {
@@ -35,6 +35,7 @@ export default class TermRows extends Component {
 
 	render() {
 	  const { rows } = this.props;
+	  console.log(rows)
 	  return(
 				<div className="TermRows"
 					 ref="term_rows">
@@ -52,31 +53,41 @@ export default class TermRows extends Component {
 				          </div>
 				        </div>
 				      </div>
-			        {     
-			            rows.map((id, i) => {
-			              return (
-			                <TermRow
-			                  asc_id={id}
-			                  ref={`row${i}`}                    
-			                  total_count={this.props.row_length}
-			                  index={i}
-			                  key={`row${i}`}
-			                  id={this.props.id}
-			                  associations={this.props.associations}
-			                  items={this.props.items}
-			                  rows={this.props.items}
-			                  createItem={this.props.createItem}
-			                  updateItem={this.props.updateItem}
-			                  deleteRow={this.props.deleteRow}
-			                  addRow={this.props.addRow}
-			                  resizing={this.props.resizing}
-			                  editing={this.props.editing}
-			                  able_to_spark={this.props.able_to_spark}
-			                  rendered={this.props.rendered}
-			                  finishedRendering={this.props.finishedRendering}
-			                />
-			            )})	          
-			        }
+						{     
+						rows.map((id, i) => {
+							let association, item;
+							if(id !== null && this.props.associations !== undefined) {
+								association = this.props.associations[id] 
+								item = association !== undefined  
+								? this.props.items[association.item_id] 
+								: null
+							} else if (id == null) {
+								association = null
+								item = null
+							}
+							return (
+								<TermRow
+									asc_id={id}
+									ref={`row${i}`}                    
+									total_count={this.props.row_length}
+									index={i}
+									key={`row${i}`}
+									id={this.props.id}
+									association={association}
+									item={item}
+									rows={this.props.rows}
+									createItem={this.props.createItem}
+									updateItem={this.props.updateItem}
+									deleteRow={this.props.deleteRow}
+									addRow={this.props.addRow}
+									resizing={this.props.resizing}
+									editing={this.props.editing}
+									able_to_spark={this.props.able_to_spark}
+									rendered={this.props.rendered}
+									finishedRendering={this.props.finishedRendering}
+								/>
+							)})	          
+						}
 			        <div className="TermRow add_row"
 			        	 ref="add_row"
 			        	 onClick={() => this.props.addRow()}

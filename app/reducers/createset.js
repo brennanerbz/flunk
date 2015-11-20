@@ -357,9 +357,14 @@ export function createset(state = createState, action) {
     case DELETE_ROW_SUCCESS:
       let o_rows = state.rows,
           n_rows,
+          o_associations = state.associations,
+          o_items = state.items,
           new_count = state.count;
       if(action.asc !== null && action.asc !== undefined) {
         n_rows = o_rows.filter((x, i) => x !== action.asc.id)
+        let delete_asc = action.asc.id;
+        delete o_items[delete_asc.item_id]
+        delete o_associations[delete_asc]
         new_count--;
       } else {
         n_rows = o_rows.filter((x, i) => i !== action.index)
@@ -368,7 +373,9 @@ export function createset(state = createState, action) {
         ...state,
         rows: n_rows,
         count: new_count,
-        row_length: n_rows.length
+        row_length: n_rows.length,
+        associations: o_associations,
+        items: o_items
       }
     case SAVE_TITLE:
       return {

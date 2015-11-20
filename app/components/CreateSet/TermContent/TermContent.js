@@ -38,7 +38,6 @@ export default class TermContent extends Component {
         })
         setTimeout(() => {
             this.trigger(term_node, def_node)
-            console.log(rendered)
             if(index == total_count - 1 && !rendered) { 
                 setTimeout(() => {
                    this.props.finishedRendering() 
@@ -58,6 +57,21 @@ export default class TermContent extends Component {
         if(!this.state.triggered) {
            this.trigger(term_node, def_node)
            this.setState({triggered: true}); 
+        }
+        if(this.props.item !== nextProps.item) {
+            if(nextProps.item !== undefined && nextProps.item !== null) {
+                this.setState({
+                    term: nextProps.item.target,
+                    definition: nextProps.item.cue
+                });
+                return;
+            }
+            if(nextProps.item == null) {
+                this.setState({
+                    term: null,
+                    definition: null
+                });
+            }
         }
     }
  

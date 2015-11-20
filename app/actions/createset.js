@@ -244,7 +244,6 @@ export function updateSetSubjects(subjects, set) {
 				set = set == undefined ? getState().createset.set : set;
 			if(subjects !== undefined) {
 				subs = { subjects: subjects };
-				console.log(subs)
 				axios.put(`${api_url}/sets/${set.id}/edit-subjects/`, subs)
 				.then((res) => {
 					subs = res.data.subjects
@@ -643,7 +642,6 @@ export function createAssociation(item_id, index) {
 			})
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => { 
-				console.log(res)
 				association = res.data
 				dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index})
 			})

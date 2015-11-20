@@ -16,19 +16,7 @@ export default class TermRow extends Component {
 		definitions: null,
 		item: null,
 		association: null,
-		association_id: null,
 		index: null
-	}
-
-	loadData(asc_id, associations, items) {
-		if(asc_id !== null  && associations !== undefined) {
-			let association = associations[asc_id]
-			this.setState({ 
-				item: items[association.item_id],
-				association: association,
-				association_id: asc_id
-			});
-		}
 	}
 
 	sparkNewRow(index, total_count) {
@@ -41,22 +29,30 @@ export default class TermRow extends Component {
 	}
 
 	componentWillMount() {
-		const { asc_id, associations, items, index, total_count, able_to_spark } = this.props;
+		const { association, item, index, total_count, able_to_spark } = this.props;
 		this.setState({
 			index: index,
 			total_count: total_count
 		});
-		this.loadData(asc_id, associations, items)
+		if(association !== null && item !== null) {
+			this.setState({
+				item: item,
+				association: association
+			});
+		}
 		if(total_count > 2 && able_to_spark) {
 			this.sparkNewRow(index, total_count)
 		}
+
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if(document.activeElement == document.body) this.setState({ active_row: false })
-		const { index, asc_id, items, associations, total_count } = this.props;
-		this.loadData(asc_id, associations, items)
-		/* TODO: change to changeData method */
+		const { association, item, index, total_count } = this.props;
+		this.setState({
+			item: item,
+			association: association
+		});
 	}
 
 	saveTerm = (term) => { 
@@ -110,7 +106,7 @@ export default class TermRow extends Component {
 	}
 
 	handleDelete = () => {
- 		deleteRow(this.state.index, this.state.association)
+ 		this.props.deleteRow(this.state.index, this.state.association)
 	}	
 
 	render() {
@@ -122,8 +118,8 @@ export default class TermRow extends Component {
 					{this.state.index + 1}
 				</a>
 				<TermContent className="TermRow-content"
-							 item={this.state.item}
-						     index={this.state.index}
+							 item={this.props.item}
+						     index={this.props.index}
 						     total_count={this.props.total_count}
 						     active_row={this.state.active_row}
 						     active_side={this.state.active_side}
@@ -140,7 +136,7 @@ export default class TermRow extends Component {
 				<div className="TermRow-operations">	
 					{	
 						this.state.is_mouse_over 
-						&& this.props.totalCount > 2 &&
+						&& this.props.total_count > 2 &&
 						<a className="TermRow-control material-icons"
 					   		onClick={this.handleDelete}>
 							clear

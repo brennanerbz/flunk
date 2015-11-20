@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69a57137-d5d8-40a6-a3c5-9fb76dc18c38" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/FrontEnd.iml" afterPath="$PROJECT_DIR$/.idea/FrontEnd.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/SetView/ItemList/ItemList.js" afterPath="$PROJECT_DIR$/app/components/SetView/ItemList/ItemList.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/routes/Set/Set.js" afterPath="$PROJECT_DIR$/app/routes/Set/Set.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/actions/set.js" afterPath="$PROJECT_DIR$/app/actions/set.js" />

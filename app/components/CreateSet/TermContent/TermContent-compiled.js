@@ -202,7 +202,7 @@ var TermContent = (function (_Component) {
                 if (index == total_count - 1 && !rendered) {
                     setTimeout(function () {
                         _this.props.finishedRendering();
-                    }, 50);
+                    }, 25);
                 }
             }, 1);
         }

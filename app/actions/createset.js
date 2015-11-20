@@ -220,9 +220,6 @@ export function updateSet(_set, ...args) {
 			)
 			.then(res => set = res.data)
 			dispatch({type: UPDATE_SET_SUCCESS, set})
-			if(set.title !== 'Untitled') {
-				// dispatch(updateSetSubjects(undefined, set))
-			}
 		} catch(err) {
 			dispatch({
 				type: UPDATE_SET_FAILURE,

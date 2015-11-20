@@ -259,7 +259,7 @@ var TermContent = (function (_Component) {
                     { className: 'TermContent-wrap' },
                     _react2['default'].createElement(
                         'div',
-                        { className: 'TermContent-side word-side',
+                        { className: (0, _classnames2['default'])("TermContent-side", { "word-side-focus": active_row }, { 'word-side': !active_row }),
                             ref: 'termContentWord' + index,
                             onClick: function () {
                                 _this2.props.activateRow();

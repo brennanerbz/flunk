@@ -98,8 +98,10 @@ export default class CreateSetHeader extends Component {
 		if(set !== null && assignment == null) {
 			createAssignment(set.id, 'admin', {name: 'navigate', prop: true}, pushState)
 			updateSet(set, {name: 'finalized', prop: true})
+			// createSequence
+			// createSlots
 			return;
-			// TODO: createSequence()
+			
 		}
 		if((set && assignment) !== null) {
 			if(set.finalized == null) updateSet(set, {name: 'finalized', prop: true})

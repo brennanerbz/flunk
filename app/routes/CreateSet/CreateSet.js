@@ -12,6 +12,7 @@ import * as transfer from '../../actions/transfer';
 /* Components */
 import TermRows from '../../components/CreateSet/TermRows/TermRows';
 import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSetHeader';
+import SavingLabel from '../../components/CreateSet/SavingLabel/SavingLabel';
 
 @connect(state => ({
 	/* Router state */
@@ -25,6 +26,7 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	isLoadingSet: state.createset.isLoadingSet,
 	isCreatingSet: state.createset.isCreatingSet,
 	isUpdatingSet: state.createset.isUpdatingSet,
+	isCreatingItem: state.createset.isCreatingItem,
 	check_subjects: state.createset.check_subjects,
 	/* User */
 	user: state.user.user,
@@ -94,38 +96,57 @@ export default class CreateSetPage extends Component {
 		}, 2500)
 	}
 
+	stayOnPage() {
+		const { set, loadEditing, pushState } = this.props;
+		pushState(null, `/createset`)
+		setTimeout(() => {
+			loadEditing(set.id, pushState)
+		}, 50)
+	}
+
 	componentWillUnmount() {
 		const { set, 
+				isCreatingSet,
 				updateSet, 
 				clearSet, 
 				assignment, 
 				createAssignment,
 				associations,
+				items,
 				reorder, 
 				clearTransferState,
 				unMountingCreate,
-				deleted	 
+				deleted,
+				pushState
 				} = this.props;
 				
 		unMountingCreate()
 
 		clearTransferState()
 
-		if(set !== null) {
-			if(assignment !== null && Object.keys(associations).length > 1) reorder()
-			if(assignment == null && !deleted) {
-				updateSet(set, {name: 'finalized', prop: null})
-				createAssignment(set.id)
-				if(associations !== (null)) {
-					if(Object.keys(associations).length > 1) reorder()
-				} 
+		if(set == null && isCreatingSet && !deleted) {
+			var message = "You have unsaved changes!\n\n Are you sure you want to leave?";
+			if(confirm(message)) {
+				clearSet()
+				clearInterval(this.subPoll)
+				return true;
+			} else {
+				this.stayOnPage()
+				return;
 			}
 		}
-		setTimeout(() => {
-			clearSet()
-		}, 50)
 
-		clearInterval(this.subPoll)
+		if(set !== null) {
+            if(associations !== null && Object.keys(associations).length > 1) reorder()
+            if(assignment == null && !deleted) {
+            	updateSet(set, {name: 'finalized', prop: null})
+            	createAssignment(set.id)
+            }
+            setTimeout(() => {
+            	clearSet()
+            }, 50)
+            clearInterval(this.subPoll)
+		}
 	}	
 
 	render() {
@@ -153,6 +174,14 @@ export default class CreateSetPage extends Component {
 				</div>
 				: 
 				<div>
+					<SavingLabel 
+						assignment={this.props.assignment}
+						set={this.props.set}
+						isLoadingSet={this.props.isLoadingSet}
+						isCreatingSet={this.props.isCreatingSet}
+						isUpdatingSet={this.props.isUpdatingSet}
+						isCreatingItem={this.props.isCreatingItem}
+					/>
 					<CreateSetHeader 
 						assignment={this.props.assignment}
 						associations={this.props.associations}

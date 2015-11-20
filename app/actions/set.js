@@ -5,32 +5,15 @@ import request from 'superagent';
 
 const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 
-// Concurrent call that will call each method and return the whole/entire state desired
-
-export const RECEIVE_SETVIEW_SUCCESS = 'REQUEST_SETVIEW_SUCCESS';
-export function fetchSetView(user_id, set_id) {
-	return async(dispatch) => {
-		axios.all([fetchSet(set_id), fetchContent(set_id), fetchAssignment(user_id, set_id)])
-		.then(axios.spread((set, items, assignment) => {
-			console.log("Axios.all:" + set, items, assignment)
-			dispatch({type: RECEIVE_SETVIEW_SUCCESS, set, items, assignment})
-		}))
-	}
-}
-
-
-// Call /sets/:id route with the params id passed in from React. Will be a function to run concurrently. This will return a set object, and from this set object, we will be able to  fill store. 
-
+/*
+@params set_id 
+*/
 export const REQUEST_SET = 'REQUEST_SET';
 export const RECEIVE_SET_SUCCESS = 'RECEIVE_SET_SUCCESS';
 export const RECEIVE_SET_FAILURE = 'RECEIVE_SET_FAILURE';
 export const RECEIVE_ASSIGNMENTS_SUCCESS = 'RECEIVE_ASSIGNMENTS_SUCCESS';
-
-/*
-@params set_id 
-*/
 export function fetchSet(set_id) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		if(getState().sets.isFetchingAssignments || getState().user.isFetchingUser) {
 			setTimeout(() => {
 				dispatch(fetchSet(set_id))
@@ -38,63 +21,52 @@ export function fetchSet(set_id) {
 			return;
 		}
 		dispatch({type: REQUEST_SET})
-		try {
-			let set,
-				user = getState().user.user,
-				assignments,
-				assignment;
-			await axios.get(`${api_url}/users/${user.id}/assignments/`)
-			.then((res) => { 
-				assignments = res.data.assignments 
-				dispatch({type: RECEIVE_ASSIGNMENTS_SUCCESS, assignments })
-			})
-			await axios.get(`${api_url}/sets/${set_id}`).then((res) => set = res.data)
+		let set,
+			user = getState().user.user;
+		axios.get(`${api_url}/sets/${set_id}`).then((res) => { 
+			set = res.data
 			dispatch({
 				type: RECEIVE_SET_SUCCESS,
 				set
 			})
-			assignment = assignments.filter(assignment => assignment.set_id == Number(set_id))[0]
-			if(assignment !== undefined) {
-				dispatch(fetchAssignment(assignment.id))
-				return;
-			} else {
-				dispatch(fetchAssociations(set_id))
-			}
-		}
-		catch(err) {
+		}).catch((err) => {
 			dispatch({
 				type: RECEIVE_SET_FAILURE,
-				error: Error(err)
+				error: Error(err),
+				err: err
 			})
-		}
+		})
 	}
 }
 
 /*
 @params set_id
+GET /sets/<id>/associations/?start=0&end=99
 */
 export const REQUEST_ASSOCIATIONS = 'REQUEST_ASSOCIATIONS';
 export const RECEIVE_ASSOCIATIONS_SUCCESS = 'RECEIVE_ASSOCIATIONS_SUCCESS';
 export const RECEIVE_ASSOCIATIONS_FAILURE = 'RECEIVE_ASSOCIATIONS_FAILURE';
 export function fetchAssociations(set_id) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		dispatch({type: REQUEST_ASSOCIATIONS})
-		try {
-			let associations;
-			await axios.get(`${api_url}/sets/${set_id}/associations/`)
-			.then((res) => associations = res.data.associations)
-			console.log(associations)
+		let associations;
+		axios.get('http://jsonplaceholder.typicode.com/photos').then(res => {
+			console.log(res.data)
+		})
+		axios.get(`${api_url}/sets/${set_id}/associations/?start=${0}&end=${99}`)
+		.then((res) => {
+			associations = res.data.associations
 			dispatch({
 				type: RECEIVE_ASSOCIATIONS_SUCCESS,
 				associations
-			})			
-		} catch(err) {
+			})
+		}).catch(err => {
 			dispatch({
 				type: RECEIVE_ASSOCIATIONS_FAILURE,
 				error: Error(err),
-				typeErr: err
+				err: err
 			})
-		}
+		})
 	}
 }
 

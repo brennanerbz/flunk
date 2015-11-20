@@ -261,7 +261,7 @@ export default function learn(state = initial_learnstate, action) {
 				slots: action.slots,
 				current_slot: slot
 			}
-		case RECEIVE_TRIALS_SUCCESS:
+		case RECEIVE_TRIALS_SUCCESS: 
 			return {
 				...state,
 				isFetchingTrials: false,

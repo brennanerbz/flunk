@@ -214,48 +214,39 @@ export const REQUEST_SLOTS = 'REQUEST_SLOTS';
 export const RECEIVE_SLOTS_SUCCESS = 'RECEIVE_SLOTS_SUCCESS';
 export const RECEIVE_SLOTS_FAILURE = 'RECEIVE_SLOTS_FAILURE';
 export function fetchSlots(sequence_id) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		dispatch({type: REQUEST_SLOTS})
-		try {
-			let slots, start, end, seq_id;
-			if(sequence_id == undefined) {
-				seq_id = await getState().learn.current_sequence.id;
-				if(seq_id == undefined) {
-					setTimeout(() => {
-						dispatch(fetchSlots())
-						return;
-					}, 5)
-				}
-			} else {
-				seq_id = sequence_id
-			}
-			start = await getState().learn.start;
-			end = await getState().learn.end
-			await axios.get(`${api_url}/sequences/${seq_id}/slots/?start=${start}&end=${end}`)
-			.then(res => {
-				seq_id = current_sequence.id;
-				slots = res.data.slots
-				if(res.data.total_slots_count === 0) {
-					dispatch(fetchSlots(seq_id))
+		let slots, start, end, seq_id;
+		if(sequence_id == undefined) {
+			seq_id = getState().learn.current_sequence.id;
+			if(seq_id == undefined) {
+				setTimeout(() => {
+					dispatch(fetchSlots())
 					return;
-				}
-				let unfinished_slots = slots.filter(slot => slot.completed !== true)
-				if(unfinished_slots.length === 0) {
-					current_sequence['type'] = 'completed';
-					dispatch(updateSequence(current_sequence))
-					dispatch({type: SHOW_COMPLETED_SEQUENCE})
-				}
-				dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
-
-				dispatch({type: CREATE__MINISEQS, slots})
-				dispatch(fetchTrials())
-			})
-		} catch(err) {
+				}, 5)
+			}
+		} else {
+			seq_id = sequence_id
+		}
+		start = getState().learn.start;
+		end = getState().learn.end
+		axios.get(`${api_url}/sequences/${seq_id}/slots/?start=${start}&end=${end}`)
+		.then(res => {
+			seq_id = current_sequence.id;
+			slots = res.data.slots
+			if(res.data.total_slots_count === 0) {
+				dispatch(fetchSlots(seq_id))
+				return;
+			}
+			dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
+		})
+		.catch(err => {
 			dispatch({
 				type: RECEIVE_SLOTS_FAILURE,
 				error: Error(err)
 			})
-		}
+		})
+		dispatch(fetchTrials())
 	}
 }
 
@@ -266,14 +257,9 @@ export function fetchSlots(sequence_id) {
 export const UPDATE_SLOT = 'UPDATE_SLOT'
 export const UPDATE_SLOT_SUCCESS = 'UPDATE_SLOT_SUCCESS'
 export const UPDATE_SLOT_FAILURE = 'UPDATE_SLOT_FAILURE'
-function willUpdateSlot() {
-	return {
-		type: UPDATE_SLOT
-	}
-}
 export function updateSlot(slot) {
 	return async(dispatch, getState) => {
-		dispatch(willUpdateSlot())
+		dispatch({type: UPDATE_SLOT})
 		try {
 			await axios.put(`${api_url}/slots/${slot.id}`, 
 				slot
@@ -324,26 +310,22 @@ export function completed5Slots() {
 export const REQUEST_TRIALS = 'REQUEST_TRIALS';
 export const RECEIVE_TRIALS_SUCCESS = 'RECEIVE_TRIALS_SUCCESS';
 export const RECEIVE_TRIALS_FAILURE = 'RECEIVE_TRIALS_FAILURE';
-function requestTrials() {
-	return {
-		type: REQUEST_TRIALS
-	}
-}
 export function fetchTrials() {
-	return async(dispatch, getState) => {
-		dispatch(requestTrials())
-		try {
-			let state = getState().learn,
-				slot = state.current_slot,
-				slots = state.current_miniseq.slots,
-				slot_id = slot.id,
-				trial = {},
-				trials;
-			await axios.get(`${api_url}/slots/${slot_id}/trials/`).then(res => trials = res.data.trials)
-			if(slots.filter(slot => !slot.completed).length === 0) {
-				dispatch(completeMiniSequence())
-				return;
-			}
+	return (dispatch, getState) => {
+		dispatch({type: REQUEST_TRIALS})
+		let state = getState().learn,
+			slot = state.current_slot,
+			slots = state.current_miniseq.slots,
+			slot_id = slot.id,
+			trial = {},
+			trials;
+		if(Object.keys(slot).length === 0) {
+			dispatch(fetchTrials())
+			return;
+		}
+		axios.get(`${api_url}/slots/${slot_id}/trials/`)
+		.then(res => { 
+			trials = res.data.trials
 			if(trials !== undefined && trials.length > 0) {
 				dispatch({type: RECEIVE_TRIALS_SUCCESS, trials})
 				trial = trials.slice(-1)[0]
@@ -360,12 +342,13 @@ export function fetchTrials() {
 				trial['type'] = null;
 				dispatch(newTrial(trial))
 			}
-		} catch(err) {
+		})
+		.catch(err => {
 			dispatch({
 				type: RECEIVE_TRIALS_FAILURE,
 				error: Error(err)
 			})
-		}
+		})
 	}
 }
 
@@ -378,11 +361,6 @@ subject, synonyms, augs, related_terms, nonemc_choices, mc_choices, truefalse_ta
 export const NEW_TRIAL = 'NEW_TRIAL';
 export const NEW_TRIAL_SUCCESS = 'NEW_TRIAL_SUCCESS';
 export const NEW_TRIAL_FAILURE = 'NEW_TRIAL_FAILURE';
-function willCreateNewTrial() {
-	return {
-		type: NEW_TRIAL
-	}
-}
 var _default_trial = {
 	slot_id: 0,
 	cue_visible: '',
@@ -412,7 +390,7 @@ var _default_trial = {
 }
 export function newTrial(trial) {
 	return async(dispatch, getState) => {
-		dispatch(willCreateNewTrial())
+		dispatch({type: NEW_TRIAL})
 		try {
 			let new_trial,
 				state = await getState().learn,
@@ -514,14 +492,9 @@ export function newFormat(last_trial, state) {
 export const NEW_HINT = 'NEW_HINT';
 export const NEW_HINT_SUCCESS = 'NEW_HINT_SUCCESS';
 export const NEW_HINT_FAILURE = 'NEW_HINT_FAILURE';
-function willShowHint() {
-	return { 
-		type: NEW_HINT
-	}
-}
 export function hint(response) {
 	return async(dispatch, getState) => {
-		dispatch(willShowHint())
+		dispatch({type: NEW_HINT})
 		try {
 			let current_trial = await getState().learn.current_trial,
 				id = current_trial.id,
@@ -570,14 +543,9 @@ function willUpdateTrial() {
 		type: UPDATE_TRIAL
 	}
 }
-function grading() {
-	return {
-		type: GRADING
-	}
-}
-export function updateTrial(response) { // TODO: make sure to pass in object from component. use state to determine other variables. 
+export function updateTrial(response) {  
 	return async(dispatch, getState) => {
-		await dispatch(grading())
+		await dispatch({type: GRADING})
 		try {
 			let state = await getState().learn,
 				current_trial = state.current_trial,
@@ -638,14 +606,9 @@ export function updateTrial(response) { // TODO: make sure to pass in object fro
 export const ADAPT = 'ADAPT';
 export const ADAPT_SUCCESS = 'ADAPT_SUCCESS';
 export const ADAPT_FAILURE = 'ADAPT_FAILURE';
-function willAdapt() {
-	return {
-		type: ADAPT
-	}
-}
 export function adapt(updated_trial) {
 	return (dispatch, getState) => {
-		dispatch(willAdapt())
+		dispatch({type: ADAPT})
 		try {
 			let new_format = dispatch(newFormat(updated_trial, getState())),
 				current_slot = getState().learn.current_slot,

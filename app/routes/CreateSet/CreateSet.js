@@ -12,6 +12,7 @@ import * as transfer from '../../actions/transfer';
 /* Components */
 import TermRows from '../../components/CreateSet/TermRows/TermRows';
 import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSetHeader';
+import SavingLabel from '../../components/CreateSet/SavingLabel/SavingLabel';
 
 @connect(state => ({
 	/* Router state */
@@ -25,6 +26,7 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	isLoadingSet: state.createset.isLoadingSet,
 	isCreatingSet: state.createset.isCreatingSet,
 	isUpdatingSet: state.createset.isUpdatingSet,
+	isCreatingItem: state.createset.isCreatingItem,
 	check_subjects: state.createset.check_subjects,
 	/* User */
 	user: state.user.user,
@@ -153,6 +155,14 @@ export default class CreateSetPage extends Component {
 				</div>
 				: 
 				<div>
+					<SavingLabel 
+						assignment={this.props.assignment}
+						set={this.props.set}
+						isLoadingSet={this.props.isLoadingSet}
+						isCreatingSet={this.props.isCreatingSet}
+						isUpdatingSet={this.props.isUpdatingSet}
+						isCreatingItem={this.props.isCreatingItem}
+					/>
 					<CreateSetHeader 
 						assignment={this.props.assignment}
 						associations={this.props.associations}

@@ -221,6 +221,7 @@ export function createset(state = createState, action) {
       }
       return {
         ...state,
+        isUpdatingSet: false,
         subjects: _subs,
         set: Object.assign({...state.set}, {subjects: _subs}),
         check_subjects: false

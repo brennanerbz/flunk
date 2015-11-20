@@ -238,7 +238,7 @@ export const UPDATE_SETSUBJECTS_SUCCESS = 'UPDATE_SETSUBJECTS_SUCCESS';
 export const UPDATE_SETSUBJECTS_FAILURE = 'UPDATE_SETSUBJECTS_FAILURE';
 export function updateSetSubjects(subjects, set) {
 	return (dispatch, getState) => {
-		dispatch({type: UPDATE_SET})
+		// dispatch({type: UPDATE_SET})
 		try {
 			var subs,
 				set = set == undefined ? getState().createset.set : set;

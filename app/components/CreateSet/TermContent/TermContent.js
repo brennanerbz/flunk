@@ -85,7 +85,7 @@ export default class TermContent extends Component {
       	return (
             <div className={classnames({"TermContent-focus": active_row, "TermContent": !active_row} )}>
                 <div className="TermContent-wrap">          
-                    <div className="TermContent-side word-side" 
+                    <div className={classnames("TermContent-side", {"word-side-focus": active_row}, {'word-side': !active_row})}
                          ref={`termContentWord${index}`}
                          onClick={() => { 
                             this.props.activateRow()

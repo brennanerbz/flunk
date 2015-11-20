@@ -65,12 +65,14 @@ export default class TermRows extends Component {
 			                  associations={this.props.associations}
 			                  items={this.props.items}
 			                  rows={this.props.items}
-			                  flag={this.props.flag}
 			                  createItem={this.props.createItem}
 			                  updateItem={this.props.updateItem}
 			                  deleteRow={this.props.deleteRow}
 			                  addRow={this.props.addRow}
 			                  resizing={this.props.resizing}
+			                  editing={this.props.editing}
+			                  able_to_spark={this.props.able_to_spark}
+			                  rendered={this.props.rendered}
 			                  finishedRendering={this.props.finishedRendering}
 			                />
 			            )})	          

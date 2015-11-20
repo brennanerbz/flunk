@@ -51,7 +51,8 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	resizing: state.createset.resizing,
 	/* New state */
 	row_length: state.createset.row_length,
-	rendered: state.createset.rendered
+	rendered: state.createset.rendered,
+	able_to_spark: state.createset.able_to_spark
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -171,6 +172,7 @@ export default class CreateSetPage extends Component {
 						title_flag={this.props.title_flag}
 						createAssignment={this.props.createAssignment}
 						updateAssignment={this.props.updateAssignment}
+						deleteAssignment={this.props.deleteAssignment}
 						createSet={this.props.createSet}
 						updateSet={this.props.updateSet}
 						updateSetSubjects={this.props.updateSetSubjects}
@@ -195,7 +197,9 @@ export default class CreateSetPage extends Component {
 								resizing={this.props.resizing}
 								rows={this.props.rows}
 								row_length={this.props.row_length}
-								setFlag={this.props.setFlag}
+								editing={this.props.editing}
+								able_to_spark={this.props.able_to_spark}
+								rendered={rendered}
 								finishedRendering={this.props.finishedRendering}
 							/>
 						</div>

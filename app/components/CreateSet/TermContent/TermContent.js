@@ -24,7 +24,7 @@ export default class TermContent extends Component {
     }
 
     componentDidMount() {
-        const { item, active_row, active_side, index, total_count } = this.props;
+        const { item, active_row, active_side, index, total_count, rendered } = this.props;
         this.loadItem(item) 
         let term_node = this.refs[`autocomplete_term_${index}`],
             def_node = this.refs[`autocomplete_def_${index}`]
@@ -38,7 +38,11 @@ export default class TermContent extends Component {
         })
         setTimeout(() => {
             this.trigger(term_node, def_node)
-            if(index == total_count) this.props.finishedRendering()
+            if(index == total_count - 1 && !rendered) { 
+                setTimeout(() => {
+                   this.props.finishedRendering() 
+                }, 1)
+            }
         }, 1)
     }
 

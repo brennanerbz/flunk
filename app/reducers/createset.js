@@ -111,7 +111,8 @@ export var createState = {
   isLoadingSet: false,
   check_subjects: false,
   unmounting: false,
-  rendered: false
+  rendered: false,
+  able_to_spark: true
 };
 
 /* ---- Remove duplicates ----*/
@@ -141,7 +142,8 @@ export function createset(state = createState, action) {
       return {
         ...state,
         isLoadingSet: true,
-        unmounting: false
+        unmounting: false,
+        able_to_spark: false
       }
     case LOAD_EDITING_SUCCESS:
       let load_rows = [null, null],
@@ -172,6 +174,7 @@ export function createset(state = createState, action) {
         items: action.items,
         associations: action.associations,
         rows: load_rows,
+        row_length: load_rows.length,
         count: Object.keys(action.associations).length > 0 
                ? action.associations[action.rows.slice(-1)[0]].order + 1 
                : 1,
@@ -338,7 +341,8 @@ export function createset(state = createState, action) {
         ...state,
         activeRow: last_index,
         rows: new_rows,
-        row_length: new_rows.length
+        row_length: new_rows.length,
+        able_to_spark: true
       }
     case SET_FLAG: 
       return {

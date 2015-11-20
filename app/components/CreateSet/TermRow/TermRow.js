@@ -11,6 +11,7 @@ export default class TermRow extends Component {
 		is_mouse_over: false, 
 		active_row: false,
 		active_side: 0, /* 0 = 'term' & 1 = 'definition' */
+		total_count: 2,
 		terms: null,	
 		definitions: null,
 		item: null,
@@ -40,23 +41,22 @@ export default class TermRow extends Component {
 	}
 
 	componentWillMount() {
-		const { asc_id, associations, items, index, total_count } = this.props;
-		this.setState({index: index});
+		const { asc_id, associations, items, index, total_count, able_to_spark } = this.props;
+		this.setState({
+			index: index,
+			total_count: total_count
+		});
 		this.loadData(asc_id, associations, items)
-		if(total_count > 2) {
+		if(total_count > 2 && able_to_spark) {
 			this.sparkNewRow(index, total_count)
 		}
-	}
-
-	componentDidMount() {
-		
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if(document.activeElement == document.body) this.setState({ active_row: false })
 		const { index, asc_id, items, associations, total_count } = this.props;
 		this.loadData(asc_id, associations, items)
-		/* TODO: change to changeDate method */
+		/* TODO: change to changeData method */
 	}
 
 	saveTerm = (term) => { 
@@ -114,7 +114,6 @@ export default class TermRow extends Component {
 	}	
 
 	render() {
-		const { flag } = this.props;
 		return (
 			<div className="TermRow" 
 				 onMouseOver={() => this.setState({is_mouse_over: true})}
@@ -134,9 +133,8 @@ export default class TermRow extends Component {
 						     saveTerm={this.saveTerm}
 						     saveDefinition={this.saveDefinition}
 						     addRow={this.props.addRow}	
-						     flag={this.props.flag}
-						     setFlag={this.props.setFlag}
 						     resizing={this.props.resizing}	
+						     rendered={this.props.rendered}
 						     finishedRendering={this.props.finishedRendering}	
 				/>
 				<div className="TermRow-operations">	

@@ -38,10 +38,11 @@ export default class TermContent extends Component {
         })
         setTimeout(() => {
             this.trigger(term_node, def_node)
+            console.log(rendered)
             if(index == total_count - 1 && !rendered) { 
                 setTimeout(() => {
                    this.props.finishedRendering() 
-                }, 1)
+                }, 50)
             }
         }, 1)
     }

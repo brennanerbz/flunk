@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 
 export default class SavingLabel extends Component {
 	static propTypes = {
@@ -6,6 +7,13 @@ export default class SavingLabel extends Component {
 
 	state = {
 		message: ''
+	}
+
+	componentWillMount() {
+		if(this.props.set == null) this.setState({message: 'Draft'})
+		if(this.props.set !== null) { 
+			this.setState({message: `Created ${moment.utc(this.props.set.creation).fromNow()}`});
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -17,7 +25,7 @@ export default class SavingLabel extends Component {
 			});
 			setTimeout(() => {
 				this.setState({
-					message: nextProps.set == null ? 'Draft' : 'Saved'
+					message: this.props.set == null ? 'Draft' : 'Saved'
 				});
 			}, 500)
 			return;

@@ -181,6 +181,7 @@ export default class Learn extends Component {
 
 	render() {
 		const { current_slot,
+				current_trial,
 				slots,
 				newSequence, 
 				isFetchingTrials,
@@ -194,6 +195,10 @@ export default class Learn extends Component {
 				nextSlot,
 				trial,
 				params} = this.props;
+		let debug_trial = []
+		for(var prop in current_trial) {
+			debug_trial.push(prop + ": " + current_trial[prop])
+		}
 		return (
 			<div className="learn_page"
 				 ref="learn_page"
@@ -294,6 +299,47 @@ export default class Learn extends Component {
 												{...this.props}/>
 										: null
 									}
+									<div style={{
+										height: '200px',
+										position: 'absolute',
+										top: '100px',
+										right: '0',
+										display: 'table'
+									}}>
+										<div style={{display: 'table-cell'}}>
+											{ 
+												debug_trial.map((row, i) => {
+													if(i < (debug_trial.length - 1) / 2) {
+														return (
+															<p style={{
+																fontSize: '13px',
+																margin: '0'
+															}}	
+															   key={i}>{row}</p>
+														)
+													}
+													
+												}) 
+											}
+										</div>
+										<div style={{ display: 'table-cell'}}>
+											{ 
+												debug_trial.map((row, i) => {
+													if(i > (debug_trial.length - 1) / 2) {
+														return (
+															<p style={{
+																fontSize: '13px',
+																margin: '0'
+															}}	
+															   key={i}>{row}</p>
+														)
+													}
+													
+												}) 
+											}
+										</div>
+
+									</div>
 									<div className="feedback">
 										<a className="feedback_link">Feedback</a>
 									</div>

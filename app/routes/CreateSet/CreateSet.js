@@ -47,7 +47,12 @@ import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSe
 	def_choices: state.createset.def_choices,
 	rows: state.createset.rows,
 	flag: state.createset.flag,
-	title_flag: state.createset.title_flag
+	title_flag: state.createset.title_flag,
+	resizing: state.createset.resizing,
+	/* New state */
+	row_length: state.createset.row_length,
+	rendered: state.createset.rendered,
+	able_to_spark: state.createset.able_to_spark
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -124,9 +129,9 @@ export default class CreateSetPage extends Component {
 	}	
 
 	render() {
-		const { isLoadingSet } = this.props;
+		const { isLoadingSet, rendered } = this.props;
 		return(
-			<div className="CreateSetPage no_sidenav_container">
+			<div className={classnames("CreateSetPage no_sidenav_container", {"rendering": !rendered })}>
 			{
 				isLoadingSet
 				?
@@ -148,11 +153,56 @@ export default class CreateSetPage extends Component {
 				</div>
 				: 
 				<div>
-					<CreateSetHeader {...this.props}/>                 
+					<CreateSetHeader 
+						assignment={this.props.assignment}
+						associations={this.props.associations}
+						check_subjects={this.props.check_subjects}
+						deleted={this.props.deleted}
+						editing={this.props.editing}
+						isLoadingSet={this.props.isLoadingSet}
+						isUpdatingSet={this.props.isUpdatingSet}
+						items={this.props.items}
+						loadSetFlag={this.props.loadSetFlag}
+						purpose={this.props.purpose}
+						set={this.props.set}
+						id={this.props.id}
+						setTitleFlag={this.props.setTitleFlag}
+						subjects={this.props.subjects}
+						title={this.props.title}
+						title_flag={this.props.title_flag}
+						createAssignment={this.props.createAssignment}
+						updateAssignment={this.props.updateAssignment}
+						deleteAssignment={this.props.deleteAssignment}
+						createSet={this.props.createSet}
+						updateSet={this.props.updateSet}
+						updateSetSubjects={this.props.updateSetSubjects}
+						user={this.props.user}
+						pushState={this.props.pushState}
+					/>                 
 					<div className="container">
 						<div className="CreateSetPage-list">
-						<TermRows {...this.props} />
-					</div>
+							<TermRows
+								addRow={this.props.addRow}
+								assignment={this.props.assignment}
+								associations={this.props.associations}
+								check_subjects={this.props.check_subjects}
+								createAssociation={this.props.createAssociation}
+								updateAssociation={this.props.updateAssociation}
+								createItem={this.props.createItem}
+								updateItem={this.props.updateItem}
+								deleteRow={this.props.deleteRow}
+								flag={this.props.flag}
+								items={this.props.items}
+								resize={this.props.resize}
+								resizing={this.props.resizing}
+								rows={this.props.rows}
+								row_length={this.props.row_length}
+								editing={this.props.editing}
+								able_to_spark={this.props.able_to_spark}
+								rendered={rendered}
+								finishedRendering={this.props.finishedRendering}
+							/>
+						</div>
 					</div>
 				</div>
 			}

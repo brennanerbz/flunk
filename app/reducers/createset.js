@@ -43,7 +43,6 @@ import {
   UPDATE_ASSOCIATION,
   UPDATE_ASSOCIATION_SUCCESS,
   UPDATE_ASSOCIATION_FAILURE,
-	SAVE_SET,
 
 	SAVE_TITLE,
 	SAVE_PURPOSE,
@@ -54,12 +53,7 @@ import {
 	DELETE_ROW,
   DELETE_ROW_SUCCESS,
 
-	FLIP_ACTIVESIDE,
-	ACTIVATE_ROW,
-
-	SET_MOUSE_POS,
 	RESIZE,
-	SCROLL,
 
   CLEAR_SET,
 
@@ -74,12 +68,11 @@ import {
 
   LOADING_SET,
 
-  UNMOUNTING_CREATE
+  UNMOUNTING_CREATE,
+
+  FINISHED_RENDERING
 	
 } from '../actions/createset';
-
-import _ from 'lodash';
-import assign from 'lodash/object/assign';
 
 export var createState = {
   cleared: false,
@@ -104,8 +97,8 @@ export var createState = {
   current_order_index: null,
   term_choices: null,
   def_choices: null,
-  // rows: Array.from(Array())
   rows: [null, null],
+  row_length: 2,
   flag: false,
   title_flag: false,
   /* Old State */
@@ -116,11 +109,10 @@ export var createState = {
   /* Editing */
   editing: false,
   isLoadingSet: false,
-
   check_subjects: false,
-
-  unmounting: false
-
+  unmounting: false,
+  rendered: false,
+  able_to_spark: true
 };
 
 /* ---- Remove duplicates ----*/
@@ -150,7 +142,8 @@ export function createset(state = createState, action) {
       return {
         ...state,
         isLoadingSet: true,
-        unmounting: false
+        unmounting: false,
+        able_to_spark: false
       }
     case LOAD_EDITING_SUCCESS:
       let load_rows = [null, null],
@@ -181,6 +174,7 @@ export function createset(state = createState, action) {
         items: action.items,
         associations: action.associations,
         rows: load_rows,
+        row_length: load_rows.length,
         count: Object.keys(action.associations).length > 0 
                ? action.associations[action.rows.slice(-1)[0]].order + 1 
                : 1,
@@ -346,7 +340,9 @@ export function createset(state = createState, action) {
       return {
         ...state,
         activeRow: last_index,
-        rows: new_rows
+        rows: new_rows,
+        row_length: new_rows.length,
+        able_to_spark: true
       }
     case SET_FLAG: 
       return {
@@ -361,9 +357,14 @@ export function createset(state = createState, action) {
     case DELETE_ROW_SUCCESS:
       let o_rows = state.rows,
           n_rows,
+          o_associations = state.associations,
+          o_items = state.items,
           new_count = state.count;
       if(action.asc !== null && action.asc !== undefined) {
         n_rows = o_rows.filter((x, i) => x !== action.asc.id)
+        let delete_asc = action.asc.id;
+        delete o_items[delete_asc.item_id]
+        delete o_associations[delete_asc]
         new_count--;
       } else {
         n_rows = o_rows.filter((x, i) => i !== action.index)
@@ -371,13 +372,10 @@ export function createset(state = createState, action) {
       return {
         ...state,
         rows: n_rows,
-        count: new_count
-      }
-    case FLIP_ACTIVESIDE:
-      const active = state.activeContext;
-      return {
-        ...state,
-        activeContext: !active
+        count: new_count,
+        row_length: n_rows.length,
+        associations: o_associations,
+        items: o_items
       }
     case SAVE_TITLE:
       return {
@@ -389,34 +387,10 @@ export function createset(state = createState, action) {
         ...state,
         purpose: action.purpose
       }
-    case ACTIVATE_ROW:
-      return {
-        ...state,
-        activeRow: action.index
-      }
-    case SAVE_SET:
-      const terms = JSON.stringify(state.terms, null, 2)
-      alert(
-        "Title:" + state.title + "\n" + 
-        "Purpose:" + state.purpose + "\n" + 
-        "Items:" + terms
-        );
-      return state;
-
-    case SET_MOUSE_POS:
-      return {
-        ...state,
-        mousePos: action.index
-      }
     case RESIZE:
       return {
         ...state,
         resizing: !state.resizing
-      }
-    case SCROLL:
-      return {
-        ...state,
-        scrolling: !state.scrolling
       }
     case UNMOUNTING_CREATE:
       return {
@@ -433,6 +407,11 @@ export function createset(state = createState, action) {
       return {
         ...state,
         cleared: false
+      }
+    case FINISHED_RENDERING:
+      return {
+        ...state,
+        rendered: true
       }
     case UPDATE_ASSOCIATION_FAILURE:
     case TERM_SUGGESTIONS_FAILURE:

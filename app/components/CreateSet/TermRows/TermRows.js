@@ -1,150 +1,99 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
-import _ from 'lodash';
-
-import * as actionCreators from '../../../actions/createset';
 
 import TermRow from '../TermRow/TermRow';
 
-@connect(
-	state => ({
-		activeContext: state.createset.activeContext,
-		activeRow: state.createset.activeRow,
-		mousePos: state.createset.mousePos,
-		resizing: state.createset.resizing,
-		scrolling: state.createset.scrolling
-	}),
-	dispatch => ({
-		...bindActionCreators({
-		  ...actionCreators
-		}, dispatch)
-	})
-)
 export default class TermRows extends Component {
 	static propTypes = {
 		dispatch: PropTypes.func,
 		addRow: PropTypes.func,
 		resize: PropTypes.func,
 		adjustScroll: PropTypes.func,
-		activateRow: PropTypes.func,
-		activeRow: PropTypes.number,
-		mousePos: PropTypes.number,
-		activeContext: PropTypes.bool
-	}
-
-	constructor(props) {
-		super(props)
-		this.state = {
-			activeSide: this.props.activeContext ? 'word' : 'def'
-		}
 	}
 
 	componentDidMount = () => {
-	  // window.addEventListener('resize', this.handleResize);
-	  // window.addEventListener('scroll', this.handleScroll);	  
+	  window.addEventListener('resize', this.handleResize); 
 	}
 
 	componentWillUnmount = () => {
-	  // window.removeEventListener('resize', this.handleResize)
-	  // window.removeEventListener('scroll', this.handleScroll);
-	}
-
-	componentWillReceiveProps = (nextProps) => {
-	  const { activeContext, setFlag, flag, activeRow } = this.props;
-	  this.setState({
-	    activeSide: nextProps.activeContext ? 'word' : 'def'
-	  });
-	  if(document.activeElement == document.body) {
-	  	if(flag)setFlag(false)
-	  }
+	  window.removeEventListener('resize', this.handleResize)
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
-	  const { activeRow, rows } = this.props;
-	  if (prevProps.activeRow !== this.props.activeRow && activeRow === rows.length - 1) {
-	    this.scrollToBottom()
-	  }
+		const { row_length } = this.props;
+		if(prevProps.row_length < row_length) this.scrollToBottom()
 	}
 
-	// handleResize = () => {
-	//   this.props.resize()
-	// }
+	handleResize = () => {
+	  this.props.resize()
+	}
 
 	scrollToBottom = () => {
 	  const node = document.body;
 	  node.scrollTop = node.scrollHeight;
 	} 
 
-	// handleScroll = () => {
-	//   this.props.adjustScroll()
-	// }
-
-	deactivateRow = () => {
-	  let { activateRow, setFlag, flag } = this.props;
-	  if(document.activeElement == document.body) {
-	  	activateRow(-1)
-	  	if(flag)setFlag(false)
-	  }
-	}
-
 	render() {
-	  const { rows, activeRow, addRow } = this.props;
-	  const length = rows.length - 1;
-	  // console.log(rows)
+	  const { rows, associations, items } = this.props;
 	  return(
 				<div className="TermRows"
-					 ref="term_rows"
-			         onBlur={this.deactivateRow}>
-			      <div className="TermRow">
-			        <div className="TermRow-content row-labels">
-			          <div className="TermContent">
-			            <div className="TermContent-wrap">
-			              <div className="TermContent-side word-side">
-			                <p>Terms</p>
-			              </div>
-			              <div className="TermContent-side def-side">
-			                <p>Definitions</p>
-			              </div>
-			            </div>
-			          </div>
-			        </div>
-			      </div>
-			        {     
-			            rows.map((id, i) => {
-			              return (
-			                <TermRow
-			                  asc_id={id}
-			                  // isMouseOver={i === this.props.mousePos}
-			                  ref={`row${i}`}                    
-			                  activeRow={activeRow}
-			                  activeSide={this.state.activeSide}
-			                  lastIndex={Number(length)}
-			                  totalCount={length}
-			                  index={i}
-			                  key={`row${i}`}
-			                  termLuid={`row${i}`}
-			                  {...this.props}
-			                />
-			              )
-			            })	          
-			        }
+					 ref="term_rows">
+				      <div className="TermRow">
+				        <div className="TermRow-content row-labels">
+				          <div className="TermContent">
+				            <div className="TermContent-wrap">
+				              <div className="TermContent-side word-side">
+				                <p>Terms</p>
+				              </div>
+				              <div className="TermContent-side def-side">
+				                <p>Definitions</p>
+				              </div>
+				            </div>
+				          </div>
+				        </div>
+				      </div>
+						{     
+						rows.map((id, i) => {
+							let association, item;
+
+							association = id !== null && associations !== undefined 
+							? associations[id]
+							: null,
+
+							item = association !== null && items !== undefined
+							? items[association.item_id]
+							: null
+
+							return (
+								<TermRow
+									asc_id={id}
+									ref={`row${i}`}                    
+									total_count={this.props.row_length}
+									index={i}
+									key={`row${i}`}
+									id={this.props.id}
+									association={association}
+									item={item}
+									rows={this.props.rows}
+									createItem={this.props.createItem}
+									updateItem={this.props.updateItem}
+									deleteRow={this.props.deleteRow}
+									addRow={this.props.addRow}
+									resizing={this.props.resizing}
+									editing={this.props.editing}
+									able_to_spark={this.props.able_to_spark}
+									rendered={this.props.rendered}
+									finishedRendering={this.props.finishedRendering}
+								/>
+							)})	          
+						}
 			        <div className="TermRow add_row"
 			        	 ref="add_row"
-			        	 onClick={() => addRow()}
+			        	 onClick={() => this.props.addRow()}
 			        	 title="Add a row">
 			        	<span className="add_icon">+</span>
 			        </div>
-			      </div>
+			    </div>
 		);
 	}
 }
-
-
-// <i className={classnames("material-icons md-36", "icon-cursor")}
-//    ref="addButton"
-//    onClick={() => addRow()}	           
-//    title="Add a row">
-//   add_circle_outline
-// </i>

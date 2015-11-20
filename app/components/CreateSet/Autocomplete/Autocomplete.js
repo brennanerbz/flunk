@@ -26,7 +26,7 @@ export default class Autocomplete extends Component {
 		// menuStyle: PropTypes.object,
 		inputProps: PropTypes.object,
 		index: PropTypes.number,
-		lastIndex: PropTypes.number
+		totalCount: PropTypes.number
 	}
 
 	// static defaultProps = {
@@ -59,7 +59,6 @@ export default class Autocomplete extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			value: this.props.initialValue || '',
 			// isOpen: false,
 			// highlightedIndex: null
 		}
@@ -67,25 +66,15 @@ export default class Autocomplete extends Component {
 
 	keyUpHandlers = {
 		Tab() {
-		  const { addRow, index, lastIndex, activeSide, flag, setFlag, activateRow } = this.props;
+		  const { addRow, index, totalCount, activeSide, flag, setFlag, activateRow } = this.props;
 		  if(flag) {
 		  	setFlag(false)
 		  	return;
 		  }
-		  if (index !== lastIndex) return;
-		  if (activeSide == 'def') {
-		    addRow()
-		  }
-		}
 	}
 
 	keyDownHandlers = {
 	    
-	    Tab(event) {
-	    	const { addRow, index, lastIndex, activeSide, flag } = this.props;
-	    	if (index == lastIndex && activeSide == 'def') event.preventDefault();
-	    },
-
 	    // ArrowDown() {
 	    //   // event.preventDefault()
 	    //   const { shouldsuggest } = this.props;
@@ -176,14 +165,14 @@ export default class Autocomplete extends Component {
 	}
 
 	componentDidMount() {  
-	  const { index, lastIndex, wordSide } = this.props;
+	  const { index, totalCount, wordSide } = this.props;
 	  const node = this.refs['textarea' + this.getNodeId()];
 	  // autosize(node);
 	  // if (this.props.onResize) {
 	  //   node.addEventListener(RESIZED, this.props.onResize);
 	  // }
 	  if (document.activeElement == document.body) {
-	    if (index === lastIndex && wordSide) {
+	    if (index === totalCount && wordSide) {
 	      node.focus()
 	    }
 	  }
@@ -192,9 +181,9 @@ export default class Autocomplete extends Component {
 	componentWillReceiveProps(nextProps) {
 	  // if (nextProps.rect() !== this.props.rect()) { this.setMenuPositions() }
 	  // this._performAutoCompleteOnUpdate = true;
-	  // if (this.getValue(nextProps) !== this.getValue(this.props)){
-	  //   this.dispatchEvent(UPDATE, true);
-	  // }
+	  if (this.getValue(nextProps) !== this.getValue(this.props)){
+	    this.dispatchEvent(UPDATE, true);
+	  }
 	  const { index, item, defSide, wordSide } = this.props,
 	  		  value = this.state.value;
 	  if(item !== nextProps.item) {
@@ -215,48 +204,48 @@ export default class Autocomplete extends Component {
 	  }
 	}
 
-	// componentDidUpdate(prevProps, prevState) {
-	//   // if (this.state.isOpen === true && prevState.isOpen === false)
-	//     // this.setMenuPositions()
-	//   // if(this.state.value !== prevState.value)
-	//   // 	this.setMenuPositions()    
-	//   // if (this.state.isOpen && this._performAutoCompleteOnUpdate) 
-	//   //   this._performAutoCompleteOnUpdate = false
-	//   if (prevState.value !== this.state.value){
-	//     this.dispatchEvent(UPDATE, true);
-	//   }
-	// }
+	componentDidUpdate(prevProps, prevState) {
+	  // if (this.state.isOpen === true && prevState.isOpen === false)
+	    // this.setMenuPositions()
+	  // if(this.state.value !== prevState.value)
+	  // 	this.setMenuPositions()    
+	  // if (this.state.isOpen && this._performAutoCompleteOnUpdate) 
+	  //   this._performAutoCompleteOnUpdate = false
+	  if (prevState.value !== this.state.value){
+	    this.dispatchEvent(UPDATE, true);
+	  }
+	}
 
-	// componentWillUnmount() {
-	//   const node = this.refs['textarea' + this.getNodeId()];
-	//   if (this.props.onResize) {
-	//     node.removeEventListener(RESIZED);
-	//   }
-	//   this.dispatchEvent(DESTROY)
-	// }
+	componentWillUnmount() {
+	  const node = this.refs['textarea' + this.getNodeId()];
+	  if (this.props.onResize) {
+	    node.removeEventListener(RESIZED);
+	  }
+	  this.dispatchEvent(DESTROY)
+	}
 
 	getNodeId = () => {
 	  const { index } = this.props;
 	  return index
 	}
 
-	// dispatchEvent = (EVENT_TYPE, defer) => {
-	//   const event = document.createEvent('Event');
-	//   const node = this.refs['textarea' + this.getNodeId()];
-	//   event.initEvent(EVENT_TYPE, true, false); 
-	//   const dispatch = () => node.dispatchEvent(event);
-	//   if (defer) {
-	//     setTimeout(dispatch)
-	//   } else {
-	//     dispatch()
-	//   }
-	// }
+	dispatchEvent = (EVENT_TYPE, defer) => {
+	  const event = document.createEvent('Event');
+	  const node = this.refs['textarea' + this.getNodeId()];
+	  event.initEvent(EVENT_TYPE, true, false); 
+	  const dispatch = () => node.dispatchEvent(event);
+	  if (defer) {
+	    setTimeout(dispatch)
+	  } else {
+	    dispatch()
+	  }
+	}
 
-	// getValue = (props) => {
-	//   if (props) {
-	//     return props.valueLink ? props.valueLink.value : props.value;
-	//   }
-	// }
+	getValue = (props) => {
+	  if (props) {
+	    return props.valueLink ? props.valueLink.value : props.value;
+	  }
+	}
 
 	// maybeScrollItemIntoView = () => {
 	//   if (this.state.isOpen === true && this.state.highlightedIndex !== null) {
@@ -414,47 +403,18 @@ export default class Autocomplete extends Component {
 	//   return React.cloneElement(menu, { ref: 'menu' })
 	// }
 
-	handleInputBlur = () => {
-	  // if (this._ignoreBlur) 
-	  //   return
-	  // this.setState({
-	  //   isOpen: false,
-	  //   highlightedIndex: null
-	  // })
-	  if(this.props.wordSide) {
-	    this.props.saveWord(this.state.value)
-	  } else {
-	    this.props.saveDef(this.state.value)
-	    // this.props.clearDefChoices()
-	  }
-	}
+	// handleInputBlur = () => {
+	//   if (this._ignoreBlur) 
+	//     return
+	//   this.setState({
+	//     isOpen: false,
+	//     highlightedIndex: null
+	//   })
+	// }
 
-	handleInputFocus = () => {
-	  const { index, 
-	  		  activateRow, 
-	  		  switchToDef, 
-	  		  switchToWord,
-	  		  flag,
-	  		  setFlag,
-	  		  // onFocus,
-	  		  item,
-	  		  items } = this.props;
-	  // if (this._ignoreBlur)
-	  //   return
-	  activateRow(index)
-	  if (this.props.defSide) {
-	  	switchToDef()
-	  	// onFocus()
-	  	this.setState({ isOpen: true })
-	  } else {
-	    switchToWord()
-	  }
-	}
-
-	handleInputClick = () => {
-	  const {activateRow, index} = this.props;
-	  activateRow(index)
-	}
+	// handleInputFocus = () => {
+	//   	this.setState({ isOpen: true })
+	// }
 
 	focusSide = () => {
 	  const node = this.refs['textarea' + this.getNodeId()]
@@ -462,18 +422,12 @@ export default class Autocomplete extends Component {
 	}
 
 	render () {
-	  // if (this.props.debug) { // you don't like it, you love it
-	  //   _debugStates.push({
-	  //     id: _debugStates.length,
-	  //     state: this.state
-	  //   })
-	  // }
 	  const {index, item}  = this.props;
 	  return (
 	    <div className="Autocomplete-textarea" style={{display: 'inline-block'}}>
 	      <textarea
 	      	autoFocus={this.props.wordSide 
-	      			  && this.props.index == this.props.lastIndex
+	      			  && this.props.index == this.props.totalCount
 	      			  && this.props.title_flag
 	      			  ? true : false}
 	        tabIndex={this.props.tabIndex}

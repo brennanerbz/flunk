@@ -26,17 +26,17 @@ export function fetchSet(user_id, set_id, pushState) {
 				associations[asc.id] = asc
 				rows.push(asc.id)
 			})
-
 			if(set.editability == 'creator' && set.creator_id !== user_id) {
 				pushState(null, '/')
 				return;
 			}
 			dispatch({type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows})
 		} catch(err) {
-			pushState(null, '/error')
+			if(err.status == 404) pushState(null, '/error')
 			dispatch({
 				type: LOAD_EDITING_FAILURE,
-				error: Error(err)
+				error: Error(err),
+				err: err
 			})
 		}
 	}
@@ -56,25 +56,32 @@ export function loadEditing(set_id, pushState) {
 			let transferState = getState().transfer,
 				user = getState().user.user,
 				set, assignment, items = {}, associations = {}, rows = [];
-			if(transferState.set !== null && transferState.set.id == set_id) {
-				set = transferState.set
-				assignment = transferState.assignment
-				transferState.associations.forEach(asc => {
-					items[asc.item_id] = asc.item
-					associations[asc.id] = asc
-					rows.push(asc.id)
-				})
-				if(set.editability == 'creator' && set.creator_id !== user.id) {
-					pushState(null, '/error')
-					return;
+			if(Object.keys(user).length == 0) { setTimeout(() => { 
+				dispatch(loadEditing(set_id, pushState))
+				return;
+			}, 250)}
+			if(transferState.set !== null && transferState.set !== undefined) {
+				if(transferState.set.id == set_id) {
+					set = transferState.set
+					assignment = transferState.assignment
+					transferState.associations.forEach(asc => {
+						items[asc.item_id] = asc.item
+						associations[asc.id] = asc
+						rows.push(asc.id)
+					})
+					if(set.editability == 'creator' && set.creator_id !== user.id) {
+						pushState(null, '/error')
+						return;
+					}
+					setTimeout(() => {
+						dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows })
+					}, 50)
 				}
-				setTimeout(() => {
-					dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows })
-				}, 50)
 			} else {
 				dispatch(fetchSet(user.id, set_id, pushState))
 			}	
 		} catch(err) {
+			pushState(null, '/error')
 			dispatch({
 				type: LOAD_EDITING_FAILURE,
 				error: Error(err)
@@ -237,7 +244,6 @@ export function updateSetSubjects(subjects, set) {
 				set = set == undefined ? getState().createset.set : set;
 			if(subjects !== undefined) {
 				subs = { subjects: subjects };
-				console.log(subs)
 				axios.put(`${api_url}/sets/${set.id}/edit-subjects/`, subs)
 				.then((res) => {
 					subs = res.data.subjects
@@ -636,7 +642,6 @@ export function createAssociation(item_id, index) {
 			})
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => { 
-				console.log(res)
 				association = res.data
 				dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index})
 			})
@@ -747,10 +752,9 @@ import { createState } from '../reducers/createset';
 export const CLEAR_SET = 'CLEAR_SET';
 export function clearSet() {
 	return (dispatch, getState) => {
-		let current_state = getState().createset,
-			copy_state = Object.assign({...createState}, {cleared: true})
+		let current_state = getState().createset;
 		dispatch({type: CLEAR_SET}) 
-		if(!_.isEqual(copy_state, current_state)) {
+		if(!_.isEqual(current_state, current_state)) {
 			setTimeout(() => {
 				dispatch(clearSet()) 
 			}, 500)
@@ -796,17 +800,17 @@ export function deleteRow(index, asc) {
 	}
 }
 
+export const FINISHED_RENDERING = 'FINISHED_RENDERING';
+export function finishedRendering() {
+	return {
+		type: FINISHED_RENDERING
+	}
+}
+
 export const UNMOUNTING_CREATE = 'UNMOUNTING_CREATE'
 export function unMountingCreate() {
 	return (dispatch, getState) => {
 		dispatch({type: UNMOUNTING_CREATE})
-	}
-}
-
-export const FLIP_ACTIVESIDE = 'FLIP_ACTIVESIDE'
-export function flipActiveSide() {
-	return {
-		type: FLIP_ACTIVESIDE
 	}
 }
 
@@ -825,39 +829,9 @@ export function savePurpose(purpose) {
 	}
 }
 
-export const ACTIVATE_ROW = 'ACTIVATE_ROW'
-export function activateRow(index) {
-	return {
-		type: ACTIVATE_ROW,
-		index
-	}
-}
-
-export const SAVE_SET = 'SAVE_SET'
-export function saveSet(){
-	return {
-		type: SAVE_SET
-	}
-}
-
-export const SET_MOUSE_POS = 'SET_MOUSE_POS'
-export function setMousePos(index) {
-	return {
-		type: SET_MOUSE_POS,
-		index
-	}
-}
-
 export const RESIZE = 'RESIZE'
 export function resize() {
 	return {
 		type: RESIZE
-	}
-}
-
-export const SCROLL = 'SCROLL'
-export function adjustScroll() {
-	return {
-		type: SCROLL
 	}
 }

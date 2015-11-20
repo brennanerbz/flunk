@@ -14,8 +14,6 @@ export default class TermRow extends Component {
 		total_count: 2,
 		terms: null,	
 		definitions: null,
-		item: null,
-		association: null,
 		index: null
 	}
 
@@ -34,30 +32,17 @@ export default class TermRow extends Component {
 			index: index,
 			total_count: total_count
 		});
-		if(association !== null && item !== null) {
-			this.setState({
-				item: item,
-				association: association
-			});
-		}
 		if(total_count > 2 && able_to_spark) {
 			this.sparkNewRow(index, total_count)
 		}
-
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if(document.activeElement == document.body) this.setState({ active_row: false })
-		const { association, item, index, total_count } = this.props;
-		this.setState({
-			item: item,
-			association: association
-		});
 	}
 
 	saveTerm = (term) => { 
-	    const { createItem, updateItem } = this.props,
-	    	  { index, item, association } = this.state;
+	    const { createItem, updateItem, index, item, association } = this.props;
 	    if(item == null && term !== null) {
 	        if (term.length > 0) {
 	            createItem(index, { name: 'target', prop: term })
@@ -81,8 +66,7 @@ export default class TermRow extends Component {
 	}
 
 	saveDefinition = (def) => { 
-	    const { createItem, updateItem } = this.props,
-	    	  { index, item, association } = this.state;
+	    const { createItem, updateItem, index, item, association } = this.props;
 	    if(item == null && def !== null) {
 	        if (def.length > 0 && def !== null) {
 	            createItem(index, { name: 'cue', prop: def })
@@ -106,7 +90,7 @@ export default class TermRow extends Component {
 	}
 
 	handleDelete = () => {
- 		this.props.deleteRow(this.state.index, this.state.association)
+ 		this.props.deleteRow(this.props.index, this.props.association)
 	}	
 
 	render() {

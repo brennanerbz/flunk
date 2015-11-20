@@ -59,17 +59,22 @@ export default class TermContent extends Component {
            this.setState({triggered: true}); 
         }
         if(this.props.item !== nextProps.item) {
-            if(nextProps.item !== undefined && nextProps.item !== null) {
+            if(nextProps.item !== null && nextProps.item.target !== null) {
                 this.setState({
                     term: nextProps.item.target,
-                    definition: nextProps.item.cue
                 });
-                return;
-            }
-            if(nextProps.item == null) {
+            } else {
                 this.setState({
-                    term: null,
-                    definition: null
+                    term: ''
+                });
+            }
+            if(nextProps.item !== null && nextProps.item.cue !== null) {
+                this.setState({
+                    definition: nextProps.item.cue,
+                });
+            } else {
+                this.setState({
+                    definition: ''
                 });
             }
         }

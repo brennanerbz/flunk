@@ -34,8 +34,7 @@ export default class TermRows extends Component {
 	} 
 
 	render() {
-	  const { rows } = this.props;
-	  console.log(rows)
+	  const { rows, associations, items } = this.props;
 	  return(
 				<div className="TermRows"
 					 ref="term_rows">
@@ -56,15 +55,15 @@ export default class TermRows extends Component {
 						{     
 						rows.map((id, i) => {
 							let association, item;
-							if(id !== null && this.props.associations !== undefined) {
-								association = this.props.associations[id] 
-								item = association !== undefined  
-								? this.props.items[association.item_id] 
-								: null
-							} else if (id == null) {
-								association = null
-								item = null
-							}
+
+							association = id !== null && associations !== undefined 
+							? associations[id]
+							: null,
+
+							item = association !== null && items !== undefined
+							? items[association.item_id]
+							: null
+
 							return (
 								<TermRow
 									asc_id={id}

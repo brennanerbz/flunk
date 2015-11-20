@@ -41,7 +41,7 @@ export default class TermContent extends Component {
             if(index == total_count - 1 && !rendered) { 
                 setTimeout(() => {
                    this.props.finishedRendering() 
-                }, 50)
+                }, 25)
             }
         }, 1)
     }

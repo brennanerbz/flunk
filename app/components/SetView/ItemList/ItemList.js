@@ -31,7 +31,10 @@ export default class ItemList extends Component {
 				
 				<ul className="item_list">
 					{sorted_asssociations.map((asc, i) => {
-						return <Item key={i} item={asc.item} {...this.props}/>
+						return <Item key={i} 
+									 item={asc.item} 
+									 pushState={pushState}
+						/>
 					})}
 				</ul>
 			</div>

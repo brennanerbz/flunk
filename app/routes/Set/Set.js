@@ -46,14 +46,16 @@ export default class Set extends Component {
 	}
 
 	componentWillMount() {
-		const { params, fetchSet } = this.props;
+		const { params, fetchSet, fetchAssociations } = this.props;
 		fetchSet(params.id)
+		fetchAssociations(params.id)
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if(this.props.params.id !== nextProps.params.id) {
 			this.props.clearSetView()
 			this.props.fetchSet(nextProps.params.id)
+			this.props.fetchAssociations(nextProps.params.id)
 		}
 	}
 
@@ -71,11 +73,39 @@ export default class Set extends Component {
 					!isFetching
 					? <div className="row">
 						<div className="col-sm-9 col-md-8 col-lg-8">
-							<SetHeader {...this.props} />						
-							<ItemList {...this.props}/>	
+							<SetHeader 
+								assignment={this.props.assignment}
+								creator_id={this.props.creator_id}
+								creator_username={this.props.creator_username} 
+								id={this.props.id}
+								item_count={this.props.item_count}
+								set={this.props.set}
+								title={this.props.title}
+								user={this.props.user}
+								pushState={this.props.pushState}
+							/>						
+							<ItemList
+								assignment={this.props.assignment}
+								associations={this.props.associations}
+								id={this.props.id}
+								item_count={this.props.item_count}
+								items={this.props.items}
+								set={this.props.set} 
+								pushState={this.props.pushState}
+							/>	
 						</div>
 						<div className="col-md-4 col-lg-4">
-							<SetInfo {...this.props}/>
+							<SetInfo 
+								assignment={this.props.assignment}
+								creator_id={this.props.creator_id}
+								creator_username={this.props.creator_username} 
+								id={this.props.id}
+								doc={this.props.doc}
+								item_count={this.props.item_count}
+								purpose={this.props.purpose}
+								subjects={this.props.subjects}
+								pushState={this.props.pushState}
+							/>
 						</div>
 					</div>
 					: 

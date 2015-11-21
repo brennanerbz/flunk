@@ -83,9 +83,6 @@ function fetchAssociations(set_id) {
 	return function (dispatch, getState) {
 		dispatch({ type: REQUEST_ASSOCIATIONS });
 		var associations = undefined;
-		_axios2['default'].get('http://jsonplaceholder.typicode.com/photos').then(function (res) {
-			console.log(res.data);
-		});
 		_axios2['default'].get(api_url + '/sets/' + set_id + '/associations/?start=' + 0 + '&end=' + 99).then(function (res) {
 			associations = res.data.associations;
 			dispatch({

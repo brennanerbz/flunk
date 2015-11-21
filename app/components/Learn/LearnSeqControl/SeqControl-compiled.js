@@ -113,7 +113,7 @@ var SeqControl = (function (_Component) {
 						{ className: 'button button-outline startover_btn',
 							type: 'button',
 							onClick: function () {
-								return _this.props.newSequence(null);
+								_this.props.newSequence(null);
 							}
 						},
 						'Start over'

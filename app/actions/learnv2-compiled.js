@@ -10,7 +10,6 @@ exports.fetchLearn = fetchLearn;
 exports.fetchSequence = fetchSequence;
 exports.newSequence = newSequence;
 exports.updateSequence = updateSequence;
-exports.createSlots = createSlots;
 exports.fetchSlots = fetchSlots;
 exports.updateSlot = updateSlot;
 exports.transformSlots = transformSlots;
@@ -159,16 +158,24 @@ function newSequence(prevsequence, user_id, set_id, assignment_id) {
 				});
 			}
 		}
-		_axios2['default'].post(api_url + '/sequences/no-slots/', new_sequence).then(function (res) {
-			var sequence = res.data,
-			    sequence_id = sequence.id;
-			dispatch({ type: RECEIVE_SEQUENCE_SUCCESS, sequence: sequence });
-			dispatch(createSlots(sequence_id));
-		})['catch'](function (err) {
-			dispatch({
-				type: NEW_SEQUENCE_FAILURE,
-				error: Error(err)
-			});
+		var sequence_id, sequence;
+		_superagent2['default'].post(api_url + '/sequences/no-slots/').send(new_sequence).end(function (err, res) {
+			if (res.ok) {
+				sequence = res.body;
+				sequence_id = res.body.id;
+				dispatch({ type: RECEIVE_SEQUENCE_SUCCESS, sequence: sequence });
+				_superagent2['default'].post(api_url + '/sequences/' + sequence_id + '/slots/').timeout(150).end(function (err, res) {
+					if (res.ok) dispatch({ type: CREATE_SLOTS_SUCCESS });else console.log('timedout');
+				});
+				setTimeout(function () {
+					dispatch(fetchSlots());
+				}, 50);
+			} else {
+				dispatch({
+					type: NEW_SEQUENCE_FAILURE,
+					error: Error(err)
+				});
+			}
 		});
 	};
 }
@@ -261,24 +268,8 @@ exports.CREATE_SLOTS = CREATE_SLOTS;
 var CREATE_SLOTS_SUCCESS = 'CREATE_SLOTS_SUCCESS';
 exports.CREATE_SLOTS_SUCCESS = CREATE_SLOTS_SUCCESS;
 var CREATE_SLOTS_FAILURE = 'CREATE_SLOTS_FAILURE';
+
 exports.CREATE_SLOTS_FAILURE = CREATE_SLOTS_FAILURE;
-
-function createSlots(sequence_id) {
-	return function (dispatch, getState) {
-		dispatch({ type: CREATE_SLOTS });
-		_axios2['default'].post(api_url + '/sequences/' + sequence_id + '/slots/').then(function (res) {
-			var data = res.data;
-			dispatch({ type: CREATE_SLOTS_SUCCESS, data: data });
-		})['catch'](function (err) {
-			dispatch({
-				type: CREATE_SLOTS_FAILURE,
-				error: Error(err),
-				err: err
-			});
-		});
-	};
-}
-
 var REQUEST_SLOTS = 'REQUEST_SLOTS';
 exports.REQUEST_SLOTS = REQUEST_SLOTS;
 var RECEIVE_SLOTS_SUCCESS = 'RECEIVE_SLOTS_SUCCESS';
@@ -289,16 +280,13 @@ exports.RECEIVE_SLOTS_FAILURE = RECEIVE_SLOTS_FAILURE;
 function fetchSlots(sequence_id) {
 	return function (dispatch, getState) {
 		dispatch({ type: REQUEST_SLOTS });
-		var slots = undefined,
-		    start = undefined,
-		    end = undefined,
-		    seq_id = undefined;
+		var slots, start, end, seq_id;
 		if (sequence_id == undefined) {
 			seq_id = getState().learn.current_sequence.id;
 			if (seq_id == undefined) {
 				setTimeout(function () {
 					dispatch(fetchSlots());
-				}, 500);
+				}, 150);
 				return;
 			}
 		} else {
@@ -307,25 +295,31 @@ function fetchSlots(sequence_id) {
 		var pos = getState().learn.position;
 		if (pos !== null) {
 			start = pos - 1;
-			end = start + 4;
+			end = start + 5;
 		} else {
 			start = getState().learn.start;
 			end = getState().learn.end;
 		}
-		_axios2['default'].get(api_url + '/sequences/' + seq_id + '/slots/?start=' + start + '&end=' + end).then(function (res) {
-			slots = res.data.slots;
-			if (res.data.total_slots_count === 0) {
-				dispatch(fetchSlots(seq_id));
-				return;
+		var body = undefined;
+		_superagent2['default'].get(api_url + '/sequences/' + seq_id + '/slots/?start=' + start + '&end=' + end).end(function (err, res) {
+			if (res.ok) {
+				slots = res.body.slots;
+				body = res.body;
+				if (slots.length === 0) {
+					setTimeout(function () {
+						dispatch(fetchSlots(seq_id));
+					}, 150);
+					return;
+				}
+				dispatch({ type: RECEIVE_SLOTS_SUCCESS, slots: slots });
+				dispatch(fetchTrials());
+			} else {
+				dispatch({
+					type: RECEIVE_SLOTS_FAILURE,
+					error: Error(err)
+				});
 			}
-			dispatch({ type: RECEIVE_SLOTS_SUCCESS, slots: slots });
-		})['catch'](function (err) {
-			dispatch({
-				type: RECEIVE_SLOTS_FAILURE,
-				error: Error(err)
-			});
 		});
-		dispatch(fetchTrials());
 	};
 }
 
@@ -426,7 +420,7 @@ function fetchTrials() {
 		if (Object.keys(slot).length == 0) {
 			setTimeout(function () {
 				dispatch(fetchTrials());
-			}, 5);
+			}, 25);
 			return;
 		}
 		slot_id = slot.id;
@@ -498,96 +492,62 @@ var _default_trial = {
 };
 
 function newTrial(trial) {
-	var _this3 = this;
-
-	return function callee$1$0(dispatch, getState) {
-		var new_trial, state, current_slot, last_trial, s, start, _trialprop, _prop;
-
-		return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-			while (1) switch (context$2$0.prev = context$2$0.next) {
-				case 0:
-					dispatch({ type: NEW_TRIAL });
-					context$2$0.prev = 1;
-					new_trial = undefined;
-					context$2$0.next = 5;
-					return regeneratorRuntime.awrap(getState().learn);
-
-				case 5:
-					state = context$2$0.sent;
-					current_slot = state.current_slot;
-					last_trial = state.trials.slice(-1)[0];
-					s = new Date();
-					start = s.toISOString().replace("T", " ").replace("Z", "");
-
-					if (!current_slot.completed) {
-						context$2$0.next = 12;
-						break;
-					}
-
-					return context$2$0.abrupt('return');
-
-				case 12:
-					for (_trialprop in trial) {
-						if (trial[_trialprop] instanceof Array) {
-							trial[_trialprop] = trial[_trialprop].join("|");
-						}
-					}
-					if (trial.type == 'return') {
-						new_trial = trial;
-					} else if (trial.type == null) {
-						new_trial = Object.assign(_extends({}, _default_trial), {
-							slot_id: current_slot.id,
-							cue_visible: current_slot['item']['cue'],
-							format: 'recall',
-							start: start
-						});
-					} else if (trial.type == 'adapt') {
-						new_trial = Object.assign(_extends({}, _default_trial), {
-							slot_id: current_slot.id,
-							cue_visible: trial.cue_visible,
-							format: trial.format,
-							mc_choices: trial.mc_choices || null,
-							stem: trial.stem || null,
-							start: start
-						});
-					} else if (trial.type == 'hint') {
-						new_trial = Object.assign(_extends({}, trial), {
-							help_chosen_by_user: true,
-							augs: trial.new_aug,
-							start: start
-						});
-					}
-					for (_prop in new_trial) {
-						if (_prop == 'type') {
-							delete new_trial[_prop];
-						}
-					}
-					context$2$0.next = 17;
-					return regeneratorRuntime.awrap(_axios2['default'].post(api_url + '/trials/', new_trial).then(function (res) {
-						var _trial = res.data;
-						dispatch({ type: NEW_TRIAL_SUCCESS, _trial: _trial });
-					}));
-
-				case 17:
-					context$2$0.next = 23;
-					break;
-
-				case 19:
-					context$2$0.prev = 19;
-					context$2$0.t0 = context$2$0['catch'](1);
-
-					dispatch({
-						type: NEW_TRIAL_FAILURE,
-						errorObj: context$2$0.t0,
-						error: Error(context$2$0.t0)
-					});
-					dispatch(newSequence(null)); // TODO: take out
-
-				case 23:
-				case 'end':
-					return context$2$0.stop();
+	return function (dispatch, getState) {
+		dispatch({ type: NEW_TRIAL });
+		var new_trial = undefined,
+		    state = getState().learn,
+		    current_slot = state.current_slot,
+		    last_trial = state.trials.slice(-1)[0],
+		    s = new Date(),
+		    start = s.toISOString().replace("T", " ").replace("Z", "");
+		if (current_slot.completed) {
+			return;
+		}
+		for (var _trialprop in trial) {
+			if (trial[_trialprop] instanceof Array) {
+				trial[_trialprop] = trial[_trialprop].join("|");
 			}
-		}, null, _this3, [[1, 19]]);
+		}
+		if (trial.type == 'return') {
+			new_trial = trial;
+		} else if (trial.type == null) {
+			new_trial = Object.assign(_extends({}, _default_trial), {
+				slot_id: current_slot.id,
+				cue_visible: current_slot['item']['cue'],
+				format: 'recall',
+				start: start
+			});
+		} else if (trial.type == 'adapt') {
+			new_trial = Object.assign(_extends({}, _default_trial), {
+				slot_id: current_slot.id,
+				cue_visible: trial.cue_visible,
+				format: trial.format,
+				mc_choices: trial.mc_choices || null,
+				stem: trial.stem || null,
+				start: start
+			});
+		} else if (trial.type == 'hint') {
+			new_trial = Object.assign(_extends({}, trial), {
+				help_chosen_by_user: true,
+				augs: trial.new_aug,
+				start: start
+			});
+		}
+		for (var _prop in new_trial) {
+			if (_prop == 'type') {
+				delete new_trial[_prop];
+			}
+		}
+		_axios2['default'].post(api_url + '/trials/', new_trial).then(function (res) {
+			var _trial = res.data;
+			dispatch({ type: NEW_TRIAL_SUCCESS, _trial: _trial });
+		})['catch'](function (err) {
+			dispatch({
+				type: NEW_TRIAL_FAILURE,
+				errorObj: err,
+				error: Error(err)
+			});
+		});
 	};
 }
 
@@ -637,75 +597,35 @@ var NEW_HINT_FAILURE = 'NEW_HINT_FAILURE';
 exports.NEW_HINT_FAILURE = NEW_HINT_FAILURE;
 
 function hint(response) {
-	var _this5 = this;
-
-	return function callee$1$0(dispatch, getState) {
-		return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-			var _this4 = this;
-
-			while (1) switch (context$2$0.prev = context$2$0.next) {
-				case 0:
-					dispatch({ type: NEW_HINT });
-					context$2$0.prev = 1;
-					context$2$0.next = 4;
-					return regeneratorRuntime.awrap((function callee$2$0() {
-						var current_trial, id, current_slot, augs, recent_aug, index, next_index;
-						return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
-							while (1) switch (context$3$0.prev = context$3$0.next) {
-								case 0:
-									context$3$0.next = 2;
-									return regeneratorRuntime.awrap(getState().learn.current_trial);
-
-								case 2:
-									current_trial = context$3$0.sent;
-									id = current_trial.id;
-									current_slot = getState().learn.current_slot;
-									augs = current_slot['augs'];
-									recent_aug = current_trial.augs ? current_trial['augs'][0] : null;
-									index = recent_aug !== null ? augs.indexOf(recent_aug) : 0;
-									next_index = index + 1;
-									context$3$0.next = 11;
-									return regeneratorRuntime.awrap(_axios2['default'].put(api_url + '/trials/' + id, response).then(function (res) {
-										var updated_trial = res.data;
-										dispatch({ type: UPDATE_TRIAL_SUCCESS, updated_trial: updated_trial });
-										if (next_index >= augs.length) {
-											next_index = augs.length;
-										}
-										if (augs.length > 0 && recent_aug == null) {
-											next_index = 0;
-										}
-										var new_aug = augs[next_index];
-										current_trial['new_aug'] = new_aug;
-										current_trial['type'] = 'hint';
-										dispatch(newTrial(current_trial));
-										dispatch({ type: NEW_HINT_SUCCESS, new_aug: new_aug });
-									}));
-
-								case 11:
-								case 'end':
-									return context$3$0.stop();
-							}
-						}, null, _this4);
-					})());
-
-				case 4:
-					context$2$0.next = 9;
-					break;
-
-				case 6:
-					context$2$0.prev = 6;
-					context$2$0.t0 = context$2$0['catch'](1);
-
-					dispatch({
-						type: NEW_HINT_FAILURE,
-						error: Error(context$2$0.t0)
-					});
-
-				case 9:
-				case 'end':
-					return context$2$0.stop();
+	return function (dispatch, getState) {
+		dispatch({ type: NEW_HINT });
+		var current_trial = getState().learn.current_trial,
+		    id = current_trial.id,
+		    current_slot = getState().learn.current_slot,
+		    augs = current_slot['augs'],
+		    recent_aug = current_trial.augs ? current_trial['augs'][0] : null,
+		    index = recent_aug !== null ? augs.indexOf(recent_aug) : 0,
+		    next_index = index + 1;
+		_axios2['default'].put(api_url + '/trials/' + id, response).then(function (res) {
+			var updated_trial = res.data;
+			dispatch({ type: UPDATE_TRIAL_SUCCESS, updated_trial: updated_trial });
+			if (next_index >= augs.length) {
+				next_index = augs.length;
 			}
-		}, null, _this5, [[1, 6]]);
+			if (augs.length > 0 && recent_aug == null) {
+				next_index = 0;
+			}
+			var new_aug = augs[next_index];
+			current_trial['new_aug'] = new_aug;
+			current_trial['type'] = 'hint';
+			dispatch(newTrial(current_trial));
+			dispatch({ type: NEW_HINT_SUCCESS, new_aug: new_aug });
+		})['catch'](function () {
+			dispatch({
+				type: NEW_HINT_FAILURE,
+				error: Error(err)
+			});
+		});
 	};
 }
 
@@ -728,99 +648,56 @@ function willUpdateTrial() {
 }
 
 function updateTrial(response) {
-	var _this7 = this;
-
-	return function callee$1$0(dispatch, getState) {
-		return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-			var _this6 = this;
-
-			while (1) switch (context$2$0.prev = context$2$0.next) {
-				case 0:
-					context$2$0.next = 2;
-					return regeneratorRuntime.awrap(dispatch({ type: GRADING }));
-
-				case 2:
-					context$2$0.prev = 2;
-					context$2$0.next = 5;
-					return regeneratorRuntime.awrap((function callee$2$0() {
-						var state, current_trial, current_slot, trial_id;
-						return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
-							while (1) switch (context$3$0.prev = context$3$0.next) {
-								case 0:
-									context$3$0.next = 2;
-									return regeneratorRuntime.awrap(getState().learn);
-
-								case 2:
-									state = context$3$0.sent;
-									current_trial = state.current_trial;
-									current_slot = state.current_slot;
-									trial_id = current_trial.id;
-									context$3$0.next = 8;
-									return regeneratorRuntime.awrap(_axios2['default'].put(api_url + '/trials/' + trial_id, response).then(function (res) {
-										var updated_trial = res.data;
-										dispatch({ type: UPDATE_TRIAL_SUCCESS, updated_trial: updated_trial });
-										if (updated_trial.accuracy === 1) {
-											current_slot['completed'] = true;
-											dispatch(updateSlot(current_slot));
-											dispatch({ type: SHOW_CORRECT });
-											return;
-										}
-										dispatch(adapt(updated_trial));
-									}).then(function () {
-										var state = getState().learn,
-										    slots = state.slots,
-										    current_sequence = state.current_sequence,
-										    current_round = state.current_round,
-										    cmi = state.current_round_index,
-										    rounds = state.rounds,
-										    round_slots = current_round.slots;
-										if (slots.filter(function (slot) {
-											return !slot.completed;
-										}).length === 0) {
-											current_sequence['type'] = 'completed';
-											dispatch(updateSequence(current_sequence));
-											return;
-										}
-										if (!current_sequence.completed && current_sequence.type !== 'completed') {
-											if (round_slots.filter(function (slot) {
-												return !slot.completed;
-											}).length === 0) {
-												rounds.map(function (miniseq) {
-													if (rounds.indexOf(miniseq) == cmi) {
-														miniseq.completed = true;
-													}
-												});
-												dispatch({ type: SHOW_COMPLETE_MINISEQ, rounds: rounds });
-											}
-										}
-									}));
-
-								case 8:
-								case 'end':
-									return context$3$0.stop();
-							}
-						}, null, _this6);
-					})());
-
-				case 5:
-					context$2$0.next = 10;
-					break;
-
-				case 7:
-					context$2$0.prev = 7;
-					context$2$0.t0 = context$2$0['catch'](2);
-
-					dispatch({
-						type: UPDATE_TRIAL_FAILURE,
-						error: Error(context$2$0.t0),
-						typeerror: context$2$0.t0
-					});
-
-				case 10:
-				case 'end':
-					return context$2$0.stop();
+	return function (dispatch, getState) {
+		dispatch({ type: GRADING });
+		var state = getState().learn,
+		    current_trial = state.current_trial,
+		    current_slot = state.current_slot,
+		    trial_id = current_trial.id;
+		_axios2['default'].put(api_url + '/trials/' + trial_id, response).then(function (res) {
+			var updated_trial = res.data;
+			dispatch({ type: UPDATE_TRIAL_SUCCESS, updated_trial: updated_trial });
+			if (updated_trial.correct) {
+				current_slot['completed'] = true;
+				dispatch(updateSlot(current_slot));
+				dispatch({ type: SHOW_CORRECT });
+				return;
 			}
-		}, null, _this7, [[2, 7]]);
+			dispatch(adapt(updated_trial));
+		}).then(function () {
+			var state = getState().learn,
+			    slots = state.slots,
+			    current_sequence = state.current_sequence,
+			    current_round = state.current_round,
+			    cmi = state.current_round_index,
+			    rounds = state.rounds,
+			    round_slots = current_round;
+			if (slots.filter(function (slot) {
+				return !slot.completed;
+			}).length === 0) {
+				current_sequence['type'] = 'completed';
+				dispatch(updateSequence(current_sequence));
+				return;
+			}
+			if (!current_sequence.completed && current_sequence.type !== 'completed') {
+				if (round_slots.filter(function (slot) {
+					return !slot.completed;
+				}).length === 0) {
+					rounds.map(function (miniseq) {
+						if (rounds.indexOf(miniseq) == cmi) {
+							miniseq.completed = true;
+						}
+					});
+					dispatch({ type: SHOW_COMPLETE_MINISEQ, rounds: rounds });
+				}
+			}
+		})['catch'](function () {
+			dispatch({
+				type: UPDATE_TRIAL_FAILURE,
+				error: Error(err),
+				typeerror: err
+			});
+		});
 	};
 }
 
@@ -934,7 +811,7 @@ function skipSlot() {
 			var state = getState().learn,
 			    current_slot = state.current_slot,
 			    current_sequence = state.current_sequence,
-			    slots = state.current_round.slots,
+			    slots = state.current_round,
 			    index = state.slot_index,
 			    new_index = skipToUnfinished(index, slots),
 			    next_slot = slots[new_index],
@@ -989,7 +866,7 @@ function nextSlot(dir) {
 			var state = getState().learn,
 			    current_slot = state.current_slot,
 			    current_sequence = state.current_sequence,
-			    slots = state.current_round.slots,
+			    slots = state.current_round,
 			    pos = state.slot_index,
 			    next_pos = findNext(dir, slots, pos),
 			    next_slot = slots[next_pos],
@@ -1042,11 +919,11 @@ var COMPLETED_ROUND = 'COMPLETED_ROUND';
 exports.COMPLETED_ROUND = COMPLETED_ROUND;
 
 function completeMiniSequence() {
-	var _this9 = this;
+	var _this4 = this;
 
 	return function callee$1$0(dispatch, getState) {
 		return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-			var _this8 = this;
+			var _this3 = this;
 
 			while (1) switch (context$2$0.prev = context$2$0.next) {
 				case 0:
@@ -1090,7 +967,7 @@ function completeMiniSequence() {
 								case 'end':
 									return context$3$0.stop();
 							}
-						}, null, _this8);
+						}, null, _this3);
 					})());
 
 				case 4:
@@ -1110,7 +987,7 @@ function completeMiniSequence() {
 				case 'end':
 					return context$2$0.stop();
 			}
-		}, null, _this9, [[1, 6]]);
+		}, null, _this4, [[1, 6]]);
 	};
 }
 

@@ -76,7 +76,7 @@ var SignPosts = (function (_Component) {
 			var slot_index = _props.slot_index;
 			var current_round = _props.current_round;
 			var isUpdatingState = _props.isUpdatingState;
-			var count = current_round.slots !== undefined ? current_round.slots.length : 0;
+			var count = current_round !== undefined ? current_round.length : 0;
 			var signs = Array.apply(null, Array(count)).map(function (x, i) {
 				var className = (0, _classnames2['default'])('material-icons md-18 sign_circle', { 'active_sign': slot_index === i }, { 'complete_sign': current_round.slots !== undefined ? current_round.slots[i].completed : null });
 				return _react2['default'].createElement(

@@ -2,14 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69a57137-d5d8-40a6-a3c5-9fb76dc18c38" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/Learn/LearnSeqControl/SeqControl-compiled.js.map" afterPath="$PROJECT_DIR$/app/components/Learn/LearnSeqControl/SeqControl-compiled.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/Learn/LearnSeqControl/SeqControl-compiled.js" afterPath="$PROJECT_DIR$/app/components/Learn/LearnSeqControl/SeqControl-compiled.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/Learn/LearnSeqControl/SignPosts-compiled.js.map" afterPath="$PROJECT_DIR$/app/components/Learn/LearnSeqControl/SignPosts-compiled.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/Learn/LearnSeqControl/SignPosts-compiled.js" afterPath="$PROJECT_DIR$/app/components/Learn/LearnSeqControl/SignPosts-compiled.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/routes/Learn/Learn.js" afterPath="$PROJECT_DIR$/app/routes/Learn/Learn.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/components/Learn/RoundSummary/RoundSummary.js" afterPath="$PROJECT_DIR$/app/components/Learn/RoundSummary/RoundSummary.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/actions/learnv2-compiled.js.map" afterPath="$PROJECT_DIR$/app/actions/learnv2-compiled.js.map" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/actions/learnv2-compiled.js" afterPath="$PROJECT_DIR$/app/actions/learnv2-compiled.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/actions/set-compiled.js.map" afterPath="$PROJECT_DIR$/app/actions/set-compiled.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/actions/set-compiled.js" afterPath="$PROJECT_DIR$/app/actions/set-compiled.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/actions/learnv2.js" afterPath="$PROJECT_DIR$/app/actions/learnv2.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/reducers/learnv2.js" afterPath="$PROJECT_DIR$/app/reducers/learnv2.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="FrontEnd.iws" />

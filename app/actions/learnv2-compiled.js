@@ -23,7 +23,8 @@ exports.adapt = adapt;
 exports.skipSlot = skipSlot;
 exports.nextSlot = nextSlot;
 exports.clearLearn = clearLearn;
-exports.completeMiniSequence = completeMiniSequence;
+exports.showCompleteRound = showCompleteRound;
+exports.nextRound = nextRound;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -233,7 +234,7 @@ function updateSequence(_sequence) {
 						if (!getState().learn.current_sequence.completed) {
 							var slot = getState().learn.current_slot;
 							dispatch(fetchTrials());
-							dispatch({ type: UPDATE_CURRENT_MINISEQ, slot: slot });
+							dispatch({ type: UPDATE_CURRENT_ROUND, slot: slot });
 						}
 					}));
 
@@ -292,8 +293,9 @@ function fetchSlots(sequence_id) {
 		} else {
 			seq_id = sequence_id;
 		}
-		var pos = getState().learn.position;
-		if (pos !== null) {
+		var pos = getState().learn.position,
+		    current_round = getState().learn.current_round;
+		if (current_round == undefined) {
 			start = pos - 1;
 			end = start + 5;
 		} else {
@@ -354,7 +356,7 @@ function updateSlot(slot) {
 							return;
 						}
 						var slot = getState().learn.current_slot;
-						dispatch({ type: UPDATE_CURRENT_MINISEQ, slot: slot });
+						dispatch({ type: UPDATE_CURRENT_ROUND, slot: slot });
 					}));
 
 				case 4:
@@ -664,33 +666,6 @@ function updateTrial(response) {
 				return;
 			}
 			dispatch(adapt(updated_trial));
-		}).then(function () {
-			var state = getState().learn,
-			    slots = state.slots,
-			    current_sequence = state.current_sequence,
-			    current_round = state.current_round,
-			    cmi = state.current_round_index,
-			    rounds = state.rounds,
-			    round_slots = current_round;
-			if (slots.filter(function (slot) {
-				return !slot.completed;
-			}).length === 0) {
-				current_sequence['type'] = 'completed';
-				dispatch(updateSequence(current_sequence));
-				return;
-			}
-			if (!current_sequence.completed && current_sequence.type !== 'completed') {
-				if (round_slots.filter(function (slot) {
-					return !slot.completed;
-				}).length === 0) {
-					rounds.map(function (miniseq) {
-						if (rounds.indexOf(miniseq) == cmi) {
-							miniseq.completed = true;
-						}
-					});
-					dispatch({ type: SHOW_COMPLETE_MINISEQ, rounds: rounds });
-				}
-			}
 		})['catch'](function () {
 			dispatch({
 				type: UPDATE_TRIAL_FAILURE,
@@ -810,21 +785,25 @@ function skipSlot() {
 		try {
 			var state = getState().learn,
 			    current_slot = state.current_slot,
-			    current_sequence = state.current_sequence,
+			    _current_sequence = state.current_sequence,
 			    slots = state.current_round,
 			    index = state.slot_index,
-			    new_index = skipToUnfinished(index, slots),
-			    next_slot = slots[new_index],
+			    new_index = skipToUnfinished(index, slots);
+			if (new_index == undefined) {
+				dispatch(showCompleteRound(_current_sequence.id));
+				return;
+			}
+			var next_slot = slots[new_index],
 			    new_pos = next_slot.order;
 			dispatch({ type: SKIP_SUCCESS, next_slot: next_slot });
 			if (next_slot.completed) {
 				dispatch({ type: SHOW_CORRECT });
 			}
-			current_sequence = Object.assign(_extends({}, current_sequence), {
+			_current_sequence = Object.assign(_extends({}, _current_sequence), {
 				position: new_pos,
 				type: 'updating_position'
 			});
-			dispatch(updateSequence(current_sequence));
+			dispatch(updateSequence(_current_sequence));
 		} catch (err) {
 			dispatch({
 				type: SKIP_FAILURE,
@@ -865,7 +844,7 @@ function nextSlot(dir) {
 		try {
 			var state = getState().learn,
 			    current_slot = state.current_slot,
-			    current_sequence = state.current_sequence,
+			    _current_sequence2 = state.current_sequence,
 			    slots = state.current_round,
 			    pos = state.slot_index,
 			    next_pos = findNext(dir, slots, pos),
@@ -878,11 +857,11 @@ function nextSlot(dir) {
 			if (next_slot.completed) {
 				dispatch({ type: SHOW_CORRECT });
 			}
-			current_sequence = Object.assign(_extends({}, current_sequence), {
+			_current_sequence2 = Object.assign(_extends({}, _current_sequence2), {
 				position: new_pos,
 				type: 'updating_position'
 			});
-			dispatch(updateSequence(current_sequence));
+			dispatch(updateSequence(_current_sequence2));
 		} catch (err) {
 			dispatch({
 				type: MOVE_SLOT_FAILURE,
@@ -905,94 +884,67 @@ function clearLearn() {
 	};
 }
 
-var CREATE__MINISEQS = 'CREATE__MINISEQS';
-exports.CREATE__MINISEQS = CREATE__MINISEQS;
-var UPDATE_CURRENT_MINISEQ = 'UPDATE_CURRENT_MINISEQ';
-exports.UPDATE_CURRENT_MINISEQ = UPDATE_CURRENT_MINISEQ;
-var MOVE_TO_UNFINISHED_MINISEQ = 'MOVE_TO_UNFINISHED_MINISEQ';
-exports.MOVE_TO_UNFINISHED_MINISEQ = MOVE_TO_UNFINISHED_MINISEQ;
-var SHOW_COMPLETE_MINISEQ = 'SHOW_COMPLETE_MINISEQ';
-exports.SHOW_COMPLETE_MINISEQ = SHOW_COMPLETE_MINISEQ;
-var MINISEQ_ERROR = 'MINISEQ_ERROR';
-exports.MINISEQ_ERROR = MINISEQ_ERROR;
-var COMPLETED_ROUND = 'COMPLETED_ROUND';
-exports.COMPLETED_ROUND = COMPLETED_ROUND;
+var SHOW_COMPLETE_ROUND = 'SHOW_COMPLETE_ROUND';
+exports.SHOW_COMPLETE_ROUND = SHOW_COMPLETE_ROUND;
+var NEXT_ROUND = 'NEXT_ROUND';
+exports.NEXT_ROUND = NEXT_ROUND;
 
-function completeMiniSequence() {
-	var _this4 = this;
+function showCompleteRound(seq_id) {
+	return function (dispatch, getState) {
+		dispatch({ type: SHOW_COMPLETE_ROUND });
+	};
+}
 
-	return function callee$1$0(dispatch, getState) {
-		return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-			var _this3 = this;
-
-			while (1) switch (context$2$0.prev = context$2$0.next) {
-				case 0:
-					dispatch({ type: COMPLETED_ROUND });
-					context$2$0.prev = 1;
-					context$2$0.next = 4;
-					return regeneratorRuntime.awrap((function callee$2$0() {
-						var state, current_sequence, rounds, current_round, length, cmi, new_index, new_miniseq, new_position;
-						return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
-							while (1) switch (context$3$0.prev = context$3$0.next) {
-								case 0:
-									context$3$0.next = 2;
-									return regeneratorRuntime.awrap(getState().learn);
-
-								case 2:
-									state = context$3$0.sent;
-									current_sequence = state.current_sequence;
-									rounds = state.rounds;
-									current_round = state.current_round;
-									length = rounds.length;
-									cmi = state.current_round_index;
-									new_index = findUnfinished(cmi, length, rounds);
-									new_miniseq = rounds[new_index];
-									new_position = new_miniseq.slots[0].order;
-
-									current_sequence = Object.assign(_extends({}, current_sequence), { position: new_position, type: 'updating_position' });
-									current_round.current = false;
-									new_miniseq.current = true;
-									rounds.map(function (miniseq) {
-										if (rounds.indexOf(miniseq) == new_index) {
-											miniseq.current = true;
-										}
-										if (rounds.indexOf(miniseq) == cmi) {
-											miniseq.current = false;
-										}
-									});
-									dispatch({ type: MOVE_TO_UNFINISHED_MINISEQ, new_miniseq: new_miniseq, new_index: new_index, rounds: rounds });
-									dispatch(updateSequence(current_sequence));
-
-								case 17:
-								case 'end':
-									return context$3$0.stop();
-							}
-						}, null, _this3);
-					})());
-
-				case 4:
-					context$2$0.next = 9;
-					break;
-
-				case 6:
-					context$2$0.prev = 6;
-					context$2$0.t0 = context$2$0['catch'](1);
-
-					dispatch({
-						type: MINISEQ_ERROR,
-						error: Error(context$2$0.t0)
-					});
-
-				case 9:
-				case 'end':
-					return context$2$0.stop();
-			}
-		}, null, _this4, [[1, 6]]);
+function nextRound() {
+	return function (dispatch, getState) {
+		dispatch(fetchSlots(current_sequence.id));
+		var isFetchingSlots = getState().learn.isFetchingSlots,
+		    current_sequence = getState().learn.current_sequence;
+		if (isFetchingSlots) {
+			setTimeout(function () {
+				dispatch(nextRound());
+			}, 50);
+		}
+		dispatch({ type: NEXT_ROUND });
+		var _s = getState().learn.current_sequence,
+		    new_position = getState().learn.current_round[0].order,
+		    sequence = Object.assign(_extends({}, _s), { position: new_position, type: 'updating_position' });
+		// dispatch reduxer that turns off showRoundSummary
+		// dispatch to update the sequence with the new current position of the first item in the next round
+		dispatch(updateSequence(sequence));
 	};
 }
 
 var UPDATING_STATE = 'UPDATING_STATE';
 exports.UPDATING_STATE = UPDATING_STATE;
-// @params: index, length and slots
+var UPDATE_CURRENT_ROUND = 'UPDATE_CURRENT_ROUND';
+
+exports.UPDATE_CURRENT_ROUND = UPDATE_CURRENT_ROUND;
+/* Show completed round or sequence */
+
+// .then(() => {
+// 	var state = getState().learn,
+// 		slots = state.slots,
+// 		current_sequence = state.current_sequence,
+// 		current_round = state.current_round,
+// 		cmi = state.current_round_index,
+// 		rounds = state.rounds,
+// 		round_slots = current_round;
+// 	if(slots.filter(slot => !slot.completed).length === 0) {
+// 		current_sequence['type'] = 'completed';
+// 		dispatch(updateSequence(current_sequence))
+// 		return;
+// 	}
+// 	if(!current_sequence.completed && current_sequence.type !== 'completed') {
+// 		if(round_slots.filter(slot => !slot.completed).length === 0) {
+// 			rounds.map((miniseq) => {
+// 				if(rounds.indexOf(miniseq) == cmi) {
+// 					miniseq.completed = true
+// 				}
+// 			})
+// 			dispatch({type: SHOW_COMPLETE_MINISEQ, rounds})
+// 		}
+// 	}
+// })
 
 //# sourceMappingURL=learnv2-compiled.js.map

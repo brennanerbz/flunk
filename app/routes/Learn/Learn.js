@@ -27,7 +27,7 @@ import SequenceSummary from '../../components/Learn/SequenceSummary/SequenceSumm
 	rounds: state.learn.rounds,
 	current_round: state.learn.current_round,
 	round_index: state.learn.current_round_index,
-	isShowingCompleteMiniseq: state.learn.isShowingCompleteMiniseq,
+	isShowingCompletedRound: state.learn.isShowingCompletedRound,
 	isUpdatingState: state.learn.isUpdatingState,
 
 	showHint: state.learn.isShowingHint,
@@ -68,14 +68,15 @@ export default class Learn extends Component {
 
 	componentDidMount() {
 		$(window).on('keyup', ::this.handleKeyUp)
-		
 	}
 
 	componentWillReceiveProps(nextProps){
-		if(this.props.current_slot.id !== nextProps.current_slot.id) {
-			this.setState({
-				inputvalue: ''
-			});
+		if(nextProps.current_slot !== undefined) {
+			if(this.props.current_slot.id !== nextProps.current_slot.id) {
+				this.setState({
+					inputvalue: ''
+				});
+			}
 		}
 	}
 
@@ -105,7 +106,7 @@ export default class Learn extends Component {
 		13(event) {
 			const { current_slot, current_trial, isGrading, skipSlot } = this.props;
 			var now, start, diff, difftwo;
-			if(current_slot.format == 'copy' && this.state.inputvalue.length === 0) {
+			if(current_slot.format == 'copy' && this.state.inputvalue.length === 0 && !this.props.isShowingCompletedRound) {
 				now = new Date()
 				now = (now).toISOString().replace("T", " ").replace("Z", "")
 				start = (current_trial.start)
@@ -119,7 +120,7 @@ export default class Learn extends Component {
 				this.refs.learn_card.sendEvent(event)
 				return true;
 			}
-			if(!isGrading && current_slot.completed) {
+			if(!isGrading && current_slot.completed && !this.props.isShowingCompletedRound) {
 				skipSlot()
 				return true;
 			}
@@ -137,12 +138,12 @@ export default class Learn extends Component {
 		const { showCorrect, 
 			 	showCompletedSequence, 
 			 	isGrading,
-			 	isShowingCompleteMiniseq,
+			 	isShowingCompletedRound,
 			 	newSequence,
-			 	completeMiniSequence,
+			 	nextRound,
 			 	skipSlot } = this.props;
-		if(event.which && isShowingCompleteMiniseq) {
-			completeMiniSequence()
+		if(event.which && isShowingCompletedRound) {
+			nextRound()
 			return;
 		}
 		if(event.which && showCompletedSequence) {
@@ -187,7 +188,7 @@ export default class Learn extends Component {
 				isFetchingTrials,
 				showLearn,
 				showCompletedSequence, 
-				isShowingCompleteMiniseq,
+				isShowingCompletedRound,
 				showCorrect, 
 				showFeedback,
 				showHint,
@@ -234,12 +235,12 @@ export default class Learn extends Component {
 					? <div>
 						<SeqControl {...this.props}/>
 							<div className={classnames("no_sidenav_container learn_container", 
-										   {"round_summary": isShowingCompleteMiniseq})}>
+										   {"round_summary": isShowingCompletedRound})}>
 								<div>
 									{
 										current_slot !== undefined 
 										&& trial !== undefined 
-										&& !isShowingCompleteMiniseq
+										&& !isShowingCompletedRound
 										&& !showCompletedSequence
 										? <LearnCard 
 											   updateValue={(value) => ::this.updateStateWithUserResponse(value)}
@@ -254,8 +255,8 @@ export default class Learn extends Component {
 										: null
 									}
 									{
-										showCorrect && !isShowingCompleteMiniseq && !showCompletedSequence
-										? <ShowCorrect correctMiniSequence={isShowingCompleteMiniseq} 
+										showCorrect && !isShowingCompletedRound && !showCompletedSequence
+										? <ShowCorrect correctMiniSequence={isShowingCompletedRound} 
 													   {...this.props}/>
 										: null
 									}
@@ -265,7 +266,7 @@ export default class Learn extends Component {
 										: null
 									}
 									{
-										isShowingCompleteMiniseq && !showCompletedSequence
+										isShowingCompletedRound && !showCompletedSequence
 										? <ReactCSSTransitionGroup transitionName="fade_in" 
 								     							   transitionEnterTimeout={500} 
 								     							   transitionLeaveTimeout={500}>
@@ -274,14 +275,14 @@ export default class Learn extends Component {
 										: null
 									}
 									{
-										!showCompletedSequence && isShowingCompleteMiniseq 
+										!showCompletedSequence && isShowingCompletedRound 
 										? <a className="link continue_link" 
-										     onClick={() => this.props.completeMiniSequence()}>
+										     onClick={() => this.props.nextRound()}>
 										     Press any key to continue to next round</a>
 										: null
 									}												
 									{
-										!showCorrect && !showCompletedSequence && !isShowingCompleteMiniseq 
+										!showCorrect && !showCompletedSequence && !isShowingCompletedRound 
 										? <DiffControls getHint={::this.handleHint} {...this.props} />
 										: null
 									}
@@ -293,7 +294,7 @@ export default class Learn extends Component {
 									}
 									{
 										(!showCorrect 
-										&& !showCompletedSequence || !isShowingCompleteMiniseq) 
+										&& !showCompletedSequence || !isShowingCompletedRound) 
 										&& (showHint && trial.augs !== null) 
 										? <Hint hints={trial.augs.length > 0 ? trial.augs : null} 
 												{...this.props}/>

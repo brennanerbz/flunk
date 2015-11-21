@@ -183,7 +183,7 @@ export function updateSequence(_sequence) {
 				if(!getState().learn.current_sequence.completed) {
 					let slot = getState().learn.current_slot
 					dispatch(fetchTrials())
-					dispatch({ type: UPDATE_CURRENT_MINISEQ, slot })
+					dispatch({ type: UPDATE_CURRENT_ROUND, slot })
 				} 
 			})
 		} catch(err) {
@@ -207,7 +207,7 @@ export const CREATE_SLOTS_FAILURE = 'CREATE_SLOTS_FAILURE';
 export const REQUEST_SLOTS = 'REQUEST_SLOTS';
 export const RECEIVE_SLOTS_SUCCESS = 'RECEIVE_SLOTS_SUCCESS';
 export const RECEIVE_SLOTS_FAILURE = 'RECEIVE_SLOTS_FAILURE';
-export function fetchSlots(sequence_id) {
+export function fetchSlots(sequence_id, isPreparing) {
 	return (dispatch, getState) => {
 		dispatch({type: REQUEST_SLOTS})
 		var slots, start, end, seq_id;
@@ -222,8 +222,9 @@ export function fetchSlots(sequence_id) {
 		} else {
 			seq_id = sequence_id
 		}
-		let pos = getState().learn.position
-		if(pos !== null) {
+		let pos = getState().learn.position,
+			current_round = getState().learn.current_round;
+		if(current_round == undefined) {
 			start = pos - 1
 			end = start + 5
 		} else {
@@ -244,7 +245,9 @@ export function fetchSlots(sequence_id) {
 	   				return;
 	   			}
 	   			dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
-	   			dispatch(fetchTrials())
+	   			if(!isPreparing) {
+	   				dispatch(fetchTrials())
+	   			}
 	   		} else {
 	   			dispatch({
 	   				type: RECEIVE_SLOTS_FAILURE,
@@ -276,7 +279,7 @@ export function updateSlot(slot) {
 					return;
 				}
 				let slot = getState().learn.current_slot
-				dispatch({ type: UPDATE_CURRENT_MINISEQ, slot })
+				dispatch({ type: UPDATE_CURRENT_ROUND, slot })
 			})			
 		} catch(err) {
 			dispatch({
@@ -562,30 +565,6 @@ export function updateTrial(response) {
 			} 
 			dispatch(adapt(updated_trial))
 		})
-		.then(() => {
-			var state = getState().learn,
-				slots = state.slots,
-				current_sequence = state.current_sequence,
-				current_round = state.current_round,
-				cmi = state.current_round_index,
-				rounds = state.rounds,
-				round_slots = current_round;
-			if(slots.filter(slot => !slot.completed).length === 0) {
-				current_sequence['type'] = 'completed';
-				dispatch(updateSequence(current_sequence))
-				return;
-			}
-			if(!current_sequence.completed && current_sequence.type !== 'completed') {
-				if(round_slots.filter(slot => !slot.completed).length === 0) {
-					rounds.map((miniseq) => {
-						if(rounds.indexOf(miniseq) == cmi) {
-							miniseq.completed = true
-						}
-					})
-					dispatch({type: SHOW_COMPLETE_MINISEQ, rounds})
-				}
-			}
-		})
 		.catch(() => {
 			dispatch({
 			type: UPDATE_TRIAL_FAILURE,
@@ -703,9 +682,13 @@ export function skipSlot() {
 				current_sequence = state.current_sequence,
 				slots = state.current_round,
 				index = state.slot_index,
-				new_index = skipToUnfinished(index, slots),
-				next_slot = slots[new_index],
-				new_pos = next_slot.order;			
+				new_index = skipToUnfinished(index, slots);
+			if(new_index == undefined) {
+				dispatch(showCompleteRound(current_sequence.id))
+				return;
+			}
+			let	next_slot = slots[new_index],
+				new_pos = next_slot.order;	
 			dispatch({type: SKIP_SUCCESS, next_slot})
 			if(next_slot.completed) {
 				dispatch({type: SHOW_CORRECT})
@@ -791,52 +774,64 @@ export function clearLearn() {
 	}
 }
 
-export const CREATE__MINISEQS = 'CREATE__MINISEQS';
-export const UPDATE_CURRENT_MINISEQ = 'UPDATE_CURRENT_MINISEQ';
-export const MOVE_TO_UNFINISHED_MINISEQ = 'MOVE_TO_UNFINISHED_MINISEQ';
-export const SHOW_COMPLETE_MINISEQ = 'SHOW_COMPLETE_MINISEQ';
-export const MINISEQ_ERROR = 'MINISEQ_ERROR';
-export const COMPLETED_ROUND = 'COMPLETED_ROUND';
-export function completeMiniSequence() {
-	return async(dispatch, getState) => {
-		dispatch({type: COMPLETED_ROUND})
-		try {
-			let state = await getState().learn,
-				current_sequence = state.current_sequence,
-				rounds = state.rounds,
-				current_round = state.current_round,
-				length = rounds.length,
-				cmi = state.current_round_index,
-				new_index = findUnfinished(cmi, length, rounds), // @params: index, length and slots
-				new_miniseq = rounds[new_index],
-				new_position = new_miniseq.slots[0].order;
-			current_sequence = Object.assign({...current_sequence}, {position: new_position, type: 'updating_position'});
-			current_round.current = false;
-			new_miniseq.current = true;
-			rounds.map((miniseq) => {
-				if(rounds.indexOf(miniseq) == new_index) {
-					miniseq.current = true
-				}
-				if(rounds.indexOf(miniseq) == cmi) {
-					miniseq.current = false
-				}
-			})
-			dispatch({type: MOVE_TO_UNFINISHED_MINISEQ, new_miniseq, new_index, rounds})
-			dispatch(updateSequence(current_sequence)) 
-		} catch(err) {
-			dispatch({
-				type: MINISEQ_ERROR,
-				error: Error(err)
-			})
+export const SHOW_COMPLETE_ROUND = 'SHOW_COMPLETE_ROUND';
+export const NEXT_ROUND = 'NEXT_ROUND';
+export function showCompleteRound(seq_id) {
+	return (dispatch, getState) => {
+		dispatch({ type: SHOW_COMPLETE_ROUND })
+		setTimeout(() => {
+			let current_sequence = getState().learn.current_sequence;
+			dispatch(fetchSlots(current_sequence.id, true))
+		}, 50)
+	}
+}
+export function nextRound() {
+	return (dispatch, getState) => {
+		let isFetchingSlots = getState().learn.isFetchingSlots;
+		if(isFetchingSlots) {
+			setTimeout(() => {
+				dispatch(nextRound())
+			}, 50)
 		}
+		dispatch({type: NEXT_ROUND})
+		let	new_position = getState().learn.position,
+			current_sequence = getState().learn.current_sequence,
+			sequence = Object.assign({...current_sequence}, {position: new_position, type: 'updating_position'})
+		dispatch(updateSequence(sequence))
 	}
 }
 
+
 export const UPDATING_STATE = 'UPDATING_STATE';
+export const UPDATE_CURRENT_ROUND = 'UPDATE_CURRENT_ROUND'
 
 
+/* Show completed round or sequence */
 
-
+// .then(() => {
+// 	var state = getState().learn,
+// 		slots = state.slots,
+// 		current_sequence = state.current_sequence,
+// 		current_round = state.current_round,
+// 		cmi = state.current_round_index,
+// 		rounds = state.rounds,
+// 		round_slots = current_round;
+// 	if(slots.filter(slot => !slot.completed).length === 0) {
+// 		current_sequence['type'] = 'completed';
+// 		dispatch(updateSequence(current_sequence))
+// 		return;
+// 	}
+// 	if(!current_sequence.completed && current_sequence.type !== 'completed') {
+// 		if(round_slots.filter(slot => !slot.completed).length === 0) {
+// 			rounds.map((miniseq) => {
+// 				if(rounds.indexOf(miniseq) == cmi) {
+// 					miniseq.completed = true
+// 				}
+// 			})
+// 			dispatch({type: SHOW_COMPLETE_MINISEQ, rounds})
+// 		}
+// 	}
+// })
 
 
 

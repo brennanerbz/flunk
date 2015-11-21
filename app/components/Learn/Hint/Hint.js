@@ -6,10 +6,6 @@ export default class Hint extends Component {
 		hints: PropTypes.array
 	}
 
-	shouldComponentUpdate(nextProps) {
-		return (this.props.current_slot.id == nextProps.current_slot.id) || (this.props.hints == nextProps.hints)
-	}
-
 	render() {
 		const { hints } = this.props,
 			  hint = hints !== null ? hints[0] : null;

@@ -418,14 +418,11 @@ function updateSet(_set) {
 
 				case 7:
 					dispatch({ type: UPDATE_SET_SUCCESS, set: set });
-					if (set.title !== 'Untitled') {
-						// dispatch(updateSetSubjects(undefined, set))
-					}
-					context$2$0.next = 14;
+					context$2$0.next = 13;
 					break;
 
-				case 11:
-					context$2$0.prev = 11;
+				case 10:
+					context$2$0.prev = 10;
 					context$2$0.t0 = context$2$0['catch'](1);
 
 					dispatch({
@@ -433,11 +430,11 @@ function updateSet(_set) {
 						error: Error(context$2$0.t0)
 					});
 
-				case 14:
+				case 13:
 				case 'end':
 					return context$2$0.stop();
 			}
-		}, null, _this5, [[1, 11]]);
+		}, null, _this5, [[1, 10]]);
 	};
 }
 

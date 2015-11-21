@@ -10,17 +10,13 @@ const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
 export const REQUEST_LEARN = 'REQUEST_LEARN';
 export const RECEIVE_LEARN_SUCCESS = 'RECEIVE_LEARN_SUCCESS';
 export const RECEIVE_LEARN_FAILURE = 'RECEIVE_LEARN_FAILURE';
-function requestLearn() {
-	return {
-		type: REQUEST_LEARN
-	}
-}
 export function fetchLearn(user_id, set_id, assignment_id) {
 	return (dispatch, getState) => {
 		dispatch(clearLearn())
-		dispatch(requestLearn())
+		dispatch({type: REQUEST_LEARN})
 		try {
 			dispatch(fetchSequence(user_id, set_id, assignment_id))
+			dispatch(fetchSlots())
 		}
 		catch (err) {
 			dispatch({
@@ -115,20 +111,35 @@ export function newSequence(prevsequence, user_id, set_id, assignment_id) {
 				})
 			} 
 		}
-		axios.post(`${api_url}/sequences/no-slots/`, 
-			new_sequence
-		).then(res => {				
-			let sequence = res.data				
-			dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
-		})
-		.catch((err) => {
-			dispatch({
-				type: NEW_SEQUENCE_FAILURE,
-				error: Error(err)
-			})
+		var sequence_id, sequence;
+		request
+		.post(`${api_url}/sequences/no-slots/`)
+		.send(new_sequence)
+		.end(function (err, res) {
+			if(res.ok) {
+				sequence = res.body;
+				sequence_id = res.body.id	
+				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
+				request
+				.post(`${api_url}/sequences/${sequence_id}/slots/`)
+				.timeout(150)
+				.end(function(err, res) {
+					if(res.ok) dispatch({type: CREATE_SLOTS_SUCCESS})
+					else console.log('timedout')
+				})
+				setTimeout(() => {
+					dispatch(fetchSlots())
+				}, 50)
+			} else {
+				dispatch({
+					type: NEW_SEQUENCE_FAILURE,
+					error: Error(err)
+				})
+			}
 		})
 	}
 }
+
 
 /*
 @params: sequence_id, position, compelted, abandoned, mode, format, timing, difficulty, adapation, chances, loop, reverse_cue, difficulty_chosen_by_user
@@ -192,23 +203,6 @@ export function updateSequence(_sequence) {
 export const CREATE_SLOTS = 'CREATE_SLOTS';
 export const CREATE_SLOTS_SUCCESS = 'CREATE_SLOTS_SUCCESS';
 export const CREATE_SLOTS_FAILURE = 'CREATE_SLOTS_FAILURE';
-export function createSlots(sequence_id) {
-	return(dispatch, getState) => {
-		dispatch({type: CREATE_SLOTS})
-		axios.post(`${api_url}/sequences/${sequence_id}/slots/`)
-		.then(res => {
-			let data = res.data;
-			dispatch({type: CREATE_SLOTS_SUCCESS, data})
-		})
-		.catch(err => {
-			dispatch({
-				type: CREATE_SLOTS_FAILURE,
-				error: Error(err),
-				err: err
-			})
-		})
-	}
-}
 
 export const REQUEST_SLOTS = 'REQUEST_SLOTS';
 export const RECEIVE_SLOTS_SUCCESS = 'RECEIVE_SLOTS_SUCCESS';
@@ -216,37 +210,48 @@ export const RECEIVE_SLOTS_FAILURE = 'RECEIVE_SLOTS_FAILURE';
 export function fetchSlots(sequence_id) {
 	return (dispatch, getState) => {
 		dispatch({type: REQUEST_SLOTS})
-		let slots, start, end, seq_id;
+		var slots, start, end, seq_id;
 		if(sequence_id == undefined) {
 			seq_id = getState().learn.current_sequence.id;
 			if(seq_id == undefined) {
 				setTimeout(() => {
 					dispatch(fetchSlots())
-					return;
-				}, 5)
+				}, 150)
+				return;
 			}
 		} else {
 			seq_id = sequence_id
 		}
-		start = getState().learn.start;
-		end = getState().learn.end
-		axios.get(`${api_url}/sequences/${seq_id}/slots/?start=${start}&end=${end}`)
-		.then(res => {
-			seq_id = current_sequence.id;
-			slots = res.data.slots
-			if(res.data.total_slots_count === 0) {
-				dispatch(fetchSlots(seq_id))
-				return;
-			}
-			dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
-		})
-		.catch(err => {
-			dispatch({
-				type: RECEIVE_SLOTS_FAILURE,
-				error: Error(err)
-			})
-		})
-		dispatch(fetchTrials())
+		let pos = getState().learn.position
+		if(pos !== null) {
+			start = pos - 1
+			end = start + 5
+		} else {
+			start = getState().learn.start;
+			end = getState().learn.end
+		}
+		let body;
+		request
+	    .get(`${api_url}/sequences/${seq_id}/slots/?start=${start}&end=${end}`)
+	    .end(function(err, res){
+	   		if(res.ok) {
+	   			slots = res.body.slots
+	   			body = res.body;
+	   			if(slots.length === 0) {
+	   				setTimeout(() => {
+	   					dispatch(fetchSlots(seq_id))
+	   				}, 150)
+	   				return;
+	   			}
+	   			dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
+	   			dispatch(fetchTrials())
+	   		} else {
+	   			dispatch({
+	   				type: RECEIVE_SLOTS_FAILURE,
+	   				error: Error(err)
+	   			})
+	   		}
+	   });	
 	}
 }
 
@@ -299,10 +304,6 @@ export function completed5Slots() {
 	}
 }
 
-
-// export const SET_CURRENT_SLOT = 'SET_CURRENT_SLOT';
-
-
 /*
 @params: slot_id
 @purpose: send a GET request to collect list of trials. will be used to send to redux store, which will then be read by the new trial function to determine what to send. 
@@ -313,16 +314,17 @@ export const RECEIVE_TRIALS_FAILURE = 'RECEIVE_TRIALS_FAILURE';
 export function fetchTrials() {
 	return (dispatch, getState) => {
 		dispatch({type: REQUEST_TRIALS})
-		let state = getState().learn,
-			slot = state.current_slot,
-			slots = state.current_miniseq.slots,
-			slot_id = slot.id,
+		let slot = getState().learn.current_slot,
+			slot_id,
 			trial = {},
 			trials;
-		if(Object.keys(slot).length === 0) {
-			dispatch(fetchTrials())
+		if(Object.keys(slot).length == 0) {
+			setTimeout(() => {
+				dispatch(fetchTrials())
+			}, 25)
 			return;
 		}
+		slot_id = slot.id;
 		axios.get(`${api_url}/slots/${slot_id}/trials/`)
 		.then(res => { 
 			trials = res.data.trials
@@ -389,67 +391,65 @@ var _default_trial = {
 	start: null
 }
 export function newTrial(trial) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		dispatch({type: NEW_TRIAL})
-		try {
-			let new_trial,
-				state = await getState().learn,
-				current_slot = state.current_slot,
-				last_trial = state.trials.slice(-1)[0],
-				s = new Date(),
-			  	start = s.toISOString().replace("T", " ").replace("Z", "");
-			if(current_slot.completed) {
-				return;
+		let new_trial,
+			state = getState().learn,
+			current_slot = state.current_slot,
+			last_trial = state.trials.slice(-1)[0],
+			s = new Date(),
+		  	start = s.toISOString().replace("T", " ").replace("Z", "");
+		if(current_slot.completed) {
+			return;
+		}
+		for(var _trialprop in trial) {
+			if(trial[_trialprop] instanceof Array) {
+				trial[_trialprop] = trial[_trialprop].join("|")
 			}
-			for(var _trialprop in trial) {
-				if(trial[_trialprop] instanceof Array) {
-					trial[_trialprop] = trial[_trialprop].join("|")
-				}
-			}
-			if (trial.type == 'return') {
-				new_trial = trial
-			} else if (trial.type == null) {
-				new_trial = Object.assign({..._default_trial}, {
-					slot_id: current_slot.id,
-					cue_visible: current_slot['item']['cue'],
-					format: 'recall',
-					start: start
-				})
-			} else if (trial.type == 'adapt') {
-				new_trial = Object.assign({..._default_trial}, {
-					slot_id: current_slot.id,
-					cue_visible: trial.cue_visible,
-					format: trial.format,
-					mc_choices: trial.mc_choices || null,
-					stem: trial.stem || null,
-					start: start
-				})
-			} else if (trial.type == 'hint') {
-				new_trial = Object.assign({...trial}, {
-					help_chosen_by_user: true,
-					augs: trial.new_aug,
-					start: start
-				})
-			}
-			for(var _prop in new_trial) {
-				if (_prop == 'type') {
-					delete new_trial[_prop]
-				}
-			}
-			await axios.post(`${api_url}/trials/`, 
-				new_trial
-			).then(res => {
-				let _trial = res.data;
-				dispatch({type: NEW_TRIAL_SUCCESS, _trial})
+		}
+		if (trial.type == 'return') {
+			new_trial = trial
+		} else if (trial.type == null) {
+			new_trial = Object.assign({..._default_trial}, {
+				slot_id: current_slot.id,
+				cue_visible: current_slot['item']['cue'],
+				format: 'recall',
+				start: start
 			})
-		} catch(err) {
+		} else if (trial.type == 'adapt') {
+			new_trial = Object.assign({..._default_trial}, {
+				slot_id: current_slot.id,
+				cue_visible: trial.cue_visible,
+				format: trial.format,
+				mc_choices: trial.mc_choices || null,
+				stem: trial.stem || null,
+				start: start
+			})
+		} else if (trial.type == 'hint') {
+			new_trial = Object.assign({...trial}, {
+				help_chosen_by_user: true,
+				augs: trial.new_aug,
+				start: start
+			})
+		}
+		for(var _prop in new_trial) {
+			if (_prop == 'type') {
+				delete new_trial[_prop]
+			}
+		}
+		axios.post(`${api_url}/trials/`, 
+			new_trial
+		).then(res => {
+			let _trial = res.data;
+			dispatch({type: NEW_TRIAL_SUCCESS, _trial})
+		})
+		.catch((err) => {
 			dispatch({
 				type: NEW_TRIAL_FAILURE,
 				errorObj: err,
 				error: Error(err)
 			})
-			dispatch(newSequence(null)) // TODO: take out 
-		}
+		})
 	}
 }
 
@@ -493,39 +493,38 @@ export const NEW_HINT = 'NEW_HINT';
 export const NEW_HINT_SUCCESS = 'NEW_HINT_SUCCESS';
 export const NEW_HINT_FAILURE = 'NEW_HINT_FAILURE';
 export function hint(response) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		dispatch({type: NEW_HINT})
-		try {
-			let current_trial = await getState().learn.current_trial,
-				id = current_trial.id,
-				current_slot = getState().learn.current_slot,
-				augs = current_slot['augs'],
-				recent_aug = current_trial.augs ? current_trial['augs'][0] : null,
-				index = recent_aug !== null ? augs.indexOf(recent_aug) : 0,
-				next_index = index + 1;
-			await axios.put(`${api_url}/trials/${id}`, 
-				response
-			).then((res) => {
-				let updated_trial = res.data;
-				dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
-				if (next_index >= augs.length) {
-					next_index = augs.length;
-				}
-				if (augs.length > 0 && recent_aug == null) {
-					next_index = 0;
-				}
-				let new_aug = augs[next_index]
-				current_trial['new_aug'] = new_aug;
-				current_trial['type'] = 'hint';
-				dispatch(newTrial(current_trial))
-				dispatch({type: NEW_HINT_SUCCESS, new_aug})
-			})
-		} catch(err) {
+		let current_trial = getState().learn.current_trial,
+			id = current_trial.id,
+			current_slot = getState().learn.current_slot,
+			augs = current_slot['augs'],
+			recent_aug = current_trial.augs ? current_trial['augs'][0] : null,
+			index = recent_aug !== null ? augs.indexOf(recent_aug) : 0,
+			next_index = index + 1;
+		axios.put(`${api_url}/trials/${id}`, 
+			response
+		).then((res) => {
+			let updated_trial = res.data;
+			dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
+			if (next_index >= augs.length) {
+				next_index = augs.length;
+			}
+			if (augs.length > 0 && recent_aug == null) {
+				next_index = 0;
+			}
+			let new_aug = augs[next_index]
+			current_trial['new_aug'] = new_aug;
+			current_trial['type'] = 'hint';
+			dispatch(newTrial(current_trial))
+			dispatch({type: NEW_HINT_SUCCESS, new_aug})
+		})
+		.catch(() => {
 			dispatch({
 				type: NEW_HINT_FAILURE,
 				error: Error(err)
 			})
-		}
+		})
 	}
 }
 
@@ -544,57 +543,56 @@ function willUpdateTrial() {
 	}
 }
 export function updateTrial(response) {  
-	return async(dispatch, getState) => {
-		await dispatch({type: GRADING})
-		try {
-			let state = await getState().learn,
-				current_trial = state.current_trial,
-				current_slot = state.current_slot,
-				trial_id = current_trial.id;
-			await axios.put(`${api_url}/trials/${trial_id}`, 
-				response
-			).then(res => {
-				let updated_trial = res.data;
-				dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
-				if(updated_trial.accuracy === 1) {
-					current_slot['completed'] = true;
-					dispatch(updateSlot(current_slot))
-					dispatch({type: SHOW_CORRECT})
-					return;
-				} 
-				dispatch(adapt(updated_trial))
-			})
-			.then(() => {
-				var state = getState().learn,
-					slots = state.slots,
-					current_sequence = state.current_sequence,
-					current_miniseq = state.current_miniseq,
-					cmi = state.current_miniseq_index,
-					miniseqs = state.miniseqs,
-					round_slots = current_miniseq.slots;
-				if(slots.filter(slot => !slot.completed).length === 0) {
-					current_sequence['type'] = 'completed';
-					dispatch(updateSequence(current_sequence))
-					return;
+	return (dispatch, getState) => {
+		dispatch({type: GRADING})
+		let state = getState().learn,
+			current_trial = state.current_trial,
+			current_slot = state.current_slot,
+			trial_id = current_trial.id;
+		axios.put(`${api_url}/trials/${trial_id}`, 
+			response
+		).then(res => {
+			let updated_trial = res.data;
+			dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
+			if(updated_trial.accuracy === 1) {
+				current_slot['completed'] = true;
+				dispatch(updateSlot(current_slot))
+				dispatch({type: SHOW_CORRECT})
+				return;
+			} 
+			dispatch(adapt(updated_trial))
+		})
+		.then(() => {
+			var state = getState().learn,
+				slots = state.slots,
+				current_sequence = state.current_sequence,
+				current_round = state.current_round,
+				cmi = state.current_round_index,
+				rounds = state.rounds,
+				round_slots = current_round;
+			if(slots.filter(slot => !slot.completed).length === 0) {
+				current_sequence['type'] = 'completed';
+				dispatch(updateSequence(current_sequence))
+				return;
+			}
+			if(!current_sequence.completed && current_sequence.type !== 'completed') {
+				if(round_slots.filter(slot => !slot.completed).length === 0) {
+					rounds.map((miniseq) => {
+						if(rounds.indexOf(miniseq) == cmi) {
+							miniseq.completed = true
+						}
+					})
+					dispatch({type: SHOW_COMPLETE_MINISEQ, rounds})
 				}
-				if(!current_sequence.completed && current_sequence.type !== 'completed') {
-					if(round_slots.filter(slot => !slot.completed).length === 0) {
-						miniseqs.map((miniseq) => {
-							if(miniseqs.indexOf(miniseq) == cmi) {
-								miniseq.completed = true
-							}
-						})
-						dispatch({type: SHOW_COMPLETE_MINISEQ, miniseqs})
-					}
-				}
-			})
-		} catch(err) {
+			}
+		})
+		.catch(() => {
 			dispatch({
-				type: UPDATE_TRIAL_FAILURE,
-				error: Error(err),
-				typeerror: err
+			type: UPDATE_TRIAL_FAILURE,
+			error: Error(err),
+			typeerror: err
 			})
-		}
+		})
 	}
 }
 
@@ -703,7 +701,7 @@ export function skipSlot() {
 			let state = getState().learn,
 				current_slot = state.current_slot,
 				current_sequence = state.current_sequence,
-				slots = state.current_miniseq.slots,
+				slots = state.current_round,
 				index = state.slot_index,
 				new_index = skipToUnfinished(index, slots),
 				next_slot = slots[new_index],
@@ -755,7 +753,7 @@ export function nextSlot(dir) {
 			let state = getState().learn,
 				current_slot = state.current_slot,
 				current_sequence = state.current_sequence,
-				slots = state.current_miniseq.slots,
+				slots = state.current_round,
 				pos = state.slot_index,
 				next_pos = findNext(dir, slots, pos),		
 				next_slot = slots[next_pos],
@@ -805,25 +803,25 @@ export function completeMiniSequence() {
 		try {
 			let state = await getState().learn,
 				current_sequence = state.current_sequence,
-				miniseqs = state.miniseqs,
-				current_miniseq = state.current_miniseq,
-				length = miniseqs.length,
-				cmi = state.current_miniseq_index,
-				new_index = findUnfinished(cmi, length, miniseqs), // @params: index, length and slots
-				new_miniseq = miniseqs[new_index],
+				rounds = state.rounds,
+				current_round = state.current_round,
+				length = rounds.length,
+				cmi = state.current_round_index,
+				new_index = findUnfinished(cmi, length, rounds), // @params: index, length and slots
+				new_miniseq = rounds[new_index],
 				new_position = new_miniseq.slots[0].order;
 			current_sequence = Object.assign({...current_sequence}, {position: new_position, type: 'updating_position'});
-			current_miniseq.current = false;
+			current_round.current = false;
 			new_miniseq.current = true;
-			miniseqs.map((miniseq) => {
-				if(miniseqs.indexOf(miniseq) == new_index) {
+			rounds.map((miniseq) => {
+				if(rounds.indexOf(miniseq) == new_index) {
 					miniseq.current = true
 				}
-				if(miniseqs.indexOf(miniseq) == cmi) {
+				if(rounds.indexOf(miniseq) == cmi) {
 					miniseq.current = false
 				}
 			})
-			dispatch({type: MOVE_TO_UNFINISHED_MINISEQ, new_miniseq, new_index, miniseqs})
+			dispatch({type: MOVE_TO_UNFINISHED_MINISEQ, new_miniseq, new_index, rounds})
 			dispatch(updateSequence(current_sequence)) 
 		} catch(err) {
 			dispatch({

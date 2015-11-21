@@ -24,9 +24,9 @@ import SequenceSummary from '../../components/Learn/SequenceSummary/SequenceSumm
 
 @connect(state => ({
 	slot_index: state.learn.slot_index,
-	miniseqs: state.learn.miniseqs,
-	current_miniseq: state.learn.current_miniseq,
-	cmi: state.learn.current_miniseq_index,
+	rounds: state.learn.rounds,
+	current_round: state.learn.current_round,
+	round_index: state.learn.current_round_index,
 	isShowingCompleteMiniseq: state.learn.isShowingCompleteMiniseq,
 	isUpdatingState: state.learn.isUpdatingState,
 

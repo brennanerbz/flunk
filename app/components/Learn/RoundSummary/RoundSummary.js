@@ -26,8 +26,8 @@ export default class RoundSummary extends Component {
 	}
 
 	render() {
-		let { current_miniseq, cmi} = this.props,
-			  slots = current_miniseq.slots;
+		let { current_round, cmi} = this.props,
+			  slots = current_round.slots;
 		return(
 			<div className="summary">
 				<h3 className="summary_header">Round {cmi + 1}</h3>

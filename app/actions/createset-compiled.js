@@ -26,6 +26,7 @@ exports.setFlag = setFlag;
 exports.setTitleFlag = setTitleFlag;
 exports.clearSet = clearSet;
 exports.loadSetFlag = loadSetFlag;
+exports.loadedView = loadedView;
 exports.addRow = addRow;
 exports.deleteRow = deleteRow;
 exports.finishedRendering = finishedRendering;
@@ -178,7 +179,7 @@ function loadEditing(set_id, pushState) {
 		return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
 			while (1) switch (context$2$0.prev = context$2$0.next) {
 				case 0:
-					dispatch({ type: LOAD_EDITING });
+					dispatch({ type: LOAD_EDITING, 'true': true });
 					context$2$0.prev = 1;
 
 					_ret2 = (function () {
@@ -1360,6 +1361,15 @@ exports.LOADING_SET = LOADING_SET;
 function loadSetFlag() {
 	return function (dispatch, getState) {
 		dispatch({ type: LOADING_SET });
+	};
+}
+
+var LOADED_VIEW = 'LOADED_VIEW';
+exports.LOADED_VIEW = LOADED_VIEW;
+
+function loadedView() {
+	return {
+		type: LOADED_VIEW
 	};
 }
 

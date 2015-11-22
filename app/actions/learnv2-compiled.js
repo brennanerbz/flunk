@@ -278,7 +278,7 @@ exports.RECEIVE_SLOTS_SUCCESS = RECEIVE_SLOTS_SUCCESS;
 var RECEIVE_SLOTS_FAILURE = 'RECEIVE_SLOTS_FAILURE';
 exports.RECEIVE_SLOTS_FAILURE = RECEIVE_SLOTS_FAILURE;
 
-function fetchSlots(sequence_id) {
+function fetchSlots(sequence_id, isPreparing) {
 	return function (dispatch, getState) {
 		dispatch({ type: REQUEST_SLOTS });
 		var slots, start, end, seq_id;
@@ -314,7 +314,9 @@ function fetchSlots(sequence_id) {
 					return;
 				}
 				dispatch({ type: RECEIVE_SLOTS_SUCCESS, slots: slots });
-				dispatch(fetchTrials());
+				if (!isPreparing) {
+					dispatch(fetchTrials());
+				}
 			} else {
 				dispatch({
 					type: RECEIVE_SLOTS_FAILURE,
@@ -785,12 +787,12 @@ function skipSlot() {
 		try {
 			var state = getState().learn,
 			    current_slot = state.current_slot,
-			    _current_sequence = state.current_sequence,
+			    current_sequence = state.current_sequence,
 			    slots = state.current_round,
 			    index = state.slot_index,
 			    new_index = skipToUnfinished(index, slots);
 			if (new_index == undefined) {
-				dispatch(showCompleteRound(_current_sequence.id));
+				dispatch(showCompleteRound(current_sequence.id));
 				return;
 			}
 			var next_slot = slots[new_index],
@@ -799,11 +801,11 @@ function skipSlot() {
 			if (next_slot.completed) {
 				dispatch({ type: SHOW_CORRECT });
 			}
-			_current_sequence = Object.assign(_extends({}, _current_sequence), {
+			current_sequence = Object.assign(_extends({}, current_sequence), {
 				position: new_pos,
 				type: 'updating_position'
 			});
-			dispatch(updateSequence(_current_sequence));
+			dispatch(updateSequence(current_sequence));
 		} catch (err) {
 			dispatch({
 				type: SKIP_FAILURE,
@@ -844,7 +846,7 @@ function nextSlot(dir) {
 		try {
 			var state = getState().learn,
 			    current_slot = state.current_slot,
-			    _current_sequence2 = state.current_sequence,
+			    current_sequence = state.current_sequence,
 			    slots = state.current_round,
 			    pos = state.slot_index,
 			    next_pos = findNext(dir, slots, pos),
@@ -857,11 +859,11 @@ function nextSlot(dir) {
 			if (next_slot.completed) {
 				dispatch({ type: SHOW_CORRECT });
 			}
-			_current_sequence2 = Object.assign(_extends({}, _current_sequence2), {
+			current_sequence = Object.assign(_extends({}, current_sequence), {
 				position: new_pos,
 				type: 'updating_position'
 			});
-			dispatch(updateSequence(_current_sequence2));
+			dispatch(updateSequence(current_sequence));
 		} catch (err) {
 			dispatch({
 				type: MOVE_SLOT_FAILURE,
@@ -892,25 +894,25 @@ exports.NEXT_ROUND = NEXT_ROUND;
 function showCompleteRound(seq_id) {
 	return function (dispatch, getState) {
 		dispatch({ type: SHOW_COMPLETE_ROUND });
+		setTimeout(function () {
+			var current_sequence = getState().learn.current_sequence;
+			dispatch(fetchSlots(current_sequence.id, true));
+		}, 50);
 	};
 }
 
 function nextRound() {
 	return function (dispatch, getState) {
-		dispatch(fetchSlots(current_sequence.id));
-		var isFetchingSlots = getState().learn.isFetchingSlots,
-		    current_sequence = getState().learn.current_sequence;
+		var isFetchingSlots = getState().learn.isFetchingSlots;
 		if (isFetchingSlots) {
 			setTimeout(function () {
 				dispatch(nextRound());
 			}, 50);
 		}
 		dispatch({ type: NEXT_ROUND });
-		var _s = getState().learn.current_sequence,
-		    new_position = getState().learn.current_round[0].order,
-		    sequence = Object.assign(_extends({}, _s), { position: new_position, type: 'updating_position' });
-		// dispatch reduxer that turns off showRoundSummary
-		// dispatch to update the sequence with the new current position of the first item in the next round
+		var new_position = getState().learn.position,
+		    current_sequence = getState().learn.current_sequence,
+		    sequence = Object.assign(_extends({}, current_sequence), { position: new_position, type: 'updating_position' });
 		dispatch(updateSequence(sequence));
 	};
 }

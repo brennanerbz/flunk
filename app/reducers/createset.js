@@ -67,6 +67,7 @@ import {
   LOAD_EDITING_FAILURE,
 
   LOADING_SET,
+  LOADED_VIEW,
 
   UNMOUNTING_CREATE,
 
@@ -108,11 +109,12 @@ export var createState = {
   scrolling: false,
   /* Editing */
   editing: false,
-  isLoadingSet: false,
+  isLoadingSet: true,
   check_subjects: false,
   unmounting: false,
   rendered: false,
-  able_to_spark: true
+  able_to_spark: true,
+  isLoadingEditing: false
 };
 
 /* ---- Remove duplicates ----*/
@@ -141,7 +143,6 @@ export function createset(state = createState, action) {
     case LOAD_EDITING: 
       return {
         ...state,
-        isLoadingSet: true,
         unmounting: false,
         able_to_spark: false
       }
@@ -164,7 +165,6 @@ export function createset(state = createState, action) {
       return {
         ...state,
         editing: true,
-        isLoadingSet: false,
         set: action.set,
         id: action.set.id,
         title: action.set.title,
@@ -179,7 +179,8 @@ export function createset(state = createState, action) {
                ? action.associations[action.rows.slice(-1)[0]].order + 1 
                : 1,
         deleted: false,
-        subjects: _subjects
+        subjects: _subjects,
+        isLoadingSet: false
       }
     case CREATE_SET_SUCCESS:
       if(state.cleared) return { ...state }
@@ -407,7 +408,13 @@ export function createset(state = createState, action) {
     case LOADING_SET: 
       return {
         ...state,
+        isLoadingSet: true,
         cleared: false
+      }
+    case LOADED_VIEW:
+      return {
+        ...state,
+        isLoadingSet: false
       }
     case FINISHED_RENDERING:
       return {

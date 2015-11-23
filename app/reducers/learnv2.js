@@ -215,8 +215,8 @@ export default function learn(state = initial_learnstate, action) {
 				current_round: current_round,
 				current_round_index: action.round,
 				slot_index: slot_index,
-				start: state.start + 5,
-				end: state.end + 5
+				start: action.start,
+				end: action.end
 			}
 		case RECEIVE_TRIALS_SUCCESS: 
 			return {
@@ -306,7 +306,7 @@ export default function learn(state = initial_learnstate, action) {
 				...state,
 				isShowingCorrect: false,
 				isShowingCompletedRound: true,
-				position: state.position + 1
+				position: state.end + 1
 			}
 		case NEXT_ROUND:
 			return {

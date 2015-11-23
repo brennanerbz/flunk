@@ -45,13 +45,14 @@ export function fetchSequence(user_id, set_id, assignment_id, mode) {
 		let sequences;
 		axios.get(`${api_url}/sequences/?user_id=${Number(user_id)}&set_id=${Number(set_id)}`)
 		.then(res => {
-			sequences = res.data.sequences.filter(seq => !seq.completed)
-			if(sequences !== undefined && sequences.length > 0) {
-				const sorted_sequences = sequences.sort((s1, s2) => {
+			sequences = res.data.sequences
+			const sorted_sequences = sequences.sort((s1, s2) => {
 					return new Date(s2.creation) - new Date(s1.creation)
-				})
-				const sequence = sorted_sequences[0]
+			}),
+			sequence = sorted_sequences[0]
+			if(!sequence.completed) {
 				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
+
 			} else {
 				let sequence = { type: 'noprior' }
 				dispatch(newSequence(sequence, user_id, set_id, assignment_id))
@@ -158,13 +159,9 @@ export function updateSequence(_sequence) {
 		dispatch(willUpdateSequence())
 		try {
 			let updated_sequence;
-			if(_sequence.type == 'updating_position') {
-				updated_sequence = _sequence;
-			} else if (_sequence.type == 'completed') {
-				updated_sequence = Object.assign({..._sequence}, {
-					completed: true
-				})
-			}
+			
+			updated_sequence = _sequence;
+			
 			for (var _seqprop in updated_sequence) {
 				if (_seqprop == 'type') {
 					delete updated_sequence[_seqprop]
@@ -174,6 +171,7 @@ export function updateSequence(_sequence) {
 			await axios.put(`${api_url}/sequences/${_sequence.id}`, 
 				updated_sequence
 			).then(res => {
+				console.log(res)
 				const sequence = res.data;
 				dispatch({type: UPDATE_SEQUENCE_SUCCESS, sequence}) 
 				if(sequence.completed) {
@@ -244,7 +242,7 @@ export function fetchSlots(sequence_id, isPreparing) {
 	   				}, 150)
 	   				return;
 	   			}
-	   			dispatch({type: RECEIVE_SLOTS_SUCCESS, slots, round})
+	   			dispatch({type: RECEIVE_SLOTS_SUCCESS, slots, start, end, round})
 	   			if(!isPreparing) {
 	   				dispatch(fetchTrials())
 	   			}
@@ -780,7 +778,10 @@ export function showCompleteRound(seq_id) {
 	return (dispatch, getState) => {
 		dispatch({ type: SHOW_COMPLETE_ROUND })
 		setTimeout(() => {
-			let current_sequence = getState().learn.current_sequence;
+			let current_sequence = getState().learn.current_sequence,
+				pos = getState().learn.position,
+				length = getState().learn.sequence_length;
+			if(pos >= length) return;
 			dispatch(fetchSlots(current_sequence.id, true))
 		}, 50)
 	}
@@ -796,11 +797,15 @@ export function nextRound() {
 		dispatch({type: NEXT_ROUND})
 		let	new_position = getState().learn.position,
 			current_sequence = getState().learn.current_sequence,
+			sequence;
+		if(new_position >= current_sequence.length) {
+			sequence = Object.assign({...current_sequence}, {completed: true, type: 'completed'})
+		} else {
 			sequence = Object.assign({...current_sequence}, {position: new_position, type: 'updating_position'})
+		}
 		dispatch(updateSequence(sequence))
 	}
 }
-
 
 export const UPDATING_STATE = 'UPDATING_STATE';
 export const UPDATE_CURRENT_ROUND = 'UPDATE_CURRENT_ROUND'

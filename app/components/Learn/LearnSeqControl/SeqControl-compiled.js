@@ -83,6 +83,11 @@ var SeqControl = (function (_Component) {
 			window.addEventListener('resize', this.resizeSideNav);
 		}
 	}, {
+		key: 'shouldComponentUpdate',
+		value: function shouldComponentUpdate(nextProps) {
+			return nextProps.isShowingCompletedRound;
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _this = this;

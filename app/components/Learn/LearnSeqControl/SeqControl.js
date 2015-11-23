@@ -16,6 +16,10 @@ export default class SeqControl extends Component {
 		$('.seq_control').height($(window).height() - 50)
 	}
 
+	shouldComponentUpdate(nextProps) {
+		return !nextProps.isShowingCompletedRound
+	}
+
 	render() {
 		const { round_index } = this.props;
 		return(

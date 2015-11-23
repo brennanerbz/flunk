@@ -89,6 +89,7 @@ const initial_learnstate = {
 	isShowingCompletedRound: false,
 
 	current_sequence: {},
+	sequence_length: null,
 	sequence_completed: false,
 	sequence_id: null,
 	position: null,
@@ -176,6 +177,7 @@ export default function learn(state = initial_learnstate, action) {
 				isShowingCompletedRound: false,
 				isShowingCompletedSequence: action.sequence.completed,
 				current_sequence: action.sequence,
+				sequence_length: action.sequence.length,
 				sequence_completed: action.sequence.completed,
 				sequence_id: action.sequence.id,
 				position: action.sequence.position,
@@ -211,7 +213,7 @@ export default function learn(state = initial_learnstate, action) {
 				current_slot: slot,
 				rounds: rounds,
 				current_round: current_round,
-				current_round_index: round_index,
+				current_round_index: action.round,
 				slot_index: slot_index,
 				start: state.start + 5,
 				end: state.end + 5

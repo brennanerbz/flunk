@@ -210,7 +210,7 @@ export const RECEIVE_SLOTS_FAILURE = 'RECEIVE_SLOTS_FAILURE';
 export function fetchSlots(sequence_id, isPreparing) {
 	return (dispatch, getState) => {
 		dispatch({type: REQUEST_SLOTS})
-		var slots, start, end, seq_id;
+		var slots, start, end, seq_id, round;
 		if(sequence_id == undefined) {
 			seq_id = getState().learn.current_sequence.id;
 			if(seq_id == undefined) {
@@ -223,14 +223,14 @@ export function fetchSlots(sequence_id, isPreparing) {
 			seq_id = sequence_id
 		}
 		let pos = getState().learn.position,
-			current_round = getState().learn.current_round;
-		if(current_round == undefined) {
-			start = pos - 1
-			end = start + 5
-		} else {
-			start = getState().learn.start;
-			end = getState().learn.end
-		}
+			current_round = getState().learn.current_round,
+			length = getState().learn.sequence_length;
+
+		start = Math.round(Math.floor((pos - 1)/5)) * 5,
+		end = start + 5;
+
+		round = start !== 0 ? Math.round((length/5) / (length/end)) : 1
+
 		let body;
 		request
 	    .get(`${api_url}/sequences/${seq_id}/slots/?start=${start}&end=${end}`)
@@ -244,7 +244,7 @@ export function fetchSlots(sequence_id, isPreparing) {
 	   				}, 150)
 	   				return;
 	   			}
-	   			dispatch({type: RECEIVE_SLOTS_SUCCESS, slots})
+	   			dispatch({type: RECEIVE_SLOTS_SUCCESS, slots, round})
 	   			if(!isPreparing) {
 	   				dispatch(fetchTrials())
 	   			}

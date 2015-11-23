@@ -32,7 +32,7 @@ export default class RoundSummary extends Component {
 			  slots = current_round;
 		return(
 			<div className="summary">
-				<h3 className="summary_header">Round {round_index + 1}</h3>
+				<h3 className="summary_header">Round {round_index}</h3>
 				<table className="summary_table">
 					<tbody>
 						<tr className="recall_row">

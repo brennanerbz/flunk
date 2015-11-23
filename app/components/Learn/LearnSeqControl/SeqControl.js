@@ -28,7 +28,7 @@ export default class SeqControl extends Component {
 					<hr className="separator"/>
 					<i className="copy_only"/>
 					<div className="round_divider_label">
-					Round {round_index + 1}
+					Round {round_index}
 					</div> 
 				</div>
 				<SignPosts {...this.props} />

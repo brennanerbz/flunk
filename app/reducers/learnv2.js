@@ -1,4 +1,4 @@
-
+import moment from 'moment';
 import {
 	REQUEST_LEARN,
 	RECEIVE_LEARN_SUCCESS,
@@ -62,14 +62,13 @@ import {
 
 	CLEAR_LEARN,
 
-	CREATE__MINISEQS,
-	UPDATE_CURRENT_MINISEQ,
-	MOVE_TO_UNFINISHED_MINISEQ,
-	SHOW_COMPLETE_MINISEQ,
-
 	UPDATING_STATE,
 
-	COMPLETED_ROUND
+	UPDATE_CURRENT_ROUND,
+
+	COMPLETED_ROUND,
+	SHOW_COMPLETE_ROUND,
+	NEXT_ROUND
 
 } from '../actions/learnv2';
 import _ from 'lodash';
@@ -86,23 +85,30 @@ const initial_learnstate = {
 	isShowingCompletedSequence: false,
 	isShowingFeedback: false,
 	isShowingHint: false,
+	isUpdatingState: false,
+	isShowingCompletedRound: false,
 
 	current_sequence: {},
+	sequence_length: null,
+	sequence_completed: false,
+	sequence_id: null,
+	position: null,
+	start: 0,
+	end: 5,
 
 	slots: [],
 	current_slot: {},
+	slot_index: null,
 
 	trials: [],
 	current_trial: {},
 	trial: {},
 
-	slot_index: null,
-	miniseqs: [],
-	current_miniseq: {},
-	current_miniseq_index: null,
-	isShowingCompleteMiniseq: false,
-
-	isUpdatingState: false
+	
+	rounds: [],
+	current_round: {},
+	current_round_index: null,
+		
 }
 
 Array.prototype.clean = function(deleteValue) {
@@ -118,103 +124,31 @@ Array.prototype.clean = function(deleteValue) {
 export default function learn(state = initial_learnstate, action) {
 	switch(action.type) {
 
-		case COMPLETED_ROUND: 
-			return {
-				...state,
-				isShowingCompleteMiniseq: false
-			}
 		case UPDATING_STATE: 
 			return {
 				...state,
 				isUpdatingState: true
 			}
-
-		case SHOW_COMPLETE_MINISEQ:  
-			return {
-				...state,
-				isShowingCompleteMiniseq: true,
-				current_miniseq: Object.assign({...state.current_miniseq}, {completed: true}),
-				miniseqs: action.miniseqs
-			}
-		case MOVE_TO_UNFINISHED_MINISEQ: 
- 			return {
-				...state,
-				current_miniseq_index: action.new_index,
-				current_miniseq: action.new_miniseq,
-				miniseqs: action.miniseqs
-			}
-		
-		case UPDATE_CURRENT_MINISEQ:
+		case UPDATE_CURRENT_ROUND:
 			let _newslot = action.slot,
 				_newslotid = _newslot.id,
-			    _currminiseq = state.current_miniseq,
+			    _currminiseq = state.current_round,
+			    _round_length = _currminiseq.length,
 			    _updatedminiseq;
 			function findIndex(){
-				for(var _in = 0; _in < _currminiseq.slots.length; _in++) {
-					if(_currminiseq.slots[_in].id === _newslotid) {
+				for(var _in = 0; _in < _round_length; _in++) {
+					if(_currminiseq[_in].id === _newslotid) {
 						return _in
 					}
 				}
 			}
 			let index = findIndex()	
-			_currminiseq['slots'][index] = _newslot
+			_currminiseq[index] = _newslot
 			return {
 				...state,
 				slot_index: index,
-				current_miniseq: _currminiseq,
+				current_round: _currminiseq,
 				isUpdatingState: false
-			}
-		case CREATE__MINISEQS:
-			let miniseqs = [],
-				length = state.current_sequence.length,
-				miniseq_count = Math.floor(length / 5),
-				_n = 0,
-				_i = 0;
-			for(let _l = 0; _l <= miniseq_count; _l++) {
-				let _s = 0,
-					_a = {completed: false, current: false, slots: []}
-				while(_s < 5 + _n) {
-					_a.slots.push(action.slots[_i])
-					_s++
-					_i++
-				}
-				_n + 4
-				miniseqs.push(_a)
-			}
-			for(let loop = 0; loop < miniseqs.length; loop++) {
-				var undefinedcount = 0,
-					complete_slot_count = 0,
-					seq = miniseqs[loop];
-				for(var i = 0; i < seq['slots'].length; i++) {
-					let slots = seq['slots'],
-						new_slots;
-						slot = slots[i];
-					if(slot !== undefined && slot.order == state.current_sequence.position) {
-						seq['current'] = true
-					}
-					if(slot !== undefined && slot.completed == true) {
-						complete_slot_count++
-					}
-					seq.slots.clean(undefined)
-				}
-
-				if(complete_slot_count == seq['slots'].length) {
-					seq['completed'] = true;
-				}
-				if(undefinedcount == seq['slots'].length) {
-					delete miniseqs[loop]
-				}
-			}
-			// function to iterate over miniseqs and find the current based on current position, and completion. The current position of the global sequence should be correct. Just need to verify. 
-			let current_miniseq = miniseqs.filter(seq => seq.current)[0],
-				cmi = miniseqs.indexOf(current_miniseq),
-				slot_index = current_miniseq.slots.indexOf(state.current_slot)
-			return {
-				...state,
-				slot_index: slot_index,
-				miniseqs: miniseqs,
-				current_miniseq: current_miniseq,
-				current_miniseq_index: cmi
 			}
 		case REQUEST_LEARN:
 			return {
@@ -240,28 +174,51 @@ export default function learn(state = initial_learnstate, action) {
 			return {
 				...state,
 				isFetchingSequence: false,
-				isShowingCompleteMiniseq: false,
+				isShowingCompletedRound: false,
+				isShowingCompletedSequence: action.sequence.completed,
 				current_sequence: action.sequence,
-				isShowingCompletedSequence: action.sequence.completed
+				sequence_length: action.sequence.length,
+				sequence_completed: action.sequence.completed,
+				sequence_id: action.sequence.id,
+				position: action.sequence.position,
+				start: 0,
+				end: 5,
+				slots: [],
+				current_slot: {},
+				trials: [],
+				current_trial: {},
+				trial: {},
+				slot_index: null,
+				rounds: [],
+				current_round: {},
+				current_round_index: null
 			}
 		case RECEIVE_SLOTS_SUCCESS:
 			let slots = action.slots,
-				slot = slots.filter(slot => slot.order === state.current_sequence.position)[0],				
-				show_correct;
-			if(slot.completed == false) {
-				show_correct = false
-			} else {
-				show_correct = true
-			}
+				state_slots = state.slots,
+				slot = slots.filter(slot => slot.order === state.position)[0],	
+				current_round = slots,
+				rounds = state.rounds,
+				slot_index = current_round.indexOf(slot),
+				round_index;	
+			slots.forEach(slot => {
+				state_slots.push(slot)
+			})
+			rounds.push(current_round)
+			round_index = rounds.indexOf(current_round)
 			return {
 				...state,
 				isFetchingSlots: false,
-				isShowingCompleteMiniseq: false,
-				isShowingCorrect: show_correct,
-				slots: action.slots,
-				current_slot: slot
+				slots: state_slots,
+				current_slot: slot,
+				rounds: rounds,
+				current_round: current_round,
+				current_round_index: action.round,
+				slot_index: slot_index,
+				start: action.start,
+				end: action.end
 			}
-		case RECEIVE_TRIALS_SUCCESS:
+		case RECEIVE_TRIALS_SUCCESS: 
 			return {
 				...state,
 				isFetchingTrials: false,
@@ -271,15 +228,13 @@ export default function learn(state = initial_learnstate, action) {
 		case NEW_TRIAL_SUCCESS:
 			const _newtrials = state.trials.concat(action._trial),
 				 showHint = true;
-				// _shouldShowHint = action._trial.augs.length > 0 ? true : false;
-								// && action._trial.augs[0].indexOf(action._trial.censored_cue) !== -1;
 			return {
 				...state,
 				isShowingHint: showHint,
 				isFetchingLearn: false,
 				isFetchingTrials: false,
 				isShowingCorrect: false,
-				isShowingCompleteMiniseq: false,
+				isShowingCompletedRound: false,
 				trials: _newtrials,
 				current_trial: action._trial,
 				trial: action._trial
@@ -296,6 +251,7 @@ export default function learn(state = initial_learnstate, action) {
 				...state,
 				isShowingCorrect: _correctslot,
 				current_sequence: action.sequence,
+				position: action.sequence.position,
 				current_slot: _slot,
 				isUpdatingState: false
 			}
@@ -345,11 +301,23 @@ export default function learn(state = initial_learnstate, action) {
 				isShowingCorrect: true,
 				isUpdatingState: false
 			}
+		case SHOW_COMPLETE_ROUND:
+			return {
+				...state,
+				isShowingCorrect: false,
+				isShowingCompletedRound: true,
+				position: state.end + 1
+			}
+		case NEXT_ROUND:
+			return {
+				...state,
+				isShowingCompletedRound: false
+			}
 		case SHOW_COMPLETED_SEQUENCE: 
 			return {
 				...state,
 				isShowingCompletedSequence: true,
-				isShowingCompleteMiniseq: false,
+				isShowingCompletedRound: false,
 				isUpdatingState: false,
 				isShowingCorrect: false
 			}

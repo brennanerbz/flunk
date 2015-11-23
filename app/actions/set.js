@@ -50,9 +50,6 @@ export function fetchAssociations(set_id) {
 	return (dispatch, getState) => {
 		dispatch({type: REQUEST_ASSOCIATIONS})
 		let associations;
-		axios.get('http://jsonplaceholder.typicode.com/photos').then(res => {
-			console.log(res.data)
-		})
 		axios.get(`${api_url}/sets/${set_id}/associations/?start=${0}&end=${99}`)
 		.then((res) => {
 			associations = res.data.associations

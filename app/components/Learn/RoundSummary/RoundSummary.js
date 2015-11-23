@@ -7,7 +7,9 @@ export default class RoundSummary extends Component {
 	}
 
 	shouldComponentUpdate(nextProps) {
-		return this.props.cmi == nextProps.cmi || nextProps.isShowingCompletedMiniSeq
+		if(this.props.isShowingCompletedRound) {
+			return this.props.current_round == nextProps.current_round
+		}
 	}
 
 	renderSlotItems(slot, format, i) {
@@ -26,11 +28,11 @@ export default class RoundSummary extends Component {
 	}
 
 	render() {
-		let { current_miniseq, cmi} = this.props,
-			  slots = current_miniseq.slots;
+		let { current_round, round_index} = this.props,
+			  slots = current_round;
 		return(
 			<div className="summary">
-				<h3 className="summary_header">Round {cmi + 1}</h3>
+				<h3 className="summary_header">Round {round_index}</h3>
 				<table className="summary_table">
 					<tbody>
 						<tr className="recall_row">

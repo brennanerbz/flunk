@@ -199,10 +199,10 @@ var TermContent = (function (_Component) {
             });
             setTimeout(function () {
                 _this.trigger(term_node, def_node);
-                if (index == total_count - 1 && !rendered) {
-                    setTimeout(function () {
-                        _this.props.finishedRendering();
-                    }, 25);
+                if (index == total_count - 1) {
+                    console.log(index);
+                    console.log(total_count);
+                    _this.props.finishedRendering();
                 }
             }, 1);
         }

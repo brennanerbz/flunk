@@ -21,7 +21,7 @@ export default class SequenceSummary extends Component {
 								{slots.filter(slot => slot.format == 'recall').length} / {slots.length} 
 							</td>
 							<td className="percent">
-								{(slots.filter(slot => slot.format == 'recall').length / 5) / 100 * 10000} % 
+								{(slots.filter(slot => slot.format == 'recall').length / slots.length) / 100 * 10000} % 
 							</td>
 						</tr>
 						<tr className="mc_row">
@@ -32,7 +32,7 @@ export default class SequenceSummary extends Component {
 								{slots.filter(slot => slot.format == 'mc').length} / {slots.length} 
 							</td>
 							<td className="percent">
-								{(slots.filter(slot => slot.format == 'mc').length / 5) / 100 * 10000} % 
+								{(slots.filter(slot => slot.format == 'mc').length / slots.length) / 100 * 10000} % 
 							</td>
 						</tr>
 						<tr className="fb_row">
@@ -43,7 +43,7 @@ export default class SequenceSummary extends Component {
 								{slots.filter(slot => slot.format == 'stem').length} / {slots.length} 
 							</td>
 							<td className="percent">
-								{(slots.filter(slot => slot.format == 'stem').length / 5) / 100 * 10000} % 
+								{(slots.filter(slot => slot.format == 'stem').length / slots.length) / 100 * 10000} % 
 							</td>
 						</tr>
 						<tr className="copy_row">
@@ -54,7 +54,7 @@ export default class SequenceSummary extends Component {
 								{slots.filter(slot => slot.format == 'copy').length} / {slots.length} 
 							</td>
 							<td className="percent">
-								{(slots.filter(slot => slot.format == 'copy').length / 5) / 100 * 10000} % 
+								{(slots.filter(slot => slot.format == 'copy').length / slots.length) / 100 * 10000} % 
 							</td>
 						</tr>
 					</tbody>

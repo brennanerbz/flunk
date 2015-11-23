@@ -16,22 +16,28 @@ export default class SeqControl extends Component {
 		$('.seq_control').height($(window).height() - 50)
 	}
 
+	shouldComponentUpdate(nextProps) {
+		return !nextProps.isShowingCompletedRound
+	}
+
 	render() {
-		const { cmi } = this.props;
+		const { round_index } = this.props;
 		return(
 			<div className="seq_control">
 				<div className="round_divider">
 					<hr className="separator"/>
 					<i className="copy_only"/>
 					<div className="round_divider_label">
-					Round {cmi + 1}
+					Round {round_index}
 					</div> 
 				</div>
 				<SignPosts {...this.props} />
 				<span className="">
 					<button className="button button-outline startover_btn"
 						    type="button"
-						    onClick={() => this.props.newSequence(null)}
+						    onClick={() => { 
+						    	this.props.newSequence(null)
+						    }}
 						    >Start over</button>
 				</span>
 			</div>

@@ -20,11 +20,17 @@
 
 .CreateSetPage {
 	margin-top: 6rem;
-	min-width: 790px;
-	-webkit-transition: opacity 0.1s cubic-bezier(0.42, 0.0, 0.58, 1.0);
-	transition: opacity 0.1s cubic-bezier(0.42, 0.0, 0.58, 1.0);
-	&.rendering {
-		opacity: 0.15
+	min-width: 790px; 
+	opacity: 0.25;
+	-webkit-transition: opacity 0.05s cubic-bezier(0.42, 0.0, 0.58, 1.0);
+	transition: opacity 0.05s cubic-bezier(0.42, 0.0, 0.58, 1.0);
+	&.rendered {
+		opacity: 1
+	}
+	div {
+		&.big_spinner {
+			opacity: 1!important;
+		}
 	}
 	.saving_label {
 		position: absolute;

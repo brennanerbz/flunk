@@ -51,7 +51,7 @@ export const LOAD_EDITING_SUCCESS = 'LOAD_EDITING_SUCCESS';
 export const LOAD_EDITING_FAILURE = 'LOAD_EDITING_FAILURE';
 export function loadEditing(set_id, pushState) {
 	return async(dispatch, getState) => {
-		dispatch({ type: LOAD_EDITING })
+		dispatch({ type: LOAD_EDITING, true })
 		try {
 			let transferState = getState().transfer,
 				user = getState().user.user,
@@ -762,6 +762,12 @@ export const LOADING_SET = 'LOADING_SET';
 export function loadSetFlag() {
 	return (dispatch, getState) => {
 		dispatch({ type: LOADING_SET})
+	}
+}
+export const LOADED_VIEW = 'LOADED_VIEW'
+export function loadedView() {
+	return {
+		type: LOADED_VIEW
 	}
 }
 

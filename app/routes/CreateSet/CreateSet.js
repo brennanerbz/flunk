@@ -75,6 +75,10 @@ export default class CreateSetPage extends Component {
 		
 	} 
 
+	state = {
+		editing: false
+	}
+
 	subPoll = {}
 
 	subjectPoll() {
@@ -87,10 +91,14 @@ export default class CreateSetPage extends Component {
 	componentWillMount() {
 		const { params, transfer, loadEditing, loadSetFlag, pushState } = this.props;
 		loadSetFlag()
-		if(Object.keys(params).length !== 0) loadEditing(params.id, pushState) 
+		if(Object.keys(params).length !== 0) { 
+			this.setState({ editing: true })
+			loadEditing(params.id, pushState) 
+		}
 	}
 
 	componentDidMount() {
+		if(!this.state.editing) this.props.loadedView()
 		this.subPoll = setInterval(() => {
 			::this.subjectPoll()
 		}, 2500)
@@ -142,99 +150,101 @@ export default class CreateSetPage extends Component {
             	updateSet(set, {name: 'finalized', prop: null})
             	createAssignment(set.id)
             }
-            setTimeout(() => {
-            	clearSet()
-            }, 50)
-            clearInterval(this.subPoll)
 		}
+		setTimeout(() => {
+			clearSet()
+		}, 50)
+		clearInterval(this.subPoll)
 	}	
 
 	render() {
 		const { isLoadingSet, rendered } = this.props;
 		return(
-			<div className={classnames("CreateSetPage no_sidenav_container", {"rendering": !rendered })}>
-			{
-				isLoadingSet
-				?
-				<div className="big_spinner">
-					<div className="sk-fading-circle">
-					  <div className="sk-circle1 sk-circle"></div>
-					  <div className="sk-circle2 sk-circle"></div>
-					  <div className="sk-circle3 sk-circle"></div>
-					  <div className="sk-circle4 sk-circle"></div>
-					  <div className="sk-circle5 sk-circle"></div>
-					  <div className="sk-circle6 sk-circle"></div>
-					  <div className="sk-circle7 sk-circle"></div>
-					  <div className="sk-circle8 sk-circle"></div>
-					  <div className="sk-circle9 sk-circle"></div>
-					  <div className="sk-circle10 sk-circle"></div>
-					  <div className="sk-circle11 sk-circle"></div>
-					  <div className="sk-circle12 sk-circle"></div>
-					</div>
-				</div>
-				: 
-				<div>
-					<SavingLabel 
-						assignment={this.props.assignment}
-						set={this.props.set}
-						isLoadingSet={this.props.isLoadingSet}
-						isCreatingSet={this.props.isCreatingSet}
-						isUpdatingSet={this.props.isUpdatingSet}
-						isCreatingItem={this.props.isCreatingItem}
-					/>
-					<CreateSetHeader 
-						assignment={this.props.assignment}
-						associations={this.props.associations}
-						check_subjects={this.props.check_subjects}
-						deleted={this.props.deleted}
-						editing={this.props.editing}
-						isLoadingSet={this.props.isLoadingSet}
-						isUpdatingSet={this.props.isUpdatingSet}
-						items={this.props.items}
-						loadSetFlag={this.props.loadSetFlag}
-						purpose={this.props.purpose}
-						set={this.props.set}
-						id={this.props.id}
-						setTitleFlag={this.props.setTitleFlag}
-						subjects={this.props.subjects}
-						title={this.props.title}
-						title_flag={this.props.title_flag}
-						createAssignment={this.props.createAssignment}
-						updateAssignment={this.props.updateAssignment}
-						deleteAssignment={this.props.deleteAssignment}
-						createSet={this.props.createSet}
-						updateSet={this.props.updateSet}
-						updateSetSubjects={this.props.updateSetSubjects}
-						user={this.props.user}
-						pushState={this.props.pushState}
-					/>                 
-					<div className="container">
-						<div className="CreateSetPage-list">
-							<TermRows
-								addRow={this.props.addRow}
-								assignment={this.props.assignment}
-								associations={this.props.associations}
-								check_subjects={this.props.check_subjects}
-								createAssociation={this.props.createAssociation}
-								updateAssociation={this.props.updateAssociation}
-								createItem={this.props.createItem}
-								updateItem={this.props.updateItem}
-								deleteRow={this.props.deleteRow}
-								flag={this.props.flag}
-								items={this.props.items}
-								resize={this.props.resize}
-								resizing={this.props.resizing}
-								rows={this.props.rows}
-								row_length={this.props.row_length}
-								editing={this.props.editing}
-								able_to_spark={this.props.able_to_spark}
-								rendered={rendered}
-								finishedRendering={this.props.finishedRendering}
-							/>
+			<div>, 
+				<div className={classnames("CreateSetPage no_sidenav_container", {"rendered": rendered })}>
+				{
+					isLoadingSet
+					?
+					<div className="big_spinner">
+						<div className="sk-fading-circle">
+						  <div className="sk-circle1 sk-circle"></div>
+						  <div className="sk-circle2 sk-circle"></div>
+						  <div className="sk-circle3 sk-circle"></div>
+						  <div className="sk-circle4 sk-circle"></div>
+						  <div className="sk-circle5 sk-circle"></div>
+						  <div className="sk-circle6 sk-circle"></div>
+						  <div className="sk-circle7 sk-circle"></div>
+						  <div className="sk-circle8 sk-circle"></div>
+						  <div className="sk-circle9 sk-circle"></div>
+						  <div className="sk-circle10 sk-circle"></div>
+						  <div className="sk-circle11 sk-circle"></div>
+						  <div className="sk-circle12 sk-circle"></div>
 						</div>
 					</div>
+					: 
+					<div>
+						<SavingLabel 
+							assignment={this.props.assignment}
+							set={this.props.set}
+							isLoadingSet={this.props.isLoadingSet}
+							isCreatingSet={this.props.isCreatingSet}
+							isUpdatingSet={this.props.isUpdatingSet}
+							isCreatingItem={this.props.isCreatingItem}
+						/>
+						<CreateSetHeader 
+							assignment={this.props.assignment}
+							associations={this.props.associations}
+							check_subjects={this.props.check_subjects}
+							deleted={this.props.deleted}
+							editing={this.props.editing}
+							isLoadingSet={this.props.isLoadingSet}
+							isUpdatingSet={this.props.isUpdatingSet}
+							items={this.props.items}
+							loadSetFlag={this.props.loadSetFlag}
+							purpose={this.props.purpose}
+							set={this.props.set}
+							id={this.props.id}
+							setTitleFlag={this.props.setTitleFlag}
+							subjects={this.props.subjects}
+							title={this.props.title}
+							title_flag={this.props.title_flag}
+							createAssignment={this.props.createAssignment}
+							updateAssignment={this.props.updateAssignment}
+							deleteAssignment={this.props.deleteAssignment}
+							createSet={this.props.createSet}
+							updateSet={this.props.updateSet}
+							updateSetSubjects={this.props.updateSetSubjects}
+							user={this.props.user}
+							pushState={this.props.pushState}
+						/>                 
+						<div className="container">
+							<div className="CreateSetPage-list">
+								<TermRows
+									addRow={this.props.addRow}
+									assignment={this.props.assignment}
+									associations={this.props.associations}
+									check_subjects={this.props.check_subjects}
+									createAssociation={this.props.createAssociation}
+									updateAssociation={this.props.updateAssociation}
+									createItem={this.props.createItem}
+									updateItem={this.props.updateItem}
+									deleteRow={this.props.deleteRow}
+									flag={this.props.flag}
+									items={this.props.items}
+									resize={this.props.resize}
+									resizing={this.props.resizing}
+									rows={this.props.rows}
+									row_length={this.props.row_length}
+									editing={this.props.editing}
+									able_to_spark={this.props.able_to_spark}
+									rendered={rendered}
+									finishedRendering={this.props.finishedRendering}
+								/>
+							</div>
+						</div>
+					</div>
+				}
 				</div>
-			}
 			</div>
 		);
 	}

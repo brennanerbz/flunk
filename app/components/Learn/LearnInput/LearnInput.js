@@ -27,7 +27,8 @@ export default class LearnInput extends Component {
 		const { current_slot } = this.props;
 		if (current_slot !== nextProps.current_slot) {
 			this.setState({
-				answer: ''
+				answer: '',
+				reaction_time: null
 			});
 		}
 	}

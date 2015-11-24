@@ -39,6 +39,7 @@ import SequenceSummary from '../../components/Learn/SequenceSummary/SequenceSumm
 	showFeedback: state.learn.isShowingFeedback,
 	slots: state.learn.slots,
 	current_slot: state.learn.current_slot,
+	previous_trial: state.learn.previous_trial,
 	current_trial: state.learn.current_trial,
 	trial: state.learn.trial,
 	sets: state.sets.set_items
@@ -182,6 +183,7 @@ export default class Learn extends Component {
 
 	render() {
 		const { current_slot,
+				previous_trial,
 				current_trial,
 				slots,
 				newSequence, 
@@ -196,29 +198,63 @@ export default class Learn extends Component {
 				nextSlot,
 				trial,
 				params} = this.props;
-		let debug_trial = []
-		for(var prop in current_trial) {
+		let debug_prev_trial = [],
+			debug_curr_trial =[]
+		for(var prop in previous_trial) {
 			switch(prop) {
 				case 'accuracy':
-					debug_trial.push(prop + ": " + current_trial[prop])
+					debug_prev_trial.push(prop + ": " + previous_trial[prop])
+					break;
+				case 'answer':
+					debug_prev_trial.push(prop + ": " + previous_trial[prop])
 					break;
 				case 'feedback':
-					debug_trial.push(prop + ": " + current_trial[prop])
+					debug_prev_trial.push(prop + ": " + previous_trial[prop])
 					break;
 				case 'grading':
-					debug_trial.push(prop + ": " + current_trial[prop])
+					debug_prev_trial.push(prop + ": " + previous_trial[prop])
 					break;
 				case 'message':
-					debug_trial.push(prop + ": " + current_trial[prop])
+					debug_prev_trial.push(prop + ": " + previous_trial[prop])
 					break;
 				case 'praise':
-					debug_trial.push(prop + ": " + current_trial[prop])
+					debug_prev_trial.push(prop + ": " + previous_trial[prop])
+					break;
+				case 'reaction_time':
+					debug_prev_trial.push(prop + ": " + previous_trial[prop])
+					break;
+				case 'response_time':
+					debug_prev_trial.push(prop + ": " + previous_trial[prop])
 					break;
 				default:
 					break;
 			}
 		}
-		console.log(debug_trial)
+		for(var prop in current_trial) {
+			switch(prop) {
+				case 'click_to_answer':
+					debug_curr_trial.push(prop + ": " + current_trial[prop])
+					break;
+				case 'censored_cue':
+					debug_curr_trial.push(prop + ": " + current_trial[prop])
+					break;
+				case 'expected_accuracy':
+					debug_curr_trial.push(prop + ": " + current_trial[prop])
+					break;
+				case 'probability_correct':
+					debug_curr_trial.push(prop + ": " + current_trial[prop])
+					break;
+				case 'predicted_reaction_time':
+					debug_curr_trial.push(prop + ": " + current_trial[prop])
+					break;
+				case 'predicted_response_time':
+					debug_prev_trial.push(prop + ": " + previous_trial[prop])
+					break;
+				default:
+					break;
+			}
+		}
+		
 		return (
 			<div className="learn_page"
 				 ref="learn_page"
@@ -320,11 +356,22 @@ export default class Learn extends Component {
 										: null
 									}
 									<div className="debug_feedback">
-										{
-											debug_trial.map((x, i) => {
-												return <p key={i}>{x}</p>
-											})
-										}
+										<div className="debug_cell">
+											<p>Previous</p>
+											{
+												debug_prev_trial.map((x, i) => {
+													return <p className="feedback_key" key={i}>{x}</p>
+												})
+											}
+										</div>
+										<div className="debug_cell">
+											<p>Current</p>
+											{
+												debug_curr_trial.map((x, i) => {
+													return <p className="feedback_key" key={i}>{x}</p>
+												})
+											}
+										</div>
 									</div>
 									<div className="feedback">
 										<a className="feedback_link">Feedback</a>

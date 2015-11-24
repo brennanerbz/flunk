@@ -44,5 +44,23 @@
 		p {
 			font-size: 18px;
 		}
+		.debug_feedback {
+			display: table;
+			.debug_cell {
+				display: table-cell;
+				&:last-child {
+					padding-left: 10px!important;
+				}
+			}
+			p {
+				margin: 0;
+			}
+			.feedback_key {
+				font-size: 13px!important;
+				margin: 0!important;
+			}
+		}
 	}
+	
+	
 }

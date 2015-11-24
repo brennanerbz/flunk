@@ -101,6 +101,7 @@ const initial_learnstate = {
 	slot_index: null,
 
 	trials: [],
+	previous_trial: {},
 	current_trial: {},
 	trial: {},
 
@@ -230,6 +231,7 @@ export default function learn(state = initial_learnstate, action) {
 				 showHint = true;
 			return {
 				...state,
+				previous_trial: state.current_trial,
 				isShowingHint: showHint,
 				isFetchingLearn: false,
 				isFetchingTrials: false,

@@ -85,7 +85,7 @@ var SeqControl = (function (_Component) {
 	}, {
 		key: 'shouldComponentUpdate',
 		value: function shouldComponentUpdate(nextProps) {
-			return nextProps.isShowingCompletedRound;
+			return !nextProps.isShowingCompletedRound;
 		}
 	}, {
 		key: 'render',
@@ -106,7 +106,7 @@ var SeqControl = (function (_Component) {
 						'div',
 						{ className: 'round_divider_label' },
 						'Round ',
-						round_index + 1
+						round_index
 					)
 				),
 				_react2['default'].createElement(_SignPosts2['default'], this.props),

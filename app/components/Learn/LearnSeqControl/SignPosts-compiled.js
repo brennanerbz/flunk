@@ -69,6 +69,11 @@ var SignPosts = (function (_Component) {
 
 	_createClass(SignPosts, [{
 		key: 'render',
+
+		// shouldComponentUpdate(nextProps) {
+		// 	return !!nextProps.isShowingCompletedRound
+		// }
+
 		value: function render() {
 			var _props = this.props;
 			var current_slot = _props.current_slot;

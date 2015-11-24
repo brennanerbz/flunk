@@ -239,7 +239,7 @@ export default class Learn extends Component {
 					debug_curr_trial.push(prop + ": " + current_trial[prop])
 					break;
 				case 'format':
-					debug_prev_trial.push(prop + ": " + previous_trial[prop])
+					debug_curr_trial.push(prop + ": " + previous_trial[prop])
 					break;
 				case 'expected_accuracy':
 					debug_curr_trial.push(prop + ": " + current_trial[prop])

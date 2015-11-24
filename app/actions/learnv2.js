@@ -42,19 +42,23 @@ function requestSequence() {
 export function fetchSequence(user_id, set_id, assignment_id, mode) {
 	return (dispatch, getState) => {
 		dispatch(requestSequence())
-		let sequences;
+		let sequences, sequence;
 		axios.get(`${api_url}/sequences/?user_id=${Number(user_id)}&set_id=${Number(set_id)}`)
 		.then(res => {
 			sequences = res.data.sequences
-			const sorted_sequences = sequences.sort((s1, s2) => {
+			if(sequences !== undefined) {
+				let sorted_sequences = sequences.sort((s1, s2) => {
 					return new Date(s2.creation) - new Date(s1.creation)
-			}),
-			sequence = sorted_sequences[0]
-			if(!sequence.completed) {
-				dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
-
+				});
+				sequence = sorted_sequences[0]
+				if(sequence !== undefined && !sequence.completed) {
+					dispatch({type: RECEIVE_SEQUENCE_SUCCESS, sequence})
+				} else {
+					sequence = { type: 'noprior' }
+					dispatch(newSequence(sequence, user_id, set_id, assignment_id))
+				}
 			} else {
-				let sequence = { type: 'noprior' }
+				sequence = { type: 'noprior' }
 				dispatch(newSequence(sequence, user_id, set_id, assignment_id))
 			}
 		}).catch(err => {

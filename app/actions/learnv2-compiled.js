@@ -90,18 +90,16 @@ function fetchSequence(user_id, set_id, assignment_id, mode) {
 		dispatch(requestSequence());
 		var sequences = undefined;
 		_axios2['default'].get(api_url + '/sequences/?user_id=' + Number(user_id) + '&set_id=' + Number(set_id)).then(function (res) {
-			sequences = res.data.sequences.filter(function (seq) {
-				return !seq.completed;
-			});
-			if (sequences !== undefined && sequences.length > 0) {
-				var sorted_sequences = sequences.sort(function (s1, s2) {
-					return new Date(s2.creation) - new Date(s1.creation);
-				});
-				var sequence = sorted_sequences[0];
+			sequences = res.data.sequences;
+			var sorted_sequences = sequences.sort(function (s1, s2) {
+				return new Date(s2.creation) - new Date(s1.creation);
+			}),
+			    sequence = sorted_sequences[0];
+			if (!sequence.completed) {
 				dispatch({ type: RECEIVE_SEQUENCE_SUCCESS, sequence: sequence });
 			} else {
-				var sequence = { type: 'noprior' };
-				dispatch(newSequence(sequence, user_id, set_id, assignment_id));
+				var _sequence2 = { type: 'noprior' };
+				dispatch(newSequence(_sequence2, user_id, set_id, assignment_id));
 			}
 		})['catch'](function (err) {
 			dispatch({
@@ -210,13 +208,8 @@ function updateSequence(_sequence) {
 					context$2$0.prev = 1;
 					updated_sequence = undefined;
 
-					if (_sequence.type == 'updating_position') {
-						updated_sequence = _sequence;
-					} else if (_sequence.type == 'completed') {
-						updated_sequence = Object.assign(_extends({}, _sequence), {
-							completed: true
-						});
-					}
+					updated_sequence = _sequence;
+
 					for (_seqprop in updated_sequence) {
 						if (_seqprop == 'type') {
 							delete updated_sequence[_seqprop];
@@ -225,6 +218,7 @@ function updateSequence(_sequence) {
 					dispatch({ type: UPDATING_STATE });
 					context$2$0.next = 8;
 					return regeneratorRuntime.awrap(_axios2['default'].put(api_url + '/sequences/' + _sequence.id, updated_sequence).then(function (res) {
+						console.log(res);
 						var sequence = res.data;
 						dispatch({ type: UPDATE_SEQUENCE_SUCCESS, sequence: sequence });
 						if (sequence.completed) {
@@ -281,7 +275,7 @@ exports.RECEIVE_SLOTS_FAILURE = RECEIVE_SLOTS_FAILURE;
 function fetchSlots(sequence_id, isPreparing) {
 	return function (dispatch, getState) {
 		dispatch({ type: REQUEST_SLOTS });
-		var slots, start, end, seq_id;
+		var slots, start, end, seq_id, round;
 		if (sequence_id == undefined) {
 			seq_id = getState().learn.current_sequence.id;
 			if (seq_id == undefined) {
@@ -294,14 +288,13 @@ function fetchSlots(sequence_id, isPreparing) {
 			seq_id = sequence_id;
 		}
 		var pos = getState().learn.position,
-		    current_round = getState().learn.current_round;
-		if (current_round == undefined) {
-			start = pos - 1;
-			end = start + 5;
-		} else {
-			start = getState().learn.start;
-			end = getState().learn.end;
-		}
+		    current_round = getState().learn.current_round,
+		    length = getState().learn.sequence_length;
+
+		start = Math.round(Math.floor((pos - 1) / 5)) * 5, end = start + 5;
+
+		round = start !== 0 ? Math.round(length / 5 / (length / end)) : 1;
+
 		var body = undefined;
 		_superagent2['default'].get(api_url + '/sequences/' + seq_id + '/slots/?start=' + start + '&end=' + end).end(function (err, res) {
 			if (res.ok) {
@@ -313,7 +306,7 @@ function fetchSlots(sequence_id, isPreparing) {
 					}, 150);
 					return;
 				}
-				dispatch({ type: RECEIVE_SLOTS_SUCCESS, slots: slots });
+				dispatch({ type: RECEIVE_SLOTS_SUCCESS, slots: slots, start: start, end: end, round: round });
 				if (!isPreparing) {
 					dispatch(fetchTrials());
 				}
@@ -895,7 +888,10 @@ function showCompleteRound(seq_id) {
 	return function (dispatch, getState) {
 		dispatch({ type: SHOW_COMPLETE_ROUND });
 		setTimeout(function () {
-			var current_sequence = getState().learn.current_sequence;
+			var current_sequence = getState().learn.current_sequence,
+			    pos = getState().learn.position,
+			    length = getState().learn.sequence_length;
+			if (pos >= length) return;
 			dispatch(fetchSlots(current_sequence.id, true));
 		}, 50);
 	};
@@ -912,7 +908,12 @@ function nextRound() {
 		dispatch({ type: NEXT_ROUND });
 		var new_position = getState().learn.position,
 		    current_sequence = getState().learn.current_sequence,
-		    sequence = Object.assign(_extends({}, current_sequence), { position: new_position, type: 'updating_position' });
+		    sequence = undefined;
+		if (new_position >= current_sequence.length) {
+			sequence = Object.assign(_extends({}, current_sequence), { completed: true, type: 'completed' });
+		} else {
+			sequence = Object.assign(_extends({}, current_sequence), { position: new_position, type: 'updating_position' });
+		}
 		dispatch(updateSequence(sequence));
 	};
 }

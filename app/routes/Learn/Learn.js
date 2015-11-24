@@ -198,8 +198,27 @@ export default class Learn extends Component {
 				params} = this.props;
 		let debug_trial = []
 		for(var prop in current_trial) {
-			debug_trial.push(prop + ": " + current_trial[prop])
+			switch(prop) {
+				case 'accuracy':
+					debug_trial.push(prop + ": " + current_trial[prop])
+					break;
+				case 'feedback':
+					debug_trial.push(prop + ": " + current_trial[prop])
+					break;
+				case 'grading':
+					debug_trial.push(prop + ": " + current_trial[prop])
+					break;
+				case 'message':
+					debug_trial.push(prop + ": " + current_trial[prop])
+					break;
+				case 'praise':
+					debug_trial.push(prop + ": " + current_trial[prop])
+					break;
+				default:
+					break;
+			}
 		}
+		console.log(debug_trial)
 		return (
 			<div className="learn_page"
 				 ref="learn_page"
@@ -300,6 +319,13 @@ export default class Learn extends Component {
 												{...this.props}/>
 										: null
 									}
+									<div className="debug_feedback">
+										{
+											debug_trial.map((x, i) => {
+												return <p key={i}>{x}</p>
+											})
+										}
+									</div>
 									<div className="feedback">
 										<a className="feedback_link">Feedback</a>
 									</div>

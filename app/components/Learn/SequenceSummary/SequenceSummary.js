@@ -7,7 +7,6 @@ export default class SequenceSummary extends Component {
 
 	render() {
 		const { slots } = this.props;
-		console.log(slots)
 		return(
 			<div className="summary">
 				<h3 className="summary_header">Overall Progress</h3>

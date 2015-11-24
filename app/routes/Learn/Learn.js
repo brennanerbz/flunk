@@ -200,61 +200,92 @@ export default class Learn extends Component {
 				params} = this.props;
 		let debug_prev_trial = [],
 			debug_curr_trial =[]
-		for(var prop in previous_trial) {
-			switch(prop) {
-				case 'accuracy':
-					debug_prev_trial.push(prop + ": " + previous_trial[prop])
-					break;
-				case 'answer':
-					debug_prev_trial.push(prop + ": " + previous_trial[prop])
-					break;
-				case 'feedback':
-					debug_prev_trial.push(prop + ": " + previous_trial[prop])
-					break;
-				case 'grading':
-					debug_prev_trial.push(prop + ": " + previous_trial[prop])
-					break;
-				case 'message':
-					debug_prev_trial.push(prop + ": " + previous_trial[prop])
-					break;
-				case 'praise':
-					debug_prev_trial.push(prop + ": " + previous_trial[prop])
-					break;
-				case 'reaction_time':
-					debug_prev_trial.push(prop + ": " + previous_trial[prop])
-					break;
-				case 'response_time':
-					debug_prev_trial.push(prop + ": " + previous_trial[prop])
-					break;
-				default:
-					break;
+		if(!current_slot.completed) {
+			for(var prop in previous_trial) {
+				switch(prop) {
+					case 'accuracy':
+						debug_prev_trial.push(prop + ": " + previous_trial[prop])
+						break;
+					case 'answer':
+						debug_prev_trial.push(prop + ": " + previous_trial[prop])
+						break;
+					case 'feedback':
+						debug_prev_trial.push(prop + ": " + previous_trial[prop])
+						break;
+					case 'grading':
+						debug_prev_trial.push(prop + ": " + previous_trial[prop])
+						break;
+					case 'message':
+						debug_prev_trial.push(prop + ": " + previous_trial[prop])
+						break;
+					case 'praise':
+						debug_prev_trial.push(prop + ": " + previous_trial[prop])
+						break;
+					case 'reaction_time':
+						debug_prev_trial.push(prop + ": " + previous_trial[prop])
+						break;
+					case 'response_time':
+						debug_prev_trial.push(prop + ": " + previous_trial[prop])
+						break;
+					default:
+						break;
+				}
 			}
 		}
 		for(var prop in current_trial) {
-			switch(prop) {
-				case 'click_to_answer':
-					debug_curr_trial.push(prop + ": " + current_trial[prop])
-					break;
-				case 'censored_cue':
-					debug_curr_trial.push(prop + ": " + current_trial[prop])
-					break;
-				case 'format':
-					debug_curr_trial.push(prop + ": " + previous_trial[prop])
-					break;
-				case 'expected_accuracy':
-					debug_curr_trial.push(prop + ": " + current_trial[prop])
-					break;
-				case 'probability_correct':
-					debug_curr_trial.push(prop + ": " + current_trial[prop])
-					break;
-				case 'predicted_reaction_time':
-					debug_curr_trial.push(prop + ": " + current_trial[prop])
-					break;
-				case 'predicted_response_time':
-					debug_prev_trial.push(prop + ": " + previous_trial[prop])
-					break;
-				default:
-					break;
+			if(current_slot.completed) {
+				switch(prop) {	
+					case 'accuracy':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'answer':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'feedback':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'grading':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'message':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'praise':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'reaction_time':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'response_time':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+				}
+			} else {
+				switch(prop) {
+					case 'click_to_answer':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'censored_cue':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'format':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'expected_accuracy':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'probability_correct':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'predicted_reaction_time':
+						debug_curr_trial.push(prop + ": " + current_trial[prop])
+						break;
+					case 'predicted_response_time':
+						debug_prev_trial.push(prop + ": " + previous_trial[prop])
+						break;
+					default:
+						break;
+				}
 			}
 		}
 		

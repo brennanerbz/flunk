@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as searchactions from '../../../actions/search'
 import { pushState } from 'redux-router';
+import classnames from 'classnames';
 
 @connect(state => ({
 	loc: state.router.location,
@@ -23,7 +24,8 @@ export default class SearchBox extends Component {
 	}
 
 	state = {
-		value: ''
+		value: '',
+		focused: false
 	}
 
 	componentDidMount() {
@@ -78,7 +80,7 @@ export default class SearchBox extends Component {
 		const { loc, searching } = this.props;
 		const searchIcon = require('../assets/SearchIcon.png');
 		return(
-			<form className="header_search">
+			<div className="header_search">
 				<button className="search_btn_component">	
 					<span className="search_btn_content">
 					{
@@ -109,13 +111,20 @@ export default class SearchBox extends Component {
 					</span>
 				</button>	
 				
-				<div className="input_container">
+				<div className={classnames("input_container", 
+					{'focused': this.state.focused})}>
 					<input className="search_input" 
 							value={this.state.value}
 							onChange={::this.handleSearchInput}
+							onFocus={() => this.setState({
+								focused: true
+							})}
+							onBlur={() => this.setState({
+								focused: false
+							})}
 							onKeyDown={(e) => { if(e.which === 13) { ::this.handleSearchSubmit() } } }/>
 				</div>
-			</form>	
+			</div>	
 		);
 	}
 }

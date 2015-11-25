@@ -27,7 +27,7 @@ export default class Index extends Component {
 
 	componentWillMount() {
 		const { router, logged_in, pushState } = this.props;
-		if(!logged_in) this.setState({ render: 'home'})
+		if(logged_in) this.setState({ render: 'home'})
 	}
 
 	render() {

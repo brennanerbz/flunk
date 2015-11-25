@@ -1,0 +1,99 @@
+.landing_page {
+	position: relative;
+	top: 60px;
+	.landing_page_container {
+		margin: 0 auto;
+		max-width: 1150px;
+		border: 1px solid red;
+		font-family: "Open Sans";
+		.top {
+			display: table;
+			position: relative;
+			width: 100%;
+			.message {
+				display: table-cell;
+				text-align: left;
+				h1 {
+					font-weight: 400;
+					font-size: 28px;
+				}
+				p {
+					font-weight: 300;
+					font-size: 16px;
+				}
+				.sign_up_group {
+					button {
+						color: #fff;
+						text-shadow: none;
+						font-weight: 400;
+						font-size: 13.5px!important;
+						letter-spacing: 0.02em;
+						position: relative;
+						padding-left: 45px;
+						&:last-child {
+							margin-left: 20px;
+						}
+						&.google_button {
+							background: #DC4E41;
+							border: 1px solid #D35039;
+						}
+						&.facebook_button {
+							background: #3F5A9A;
+							border: 1px solid #345090;
+							padding-left: 40px;
+							padding-right: 17px;
+							img {
+								height: 20px;
+								bottom: 0;
+								left: 10px;
+								padding-right: 10px;
+							}
+						}
+						img {
+							opacity: 1;
+							position: absolute;
+							left: 5px;
+							top: 8px;
+							border-right: 1px solid rgba(0, 0, 0, 0.10);
+							padding-right: 5px;
+						}
+					}
+				}
+			}
+			.phone {
+				display: table-cell;
+				position: absolute;
+				right: 0;
+			}
+		}
+		.bottom {
+			.features {
+				.feature_col {
+					text-align: center;
+					&.top-to-bottom {
+					    border-width: 1px;
+					    border-style: solid;
+					    -webkit-border-image: 
+					      -webkit-gradient(linear, 0 0, 0 100%, from(#B5B5B5), to(rgba(0, 0, 0, 0))) 1 100%;
+					    -webkit-border-image: 
+					      -webkit-linear-gradient(#B5B5B5, rgba(0, 0, 0, 0)) 1 100%;
+					    -moz-border-image:
+					      -moz-linear-gradient(#B5B5B5, rgba(0, 0, 0, 0)) 1 100%;    
+					    -o-border-image:
+					      -o-linear-gradient(#B5B5B5, rgba(0, 0, 0, 0)) 1 100%;
+					    border-image:
+					      linear-gradient(to bottom, #B5B5B5, rgba(0, 0, 0, 0)) 1 100%;
+					}
+				}
+			}
+		}
+	}
+	.footer {
+
+	}
+}
+
+// border: 1px solid -webkit-linear-gradient(bottom, red , blue); 
+// border: 1px solid -o-linear-gradient(bottom, red, blue); 
+// border: 1px solid -moz-linear-gradient(bottom, red, blue); 
+// border: 1px solid linear-gradient(to bottom, red , blue); 

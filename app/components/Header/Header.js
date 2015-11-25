@@ -39,12 +39,6 @@ export default class Header extends Component {
 		choices: ['Go to set', 'Edit', 'Privacy settings', 'Mode']
 	}
 
-	renderFetchProgress() {
-		return (
-			<span className="loading_line"></span>
-		);
-	}
-
 	openSetMenu() {
 		let open = this.state.isSetMenuOpen;
 		if(open) {
@@ -72,7 +66,7 @@ export default class Header extends Component {
 	}
 
 	handleSelect(choice) {
-		console.log(choice)
+		// console.log(choice)
 	}
 
 	render() {
@@ -92,25 +86,23 @@ export default class Header extends Component {
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
 		return(
-			<div>				
-				<nav className={
-					classnames({'header-bordered': 
-							    loc.pathname.indexOf('/createset') !== -1 ? false
-							    : true },
-								'header header-top')}>
-					{ 
-						isFetching || fetchingLearn
-						? ::this.renderFetchProgress()
-						: null
-					}
-					
-					<div className="container">
-						<span className="header-block header-left float-left">
+			<div className="header_positioner">
+				<div className={classnames("header_container", 
+					{'no_border': loc.pathname.indexOf('createset') !== -1 ? true : false })}>				
+					<div className='header'>
+						{ 
+							isFetching || fetchingLearn
+							? null
+							// ? <span className="loading_line"></span>
+							: null
+						}
+						<div className="header_logo">
 							<Link className="site-logo" to="/">						
-									<img className={classnames("site-icon")} 
+									<img className={classnames("site_icon")} 
 										 src={logo} />
 							</Link>
-							
+						</div>
+						<div className="header_content">
 							{
 								loc.pathname.indexOf('/createset') !== -1
 								? null
@@ -129,30 +121,30 @@ export default class Header extends Component {
 										</Link>	
 								  </button>
 							}
-						</span>
-						{ !fetchingLearn && loc.pathname.indexOf('/learn') !== -1 ? 
-						<span className="open_set_container set_name_wrapper"
-						      ref="set_name_wrapper">
-								<Link to={`/set/${set_id}`} className="open_set_btn"
-										// onClick={::this.openSetMenu}
-									    // onBlur={::this.closeSetMenu}
-									    ref="open_set_btn">
-										<h1 className="set_name"
-											ref="set_name"><span className="set_hash">#</span>{learn_set.title.toLowerCase()}</h1>
-										<span>
-											<img className="dropdown_menu_icon icon" 
-											 src={dropdown_icon}/>
-										</span>
-								</Link>
-						</span>						
-						: null } 
-						<span className="header-block header-right">
+							{ !fetchingLearn && loc.pathname.indexOf('/learn') !== -1 ? 
+							<span className="open_set_container set_name_wrapper"
+							      ref="set_name_wrapper">
+									<Link to={`/set/${set_id}`} className="open_set_btn"
+											// onClick={::this.openSetMenu}
+										    // onBlur={::this.closeSetMenu}
+										    ref="open_set_btn">
+											<h1 className="set_name"
+												ref="set_name"><span className="set_hash">#</span>{learn_set.title.toLowerCase()}</h1>
+											<span>
+												<img className="dropdown_menu_icon icon" 
+												 src={dropdown_icon}/>
+											</span>
+									</Link>
+							</span>						
+							: null }
+						</div>
+						<div className="header_user">
 							<div className="button-group">
 								<Avatar {...this.props}/>								
 							</div>
-						</span>
+						</div>
 					</div>
-				</nav>
+				</div>
 			</div>
 		);
 	}

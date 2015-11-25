@@ -78,8 +78,9 @@ export default class SearchBox extends Component {
 		const { loc, searching } = this.props;
 		const searchIcon = require('../assets/SearchIcon.png');
 		return(
-			<div className="input-button-group predictive-search">
-				<button className="button button-inline button-with-icon iconisInNav search_button">
+			<form className="header_search">
+				<button className="search_btn_component">	
+					<span className="search_btn_content">
 					{
 						searching
 						?
@@ -105,14 +106,18 @@ export default class SearchBox extends Component {
 						<img className="search-icon svg-icon" src={searchIcon}></img>
 						: null
 					}
-				</button>
-				<input className="text-input search-input input-rounded"
-					   placeholder="Search"
-					   value={this.state.value}
-					   onChange={::this.handleSearchInput}
-					   onKeyDown={(e) => { if(e.which === 13) { ::this.handleSearchSubmit() } } }
-				/>										
-			</div>
+					</span>
+				</button>	
+				
+				<div className="input_container">
+					<input className="search_input" 
+							value={this.state.value}
+							onChange={::this.handleSearchInput}
+							onKeyDown={(e) => { if(e.which === 13) { ::this.handleSearchSubmit() } } }/>
+				</div>
+			</form>	
 		);
 	}
 }
+
+

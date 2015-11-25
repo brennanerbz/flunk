@@ -1,10 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-
-let styles = {
-	marginTop: "200px",
-	marginLeft: "200px"
-}
+require('./LandingPage.scss')
 
 export default class LandingPage extends Component {
 	constructor(props, context) {
@@ -17,8 +13,19 @@ export default class LandingPage extends Component {
 
 	render() {
 		return(
-			<div className={styles}>
-				
+			<div className="landing_page">
+				<div className="landing_page_container">
+					<h1> Landing Page </h1>
+					<h1> Landing Page </h1>
+					<h1> Landing Page </h1>
+					<h1> Landing Page </h1>
+					<h1> Landing Page </h1>
+					<h1> Landing Page </h1>
+					<h1> Landing Page </h1>
+					<h1> Landing Page </h1>
+					<h1> Landing Page </h1>
+					<h1> Landing Page </h1>
+				</div>
 			</div>
 		);
 	}

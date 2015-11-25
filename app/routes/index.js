@@ -1,8 +1,11 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
+import { pushState } from 'redux-router';
 
 /* Routes */
 import FlunkApp from './App';
+import Index from './Index/Index';
+
 import LandingPage from './LandingPage/LandingPage';
 import Home from './Home/Home';
 import CreateSet from './CreateSet/CreateSet';
@@ -12,14 +15,15 @@ import SetView from './Set/Set';
 import Search from './Search/Search';
 import ErrorPage from './ErrorPage/ErrorPage';
 
-import fillStore from '../utils/fillStore';
+import fillStore from '../utils/fillStore'; 
 
 const routes = (
   <Route component={FlunkApp}>
-    <Route path="/" component={Home} />
+
+    <Route path="/" component={Index}/>
     
     <Route path='set/:id' component={SetView}/>
-    <Route path="profile/:id" component={Profile}/>     
+    <Route path="profile/:id" component={Profile} />     
 
     <Route path="createset" component={CreateSet} />
     <Route path="createset/:id" component={CreateSet}/>
@@ -33,6 +37,7 @@ const routes = (
     <Route path="*" component={ErrorPage}/>
   </Route>
 );
+ 
 
 function walk(routes, cb) {
   cb(routes);
@@ -46,13 +51,14 @@ function walk(routes, cb) {
 /* Parent: ../Root.js */
 export default (store, client) => {
   return walk(Route.createRouteFromReactElement(routes), route => {
-    route.onEnter = (nextState, transition) => {
-      // const loggedIn = !!store.getState().auth.token;
-      // if (route.requireAuth && !loggedIn) {
-      //   transition.to(...redirectBackAfter('/login', nextState));
-      if (client) {
-        fillStore(store, nextState, [route.component]);
+    route.onEnter = function requireAuth(nextState, replaceState) {
+      if(route.requireAuth && !store.getState().user.logged_in) {
+        replaceState({ nextPathname: nextState.location.pathname }, '/')
       }
-    };
+    }
   });
 };
+// <Route path="/">
+//   <Route component={LandingPage}/>
+//   <Route component={Home}/>
+// </Route>

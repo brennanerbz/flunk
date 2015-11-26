@@ -461,10 +461,6 @@ $width: 70px;
 		}
 	}
 	&.sign_in_button {
-		color: white;
-		text-shadow: none;
-		background: #4182F7;
-		border: 1px solid #3E82F7;
 		margin-right: 10px;
 	}
 	&.upload_button {
@@ -481,9 +477,10 @@ $width: 70px;
 		}
 	}
 	&.primary {
-		background: #4182F7;
+		background: #5596E7;
 		color: #fff;
-		border: 1px solid #3779EE;
+		text-shadow:0 1px 0 rgba(0,0,0,.2);
+		border: 1px solid #498ADA;
 	}
 }
 :global .button-primary {

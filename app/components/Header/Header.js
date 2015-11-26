@@ -152,7 +152,7 @@ export default class Header extends Component {
 										logged_in
 										?
 										<Avatar {...this.props}/>
-										: <button className="button sign_in_button"
+										: <button className="button sign_in_button primary"
 										 		  onClick={() => pushState(null, '/sign-in')}>
 										 		  Sign in
 										 </button>	

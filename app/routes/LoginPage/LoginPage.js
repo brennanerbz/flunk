@@ -41,7 +41,7 @@ export default class LogInPage extends Component {
 						</div>
 						<div className="card">
 							<div className="user_info">
-								<img src={account}/>
+								
 							</div>
 							<form className="sign_in">
 								<input className=""

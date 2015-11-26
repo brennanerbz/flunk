@@ -7,6 +7,8 @@ import FlunkApp from './App';
 import Index from './Index/Index';
 
 import LandingPage from './LandingPage/LandingPage';
+import LoginPage from './LoginPage/LoginPage';
+
 import Home from './Home/Home';
 import CreateSet from './CreateSet/CreateSet';
 import Profile from './Profile/Profile';
@@ -23,6 +25,7 @@ const routes = (
     <Route path="/" component={Index}/>
 
     <Route path="landing" component={LandingPage}/>
+    <Route path="sign-in" component={LoginPage}/>
     
     <Route path='set/:id' component={SetView}/>
     <Route path="profile/:id" component={Profile} />     

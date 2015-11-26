@@ -16,15 +16,15 @@ export default class LandingPage extends Component {
 			  f_icon = require('../../assets/facebook_logo.png'),
 			  library = require('../../assets/library-plus.png'),
 			  edit = require('../../assets/edit.png'),
-			  group = require('../../assets/group.png'),
+			  upload = require('../../assets/upload.png'),
 			  iphone = require('../../assets/acuitIphone.png');
 		return(		
 			<div className="landing_page">
 				<div className="landing_page_container">
 					<div className="top">
 						<div className="message">
-							<h1>A simple tool to study anything.</h1>
-							<p>The easiest way to learn is finally here.<br/> Meet the world's most effective study tool.</p>
+							<h1>A simple tool to learn anything.</h1>
+							<p>Flunk is a smart learning tool that makes <br/> learning simpler, more pleasant, and more productive.</p>
 							<div className="sign_up_group">
 								<button className="google_button button">
 									<img className="icon" 
@@ -48,31 +48,31 @@ export default class LandingPage extends Component {
 							<div className=" feature_col">
 								<div className="feature_header">
 									<img className="icon"
+										 src={upload}/>
+									Upload
+								</div>
+								<div className="feature_content">
+									Flunk can instantly transform anything you upload into a study set. 
+								</div>
+							</div>
+							<div className=" feature_col top-to-bottom">
+								<div className="feature_header">
+									<img className="icon"
 										 src={library}/>
 									Create
 								</div>
 								<div className="feature_content">
-									Easily create a study set with the exact content you need to know or search to see if it’s already done.
+									Easily enter the material you need to know. Creating a study set is easy. 
 								</div>
 							</div>
-							<div className=" feature_col top-to-bottom">
+							<div className=" feature_col">
 								<div className="feature_header">
 									<img className="icon"
 										 src={edit}/>
 									Learn
 								</div>
 								<div className="feature_content">
-									Have fast, effective study sessions with adaptive flashcards. The last study tool you’ll ever need.
-								</div>
-							</div>
-							<div className=" feature_col">
-								<div className="feature_header">
-									<img className="icon"
-										 src={group}/>
-									Share
-								</div>
-								<div className="feature_content">
-									Send a study set or concept to your friends with one link— even if they don’t have an account.
+									Learn with assistive hints, examples and step-by-step feedback.
 								</div>
 							</div>
 						</div>

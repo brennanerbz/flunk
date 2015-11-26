@@ -16,6 +16,7 @@ import Menu from '../Menu/Menu';
 	loc: state.router.location,
 	sets: state.sets.sets,
 	user: state.user.user,
+	logged_in: state.user.logged_in,
 	current_sequence: state.learn.current_sequence,
 	learn_set: state.learn.current_sequence.set,
 	set_id: state.learn.current_sequence.set_id,
@@ -81,7 +82,8 @@ export default class Header extends Component {
 			  	fetchingLearn,
 			  	learn_set,
 			  	set_id,
-			  	pushState
+			  	pushState,
+			  	logged_in
 			  } = this.props;
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
@@ -140,7 +142,16 @@ export default class Header extends Component {
 						</div>
 						<div className="header_user">
 							<div className="button-group">
-								<Avatar {...this.props}/>								
+								<button className="button upload_button">Upload</button>
+								{
+									logged_in
+									?
+									<Avatar {...this.props}/>
+									: <button className="button sign_in_button"
+									 		  onClick={() => pushState(null, '/sign-in')}>
+									 		  Sign in
+									 </button>	
+								}
 							</div>
 						</div>
 					</div>

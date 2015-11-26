@@ -28,6 +28,15 @@ label, input {
     line-height: 24px;
 }
 
+input {
+	border:1px solid #ccc;
+	outline: none;
+	border-radius: 2px;
+	&:focus {
+		border-color: #498dff;
+	}
+}
+
 :global .bold {
 	font-weight: 700!important;
 }
@@ -410,7 +419,7 @@ $width: 70px;
 	padding: 0px 17px;
 	color: rgba(0, 0, 0, 0.44);
 	background: transparent none repeat scroll 0% 0%;
-	font-size: 15px;
+	font-size: 14px;
 	text-align: center;
 	text-decoration: none;
 	cursor: pointer;
@@ -430,7 +439,6 @@ $width: 70px;
 	line-height: 30px;
 	-webkit-transition: 0.1s ease-in-out;
 	transition: 0.1s ease-in-out;
-	text-shadow: 0 1px 1px rgba(0,0,0,.1)!important;
 	&:hover {		
 		-moz-transition:  0.1 ease-in-out;
 		transition: 0.1 ease-in-out;
@@ -447,6 +455,31 @@ $width: 70px;
 		&:hover {
 			box-shadow: none;
 		}
+	}
+	&.sign_in_button {
+		color: white;
+		text-shadow: none;
+		background: #4182F7;
+		border: 1px solid #3E82F7;
+		margin-right: 10px;
+	}
+	&.upload_button {
+		color: #555459;
+		background: #F8F8F8;
+		border: 1px solid #D3D3D3;
+		margin-right: 10px;
+		text-shadow: none;
+		&:hover {
+			box-shadow: none;
+			// color: #32A2E6;
+			border: 1px solid #ccc;
+			background: #f1f1f1;
+		}
+	}
+	&.primary {
+		background: #4083FB;
+		color: #fff;
+		border: 1px solid #3779EE;
 	}
 }
 :global .button-primary {
@@ -617,7 +650,6 @@ button:focus, input[type="button"]:focus {
 
 :global .button-group {
 	.button {
-		margin-right: -5px;
 		vertical-align: middle;
 	}
 	.button-circle {

@@ -29,45 +29,6 @@
 					font-size: 16px;
 					margin-top: 1em;
 				}
-				.sign_up_group {
-					margin-top: 2.5em;
-					button {
-						color: #fff;
-						text-shadow: none;
-						font-weight: 400;
-						font-size: 14px!important;
-						letter-spacing: 0.02em;
-						position: relative;
-						padding-left: 45px;
-						&:last-child {
-							margin-left: 20px;
-						}
-						&.google_button {
-							background: #DC4E41;
-							border: 1px solid #D35039;
-						}
-						&.facebook_button {
-							background: #3F5A9A;
-							border: 1px solid #345090;
-							padding-left: 40px;
-							padding-right: 17px;
-							img {
-								height: 20px;
-								bottom: 0;
-								left: 10px;
-								padding-right: 10px;
-							}
-						}
-						img {
-							opacity: 1;
-							position: absolute;
-							left: 5px;
-							top: 5px;
-							border-right: 1px solid rgba(0, 0, 0, 0.10);
-							padding-right: 5px;
-						}
-					}
-				}
 			}
 			.phone {
 				display: table-cell;
@@ -146,6 +107,47 @@
 			.right {
 				float: right;
 			}
+		}
+	}
+}
+
+.sign_up_group {
+	margin-top: 2.5em;
+	button {
+		color: #fff;
+		min-width: 201px;
+		text-shadow: none;
+		font-weight: 400;
+		font-size: 14px!important;
+		letter-spacing: 0.02em;
+		position: relative;
+		padding-left: 45px;
+		&:last-child {
+			margin-left: 20px;
+		}
+		&.google_button {
+			background: #DC4E41;
+			border: 1px solid #D35039;
+		}
+		&.facebook_button {
+			background: #3F5A9A;
+			border: 1px solid #345090;
+			padding-left: 40px;
+			padding-right: 17px;
+			img {
+				height: 20px;
+				bottom: 0;
+				left: 10px;
+				padding-right: 10px;
+			}
+		}
+		img {
+			opacity: 1;
+			position: absolute;
+			left: 5px;
+			top: 5px;
+			border-right: 1px solid rgba(0, 0, 0, 0.10);
+			padding-right: 5px;
 		}
 	}
 }

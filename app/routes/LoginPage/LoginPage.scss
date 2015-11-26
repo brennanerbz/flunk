@@ -16,11 +16,12 @@
 			.card {
 				padding-bottom: 60px;
 				padding-top: 40px;
+				border: none;
 			}
 			.user_info {
-				margin-bottom: 10px;
+				margin-bottom: 20px;
 				img {
-					height: 99px;
+					height: 85px;
 				}
 			}
 			.sign_in {
@@ -56,6 +57,7 @@
 			}
 			.logo {
 				margin-bottom: 20px;
+				cursor: pointer;
 				img {
 					height: 25px;
 				}

@@ -88,74 +88,81 @@ export default class Header extends Component {
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
 		return(
-			<div className="header_positioner">
-				<div className={classnames("header_container", 
-					{'no_border': loc.pathname.indexOf('createset') !== -1 ? true : false })}>				
-					<div className='header'>
-						{ 
-							isFetching || fetchingLearn
-							? null
-							// ? <span className="loading_line"></span>
-							: null
-						}
-						<div className="header_logo">
-							<Link className="site-logo" to="/">						
-									<img className={classnames("site_icon")} 
-										 src={logo} />
-							</Link>
-						</div>
-						<div className="header_content">
-							{
-								loc.pathname.indexOf('/createset') !== -1
+			<div>
+			{
+				loc.pathname.indexOf('sign-in') !== -1
+				? null
+				:
+				<div className="header_positioner">
+					<div className={classnames("header_container", 
+						{'no_border': loc.pathname.indexOf('createset') !== -1 ? true : false })}>				
+						<div className='header'>
+							{ 
+								isFetching || fetchingLearn
 								? null
-								: <SearchBox {...this.props}/>
+								// ? <span className="loading_line"></span>
+								: null
 							}
-							{
-								loc.pathname.indexOf('/learn') !== -1 || loc.pathname.indexOf('/createset') !==  -1
-								? null
-								: <button className="create_set_btn_group"
-										  onClick={() => { 
-										  	pushState(null, '/createset') 
-										  }}>
-										<img className="create_icon" src={create_icon}/>
-										<Link className="button create-set-button button-outline" to="">
-														Create a study set					
-										</Link>	
-								  </button>
-							}
-							{ !fetchingLearn && loc.pathname.indexOf('/learn') !== -1 ? 
-							<span className="open_set_container set_name_wrapper"
-							      ref="set_name_wrapper">
-									<Link to={`/set/${set_id}`} className="open_set_btn"
-											// onClick={::this.openSetMenu}
-										    // onBlur={::this.closeSetMenu}
-										    ref="open_set_btn">
-											<h1 className="set_name"
-												ref="set_name"><span className="set_hash">#</span>{learn_set.title.toLowerCase()}</h1>
-											<span>
-												<img className="dropdown_menu_icon icon" 
-												 src={dropdown_icon}/>
-											</span>
-									</Link>
-							</span>						
-							: null }
-						</div>
-						<div className="header_user">
-							<div className="button-group">
-								<button className="button upload_button">Upload</button>
+							<div className="header_logo">
+								<Link className="site-logo" to="/">						
+										<img className={classnames("site_icon")} 
+											 src={logo} />
+								</Link>
+							</div>
+							<div className="header_content">
 								{
-									logged_in
-									?
-									<Avatar {...this.props}/>
-									: <button className="button sign_in_button"
-									 		  onClick={() => pushState(null, '/sign-in')}>
-									 		  Sign in
-									 </button>	
+									loc.pathname.indexOf('/createset') !== -1
+									? null
+									: <SearchBox {...this.props}/>
 								}
+								{
+									loc.pathname.indexOf('/learn') !== -1 || loc.pathname.indexOf('/createset') !==  -1
+									? null
+									: <button className="create_set_btn_group"
+											  onClick={() => { 
+											  	pushState(null, '/createset') 
+											  }}>
+											<img className="create_icon" src={create_icon}/>
+											<Link className="button create-set-button button-outline" to="">
+															Create a study set					
+											</Link>	
+									  </button>
+								}
+								{ !fetchingLearn && loc.pathname.indexOf('/learn') !== -1 ? 
+								<span className="open_set_container set_name_wrapper"
+								      ref="set_name_wrapper">
+										<Link to={`/set/${set_id}`} className="open_set_btn"
+												// onClick={::this.openSetMenu}
+											    // onBlur={::this.closeSetMenu}
+											    ref="open_set_btn">
+												<h1 className="set_name"
+													ref="set_name"><span className="set_hash">#</span>{learn_set.title.toLowerCase()}</h1>
+												<span>
+													<img className="dropdown_menu_icon icon" 
+													 src={dropdown_icon}/>
+												</span>
+										</Link>
+								</span>						
+								: null }
+							</div>
+							<div className="header_user">
+								<div className="button-group">
+									<button className="button upload_button">Upload</button>
+									{
+										logged_in
+										?
+										<Avatar {...this.props}/>
+										: <button className="button sign_in_button"
+										 		  onClick={() => pushState(null, '/sign-in')}>
+										 		  Sign in
+										 </button>	
+									}
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				}
 			</div>
 		);
 	}

@@ -35,7 +35,9 @@ input {
 	padding: 2px 6px;
 	height: 32px;
 	&:focus {
-		border-color: #498dff;
+		border: 1px solid #498DFF;
+		box-shadow: 0 0 7px rgba(39, 128, 248, .15);
+		outline: none;
 	}
 }
 
@@ -479,7 +481,7 @@ $width: 70px;
 		}
 	}
 	&.primary {
-		background: #4083FB;
+		background: #4182F7;
 		color: #fff;
 		border: 1px solid #3779EE;
 	}

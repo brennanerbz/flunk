@@ -62,16 +62,17 @@ export default class LogInPage extends Component {
 								<button className="google_button button">
 									<img className="icon" 
 										 src={g_icon}/>
-									Sign up with Google
+									Sign in with Google
 								</button>
 								<button className="facebook_button button">
 									<img className="icon"
 										 src={f_icon}/>
-									Sign up with Facebook
+									Sign in with Facebook
 								</button>
 							</div>
 						</div>
 						<div className="backup">
+							Don't have an account? &nbsp;
 							<a className="link">Create account</a>
 						</div>
 					</div>

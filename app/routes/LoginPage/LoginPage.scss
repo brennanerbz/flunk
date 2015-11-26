@@ -1,6 +1,6 @@
 .sign_in_page_container {
 	position: absolute;
-	top: 60px;
+	top: 0px;
 	bottom: 0;
 	width: 100%;
 	.sign_in_page {
@@ -12,9 +12,9 @@
 		font-family: "Open Sans";
 		padding-top: 4em;
 		.sign_in_content {
-			min-width: 285px;
+			min-width: 350px;
 			.card {
-				padding-bottom: 40px;
+				padding-bottom: 60px;
 				padding-top: 40px;
 			}
 			.user_info {
@@ -26,7 +26,7 @@
 			.sign_in {
 				margin-bottom: 20px;
 				input, button {
-					min-width: 201px;
+					min-width: 255px;
 				}
 				input {
 					margin-bottom: 10px;
@@ -35,9 +35,19 @@
 					display: block;
 				}
 			}
+			.day_divider {
+				margin: 0rem 0px 0 0;
+				padding: 0.5rem 16px 0.5rem 1.5rem;
+				min-width: 0;
+				.day_divider_label {
+					font-weight: 400;
+				}
+			}
 			.sign_up_group {
+				margin-top: 20px;
 				button {
 					display: block;
+					min-width: 255px;
 					&:last-child {
 						margin: 0;
 						margin-top: 10px;
@@ -45,15 +55,20 @@
 				}
 			}
 			.logo {
+				margin-bottom: 20px;
 				img {
 					height: 25px;
 				}
+			}
+			.instruction {
+				margin-bottom: 25px;
+				font-size: 18px;
 			}
 		}
 		.sign_in_content, 
 		.sign_up_group, 
 		.logo, .backup, .user_info,
-		.sign_in {
+		.sign_in, .instruction{
 			display: table;
 			margin: 0 auto;
 		}

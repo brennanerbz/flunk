@@ -32,6 +32,8 @@ input {
 	border:1px solid #ccc;
 	outline: none;
 	border-radius: 2px;
+	padding: 2px 6px;
+	height: 32px;
 	&:focus {
 		border-color: #498dff;
 	}

@@ -1,11 +1,17 @@
 .landing_page {
-	position: relative;
+	position: absolute;
 	top: 60px;
+	bottom: 0;
+	width: 100%;
 	.landing_page_container {
 		margin: 0 auto;
-		max-width: 1150px;
-		border: 1px solid red;
+		min-width: 905px!important;
+		max-width: 1200px;
+		padding-left: 50px;
+		padding-right: 50px;
+		// border: 1px solid red;
 		font-family: "Open Sans";
+		padding-top: 4em;
 		.top {
 			display: table;
 			position: relative;
@@ -13,6 +19,7 @@
 			.message {
 				display: table-cell;
 				text-align: left;
+				float: left;
 				h1 {
 					font-weight: 400;
 					font-size: 28px;
@@ -20,13 +27,15 @@
 				p {
 					font-weight: 300;
 					font-size: 16px;
+					margin-top: 1em;
 				}
 				.sign_up_group {
+					margin-top: 2.5em;
 					button {
 						color: #fff;
 						text-shadow: none;
 						font-weight: 400;
-						font-size: 13.5px!important;
+						font-size: 14px!important;
 						letter-spacing: 0.02em;
 						position: relative;
 						padding-left: 45px;
@@ -53,7 +62,7 @@
 							opacity: 1;
 							position: absolute;
 							left: 5px;
-							top: 8px;
+							top: 5px;
 							border-right: 1px solid rgba(0, 0, 0, 0.10);
 							padding-right: 5px;
 						}
@@ -62,14 +71,20 @@
 			}
 			.phone {
 				display: table-cell;
-				position: absolute;
-				right: 0;
+				float: right;
+				img {
+					height: 288px;
+				}
 			}
 		}
 		.bottom {
 			.features {
+				width: 100%;
 				.feature_col {
 					text-align: center;
+					padding: 0 3em;
+					width: 33.33333%;
+					float: left;
 					&.top-to-bottom {
 					    border-width: 1px;
 					    border-style: solid;
@@ -84,12 +99,54 @@
 					    border-image:
 					      linear-gradient(to bottom, #B5B5B5, rgba(0, 0, 0, 0)) 1 100%;
 					}
+					.feature_header {
+						font-size: 18px;
+						img {
+							margin-right: 10px;
+						}
+					}
+					.feature_content {
+						margin: 0 auto;
+						margin-top: 1.5em;
+						// text-align: left;
+						font-size: 15px;
+						font-weight: 400;
+					}
 				}
 			}
 		}
 	}
 	.footer {
-
+		position: absolute;
+		width: 100%;
+		bottom: 0;
+		background: #F2F2F2;
+		border-top: 1px solid #e4e4e4;
+		padding-left: 30px;
+		padding-right: 30px;
+		ul {
+			position: relative;
+			margin: 0;
+			.left, .right {
+				font-size: 14px;
+				position: relative;
+				a {
+					color: #555459;
+					margin: 10px;
+					display: inline-block;
+					cursor: pointer;
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+			}
+			.left {
+				float: left;
+			}
+			.right {
+				float: right;
+			}
+		}
 	}
 }
 

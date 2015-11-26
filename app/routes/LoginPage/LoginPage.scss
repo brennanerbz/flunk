@@ -10,7 +10,7 @@
 		padding-left: 50px;
 		padding-right: 50px;
 		font-family: "Open Sans";
-		padding-top: 7em;
+		padding-top: 8em;
 		.sign_in_content {
 			min-width: 350px;
 			.card {
@@ -64,7 +64,7 @@
 			}
 			.instruction {
 				margin-bottom: 25px;
-				font-size: 18px;
+				font-size: 20px;
 			}
 		}
 		.sign_in_content, 
@@ -73,6 +73,22 @@
 		.sign_in, .instruction{
 			display: table;
 			margin: 0 auto;
+		}
+	}
+	.close {
+		position: absolute;
+		right: 75px;
+		top: 30px;
+		height: 48px;
+		width: 48px;
+		border-radius: 999em;
+		display: table;
+		margin: 0 auto;
+		font-size: 14px;
+		padding-top: 12px;
+		padding-left: 12px;
+		&:hover {
+			background: #ccc;
 		}
 	}	
 }

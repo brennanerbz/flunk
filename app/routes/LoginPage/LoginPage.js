@@ -10,7 +10,8 @@ import { pushState } from 'redux-router';
 
 @connect(state => ({
 	user: state.user.user,
-	logged_in: state.user.logged_in
+	logged_in: state.user.logged_in,
+	router: state.router
 	}), 
 	dispatch => ({
 		...bindActionCreators({
@@ -27,7 +28,8 @@ export default class LogInPage extends Component {
 			  account = require('../../assets/empty_account_2.png'),
 			  g_icon = require('../../assets/google_logo.png'),
 			  f_icon = require('../../assets/facebook_logo.png'),
-			  { pushState } = this.props;
+			  { pushState, router } = this.props;
+		console.log(router)
 		return(
 			<div className="sign_in_page_container">
 				<div className="sign_in_page">
@@ -75,6 +77,12 @@ export default class LogInPage extends Component {
 							Don't have an account? &nbsp;
 							<a className="link">Create account</a>
 						</div>
+					</div>
+				</div>
+				<div className="close"
+					 onClick={() => pushState(null, '/landing')}>
+					<div className="close_icon material-icons">
+						clear
 					</div>
 				</div>
 			</div>

@@ -10,16 +10,17 @@
 		padding-left: 50px;
 		padding-right: 50px;
 		font-family: "Open Sans";
-		padding-top: 8em;
+		padding-top: 2.5em;
 		.sign_in_content {
-			min-width: 350px;
+			min-width: 315px;
 			.card {
-				padding-bottom: 30px;
-				padding-top: 10px;
-				border: none;
+				padding-bottom: 40px;
+				padding-top: 30px;
+				margin-bottom: 30px;
+				// border: none;
 			}
 			.user_info {
-				margin-bottom: 5px;
+				margin-bottom: 20px;
 				img {
 					height: 85px;
 				}
@@ -27,7 +28,7 @@
 			.sign_in {
 				margin-bottom: 20px;
 				input, button {
-					min-width: 255px;
+					min-width: 240px;
 				}
 				input {
 					margin-bottom: 10px;
@@ -37,7 +38,7 @@
 				}
 			}
 			.day_divider {
-				margin: 0rem 0px 0 0;
+				margin: 0rem 45px 0 45px;
 				padding: 0.5rem 16px 0.5rem 1.5rem;
 				min-width: 0;
 				.day_divider_label {
@@ -48,7 +49,7 @@
 				margin-top: 20px;
 				button {
 					display: block;
-					min-width: 255px;
+					min-width: 240px;
 					&:last-child {
 						margin: 0;
 						margin-top: 10px;
@@ -56,15 +57,17 @@
 				}
 			}
 			.logo {
-				margin-bottom: 20px;
+				margin-bottom: 45px;
 				cursor: pointer;
 				img {
 					height: 25px;
 				}
 			}
 			.instruction {
-				margin-bottom: 25px;
-				font-size: 20px;
+				margin-bottom: 45px;
+				font-size: 26px;
+				font-family: "Open Sans";
+				font-weight: 300;
 			}
 		}
 		.sign_in_content, 
@@ -73,6 +76,9 @@
 		.sign_in, .instruction{
 			display: table;
 			margin: 0 auto;
+		}
+		.backup {
+			font-size: 14px;
 		}
 	}
 	.close {

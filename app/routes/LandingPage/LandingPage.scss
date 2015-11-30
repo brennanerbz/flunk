@@ -112,19 +112,19 @@
 }
 
 .sign_up_group {
-	margin-top: 2.5em;
+	margin-top: 2em;
 	button {
 		color: #fff;
-		min-width: 201px;
+		min-width: 225px;
 		text-shadow: none;
 		font-weight: 400;
 		font-size: 14px!important;
 		letter-spacing: 0.02em;
 		position: relative;
-		padding-left: 45px;
-		&:last-child {
-			margin-left: 20px;
-		}
+		padding-left: 23px;
+		// &:last-child {
+		// 	margin-left: 20px;
+		// }
 		&.google_button {
 			background: #DC4E41;
 			border: 1px solid #D35039;
@@ -135,21 +135,62 @@
 			padding-left: 40px;
 			padding-right: 17px;
 			img {
-				height: 20px;
-				bottom: 0;
-				left: 10px;
-				padding-right: 10px;
+				height: 26px;
+			    bottom: 1px;
+			    left: 13px;
+			    padding-right: 15px;
 			}
 		}
 		img {
 			opacity: 1;
 			position: absolute;
-			left: 5px;
+			left: 8px;
 			top: 5px;
 			border-right: 1px solid rgba(0, 0, 0, 0.10);
-			padding-right: 5px;
+			padding-right: 8px;
 		}
 	}
+}
+
+.typed-cursor{
+    opacity: 1;
+    -webkit-animation: blink 0.7s infinite;
+    -moz-animation: blink 0.7s infinite;
+    animation: blink 0.7s infinite;
+}
+@keyframes blink{
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+@-webkit-keyframes blink{
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+@-moz-keyframes blink{
+    0% { opacity:1; }
+    50% { opacity:0; }
+    100% { opacity:1; }
+}
+
+.wrap{
+	max-width: 600px;
+	margin:150px auto;
+}
+
+.type-wrap{
+	margin:10px auto;
+	padding:20px;
+	background:#f0f0f0;
+	border-radius:5px;
+	border:#CCC 1px solid;
+}
+
+.links{
+	margin:20px 0;
+	font-size: 0.75em;
+	text-align: center;
 }
 
 // border: 1px solid -webkit-linear-gradient(bottom, red , blue); 

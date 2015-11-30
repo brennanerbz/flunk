@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import typed from '../../libs/typed';
 require('./LandingPage.scss')
 
 export default class LandingPage extends Component {
@@ -10,6 +11,19 @@ export default class LandingPage extends Component {
 	static propTypes = {
 		
 	}
+
+	// componentDidMount() {
+	// 	$(function(){
+	//         $(".message_typed").typed({
+	//             strings: [" teachers,^1000", " tests,^1000", " school,^1000"],
+	//             typeSpeed: 50,
+	//             backSpeed: 50,
+	//             startDelay: 500,
+	//             showCursor: true
+	//             // loop: true
+	//         });
+	//     });
+	// }
 
 	render() {
 		const g_icon = require('../../assets/google_logo.png'),
@@ -23,19 +37,11 @@ export default class LandingPage extends Component {
 				<div className="landing_page_container">
 					<div className="top">
 						<div className="message">
-							<h1>A simple tool to learn anything.</h1>
+							<h1 className="">Outsmarting
+								<span className="message_typed"> school, </span>together</h1>
 							<p>Flunk is a smart learning tool that makes <br/> learning simpler, more pleasant, and more productive.</p>
 							<div className="sign_up_group">
-								<button className="google_button button">
-									<img className="icon" 
-										 src={g_icon}/>
-									Sign up with Google
-								</button>
-								<button className="facebook_button button">
-									<img className="icon"
-										 src={f_icon}/>
-									Sign up with Facebook
-								</button>
+								<button className="button primary">Sign Up</button>
 							</div>
 						</div>
 						<div className="phone">
@@ -94,3 +100,14 @@ export default class LandingPage extends Component {
 		);
 	}
 }
+
+// <button className="google_button button">
+// 	<img className="icon" 
+// 		 src={g_icon}/>
+// 	Sign up with Google
+// </button>
+// <button className="facebook_button button">
+// 	<img className="icon"
+// 		 src={f_icon}/>
+// 	Sign up with Facebook
+// </button>

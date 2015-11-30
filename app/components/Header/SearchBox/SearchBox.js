@@ -25,7 +25,8 @@ export default class SearchBox extends Component {
 
 	state = {
 		value: '',
-		focused: false
+		focused: false,
+		hover: false
 	}
 
 	componentDidMount() {
@@ -78,10 +79,13 @@ export default class SearchBox extends Component {
 
 	render() {
 		const { loc, searching } = this.props;
-		const searchIcon = require('../assets/SearchIcon.png');
+		const searchIcon = require('../assets/SearchIcon.png'),
+			  whiteSearchIcon = require('../assets/whiteSearchIcon.png');
 		return(
 			<div className="header_search">
-				<button className="search_btn_component">	
+				<button className={classnames("search_btn_component", {
+					"focused": this.state.focused
+				})}>	
 					<span className="search_btn_content">
 					{
 						searching
@@ -105,15 +109,19 @@ export default class SearchBox extends Component {
 					{
 						!searching
 						?
-						<img className="search-icon svg-icon" src={searchIcon}></img>
+						<img className="search-icon svg-icon" 
+							 src={this.state.focused ? whiteSearchIcon : searchIcon}></img>
 						: null
 					}
 					</span>
 				</button>	
 				
 				<div className={classnames("input_container", 
-					{'focused': this.state.focused})}>
+					{'focused': this.state.focused}, {"hover": this.state.hover})}>
 					<input className="search_input" 
+						    placeholder="Search"
+						    onMouseOver={() => this.setState({hover: true})}
+						    onMouseLeave={() => this.setState({hover: false})}
 							value={this.state.value}
 							onChange={::this.handleSearchInput}
 							onFocus={() => this.setState({

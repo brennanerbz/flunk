@@ -29,7 +29,6 @@ export default class LogInPage extends Component {
 			  g_icon = require('../../assets/google_logo.png'),
 			  f_icon = require('../../assets/facebook_logo.png'),
 			  { pushState, router } = this.props;
-		console.log(router)
 		return(
 			<div className="sign_in_page_container">
 				<div className="sign_in_page">
@@ -39,16 +38,15 @@ export default class LogInPage extends Component {
 							<img src={brand_logo}/>
 						</div>
 						<div className="instruction">
-							Sign into your account
+							Sign in
 						</div>
 						<div className="card">
 							<div className="user_info">
-								
 							</div>
 							<form className="sign_in">
 								<input className=""
 									   autoFocus={true}
-									   placeholder="Enter your e-mail"/>
+									   placeholder="Email"/>
 								<button className="button primary">
 									Next
 								</button>
@@ -57,7 +55,7 @@ export default class LogInPage extends Component {
 								<hr className="separator"/>
 								<i className="copy_only"/>
 								<div className="day_divider_label">
-									Or
+									or
 								</div>
 							</div>
 							<div className="sign_up_group">
@@ -74,7 +72,6 @@ export default class LogInPage extends Component {
 							</div>
 						</div>
 						<div className="backup">
-							Don't have an account? &nbsp;
 							<a className="link">Create account</a>
 						</div>
 					</div>

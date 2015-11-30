@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import typed from '../../libs/typed';
 require('./LandingPage.scss')
 
 export default class LandingPage extends Component {
@@ -11,19 +10,6 @@ export default class LandingPage extends Component {
 	static propTypes = {
 		
 	}
-
-	// componentDidMount() {
-	// 	$(function(){
-	//         $(".message_typed").typed({
-	//             strings: [" teachers,^1000", " tests,^1000", " school,^1000"],
-	//             typeSpeed: 50,
-	//             backSpeed: 50,
-	//             startDelay: 500,
-	//             showCursor: true
-	//             // loop: true
-	//         });
-	//     });
-	// }
 
 	render() {
 		const g_icon = require('../../assets/google_logo.png'),

@@ -66,7 +66,7 @@
                     position: relative;
                     display: inline-block;
                     padding-right: 0px;
-                    z-index: 700;
+                    z-index: 100;
                     border: 0px none;  
                     cursor: pointer; 
                     .site_icon {
@@ -302,11 +302,10 @@
 
 .log_in {
     .popover_blackout {
-        background: -webkit-linear-gradient(top,#000,transparent);
-        background: -moz-linear-gradient(top,#000,transparent);
-        background: -ms-linear-gradient(top,#000,transparent);
-        background: linear-gradient(to bottom,#000,transparent);
-        height: 50px;
+        background: -webkit-linear-gradient(top,#fff,transparent);
+        background: -moz-linear-gradient(top,#fff,transparent);
+        background: -ms-linear-gradient(top,#fff,transparent);
+        background: linear-gradient(to bottom,#fff,transparent);
         left: 0;
         opacity: 0;
         -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
@@ -314,11 +313,11 @@
         position: absolute;
         width: 100%;
         z-index: 200;
-        height: 600px;
-        opacity: 0.45;
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=45)";
-        filter: alpha(opacity=45);
-        top: 0;
+        height: 1250px;
+        opacity: 87.5;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=87.5)";
+        filter: alpha(opacity=87.5);
+        top: 55px;
     }
 }
 

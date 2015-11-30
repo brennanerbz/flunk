@@ -6,14 +6,53 @@
 	.landing_page_container {
 		margin: 0 auto;
 		min-width: 905px!important;
-		max-width: 1200px;
+		max-width: 1250px;
 		padding-left: 50px;
 		padding-right: 50px;
-		font-family: "Open Sans";
+		font-family: "Lato";
 		padding-top: 4em;
 		display: table;
 		.marketing_copy {
-			display: table-cell;
+			max-width: 745px;
+			margin-right: 105px;
+			h1 {
+				font-size: 32px;
+				font-weight: 300;
+			}
+			ul {
+				li {
+					&.copy_item {
+						position: relative;
+						display: block;
+						margin-bottom: 35px;
+						font-family: "Lato";
+						&:first-child {
+							margin-top: 50px;
+						}
+						img {
+							display: inline-block;
+							position: absolute;
+							height: 30px;
+							top: 5px;
+						}
+						.copy {
+							display: block;
+							margin-left: 80px;
+							p {
+								margin-bottom: 0!important;
+							}
+							.header {
+								font-weight: 700;
+								font-size: 18px;
+							}
+							.text {
+								font-weight: 300;
+								font-size: 17px;
+							}
+						}
+					}
+				}
+			}
 		}
 		.sign_up {
 			display: table-cell;

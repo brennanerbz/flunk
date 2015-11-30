@@ -13,24 +13,37 @@ export default class LandingPage extends Component {
 	}
 
 	render() {
-		const library = require('../../assets/library-plus.png'),
-			  edit = require('../../assets/edit.png'),
+		const compose = require('../../assets/compose.png'),
 			  upload = require('../../assets/upload.png'),
-			  iphone = require('../../assets/acuitIphone.png');
+			  steps = require('../../assets/steps.png');
 		return(		
 			<div className="landing_page">
 				<div className="landing_page_container">
 					<div className="marketing_copy">
-						<h1>A smart learning tool that makes learning simpler, more pleasant, and more productive.</h1>
+						<h1>A smart learning tool that lets you study anything, for free.</h1>
 						<ul className="copy_list">
 							<li className="copy_item">
-								Upload
+								<img className="big icon" src={upload}/>
+								<div className="copy">
+									<p className="header">Upload</p>
+									<p className="text">Flunk can instantly transform anything you upload into a study set.</p>
+								</div>
+								
 							</li>
 							<li className="copy_item">
-								Create
+								<img className="big icon" src={compose}/>
+								<div className="copy">
+
+									<p className="header">Create</p>
+									<p className="text">Easily enter the material you need to know. Creating a study set is easy.</p>
+								</div>
 							</li>
 							<li className="copy_item">
-								Learn
+								<img className="big icon" src={steps}/>
+								<div className="copy">
+									<p className="header">Learn</p>
+									<p className="text">Learn with assistive hints, examples and step-by-step feedback.</p>
+								</div>
 							</li>
 						</ul>
 					</div>

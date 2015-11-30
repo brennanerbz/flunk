@@ -56,9 +56,12 @@ function walk(routes, cb) {
 /* Parent: ../Root.js */
 export default (store, client) => {
   return walk(Route.createRouteFromReactElement(routes), route => {
-    route.onEnter = function requireAuth(nextState, replaceState) {
-      if(route.requireAuth && !store.getState().user.logged_in) {
-        replaceState({ nextPathname: nextState.location.pathname }, '/')
+    route.onEnter = (nextState, transition) => {
+      // const loggedIn = !!store.getState().auth.token;
+      // if (route.requireAuth && !loggedIn) {
+      //   transition.to(...redirectBackAfter('/login', nextState));
+      if (client) {
+        fillStore(store, nextState, [route.component]);
       }
     }
   });

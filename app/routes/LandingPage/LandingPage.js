@@ -23,8 +23,6 @@ export default class LandingPage extends Component {
 				<div className="landing_page_container">
 					<div className="top">
 						<div className="message">
-							<h1 className="">Outsmarting
-								<span className="message_typed"> school, </span>together</h1>
 							<p>Flunk is a smart learning tool that makes <br/> learning simpler, more pleasant, and more productive.</p>
 							<div className="sign_up_group">
 								<button className="button primary">Sign Up</button>

@@ -1,16 +1,28 @@
 .sign_up_container {
 	.card {
 		padding: 2.5em;
+		max-width: 350px;
+		.message {
+			h4 {
+				font-weight: 900;
+				letter-spacing: 0.02em;
+			}
+		}
 		.sign_up_form {
 			width: 100%;
 			input {
 				display: block;
 				width: 100%;
 				margin-top: 10px;
-				margin-bottom: 10px;
 				&:nth-child(2), &:first-child {
-					width: 50%;
+					width: 48%;
 					display: inline-block;
+				}
+				&:first-child {
+					margin-right: 10px;
+				}
+				&:last-child {
+					margin-bottom: 10px;
 				}
 			}
 			p {
@@ -23,18 +35,29 @@
 				}
 			}
 		}
+		.day_divider {
+			margin: 0rem 45px 0 45px;
+			padding: 0.5rem 16px 0.5rem 1.5rem;
+			min-width: 0;
+			.day_divider_label {
+				font-weight: 400;
+				color: #ccc;
+			}
+		}
 		.sign_up_group {
 			margin-top: 2em;
 			width: 100%;
 			button {
 				color: #fff;
 				min-width: 225px;
+				width: 100%;
 				text-shadow: none;
 				font-weight: 400;
 				font-size: 14px!important;
 				letter-spacing: 0.02em;
 				position: relative;
 				padding-left: 23px;
+				margin-bottom: 10px;
 				&.google_button {
 					background-image: linear-gradient(-180deg, #F87A6E 0%, #DC4E41 100%);
 					border-radius: 3px;

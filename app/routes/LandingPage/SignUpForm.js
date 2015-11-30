@@ -10,11 +10,11 @@ export default class SignUpForm extends Component {
 			  f_icon = require('../../assets/facebook_logo.png');
 		return(
 			<div className="sign_up_container">
-				<div className="message">
-					<h4>Sign Up</h4>
-					<p>It's free</p>
-				</div>
 				<div className="card">
+					<div className="message">
+						<h4>Sign Up</h4>
+						<p>It's free</p>
+					</div>
 					<div className="sign_up_group">
 						<button className="google_button button">
 							<img className="icon" 

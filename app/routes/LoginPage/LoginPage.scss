@@ -1,0 +1,100 @@
+.sign_in_page_container {
+	position: absolute;
+	top: 0px;
+	bottom: 0;
+	width: 100%;
+	.sign_in_page {
+		margin: 0 auto;
+		min-width: 905px!important;
+		max-width: 1200px;
+		padding-left: 50px;
+		padding-right: 50px;
+		font-family: "Open Sans";
+		padding-top: 2.5em;
+		.sign_in_content {
+			min-width: 315px;
+			.card {
+				padding-bottom: 40px;
+				padding-top: 30px;
+				margin-bottom: 30px;
+				// border: none;
+			}
+			.user_info {
+				margin-bottom: 20px;
+				img {
+					height: 85px;
+				}
+			}
+			.sign_in {
+				margin-bottom: 20px;
+				input, button {
+					min-width: 240px;
+				}
+				input {
+					margin-bottom: 10px;
+				}
+				button {
+					display: block;
+				}
+			}
+			.day_divider {
+				margin: 0rem 45px 0 45px;
+				padding: 0.5rem 16px 0.5rem 1.5rem;
+				min-width: 0;
+				.day_divider_label {
+					font-weight: 400;
+				}
+			}
+			.sign_up_group {
+				margin-top: 20px;
+				button {
+					display: block;
+					min-width: 240px;
+					&:last-child {
+						margin: 0;
+						margin-top: 10px;
+					}
+				}
+			}
+			.logo {
+				margin-bottom: 45px;
+				cursor: pointer;
+				img {
+					height: 25px;
+				}
+			}
+			.instruction {
+				margin-bottom: 45px;
+				font-size: 26px;
+				font-family: "Open Sans";
+				font-weight: 300;
+			}
+		}
+		.sign_in_content, 
+		.sign_up_group, 
+		.logo, .backup, .user_info,
+		.sign_in, .instruction{
+			display: table;
+			margin: 0 auto;
+		}
+		.backup {
+			font-size: 14px;
+		}
+	}
+	.close {
+		position: absolute;
+		right: 75px;
+		top: 30px;
+		height: 48px;
+		width: 48px;
+		border-radius: 999em;
+		display: table;
+		margin: 0 auto;
+		font-size: 14px;
+		padding-top: 12px;
+		padding-left: 12px;
+		&:hover {
+			background: #ccc;
+		}
+	}	
+}

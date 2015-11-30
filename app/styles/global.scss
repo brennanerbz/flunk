@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Roboto:400,300|Lato:900,700,400,300);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400|Roboto:400,300|Lato:900,700,400,300);
 
 @font-face {
   font-family: 'Calibri';
@@ -26,6 +26,20 @@ label, input {
     font-size: 1pc;
     font-weight: 400;
     line-height: 24px;
+}
+
+input {
+	border:1px solid #ccc;
+	outline: none;
+	border-radius: 2px;
+	padding: 2px 6px;
+	height: 32px;
+	font-family: "Lato";
+	&:focus {
+		border: 1px solid #498DFF;
+		box-shadow: 0 0 7px rgba(39, 128, 248, .15);
+		outline: none;
+	}
 }
 
 :global .bold {
@@ -235,7 +249,7 @@ label, input {
 	padding-left: 50px;
 	padding-right: 50px;
 	clear: both!important;
-	margin: 5rem auto!important;
+	margin: 4rem auto!important;
 }
 
 :global .float-left {
@@ -406,11 +420,11 @@ $width: 70px;
 :global .button {
 	display: inline-block;
 	position: relative;
-	height: 37px;
+	height: 32px;
 	padding: 0px 17px;
 	color: rgba(0, 0, 0, 0.44);
 	background: transparent none repeat scroll 0% 0%;
-	font-size: 15px;
+	font-size: 14px;
 	text-align: center;
 	text-decoration: none;
 	cursor: pointer;
@@ -419,7 +433,7 @@ $width: 70px;
 	white-space: nowrap;
 	-moz-user-select: none;
 	box-sizing: border-box;
-	border-radius: 4px;
+	border-radius: 2px;
 	font-family: "Lato";
 	letter-spacing: 0.003em;
 	font-weight: 400;
@@ -427,10 +441,9 @@ $width: 70px;
 	text-rendering: optimizelegibility;
 	-moz-osx-font-smoothing: grayscale;
 	font-feature-settings: "liga";
-	line-height: 35px;
+	line-height: 30px;
 	-webkit-transition: 0.1s ease-in-out;
 	transition: 0.1s ease-in-out;
-	text-shadow: 0 1px 1px rgba(0,0,0,.1)!important;
 	&:hover {		
 		-moz-transition:  0.1 ease-in-out;
 		transition: 0.1 ease-in-out;
@@ -447,6 +460,28 @@ $width: 70px;
 		&:hover {
 			box-shadow: none;
 		}
+	}
+	&.sign_in_button {
+		margin-right: 10px;
+	}
+	&.upload_button {
+		color: #555459;
+		background: #F8F8F8;
+		border: 1px solid #D3D3D3;
+		margin-right: 10px;
+		text-shadow: none;
+		&:hover {
+			box-shadow: none;
+			// color: #32A2E6;
+			border: 1px solid #ccc;
+			background: #f1f1f1;
+		}
+	}
+	&.primary {
+		background: #5596E7;
+		color: #fff;
+		text-shadow:0 1px 0 rgba(0,0,0,.2);
+		border: 1px solid #498ADA;
 	}
 }
 :global .button-primary {
@@ -617,7 +652,6 @@ button:focus, input[type="button"]:focus {
 
 :global .button-group {
 	.button {
-		margin-right: -5px;
 		vertical-align: middle;
 	}
 	.button-circle {

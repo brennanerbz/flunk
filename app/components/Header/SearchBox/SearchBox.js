@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as searchactions from '../../../actions/search'
 import { pushState } from 'redux-router';
+import classnames from 'classnames';
 
 @connect(state => ({
 	loc: state.router.location,
@@ -23,7 +24,9 @@ export default class SearchBox extends Component {
 	}
 
 	state = {
-		value: ''
+		value: '',
+		focused: false,
+		hover: false
 	}
 
 	componentDidMount() {
@@ -76,10 +79,14 @@ export default class SearchBox extends Component {
 
 	render() {
 		const { loc, searching } = this.props;
-		const searchIcon = require('../assets/SearchIcon.png');
+		const searchIcon = require('../assets/SearchIcon.png'),
+			  whiteSearchIcon = require('../assets/whiteSearchIcon.png');
 		return(
-			<div className="input-button-group predictive-search">
-				<button className="button button-inline button-with-icon iconisInNav search_button">
+			<div className="header_search">
+				<button className={classnames("search_btn_component", {
+					"focused": this.state.focused
+				})}>	
+					<span className="search_btn_content">
 					{
 						searching
 						?
@@ -102,17 +109,32 @@ export default class SearchBox extends Component {
 					{
 						!searching
 						?
-						<img className="search-icon svg-icon" src={searchIcon}></img>
+						<img className="search-icon svg-icon" 
+							 src={this.state.focused ? whiteSearchIcon : searchIcon}></img>
 						: null
 					}
-				</button>
-				<input className="text-input search-input input-rounded"
-					   placeholder="Search"
-					   value={this.state.value}
-					   onChange={::this.handleSearchInput}
-					   onKeyDown={(e) => { if(e.which === 13) { ::this.handleSearchSubmit() } } }
-				/>										
-			</div>
+					</span>
+				</button>	
+				
+				<div className={classnames("input_container", 
+					{'focused': this.state.focused}, {"hover": this.state.hover})}>
+					<input className="search_input" 
+						    placeholder="Search"
+						    onMouseOver={() => this.setState({hover: true})}
+						    onMouseLeave={() => this.setState({hover: false})}
+							value={this.state.value}
+							onChange={::this.handleSearchInput}
+							onFocus={() => this.setState({
+								focused: true
+							})}
+							onBlur={() => this.setState({
+								focused: false
+							})}
+							onKeyDown={(e) => { if(e.which === 13) { ::this.handleSearchSubmit() } } }/>
+				</div>
+			</div>	
 		);
 	}
 }
+
+

@@ -9,6 +9,9 @@ const styles = require('../styles/global.scss');
 import Header from '../components/Header/Header';
 import SideNav from '../components/SideNav/SideNav';
 
+import LandingPage from './LandingPage/LandingPage';
+import Home from './Home/Home';
+
 import * as actions from '../actions/usersets';
 import * as user from '../actions/user';
 
@@ -54,10 +57,10 @@ export default class FlunkApp extends Component {
 
 	render() {
 	const route = this.props.router.location.pathname;	
-		return(
+		return( 
 			<div>
 				<Header/>
-				{::this.renderSideNav()}				
+				{::this.renderSideNav()}
 				{this.props.children}
 			</div>
 		);

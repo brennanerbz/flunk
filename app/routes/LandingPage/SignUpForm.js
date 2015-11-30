@@ -19,6 +19,7 @@ export default class SignUpForm extends Component {
 				<div className="card">
 					<div className="message">
 						<h4>Sign Up</h4>
+						<p>It's free.</p>
 					</div>
 					<div className="sign_up_group">
 						<button className="google_button button">

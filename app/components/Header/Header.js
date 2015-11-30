@@ -10,7 +10,7 @@ import Notifications from './Notifications/Notifications';
 import SearchBox from './SearchBox/SearchBox';
 import Avatar from '../Avatar/Avatar';
 import Menu from '../Menu/Menu';
-
+import QuickLogIn from '../QuickLogIn/QuickLogIn';
 
 @connect(state => ({
 	loc: state.router.location,
@@ -37,7 +37,8 @@ export default class Header extends Component {
 
 	state = {
 		isSetMenuOpen: false,
-		choices: ['Go to set', 'Edit', 'Privacy settings', 'Mode']
+		choices: ['Go to set', 'Edit', 'Privacy settings', 'Mode'],
+		popover: false
 	}
 
 	openSetMenu() {
@@ -152,17 +153,27 @@ export default class Header extends Component {
 										logged_in
 										?
 										<Avatar {...this.props}/>
-										: <button className="button sign_in_button primary"
-										 		  onClick={() => pushState(null, '/sign-in')}>
-										 		  Log in
-										 </button>	
+										: 
+										<button className="button sign_in_button primary"
+										 		onClick={() => this.setState({ popover: true })}>
+										 		Log in
+										</button>	
 									}
 								</div>
 							</div>
 						</div>
+						{
+							this.state.popover
+							&&
+							<div className="popout log_in">
+								<QuickLogIn closePopout={() => this.setState({ popover: false })} />
+								<span className="popover_blackout">
+								</span>
+							</div>
+						}
 					</div>
 				</div>
-				}
+			}
 			</div>
 		);
 	}

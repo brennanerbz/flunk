@@ -42,6 +42,23 @@ input {
 	}
 }
 
+.google_button {
+	background-image: linear-gradient(-180deg, #F87A6E 0%, #DC4E41 100%);
+	border-radius: 3px;
+}
+.facebook_button {
+	background-image: linear-gradient(-180deg, #6B88C9 0%, #35508A 100%);
+	border-radius: 3px;
+	padding-left: 40px;
+	padding-right: 17px;
+	img {
+		height: 26px;
+	    bottom: 1px;
+	    left: 13px;
+	    padding-right: 15px;
+	}
+}
+
 :global .bold {
 	font-weight: 700!important;
 }

@@ -9,6 +9,7 @@
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     .header_container {
+        z-index: 300;
         background: #fff;
         border-bottom: 1px solid #e8e8e8;
         min-width: 905px;
@@ -299,6 +300,27 @@
     }
 }
 
+.log_in {
+    .popover_blackout {
+        background: -webkit-linear-gradient(top,#000,transparent);
+        background: -moz-linear-gradient(top,#000,transparent);
+        background: -ms-linear-gradient(top,#000,transparent);
+        background: linear-gradient(to bottom,#000,transparent);
+        height: 50px;
+        left: 0;
+        opacity: 0;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+        filter: alpha(opacity=0);
+        position: absolute;
+        width: 100%;
+        z-index: 200;
+        height: 600px;
+        opacity: 0.45;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=45)";
+        filter: alpha(opacity=45);
+        top: 0;
+    }
+}
 
 
 

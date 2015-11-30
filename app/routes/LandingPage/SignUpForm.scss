@@ -1,0 +1,65 @@
+.sign_up_container {
+	.card {
+		padding: 2.5em;
+		.sign_up_form {
+			width: 100%;
+			input {
+				display: block;
+				width: 100%;
+				margin-top: 10px;
+				margin-bottom: 10px;
+				&:nth-child(2), &:first-child {
+					width: 50%;
+					display: inline-block;
+				}
+			}
+			p {
+				color: #ccc;
+				font-size: 12.5px;
+			}
+			button {
+				&.green {
+					width: 100%;
+				}
+			}
+		}
+		.sign_up_group {
+			margin-top: 2em;
+			width: 100%;
+			button {
+				color: #fff;
+				min-width: 225px;
+				text-shadow: none;
+				font-weight: 400;
+				font-size: 14px!important;
+				letter-spacing: 0.02em;
+				position: relative;
+				padding-left: 23px;
+				&.google_button {
+					background-image: linear-gradient(-180deg, #F87A6E 0%, #DC4E41 100%);
+					border-radius: 3px;
+				}
+				&.facebook_button {
+					background-image: linear-gradient(-180deg, #6B88C9 0%, #35508A 100%);
+					border-radius: 3px;
+					padding-left: 40px;
+					padding-right: 17px;
+					img {
+						height: 26px;
+					    bottom: 1px;
+					    left: 13px;
+					    padding-right: 15px;
+					}
+				}
+				img {
+					opacity: 1;
+					position: absolute;
+					left: 8px;
+					top: 5px;
+					border-right: 1px solid rgba(0, 0, 0, 0.10);
+					padding-right: 8px;
+				}
+			}
+		}
+	}
+}

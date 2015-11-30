@@ -22,7 +22,7 @@ import fillStore from '../utils/fillStore';
 const routes = (
   <Route component={FlunkApp}>
 
-    <Route path="/" component={Index}/>
+    <Route path="/" component={Home}/>
 
     <Route path="landing" component={LandingPage}/>
     <Route path="sign-in" component={LoginPage}/>

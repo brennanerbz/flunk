@@ -15,12 +15,12 @@ export default class LandingPage extends Component {
 	render() {
 		const compose = require('../../assets/compose.png'),
 			  upload = require('../../assets/upload.png'),
-			  steps = require('../../assets/steps.png');
+			  chat = require('../../assets/chat.png');
 		return(		
 			<div className="landing_page">
 				<div className="landing_page_container">
 					<div className="marketing_copy">
-						<h1>A smart learning tool that lets you study anything, for free.</h1>
+						<h1>Smart learning tools that let you study anything, for free.</h1>
 						<ul className="copy_list">
 							<li className="copy_item">
 								<img className="big icon" src={upload}/>
@@ -28,18 +28,16 @@ export default class LandingPage extends Component {
 									<p className="header">Upload</p>
 									<p className="text">Flunk can instantly transform anything you upload into a study set.</p>
 								</div>
-								
 							</li>
 							<li className="copy_item">
 								<img className="big icon" src={compose}/>
 								<div className="copy">
-
 									<p className="header">Create</p>
 									<p className="text">Easily enter the material you need to know. Creating a study set is easy.</p>
 								</div>
 							</li>
 							<li className="copy_item">
-								<img className="big icon" src={steps}/>
+								<img className="big icon" src={chat}/>
 								<div className="copy">
 									<p className="header">Learn</p>
 									<p className="text">Learn with assistive hints, examples and step-by-step feedback.</p>

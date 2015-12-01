@@ -14,15 +14,16 @@
 		.sign_in_content {
 			min-width: 315px;
 			.card {
-				padding-bottom: 40px;
 				padding-top: 30px;
-				margin-bottom: 30px;
-				padding: 2.5em;
+				padding: 1.5em;
 				width: 350px;
 			}
 			.header {
-				font-size: 24px;
-				font-weight: 700;
+				h4 {
+					font-size: 24px;
+					font-weight: 700;
+					margin-bottom: 20px;
+				}
 			}
 			.sign_in {
 				margin-bottom: 20px;
@@ -37,11 +38,11 @@
 				}
 			}
 			.day_divider {
-				margin: 0rem 45px 0 45px;
 				padding: 0.5rem 16px 0.5rem 1.5rem;
 				min-width: 0;
 				.day_divider_label {
 					font-weight: 400;
+					color: #ccc;
 				}
 			}
 			.sign_up_group {

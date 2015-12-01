@@ -16,18 +16,18 @@
 			max-width: 745px;
 			margin-right: 105px;
 			h1 {
-				font-size: 32px;
-				font-weight: 300;
+				font-size: 28px;
+				font-weight: 700;
 			}
 			ul {
 				li {
 					&.copy_item {
 						position: relative;
 						display: block;
-						margin-bottom: 35px;
+						margin-bottom: 55px;
 						font-family: "Lato";
 						&:first-child {
-							margin-top: 50px;
+							margin-top: 60px;
 						}
 						img {
 							display: inline-block;
@@ -43,11 +43,12 @@
 							}
 							.header {
 								font-weight: 700;
-								font-size: 18px;
+								font-size: 19px;
 							}
 							.text {
-								font-weight: 300;
+								font-weight: 400;
 								font-size: 17px;
+								color: #7D7D7D;
 							}
 						}
 					}

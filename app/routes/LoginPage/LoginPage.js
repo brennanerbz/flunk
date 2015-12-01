@@ -41,6 +41,25 @@ export default class LogInPage extends Component {
 							<div className="header">
 								<h4>Log In</h4>
 							</div>
+							<div className="sign_up_group">
+								<button className="google_button button">
+									<img className="icon" 
+										 src={g_icon}/>
+									Log in with Google
+								</button>
+								<button className="facebook_button button">
+									<img className="icon"
+										 src={f_icon}/>
+									Log in with Facebook
+								</button>
+							</div>
+							<div className="day_divider">
+								<hr className="separator"/>
+								<i className="copy_only"/>
+								<div className="day_divider_label">
+									or
+								</div>
+							</div>
 							<form className="sign_in">
 								<input className=""
 									   autoFocus={true}
@@ -52,28 +71,9 @@ export default class LogInPage extends Component {
 									Log In 
 								</button>
 							</form>
-							<div className="day_divider">
-								<hr className="separator"/>
-								<i className="copy_only"/>
-								<div className="day_divider_label">
-									or
-								</div>
-							</div>
-							<div className="sign_up_group">
-								<button className="google_button button">
-									<img className="icon" 
-										 src={g_icon}/>
-									Sign in with Google
-								</button>
-								<button className="facebook_button button">
-									<img className="icon"
-										 src={f_icon}/>
-									Sign in with Facebook
-								</button>
-							</div>
 						</div>
 						<div className="backup">
-							<a className="link">Create account</a>
+							Don't have an account? <a className="link">Create account</a>
 						</div>
 					</div>
 				</div>

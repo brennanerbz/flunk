@@ -25,7 +25,7 @@ const routes = (
     <Route path="/" component={Home}/>
 
     <Route path="landing" component={LandingPage}/>
-    <Route path="sign-in" component={LoginPage}/>
+    <Route path="login" component={LoginPage}/>
     
     <Route path='set/:id' component={SetView}/>
     <Route path="profile/:id" component={Profile} />     

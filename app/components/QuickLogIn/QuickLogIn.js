@@ -44,7 +44,7 @@ export default class QuickLogIn extends Component {
 						  onSubmit={::this.submitLogIn}
 						  onBlur={() => this.props.closePopout()}>
 						<input placeholder="Email" ref="email" autoFocus={true}/>
-						<input placeholder="Password"/>
+						<input type="password" placeholder="Password"/>
 						<button className="button primary"
 							    onClick={::this.submitLogIn}>
 							   	Log In

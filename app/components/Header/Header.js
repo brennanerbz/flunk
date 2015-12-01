@@ -91,7 +91,7 @@ export default class Header extends Component {
 		return(
 			<div>
 			{
-				loc.pathname.indexOf('sign-in') !== -1
+				loc.pathname.indexOf('login') !== -1
 				? null
 				:
 				<div className="header_positioner">
@@ -147,19 +147,26 @@ export default class Header extends Component {
 								: null }
 							</div>
 							<div className="header_user">
-								<div className="button-group">
-									<button className="button upload_button">Upload</button>
-									{
-										logged_in
-										?
-										<Avatar {...this.props}/>
-										: 
-										<button className="button sign_in_button primary"
-										 		onClick={() => this.setState({ popover: true })}>
-										 		Log in
-										</button>	
-									}
-								</div>
+								{
+									logged_in
+									&&
+									<Avatar {...this.props}/>
+								}
+								{
+									loc.pathname.indexOf('createset') == -1  
+									&&
+									<div className="button-group">
+										<button className="button upload_button">Upload</button>
+										{
+											!logged_in
+											&&
+											<button className="button sign_in_button primary"
+											 		onClick={() => this.setState({ popover: true })}>
+											 		Log in
+											</button>
+										}	
+									</div>
+								}
 							</div>
 						</div>
 						{

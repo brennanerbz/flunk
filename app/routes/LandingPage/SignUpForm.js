@@ -5,6 +5,18 @@ export default class SignUpForm extends Component {
 	static propTypes = {
 	}
 
+	state = {
+		modal_version: false
+	}
+
+	componentDidMount() {
+		if(this.props.modal) {
+			this.setState({
+				modal_version: true
+			})
+		}
+	}
+
 	submitSignUp(e) {
 		e.preventDefault()
 		console.log(e.target.value)
@@ -13,14 +25,17 @@ export default class SignUpForm extends Component {
 	render() {
 		const g_icon = require('../../assets/google_logo.png'),
 			  f_icon = require('../../assets/facebook_logo.png');
-
 		return(
 			<div className="sign_up_container">
 				<div className="card">
-					<div className="message">
-						<h4>Sign Up</h4>
-						<p>It's free.</p>
-					</div>
+					{
+						!this.state.modal_version
+						&&
+						<div className="message">
+							<h4>Sign Up</h4>
+							<p>It's free.</p>
+						</div>
+					}
 					<div className="sign_up_group">
 						<button className="google_button button">
 							<img className="icon" 
@@ -42,10 +57,10 @@ export default class SignUpForm extends Component {
 					</div>
 					<form className="sign_up_form"
 						  onSubmit={::this.submitSignUp}>
-						<input placeholder="First name"/>
+						<input placeholder="First name" autoFocus={this.state.modal_version}/>
 						<input placeholder="Last name"/>
 						<input placeholder="Email"/>
-						<input placeholder="Password"/>
+						<input type="password" placeholder="Password"/>
 						<p className="">By clicking Sign Up, you agree to our <a>Terms of Service</a> and <a>Data Policy</a></p>
 						<button className="button green"
 							    onClick={::this.submitSignUp}>

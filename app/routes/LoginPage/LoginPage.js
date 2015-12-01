@@ -37,18 +37,19 @@ export default class LogInPage extends Component {
 							 onClick={() => pushState(null, '/')}>
 							<img src={brand_logo}/>
 						</div>
-						<div className="instruction">
-							Sign in
-						</div>
 						<div className="card">
-							<div className="user_info">
+							<div className="header">
+								<h4>Log In</h4>
 							</div>
 							<form className="sign_in">
 								<input className=""
 									   autoFocus={true}
 									   placeholder="Email"/>
+								<input className=""
+									   type="password"
+									   placeholder="Password"/>
 								<button className="button primary">
-									Next
+									Log In 
 								</button>
 							</form>
 							<div className="day_divider">

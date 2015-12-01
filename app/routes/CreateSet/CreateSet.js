@@ -13,11 +13,13 @@ import * as transfer from '../../actions/transfer';
 import TermRows from '../../components/CreateSet/TermRows/TermRows';
 import CreateSetHeader from '../../components/CreateSet/CreateSetHeader/CreateSetHeader';
 import SavingLabel from '../../components/CreateSet/SavingLabel/SavingLabel';
+import Modal from '../../components/Modal/modal';
 
 @connect(state => ({
 	/* Router state */
 	router: state.router,
 	loc: state.router.location,
+	logged_in: state.user.logged_in,
 	/* Transfer state */
 	transfer: state.transfer,
 	/* Flags */
@@ -76,7 +78,9 @@ export default class CreateSetPage extends Component {
 	} 
 
 	state = {
-		editing: false
+		editing: false,
+		login_prompt_modal: false,
+		modal_type: 'log_in'
 	}
 
 	subPoll = {}
@@ -89,15 +93,24 @@ export default class CreateSetPage extends Component {
 	}
 
 	componentWillMount() {
-		const { params, transfer, loadEditing, loadSetFlag, pushState } = this.props;
-		loadSetFlag()
-		if(Object.keys(params).length !== 0) { 
-			this.setState({ editing: true })
-			loadEditing(params.id, pushState) 
+		const { params, transfer, loadEditing, loadSetFlag, pushState, logged_in } = this.props;
+		if(logged_in) {
+			loadSetFlag()
+			if(Object.keys(params).length !== 0) { 
+				this.setState({ editing: true })
+				loadEditing(params.id, pushState) 
+			}
 		}
 	}
 
 	componentDidMount() {
+		if(!this.props.logged_in) {
+			this.setState({
+				login_prompt_modal: true
+			})
+			this.props.loadedView()
+			return;
+		}
 		if(!this.state.editing) this.props.loadedView()
 		this.subPoll = setInterval(() => {
 			::this.subjectPoll()
@@ -160,7 +173,11 @@ export default class CreateSetPage extends Component {
 	render() {
 		const { isLoadingSet, rendered } = this.props;
 		return(
-			<div>, 
+			<div>
+				<Modal  open={this.state.login_prompt_modal} 
+						type={this.state.modal_type}
+						pushState={this.props.pushState}
+						/>
 				<div className={classnames("CreateSetPage no_sidenav_container", {"rendered": rendered })}>
 				{
 					isLoadingSet

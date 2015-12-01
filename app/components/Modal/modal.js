@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 require('./modal.scss')
 
+import SignUpForm from '../../routes/LandingPage/SignUpForm';
+
 export default class Modal extends Component {
 	static propTypes = {
 		
@@ -13,11 +15,20 @@ export default class Modal extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if(!this.props.open && nextProps.open) {
-			$(this.refs.modal).modal()
+			if(this.props.type !== 'log_in') {
+				$(this.refs.modal).modal()
+			} else {
+				$(this.refs.modal).modal({
+					backdrop: 'static',
+				    keyboard: false
+				})
+			}
 		}
-		$(this.refs.modal).on('hidden.bs.modal', (e) => {
-		  	this.props.closeModal()
-		})
+		if(this.props.type !== 'log_in') {
+			$(this.refs.modal).on('hidden.bs.modal', (e) => {
+			  	this.props.closeModal()
+			})
+		}
 	}
 	
 	componentDidUpdate(prevProps) {
@@ -179,6 +190,24 @@ export default class Modal extends Component {
 		)
 	}
 
+	renderLogIn() {
+		const g_icon = require('../../assets/google_logo.png'),
+			  f_icon = require('../../assets/facebook_logo.png'),
+			  { pushState } = this.props;
+		return (
+			<div className="modal-body sign_up">
+				<SignUpForm modal={true}/>
+				<p className="log_in_link">Already have an account? 
+					<a onClick={() => pushState(null, '/login')}> Log In</a>
+				</p>
+			</div>
+		)
+	}
+
+	componentWillUnmount() {
+		$(this.refs.modal).modal('hide')
+	}
+
 	render() {
 		const { type, assignment, pushState, deleteAssignment } = this.props;
 		return(
@@ -188,11 +217,14 @@ export default class Modal extends Component {
 				 role="dialog" 
 				 aria-labelledby="myModalLabel"
 				 aria-hidden="true">
-				<div className="modal-dialog" role="document">
+				<div className={classnames({"sign_up": type == 'log_in'}, "modal-dialog")} role="document">
 					<div className="modal-content">
-					<div className={classnames("modal-header", { "settings": type == 'settings' }) }>
+					<div className={classnames("modal-header", 
+						{ "settings": type == 'settings' },
+						{ "sign_up": type == 'log_in'}
+						) }>
 						{
-							type !== 'settings'
+							type !== 'settings' && type !== 'log_in'
 							? 
 							<button type="button" 
 									className="close" 
@@ -212,7 +244,7 @@ export default class Modal extends Component {
 							  </button>
 							: null
 						}
-						<h3 className="modal-title" id="myModalLabel">
+						<h3 className={classnames("modal-title")} id="myModalLabel">
 							{
 								type == 'share'
 								? 'Share this study study set'
@@ -233,6 +265,10 @@ export default class Modal extends Component {
 								? 'Delete set'
 								: null
 							}
+							{
+								type == 'log_in'
+								&& 'Sign up for free to create study sets'
+							}
 						</h3>
 					</div>
 					{
@@ -252,11 +288,14 @@ export default class Modal extends Component {
 					}
 					{
 						type == 'confirm'
-						? ::this.renderConfirmBody()
-						: null
+						&& ::this.renderConfirmBody()
 					}
 					{
-						type !== 'settings'
+						type == 'log_in'
+						&& ::this.renderLogIn()
+					}
+					{
+						type !== 'settings' && type !== 'log_in'
 						?
 						<div className="modal-footer">
 							<button type="button" 

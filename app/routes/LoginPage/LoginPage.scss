@@ -9,7 +9,7 @@
 		max-width: 1200px;
 		padding-left: 50px;
 		padding-right: 50px;
-		font-family: "Open Sans";
+		font-family: "Lato";
 		padding-top: 2.5em;
 		.sign_in_content {
 			min-width: 315px;
@@ -17,18 +17,17 @@
 				padding-bottom: 40px;
 				padding-top: 30px;
 				margin-bottom: 30px;
-				// border: none;
+				padding: 2.5em;
+				width: 350px;
 			}
-			.user_info {
-				margin-bottom: 20px;
-				img {
-					height: 85px;
-				}
+			.header {
+				font-size: 24px;
+				font-weight: 700;
 			}
 			.sign_in {
 				margin-bottom: 20px;
 				input, button {
-					min-width: 240px;
+					width: 100%
 				}
 				input {
 					margin-bottom: 10px;
@@ -48,11 +47,41 @@
 			.sign_up_group {
 				margin-top: 20px;
 				button {
-					display: block;
-					min-width: 240px;
+					color: #fff;
+					width: 100%;
+					text-shadow: none;
+					font-weight: 400;
+					font-size: 14px!important;
+					letter-spacing: 0.02em;
+					position: relative;
+					padding-left: 23px;
+					margin-bottom: 10px;
+					&.google_button {
+						background-image: linear-gradient(-180deg, #F87A6E 0%, #DC4E41 100%);
+						border-radius: 3px;
+					}
+					&.facebook_button {
+						background-image: linear-gradient(-180deg, #6B88C9 0%, #35508A 100%);
+						border-radius: 3px;
+						padding-left: 40px;
+						padding-right: 17px;
+						img {
+							height: 26px;
+						    bottom: 1px;
+						    left: 13px;
+						    padding-right: 15px;
+						}
+					}
 					&:last-child {
-						margin: 0;
-						margin-top: 10px;
+						margin-bottom: 0px;
+					}
+					img {
+						opacity: 1;
+						position: absolute;
+						left: 8px;
+						top: 5px;
+						border-right: 1px solid rgba(0, 0, 0, 0.10);
+						padding-right: 8px;
 					}
 				}
 			}

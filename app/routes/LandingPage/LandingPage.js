@@ -26,7 +26,7 @@ export default class LandingPage extends Component {
 								<img className="big icon" src={upload}/>
 								<div className="copy">
 									<p className="header">Upload</p>
-									<p className="text">Flunk can instantly transform anything you upload into a study set.</p>
+									<p className="text">Flunk can jjj transform anything you upload into a study set.</p>
 								</div>
 							</li>
 							<li className="copy_item">

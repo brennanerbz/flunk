@@ -25,7 +25,7 @@ export default class LandingPage extends Component {
 			<div className="landing_page">
 				<div className="landing_page_container">
 					<div className="marketing_copy">
-						<h1>A learning tool that does the <br /> hard work for you</h1>
+						<h1>A <span className="underline">learning tool</span> that does the <br /> hard work for you</h1>
 						<p className="product_description">Ace can take the material in front of you, <br/> and turn it into practiable questions.</p>
 					</div>
 					<div className="sign_up">

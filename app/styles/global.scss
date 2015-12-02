@@ -510,6 +510,12 @@ $width: 70px;
 		border-radius: 3px;
 		color: #fff;
 	}
+	&.danger {
+		background-image: linear-gradient(-180deg, #E7603E 0%, #CB5234 100%);
+		border: 1px solid #B84428;
+		border-radius: 3px;
+		color: #fff!important;
+	}
 }
 :global .button-primary {
 	background-color: #52B78A;	

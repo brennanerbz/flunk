@@ -32,8 +32,18 @@ export default class SignUpForm extends Component {
 						!this.state.modal_version
 						&&
 						<div className="message">
-							<h4>Sign Up</h4>
-							<p>It's free.</p>
+							{
+								!this.props.last_call
+								?
+								<div>
+									<h4>Sign Up</h4>
+									<p>It's free.</p>
+								</div>
+								:
+								<div>
+									<h4 className="start_now">Get started now</h4>
+								</div>
+							}
 						</div>
 					}
 					<div className="sign_up_group">

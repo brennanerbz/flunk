@@ -9,6 +9,11 @@
 				font-weight: 700;
 				letter-spacing: 0.01em;
 				font-size: 28px;
+				&.start_now {
+					text-align: center;
+					font-weight: 400;
+					margin-bottom: 55px;
+				}
 			}
 			p {
 				margin-bottom: 15px;

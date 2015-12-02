@@ -41,6 +41,21 @@
 			padding-left: 585px;
 		}
 	}
+	.sample_transform {
+		width: 100%;
+		padding: 2.5em;
+		margin: 0 auto;
+		position: relative;
+		border-top: 1px solid #E5E5E5;
+		text-align: center;
+		p, input, button {
+			display: inline;
+			margin-right: 10px;
+		}
+		input {
+			min-width: 315px;
+		}
+	}
 	.product_slides {
 		border-top: 1px solid #E5E5E5;
 		display: block;
@@ -132,6 +147,12 @@
 			margin: 3rem auto 1em;
 			background-repeat: no-repeat;
 		}
+	}
+	.last_call {
+		display: table;
+		margin: 0 auto;
+		padding-top: 1.5em;
+		padding-bottom: 2.5em;
 	}
 	.footer {
 		position: absolute;

@@ -15,40 +15,66 @@ export default class LandingPage extends Component {
 	render() {
 		const compose = require('../../assets/compose.png'),
 			  upload = require('../../assets/upload.png'),
-			  chat = require('../../assets/chat.png');
+			  chat = require('../../assets/chat.png'),
+			  desk = require('../../assets/desk_drawing.png'),
+			  file_formats = require('../../assets/file_formats.png'),
+			  sample_share = require('../../assets/sample_share.png'),
+			  sample_learn = require('../../assets/sample_learn.png'),
+			  school_logos = require('../../assets/sample_schools.png');
 		return(		
 			<div className="landing_page">
 				<div className="landing_page_container">
 					<div className="marketing_copy">
-						<h1>Smart learning tools that let you study anything, for free.</h1>
-						<ul className="copy_list">
-							<li className="copy_item">
-								<img className="big icon" src={upload}/>
-								<div className="copy">
-									<p className="header">Upload</p>
-									<p className="text">Flunk can jjj transform anything you upload into a study set.</p>
-								</div>
-							</li>
-							<li className="copy_item">
-								<img className="big icon" src={compose}/>
-								<div className="copy">
-									<p className="header">Create</p>
-									<p className="text">Easily enter the material you need to know. Creating a study set is easy.</p>
-								</div>
-							</li>
-							<li className="copy_item">
-								<img className="big icon" src={chat}/>
-								<div className="copy">
-									<p className="header">Learn</p>
-									<p className="text">Learn with assistive hints, examples and step-by-step feedback.</p>
-								</div>
-							</li>
-						</ul>
+						<h1>A learning tool that does the <br /> hard work for you</h1>
+						<p className="product_description">Ace can take the material in front of you, <br/> and turn it into practiable questions.</p>
 					</div>
 					<div className="sign_up">
 						<SignUpForm />
 					</div>
 				</div>
+				<div className="product_slides">
+					<ul className="slide_list">
+						<li className="slide" id="drag_drop">
+							<section>
+								<img src={file_formats}/>
+								<h1 className="header">
+									Drag, drop and transform.
+								</h1>
+								<p className="product_description">
+									Not just your class notes, but <b>all your files,</b> images, videos, PDFs, and documents can be dropped into Ace and <b>transformed into study sets. </b> 
+								</p>
+							</section>
+						</li>
+						<li className="slide" id="share">
+							<section>
+								<h1 className="header">
+									Collaborate with a few clicks.
+								</h1>
+								<p className="product_description"> 
+									Send material with just a click to whoever you choose—<b>one person, your team, or your entire class.</b> You also have the choice to keep your material private. It's all up to you.
+								</p>
+								<img src={sample_share}/>
+							</section>
+						</li>
+						<li className="slide" id="learn">
+							<section>
+								<img src={sample_learn}/>
+								<h1 className="header">
+									Learn your stuff, with help from us.
+								</h1>
+								<p className="product_description">
+									 You map in or upload your material, and Ace adapts with <b>more examples, facts and step-by-step feedback</b> right where you need it.
+								</p>
+							</section>
+						</li>
+					</ul>
+				</div>
+				<section className="happy_users">
+					<div className="section_content">
+						<h3>Thousands of happy students, including:</h3>
+						<img src={school_logos} />
+					</div>
+				</section>
 				<div className="footer">	
 					<ul className="footer_links">
 						<div className="left">

@@ -18,7 +18,6 @@ import Search from './Search/Search';
 import Settings from './Settings/Settings';
 import ErrorPage from './ErrorPage/ErrorPage';
 
-
 import fillStore from '../utils/fillStore'; 
 
 const routes = (

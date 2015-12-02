@@ -24,12 +24,6 @@ export default class SideNav extends Component {
 	}
 
 	render() {
-		let pathname = this.props.loc.pathname,
-			regex = /\/(.*?)\//,
-			root_path;
-		pathname !== '/' ? root_path = regex.exec(pathname) : root_path = '/'
-		console.log(root_path)
-		console.log('working fine')
 		return(
 			<div className="sidenav">
 					<Main {...this.props}/>	

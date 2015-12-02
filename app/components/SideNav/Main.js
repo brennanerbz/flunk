@@ -8,15 +8,17 @@ export default class Main extends Component {
 	}
 
 	render() {
-	    const home_icon = require('../../assets/home_icon.png'),
-		home_icon_active = require('../../assets/home_icon_white.png'),
-		profile_icon = require('../../assets/profile_icon.png'),
-		profile_icon_active = require('../../assets/profile_icon_white.png'),
-		settings_icon = require('../../assets/settings_icon.png'),
-		settings_icon_active = require('../../assets/settings_icon_white.png'),
-		{loc} = this.props,
-		hi = loc.pathname === '/' ? home_icon_active : home_icon,
-		pi = loc.pathname.indexOf('profile') !== -1 ? profile_icon_active : profile_icon
+	    let home_icon = require('../../assets/home_icon.png'),
+			home_icon_active = require('../../assets/home_icon_white.png'),
+			profile_icon = require('../../assets/profile_icon.png'),
+			profile_icon_active = require('../../assets/profile_icon_white.png'),
+			settings_icon = require('../../assets/settings_icon.png'),
+			settings_icon_active = require('../../assets/settings_icon_white.png'),
+			{ root_path } = this.props,
+			hi, pi, si;
+			hi = root_path == '/' ? home_icon_active : home_icon,
+			pi = root_path == 'profile' ? profile_icon_active : profile_icon,
+			si = root_path == 'settings' ? settings_icon_active : settings_icon;
 		return(
 			<div className="sidenav_main">				
 				<h2 className="sidenav_header">
@@ -25,7 +27,8 @@ export default class Main extends Component {
 					</span>
 				</h2>				
 				<ul className="sidenav_list">
-					<li className={classnames("sidenav_setitem", {"active": loc.pathname === '/' && loc.pathname.indexOf('set') == -1})}>
+					<li className={classnames("sidenav_setitem", 
+						{"active": root_path == '/'})}>
 						<Link to="/" className="sidenav_setitem_name">
 							<span className="overflow_ellipsis">
 								<span className="prefix_icon">
@@ -37,7 +40,7 @@ export default class Main extends Component {
 					</li>
 
 					<li className={classnames("sidenav_setitem", 
-						{"active": loc.pathname})}>
+						{"active": root_path == 'profile'})}>
 						<Link to={`/profile/${1}`} className="sidenav_setitem_name">
 							<span className="overflow_ellipsis">
 								<span className="prefix_icon">
@@ -48,11 +51,11 @@ export default class Main extends Component {
 						</Link>
 					</li>
 					<li className={classnames("sidenav_setitem", 
-						{"active": loc.pathname = '/settings'})}>
+						{"active": root_path == 'settings'})}>
 						<Link to="/settings" className="sidenav_setitem_name">
 							<span className="overflow_ellipsis">
 								<span className="prefix_icon">
-									<img src={settings_icon} className="set_icon"/>
+									<img src={si} className="set_icon"/>
 								</span>
 								Settings
 							</span>

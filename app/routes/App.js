@@ -32,7 +32,11 @@ export default class FlunkApp extends Component {
 	}
 
 	renderSideNav() {
-		const route = this.props.router.location.pathname;
+		let route = this.props.router.location.pathname,
+			count = route.match(/\//g).length,
+			regex = count >= 2 ? /\/(.*?)\// : /\/(.*)/,
+			root_path;
+		route !== '/' ? root_path = regex.exec(route)[1] : root_path = '/'
 		if     (route.indexOf('createset') !== -1 
 			 || route.indexOf('learn') !== -1 
 			 || route.indexOf('search') !== -1
@@ -41,7 +45,7 @@ export default class FlunkApp extends Component {
 			 || route.indexOf('profile') !== -1
 			 || route == '/') {
 			return (
-				<SideNav {...this.props} />
+				<SideNav {...this.props} root_path={root_path} />
 			);
 		}
 		else if(route !== '/') { return }
@@ -56,12 +60,19 @@ export default class FlunkApp extends Component {
 	}
 
 	render() {
-	const route = this.props.router.location.pathname;	
+		let route = this.props.router.location.pathname,
+			count = route.match(/\//g).length,
+			regex = count >= 2 ? /\/(.*?)\// : /\/(.*)/,
+			root_path;
+		route !== '/' ? root_path = regex.exec(route)[1] : root_path = '/'
+		var childrenWithProps = React.Children.map(this.props.children, (child) => {
+			return React.cloneElement(child, { root_path: root_path })
+		})
 		return( 
 			<div>
 				<Header/>
 				{::this.renderSideNav()}
-				{this.props.children}
+				{childrenWithProps}
 			</div>
 		);
 	}

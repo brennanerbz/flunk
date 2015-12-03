@@ -18,13 +18,117 @@
 		.prompt_box {
 			float: left;
 			margin-left: 15px;
-			padding: 2em 8em;
+			padding: 2em 11em;
 			border: 1px solid #e8e8e8;
+			border-radius: 3px;
+			max-width: 675px;
 			h1 {
-				font-weight: 900;
+				font-weight: 700;
 				font-size: 28px;
 				color: #555459;
 				text-align: center;
+				margin: 0.5em 0 1.5em 0;
+			}
+			.drop_box {
+				border: 1px dashed #e8e8e8;
+				border-radius: 3px;
+				padding: 2.5em 1.5em;
+				margin: 1em 0;
+				cursor: pointer;
+				img {
+					height: 55px;
+					cursor: pointer;
+					text-align: center;
+					margin: 0 auto;
+					display: table;
+					opacity: 0.5;
+					-webkit-transition: all 0.05s ease-in-out;
+					transition: all 0.05s ease-in-out;
+					&.over {
+						opacity: 0.9;
+					}
+				}
+			}
+			.day_divider {
+				min-width: 100%;
+				margin: 0;
+				padding: 0.5rem 55px 0.5rem 2.75rem;
+				.day_divider_label {
+					color: #ccc;
+					font-weight: 400;
+				}
+			}
+			.link_container {
+				width: 100%;
+				.auto_expand_container {
+					width: 100%;
+					padding: 5px 6.5px 0 6.5px;
+					border: 1px solid #e8e8e8;
+					border-radius: 2px;
+					&.focus {
+							border: 1px solid #498DFF;
+							box-shadow: 0 0 7px rgba(39, 128, 248, .15);
+							outline: none;
+					}
+					textarea {
+						width: 100%;
+					}
+				}
+				h2 {
+					margin: 0.5em 0 1em 0;
+				}
+				button {
+					margin: 1em 0 1.5em 0;
+					width: 100%;
+				}
+			}
+			h2 {
+				font-size: 20px;
+				color: #444444;
+				margin-top: 15px;
+				text-align: center;
+			}
+		}
+		.instructions {
+			margin-left: 700px;
+			margin-top: 1.5em;
+			max-width: 300px;
+			min-width: 275px;
+			h2 {
+				font-size: 23px;
+				font-weight: 700;
+			}
+			ul {
+				li {
+					&:not(:last-child) {
+						border-bottom: 1px solid #e8e8e8;
+					}
+					padding: 1.5em 0 1em 0;
+					h2 {
+						font-weight: 400;
+						font-size: 16px;
+						text-transform: uppercase;
+					}
+					.step {
+						margin-top: 25px;
+						img {
+							float: left;
+							margin-top: 5px;
+							&#upload {
+								height: 20px;
+							}
+							&#transform {
+								height: 35px;
+							}
+							&#set {
+								height: 30px;
+							}
+						}
+						p {
+							margin-left: 65px;
+						}
+					}
+				}
 			}
 		}
 	}

@@ -23,11 +23,26 @@ export default class Item extends Component {
 	}
 
 	render() {
-		const { item } = this.props;
+		const { item } = this.props,
+			  star = require('../../../assets/star.png');
 		return(
 			<li>
-				{::this.renderTarget(item.target)}
-				{::this.renderCue(item.cue)}
+				<div className="progress">
+					<span className="no_answers_yet">
+						No answers yet
+					</span>
+				</div>
+				<div className="text">
+					{::this.renderTarget(item.target)}
+					{::this.renderCue(item.cue)}
+				</div>
+				<div className="actions">
+					<div className="icons">
+						<button className="toggle_btn star">
+							<img src={star}/>
+						</button>
+					</div>
+				</div>
 			</li>
 		);
 	}

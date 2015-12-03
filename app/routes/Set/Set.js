@@ -14,6 +14,7 @@ import SetHeader from '../../components/SetView/SetHeader/SetHeader';
 import SetInfo from '../../components/SetView/SetInfo/SetInfo';
 import ItemList from '../../components/SetView/ItemList/ItemList';
 import QuickPractice from '../../components/SetView/QuickPractice/QuickPractice';
+import Tabs from '../../components/SetView/Tabs/Tabs';
 
 @connect(state => ({
 	loc: state.router.location,
@@ -83,7 +84,8 @@ export default class Set extends Component {
 								title={this.props.title}
 								user={this.props.user}
 								pushState={this.props.pushState}
-							/>						
+							/>		
+							<Tabs />				
 							<ItemList
 								assignment={this.props.assignment}
 								associations={this.props.associations}

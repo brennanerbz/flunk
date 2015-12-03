@@ -114,7 +114,7 @@ export default class Settings extends Component {
 						<div className="box">
 							<form className="settings">
 								<h2>Deactivate your account</h2>
-								<p>Don't worry, your material and files will be kept safe if your account is ever reactivated. </p>
+								<p>Your material and files will be kept safe if your account is ever reactivated. </p>
 								<button className="button danger">Deactivate {user.username}</button>
 							</form>
 						</div>

@@ -91,7 +91,7 @@ export default class Header extends Component {
 				:
 				<div className="header_positioner">
 					<div className={classnames("header_container", 
-						{'no_border': root_path == 'createset' || root_path == 'upload'  })}>				
+						{'no_border': root_path == 'createset' || root_path == 'import'  })}>				
 						<div className='header'>
 							{ 
 								isFetching || fetchingLearn
@@ -107,12 +107,12 @@ export default class Header extends Component {
 							</div>
 							<div className="header_content">
 								{
-									root_path == 'createset' || root_path == 'upload'
+									root_path == 'createset' || root_path == 'import'
 									? null
 									: <SearchBox {...this.props}/>
 								}
 								{
-									root_path == 'createset' || root_path == 'upload' || root_path == 'learn'
+									root_path == 'createset' || root_path == 'import' || root_path == 'learn'
 									? null
 									: <button className="create_set_btn_group"
 											  onClick={() => { 
@@ -156,9 +156,11 @@ export default class Header extends Component {
 									loc.pathname.indexOf('createset') == -1  
 									&&
 									<div className="button-group" style={{display: 'inline-block'}}>
-										<button className="button upload_button">
-										<Link className="upload" to="/upload">Upload</Link>
-										</button>
+										<Link className="upload" to="/import">
+											<button className="button upload_button">
+											Import
+											</button>
+										</Link>
 										{
 											!logged_in
 											&&

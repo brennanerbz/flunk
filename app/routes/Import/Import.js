@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import DocumentTitle from 'react-document-title';
 import AutoexpandTextarea from '../../components/CreateSet/AutoexpandTextarea/AutoexpandTextarea';
-require('./Upload.scss');
+require('./Import.scss');
 
 export default class Upload extends Component {
 	static propTypes = {

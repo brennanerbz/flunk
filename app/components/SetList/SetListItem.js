@@ -54,7 +54,7 @@ export default class SetListItem extends Component {
 		        <div className="col-sm-5 col-md-5 col-lg-3 set_col set_author"
 		        	 onClick={() => pushState(null, `/profile/${set.creator_id}`)}>
 		        	<span className="overflow_ellipsis">		        		
-		        		by <span className="link_name">{set.creator_id}</span>
+		        		by <span className="link_name">{set.creator.username}</span>
 		        	</span>
 		        </div>		        
 		        <div className={classnames('actions', {'active': set.id === this.props.activeRow})}>

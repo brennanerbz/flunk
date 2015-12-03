@@ -60,13 +60,6 @@ export default class Header extends Component {
 		});
 	}
 
-	findSetMenuPos() {
-		let node = this.refs['set_name'];
-		const new_rect = node.getBoundingClientRect()
-		const rect = window.getComputedStyle(node)
-		return new_rect;
-	}
-
 	handleSelect(choice) {
 		// console.log(choice)
 	}
@@ -75,7 +68,7 @@ export default class Header extends Component {
 		const logo = require('./assets/FlunkLogo.png'),
 			  mini_logo = require('../../assets/color_hash.png'),
 			  create_icon = require('../../assets/compose.png'),
-			  dropdown_icon = require('../../assets/dropdown_arrow.png'),
+			  arrow_left = require('../../assets/arrow_left.png'),
 			  { loc, 
 			  	sets, 
 			  	isFetching, 
@@ -133,15 +126,25 @@ export default class Header extends Component {
 								<span className="open_set_container set_name_wrapper"
 								      ref="set_name_wrapper">
 										<Link to={`/set/${set_id}`} className="open_set_btn"
-												// onClick={::this.openSetMenu}
-											    // onBlur={::this.closeSetMenu}
 											    ref="open_set_btn">
+											    <span>
+											    	<img style={{
+											    		height: '10.5px',
+											    		marginRight: '7.5px'
+											    	}}
+											    	 src={arrow_left}/>
+											    </span>
+											    <h1 className="set_hash"
+											    	style={{
+											    		paddingTop: '6px',
+											    		fontSize: '14.5px'
+											    	}}
+											    >Back to set</h1>
 												<h1 className="set_name"
-													ref="set_name"><span className="set_hash">#</span>{learn_set.title.toLowerCase()}</h1>
-												<span>
-													<img className="dropdown_menu_icon icon" 
-													 src={dropdown_icon}/>
-												</span>
+													style={{
+														display: 'none'
+													}}
+													ref="set_name">{learn_set.title}</h1>
 										</Link>
 								</span>						
 								: null }

@@ -15,7 +15,7 @@ export default class DiffControls extends Component {
 
 	
 	shouldHideHintButton(trial_hints, slot_hints) {
-		if((trial_hints && slot_hints) !== null) {
+		if((trial_hints && slot_hints) !== null && (trial_hints && slot_hints) !== undefined) {
 			return slot_hints.length === 0 || slot_hints.slice(-1)[0].indexOf(trial_hints[0]) !== -1
 		}
 	}

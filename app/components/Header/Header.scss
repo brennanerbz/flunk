@@ -256,9 +256,9 @@
                     text-decoration: none;
                 }
                 &.set_name_wrapper {
-                    position: absolute;
-                    padding-top: 19px;
-                    padding-left: 30px;
+                    // position: absolute;
+                    padding-top: 4px;
+                    padding-left: 20px;
                     padding-right: 0px;
                     z-index: 700;
                     border: 0px none;  
@@ -272,16 +272,20 @@
                    }
                    .set_name {
                        font-family: "Lato";
-                       font-weight: 900;
+                       font-weight: 700;
                        letter-spacing: 0.01em;
-                       font-size: 1.4em;
+                       font-size: 14px;
                        color: #555549;
                        padding-top: 2px;
                    }      
                    .set_hash {
-                    margin-right: 5px;
-                    font-weight: 400;
-                    color:#9e9ea6;
+                        margin-right: 5px;
+                        font-weight: 400;
+                        -webkit-font-smoothing: antialiased;
+                        color:#9e9ea6;
+                        &:hover {
+                            color: #909090;
+                        }
                    }  
                    .diff_control {
                         width: 30px;

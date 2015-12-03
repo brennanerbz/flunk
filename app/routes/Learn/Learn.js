@@ -339,7 +339,7 @@ export default class Learn extends Component {
 											   slot={current_slot !== undefined ? current_slot : null} 
 											   slots={slots} 
 											   trial={this.props.trial}
-											   cue={current_slot !== undefined ? current_slot.item.cue : null}
+											   cue={current_slot.item !== undefined ? current_slot.item.cue : null}
 											   {...this.props}/>
 										: null
 									}

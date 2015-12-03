@@ -35,8 +35,12 @@ export default class LearnCard extends Component {
 									Correct
 								  </h4>
 								: null
+							}
+							{
+								current_slot.association !== undefined
+								&&
+								<LearnCue {...this.props}/>
 							}							
-							<LearnCue {...this.props}/>
 							{
 								showCorrect
 								? null

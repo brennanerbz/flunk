@@ -77,10 +77,12 @@ export default class Header extends Component {
 			  	learn_set,
 			  	set_id,
 			  	pushState,
-			  	logged_in
+			  	logged_in,
+			  	root_path
 			  } = this.props;
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
+		console.log(root_path)
 		return(
 			<div>
 			{
@@ -89,7 +91,7 @@ export default class Header extends Component {
 				:
 				<div className="header_positioner">
 					<div className={classnames("header_container", 
-						{'no_border': loc.pathname.indexOf('createset') !== -1 ? true : false })}>				
+						{'no_border': root_path == 'createset' || root_path == 'upload'  })}>				
 						<div className='header'>
 							{ 
 								isFetching || fetchingLearn
@@ -105,12 +107,12 @@ export default class Header extends Component {
 							</div>
 							<div className="header_content">
 								{
-									loc.pathname.indexOf('/createset') !== -1
+									root_path == 'createset' || root_path == 'upload'
 									? null
 									: <SearchBox {...this.props}/>
 								}
 								{
-									loc.pathname.indexOf('/learn') !== -1 || loc.pathname.indexOf('/createset') !==  -1
+									root_path == 'createset' || root_path == 'upload' || root_path == 'learn'
 									? null
 									: <button className="create_set_btn_group"
 											  onClick={() => { 

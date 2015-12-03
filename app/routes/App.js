@@ -70,7 +70,7 @@ export default class FlunkApp extends Component {
 		})
 		return( 
 			<div>
-				<Header/>
+				<Header root_path={root_path}/>
 				{::this.renderSideNav()}
 				{childrenWithProps}
 			</div>

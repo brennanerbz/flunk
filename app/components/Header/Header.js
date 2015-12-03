@@ -148,14 +148,9 @@ export default class Header extends Component {
 							</div>
 							<div className="header_user">
 								{
-									logged_in
-									&&
-									<Avatar {...this.props}/>
-								}
-								{
 									loc.pathname.indexOf('createset') == -1  
 									&&
-									<div className="button-group">
+									<div className="button-group" style={{display: 'inline-block'}}>
 										<button className="button upload_button">Upload</button>
 										{
 											!logged_in
@@ -166,6 +161,11 @@ export default class Header extends Component {
 											</button>
 										}	
 									</div>
+								}
+								{
+									logged_in
+									&&
+									<Avatar {...this.props}/>
 								}
 							</div>
 						</div>

@@ -154,7 +154,9 @@ export default class Header extends Component {
 									loc.pathname.indexOf('createset') == -1  
 									&&
 									<div className="button-group" style={{display: 'inline-block'}}>
-										<button className="button upload_button">Upload</button>
+										<button className="button upload_button">
+										<Link className="upload" to="/upload">Upload</Link>
+										</button>
 										{
 											!logged_in
 											&&

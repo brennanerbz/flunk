@@ -1,0 +1,31 @@
+.upload_page {
+	position: absolute;
+	top: 72.5px;
+	bottom: 0;
+	width: 100%;
+	.upload_container {
+		min-width: 905px!important;
+		font-family: "Lato";
+		padding-top: 0.5em;
+		display: block;
+		position: relative;
+		padding-bottom: 4.75em;
+		margin: 0 auto;
+		box-sizing: border-box;
+		max-width: 1215px;
+		padding-left: 1.59rem;
+		padding-right: 1.59rem;
+		.prompt_box {
+			float: left;
+			margin-left: 15px;
+			padding: 2em 8em;
+			border: 1px solid #e8e8e8;
+			h1 {
+				font-weight: 900;
+				font-size: 28px;
+				color: #555459;
+				text-align: center;
+			}
+		}
+	}
+}

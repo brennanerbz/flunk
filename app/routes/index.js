@@ -11,6 +11,7 @@ import LoginPage from './LoginPage/LoginPage';
 
 import Home from './Home/Home';
 import CreateSet from './CreateSet/CreateSet';
+import Upload from './Upload/Upload';
 import Profile from './Profile/Profile';
 import Learn from './Learn/Learn';
 import SetView from './Set/Set';
@@ -33,6 +34,8 @@ const routes = (
 
     <Route path="createset" component={CreateSet} />
     <Route path="createset/:id" component={CreateSet}/>
+
+    <Route path="upload" component={Upload}/>
 
     <Route path="learn/:id" component={Learn}/>
 

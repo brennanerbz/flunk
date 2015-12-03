@@ -73,7 +73,7 @@ export default class Set extends Component {
 				{
 					!isFetching
 					? <div className="row">
-						<div className="col-sm-9 col-md-8 col-lg-8">
+						<div className="col-sm-9 col-md-10 col-lg-10">
 							<SetHeader 
 								assignment={this.props.assignment}
 								creator_id={this.props.creator_id}
@@ -95,19 +95,21 @@ export default class Set extends Component {
 								set={this.props.set} 
 								pushState={this.props.pushState}
 							/>	
-						</div>
-						<div className="col-md-4 col-lg-4">
-							<SetInfo 
-								assignment={this.props.assignment}
-								creator_id={this.props.creator_id}
-								creator_username={this.props.creator_username} 
-								id={this.props.id}
-								doc={this.props.doc}
-								item_count={this.props.item_count}
-								purpose={this.props.purpose}
-								subjects={this.props.subjects}
-								pushState={this.props.pushState}
-							/>
+							{
+								false
+								&&
+								<SetInfo 
+									assignment={this.props.assignment}
+									creator_id={this.props.creator_id}
+									creator_username={this.props.creator_username} 
+									id={this.props.id}
+									doc={this.props.doc}
+									item_count={this.props.item_count}
+									purpose={this.props.purpose}
+									subjects={this.props.subjects}
+									pushState={this.props.pushState}
+								/>
+							}
 						</div>
 					</div>
 					: 

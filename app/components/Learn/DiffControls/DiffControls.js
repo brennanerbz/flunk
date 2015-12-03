@@ -27,7 +27,7 @@ export default class DiffControls extends Component {
 			  shouldhide = ::this.shouldHideHintButton(trial_hints, slot_hints);  
 		return(
 			<span className="diff_controls">
-				<button className={classnames("button button-primary", 
+				<button className={classnames("button green", 
 						{"disabled": shouldhide })}
 					    onClick={this.props.getHint}>Hint</button>
 				<a className="toggle_btn"

@@ -4,6 +4,12 @@ export default class Item extends Component {
 	static propTypes = {
 	}
 
+	componentDidMount = () => {
+		$("[data-toggle='tooltip']").tooltip({
+			delay: { show: 400, hide: 50}
+		})
+	}
+
 	renderTarget(target) {
 		const { pushState } = this.props;
 		let new_target = target !== null ? target.charAt(0).toUpperCase() + target.slice(1) : "..."
@@ -38,7 +44,10 @@ export default class Item extends Component {
 				</div>
 				<div className="actions">
 					<div className="icons">
-						<button className="toggle_btn star">
+						<button className="toggle_btn star"
+								data-toggle="tooltip"
+								data-placement="bottom"
+								title="Select">
 							<img src={star}/>
 						</button>
 					</div>

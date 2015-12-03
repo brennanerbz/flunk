@@ -59,12 +59,15 @@
 		background: #fff;
 		position: relative;
 		padding: 0.25rem;
+		padding-top: 0.1em;
+		padding-bottom: 0.1em;
 		border: 1px solid transparent!important;
-		border-radius: 2px!important;
+		border-radius: 3px!important;
 		-webkit-border-radius: 7px;
-		-moz-border-radius: 7px;	
+		-moz-border-radius: 7px;
+		border-bottom: 1px solid #e8e8e8;	
 		&:hover {
-			// background-color: #F9F9F9!important;
+			// background-color: #FAFAFA!important;
 			border-color: rgba(0,0,0,.1)!important;
 			// box-shadow: 0 0 3pt 2pt red;
 		}
@@ -81,6 +84,9 @@
 			&:hover {
 				text-decoration: none!important;
 			}
+		}
+		&:not(:first-child), &:not(:last-child) {
+			border-bottom: 1px solid #e8e8e8;
 		}
 	}		
 	.set_col { 

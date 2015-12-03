@@ -95,7 +95,7 @@ export default class LearnInput extends Component {
 			    	   className={classnames({'correct_answer': this.state.correct})}/>
 			   	</form>
 			   	<span className="">
-			   		<button className="button answer_btn" 
+			   		<button className="button primary" 
 			   			    type="button"
 			   			    onClick={::this.handleSubmit}>Answer</button>
 			   	</span>

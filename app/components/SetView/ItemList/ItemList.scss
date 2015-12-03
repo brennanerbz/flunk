@@ -20,7 +20,8 @@
 	    	border-top: 1px solid #eee;
 	    }
 	    .progress {
-	    	background: #f4f0ea;
+	    	background: #FAF8F5;
+	    	border: 1px solid #ddd;
 	    	border-radius: 4px;
 	    	cursor: default;
 	    	float: left;
@@ -33,7 +34,7 @@
 	    	text-align: center;
 	    	span {
 	    		&.no_answers_yet {
-	    			color: #827661;
+	    			color: #555459;
     			    display: table-cell;
     			    font-size: 11.5px;
     			    line-height: 1.5;

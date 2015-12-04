@@ -10,9 +10,10 @@ export default class ProfileStudied extends Component {
 	}
 
 	render() {
+		let sets = this.props.studied_sets.filter(set => set.finalized !== null)
 		return(
 			<div>
-				<SetList sets={this.props.studied_sets} profile={true}/>
+				<SetList sets={sets} profile={true}/>
 			</div>
 		);
 	}

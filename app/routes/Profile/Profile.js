@@ -72,6 +72,7 @@ export default class Profile extends Component {
 				...this.props
 			})
 		})
+		console.log(this.props.profilestate)
 		return(
 			<div className="main_content profile_view">
 				<div className={classnames({'col-sm-11 col-md-11': school == undefined},

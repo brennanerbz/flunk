@@ -2,7 +2,8 @@ import axios from 'axios';
 import moment from 'moment';
 import keyMirror from 'key-mirror';
 
-const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
+const server = require('./api'),
+	  api_url = server.api_url;
 
 export const REQUEST_PROFILE_FAILURE = 'REQUEST_PROFILE_FAILURE';
 export function fetchProfilePage(user_id) {

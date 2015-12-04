@@ -2,7 +2,8 @@ import axios from 'axios';
 import moment from 'moment'; 
 import request from 'superagent';
 
-let api_url = 'http://127.0.0.1:5000/webapi/v2.0';
+const server = require('./api'),
+	  api_url = server.api_url;
 
 export const SEARCH = 'SEARCH';
 export function requestSearch() {

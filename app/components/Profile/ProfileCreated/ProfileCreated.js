@@ -11,9 +11,20 @@ export default class ProfileCreated extends Component {
 	}
 
 	render() {
+		let sets = this.props.created_sets
+				   .filter(set => set.finalized !== null)
 		return(
 			<div>
-				<SetList sets={this.props.created_sets} profile={true}/>
+			{
+				sets.length == 0
+				&&
+				<h1 className="no_sets">{}</h1>
+			}
+			{
+				sets.length > 0
+				&&
+				<SetList sets={sets} profile={true}/>
+			}
 			</div>
 		);
 	}

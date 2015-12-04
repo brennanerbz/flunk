@@ -1,7 +1,8 @@
 import axios from 'axios';
 import moment from 'moment'; 
 import request from 'superagent';
-const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
+const server = require('./api'),
+	  api_url = server.api_url;
 
 /*
 @params: user_id, set_id, assignment_id, sequence_id

@@ -68,6 +68,21 @@ export default class Set extends Component {
 
 	render() {
 		const { isFetching, associations } = this.props;
+		var setChildrenWithProps = React.Children.map(this.props.children, (child) => {
+			return React.cloneElement(child, {
+				assignment: this.props.assignment,
+				associations: this.props.associations,
+				creator_id: this.props.creator_id,
+				creator_username: this.props.creator_username, 
+				id: this.props.id,
+				doc: this.props.doc,
+				item_count: this.props.item_count,
+				purpose: this.props.purpose,
+				set: this.props.set,
+				subjects: this.props.subjects,
+				pushState: this.props.pushState
+			})
+		})
 		return(
 			<div className="set_view main_content">
 				{
@@ -83,33 +98,16 @@ export default class Set extends Component {
 								set={this.props.set}
 								title={this.props.title}
 								user={this.props.user}
-								pushState={this.props.pushState}
+								
 							/>		
-							<Tabs />				
-							<ItemList
-								assignment={this.props.assignment}
-								associations={this.props.associations}
+							<Tabs 
+								location={this.props.loc}
 								id={this.props.id}
-								item_count={this.props.item_count}
-								items={this.props.items}
-								set={this.props.set} 
 								pushState={this.props.pushState}
-							/>	
-							{
-								false
-								&&
-								<SetInfo 
-									assignment={this.props.assignment}
-									creator_id={this.props.creator_id}
-									creator_username={this.props.creator_username} 
-									id={this.props.id}
-									doc={this.props.doc}
-									item_count={this.props.item_count}
-									purpose={this.props.purpose}
-									subjects={this.props.subjects}
-									pushState={this.props.pushState}
-								/>
-							}
+							/>
+
+							{ setChildrenWithProps }		
+
 						</div>
 					</div>
 					: 

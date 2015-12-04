@@ -31,6 +31,14 @@ export default class FlunkApp extends Component {
 		error: PropTypes.string
 	}
 
+	componentWillMount() {
+		const { fetchAssignments, fetchUser } = this.props; 
+		// on mounting, will load user object and assignments
+		// TODO: use cookies/localstorage to query for user
+		fetchUser(1)
+		fetchAssignments(1)
+	}
+
 	renderSideNav() {
 		let route = this.props.router.location.pathname,
 			count = route.match(/\//g).length,
@@ -49,14 +57,6 @@ export default class FlunkApp extends Component {
 			);
 		}
 		else if(route !== '/') { return }
-	}
-
-	componentWillMount() {
-		const { fetchAssignments, fetchUser } = this.props; 
-		// on mounting, will load user object and assignments
-		// TODO: use cookies/localstorage to query for user
-		fetchUser(1)
-		fetchAssignments(1)
 	}
 
 	render() {

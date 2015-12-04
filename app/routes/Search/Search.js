@@ -70,7 +70,8 @@ export default class Search extends Component {
 				users,
 				searchItems,
 				searchSets,
-				searchUsers } = this.props;
+				searchUsers,
+				root_path } = this.props;
 		let index = params.query.indexOf('&'),
 			query,
 			page_index;
@@ -81,18 +82,20 @@ export default class Search extends Component {
 		} 
 		else query = params.query;
 		query = query.toLowerCase().trim()
-		if(loc.pathname.indexOf('concepts') !== -1 && items == null) { 
-			searchItems(query, page_index);
-			this.setState({current_tab: 'concepts'});
+		if(root_path == 'search') {
+			if(loc.pathname.indexOf('concepts') !== -1 && items == null) { 
+				searchItems(query, page_index);
+				this.setState({current_tab: 'concepts'});
+			}
+			if(loc.pathname.indexOf('sets') !== -1 && items == null) {
+				searchSets(query, page_index);
+				this.setState({current_tab: 'sets'});
+			} 
+			if(loc.pathname.indexOf('users') !== -1 && items == null) {
+				searchUsers(query, page_index);
+				this.setState({current_tab: 'users'});
+			}
 		}
-		if(loc.pathname.indexOf('sets') !== -1 && items == null) {
-			searchSets(query, page_index);
-			this.setState({current_tab: 'sets'});
-		} 
-		if(loc.pathname.indexOf('users') !== -1 && items == null) {
-			searchUsers(query, page_index);
-			this.setState({current_tab: 'users'});
-		} 
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -148,7 +151,7 @@ export default class Search extends Component {
 
 	render() {
 		const { query } = this.props.params,
-			  { loc, searching, items, noResults } = this.props;
+			  { loc, searching, items, noResults, root_path } = this.props;
 		return(
 			<div className="search_page">
 				<nav className="search_tabs">

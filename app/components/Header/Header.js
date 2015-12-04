@@ -82,11 +82,10 @@ export default class Header extends Component {
 			  } = this.props;
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
-		console.log(root_path)
 		return(
 			<div>
 			{
-				loc.pathname.indexOf('login') !== -1
+				root_path == 'login'
 				? null
 				:
 				<div className="header_positioner">
@@ -124,7 +123,7 @@ export default class Header extends Component {
 											</Link>	
 									  </button>
 								}
-								{ !fetchingLearn && loc.pathname.indexOf('/learn') !== -1 ? 
+								{ !fetchingLearn && root_path == 'learn' ? 
 								<span className="open_set_container set_name_wrapper"
 								      ref="set_name_wrapper">
 										<Link to={`/set/${set_id}`} className="open_set_btn"
@@ -153,7 +152,7 @@ export default class Header extends Component {
 							</div>
 							<div className="header_user">
 								{
-									loc.pathname.indexOf('createset') == -1  
+									root_path !== 'createset'
 									&&
 									<div className="button-group" style={{display: 'inline-block'}}>
 										<Link className="upload" to="/import">

@@ -14,7 +14,11 @@ import CreateSet from './CreateSet/CreateSet';
 import Import from './Import/Import';
 import Profile from './Profile/Profile';
 import Learn from './Learn/Learn';
+
 import SetView from './Set/Set';
+import Terms from './Set/Terms';
+import Info from './Set/Info';
+
 import Search from './Search/Search';
 import Settings from './Settings/Settings';
 import ErrorPage from './ErrorPage/ErrorPage';
@@ -22,31 +26,33 @@ import ErrorPage from './ErrorPage/ErrorPage';
 import fillStore from '../utils/fillStore'; 
 
 const routes = (
-  <Route component={FlunkApp}>
+    <Route component={FlunkApp}>
+        <Route path="/" component={Home}/>
+        <Route path="landing" component={LandingPage}/>
+        <Route path="login" component={LoginPage}/>
 
-    <Route path="/" component={Home}/>
+        <Route path='set/:id' component={SetView}>
+            <IndexRoute component={Terms}/>
+            <Route path="info" component={Info}/>
+        </Route>
 
-    <Route path="landing" component={LandingPage}/>
-    <Route path="login" component={LoginPage}/>
-    
-    <Route path='set/:id' component={SetView}/>
-    <Route path="profile/:id" component={Profile} />     
+        <Route path="profile/:id" component={Profile} />     
 
-    <Route path="createset" component={CreateSet} />
-    <Route path="createset/:id" component={CreateSet}/>
+        <Route path="createset" component={CreateSet} />
+        <Route path="createset/:id" component={CreateSet}/>
 
-    <Route path="import" component={Import}/>
+        <Route path="import" component={Import}/>
 
-    <Route path="learn/:id" component={Learn}/>
+        <Route path="learn/:id" component={Learn}/>
 
-    <Route path="search/concepts/:query" component={Search}/>
-    <Route path="search/sets/:query" component={Search}/>
-    <Route path="search/users/:query" component={Search}/>
+        <Route path="search/concepts/:query" component={Search}/>
+        <Route path="search/sets/:query" component={Search}/>
+        <Route path="search/users/:query" component={Search}/>
 
-    <Route path="settings" component={Settings}/>
+        <Route path="settings" component={Settings}/>
 
-    <Route path="*" component={ErrorPage}/>
-  </Route>
+        <Route path="*" component={ErrorPage}/>
+    </Route>
 );
  
 

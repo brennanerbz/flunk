@@ -46,7 +46,8 @@ export default class Upload extends Component {
 									{'focus': this.state.link_focused})}>
 									<AutoexpandTextarea focus={() => this.setState({link_focused: true})} 
 														blur={() => this.setState({link_focused: false})}
-														placeholder="Link or text..." />
+														placeholder="Link or text..."
+														autoFocus={true} />
 								</div>
 								<button className="button green">Create</button>
 							</div>

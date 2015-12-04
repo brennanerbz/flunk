@@ -2,20 +2,22 @@
 	width: 90%;
 	margin-left: 10px;
 	.set_details {
-		padding-left: 10px;
+		margin-top: 15px;
 		.info_header {
-			font-size: 12px;
+			font-size: 14.5px;
 			font-weight: 700;
 			color: #9E9EA6;
 			padding-bottom: 0;
 			margin-bottom: 0;
+			letter-spacing: 0.01em;
 		}
 		.info_purpose, .subject {
-			font-size: 14px;
+			font-size: 16.5px;
+			-webkit-font-smoothing: antialiased;
 		}
 		.created_details {
 			padding-top: 10px;
-			font-size: 14px;
+			font-size: 15px;
 			color: #9E9EA6;
 			font-style: italic;
 		}

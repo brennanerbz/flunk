@@ -154,14 +154,9 @@ export function newSequence(prevsequence, user_id, set_id, assignment_id) {
 export const UPDATE_SEQUENCE = 'UPDATE_SEQUENCE';
 export const UPDATE_SEQUENCE_SUCCESS = 'UPDATE_SEQUENCE_SUCCESS';
 export const UPDATE_SEQUENCE_FAILURE = 'UPDATE_SEQUENCE_FAILURE';
-function willUpdateSequence() {
-	return {
-		type: UPDATE_SEQUENCE
-	}
-}
 export function updateSequence(_sequence) {
 	return async(dispatch, getState) => {
-		dispatch(willUpdateSequence())
+		dispatch({type: UPDATE_SEQUENCE})
 		try {
 			let updated_sequence;
 			
@@ -176,7 +171,6 @@ export function updateSequence(_sequence) {
 			await axios.put(`${api_url}/sequences/${_sequence.id}`, 
 				updated_sequence
 			).then(res => {
-				console.log(res)
 				const sequence = res.data;
 				dispatch({type: UPDATE_SEQUENCE_SUCCESS, sequence}) 
 				if(sequence.completed) {
@@ -293,26 +287,10 @@ export function updateSlot(slot) {
 	}
 }
 
-/*
-@params: 
-@purpose: send action to store that tells it to transform list of slots into 5 item groups
-*/
-export const TRANSFORM_5_SLOTS = 'TRANSFORM_5_SLOTS' // a few methods to set multiple arrays
-export const COMPLETED_5_SLOTS = 'COMPLETED_5_SLOTS' // for display purposes 
-export function transformSlots() {
-	return {
-		type: TRANSFORM_5_SLOTS
-	}
-}
-export function completed5Slots() {
-	return {
-		type: COMPLETED_5_SLOTS
-	}
-}
 
 /*
 @params: slot_id
-@purpose: send a GET request to collect list of trials. will be used to send to redux store, which will then be read by the new trial function to determine what to send. 
+@purpose: send a GET request to collect list of trials. If last trial is complete, show. If not, create new.
 */
 export const REQUEST_TRIALS = 'REQUEST_TRIALS';
 export const RECEIVE_TRIALS_SUCCESS = 'RECEIVE_TRIALS_SUCCESS';
@@ -324,6 +302,7 @@ export function fetchTrials() {
 			slot_id,
 			trial = {},
 			trials;
+		/* Poll for the trials */
 		if(Object.keys(slot).length == 0) {
 			setTimeout(() => {
 				dispatch(fetchTrials())
@@ -337,18 +316,16 @@ export function fetchTrials() {
 			if(trials !== undefined && trials.length > 0) {
 				dispatch({type: RECEIVE_TRIALS_SUCCESS, trials})
 				trial = trials.slice(-1)[0]
-				if(trial.accuracy === 1 && slot.completed) {
+				if(trial.correct && slot.completed) {
 					dispatch({type: SHOW_CORRECT})
 					dispatch({type: RECEIVE_LEARN_SUCCESS})
 				} else {
-					trial['type'] = 'return';
-					dispatch(newTrial(trial))						
+					dispatch(newTrial())						
 					return;
 				}
 			}
 			if(!slot.completed) {
-				trial['type'] = null;
-				dispatch(newTrial(trial))
+				dispatch(newTrial())
 			}
 		})
 		.catch(err => {
@@ -361,20 +338,17 @@ export function fetchTrials() {
 }
 
 /*
-@params: slot_id, cue_visible, image, correct_index_choice, nonde,
-truefalse, all_of_the_above, format, click_to_answer, type_index_to_answer, cue_target_reversal, reverse_truefalse, reverse_mc, format_chosen_by_user, help_chosen_by_user,
-subject, synonyms, augs, related_terms, nonemc_choices, mc_choices, truefalse_target_shown, stem, alt_cues, start
+@params: slot_id * required
 @purpose: send a POST request to create a new trial.
 */
 export const NEW_TRIAL = 'NEW_TRIAL';
 export const NEW_TRIAL_SUCCESS = 'NEW_TRIAL_SUCCESS';
 export const NEW_TRIAL_FAILURE = 'NEW_TRIAL_FAILURE';
-var _default_trial = {}
-// recall | pic | related | augN | nonemc | mc | stem | peek | copy
+// recall | pic | related | aug | nonemc | mc | stem | peek | copy
 export function newTrial(trial) {
 	return (dispatch, getState) => {
 		dispatch({type: NEW_TRIAL})
-		let new_trial,
+		let new_trial = {},
 			state = getState().learn,
 			current_slot = state.current_slot,
 			last_trial = state.trials.slice(-1)[0],
@@ -385,27 +359,20 @@ export function newTrial(trial) {
 			dispatch({type: RECEIVE_LEARN_SUCCESS})
 			return;
 		}
-		if (trial.type == 'return') {
-			new_trial = trial
-
-		} else if (trial.type == null || trial.type == 'adapt') {
-			new_trial = Object.assign({..._default_trial}, {
-				slot_id: current_slot.id,
-				start: start
-			})
-
-		} else  {
-			new_trial = Object.assign({...trial}, {
-				help_chosen_by_user: true,
-				format: trial.type,
-				start: start
-			})
+		new_trial['slot_id'] = current_slot.id
+		new_trial['start'] = start;
+		/* Adjust trial object based on direct user control */
+		if(trial !== undefined) {
+			new_trial['help_chosen_by_user'] = true;
+			new_trial['format'] = trial.type
 		}
+		/* Remove the trial type classifier */
 		for(var _prop in new_trial) {
 			if (_prop == 'type') {
 				delete new_trial[_prop]
 			}
 		}
+		console.log(new_trial)
 		axios.post(`${api_url}/trials/`, 
 			new_trial
 		).then(res => {
@@ -417,6 +384,45 @@ export function newTrial(trial) {
 				type: NEW_TRIAL_FAILURE,
 				errorObj: err,
 				error: Error(err)
+			})
+		})
+	}
+}
+
+/*
+@params: 
+@purpose: update the current trial, and either create new trial w/adapt or show correct
+*/
+export const UPDATE_TRIAL = 'UPDATE_TRIAL';
+export const UPDATE_TRIAL_SUCCESS = 'UPDATE_TRIAL_SUCCESS';
+export const UPDATE_TRIAL_FAILURE = 'UPDATE_TRIAL_FAILURE';
+export const GRADING = 'GRADING';
+export function updateTrial(response) {  
+	return (dispatch, getState) => {
+		dispatch({type: GRADING})
+		let state = getState().learn,
+			current_trial = state.current_trial,
+			current_slot = state.current_slot,
+			trial_id = current_trial.id;
+		axios.put(`${api_url}/trials/${trial_id}`, 
+			response
+		).then(res => {
+			let updated_trial = res.data;
+			dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
+			/* TODO: Make the best decision on what to show based on accuracy, grading codes and .correct */
+			if(updated_trial.accuracy < 200) {
+				current_slot['completed'] = true;
+				dispatch(updateSlot(current_slot))
+				dispatch({type: SHOW_CORRECT})
+				return;
+			} 
+			dispatch(newTrial())
+		})
+		.catch(() => {
+			dispatch({
+				type: UPDATE_TRIAL_FAILURE,
+				error: Error(err),
+				typeerror: err
 			})
 		})
 	}
@@ -451,105 +457,16 @@ export function hint(response) {
 
 
 /*
-@params: 
-@purpose: update the current trial, and either create new trial w/adapt or show correct
-*/
-export const UPDATE_TRIAL = 'UPDATE_TRIAL';
-export const UPDATE_TRIAL_SUCCESS = 'UPDATE_TRIAL_SUCCESS';
-export const UPDATE_TRIAL_FAILURE = 'UPDATE_TRIAL_FAILURE';
-export const GRADING = 'GRADING';
-export function updateTrial(response) {  
-	return (dispatch, getState) => {
-		dispatch({type: GRADING})
-		let state = getState().learn,
-			current_trial = state.current_trial,
-			current_slot = state.current_slot,
-			trial_id = current_trial.id;
-		axios.put(`${api_url}/trials/${trial_id}`, 
-			response
-		).then(res => {
-			let updated_trial = res.data;
-			dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
-			if(updated_trial.accuracy < 200) {
-				current_slot['completed'] = true;
-				dispatch(updateSlot(current_slot))
-				dispatch({type: SHOW_CORRECT})
-				return;
-			} 
-			dispatch(adapt(updated_trial))
-		})
-		.catch(() => {
-			dispatch({
-			type: UPDATE_TRIAL_FAILURE,
-			error: Error(err),
-			typeerror: err
-			})
-		})
-	}
-}
-
-
-/*
-@params: 
-@purpose: take the current state of learn and return a new trial with updated settings
-*/
-export const ADAPT = 'ADAPT';
-export const ADAPT_SUCCESS = 'ADAPT_SUCCESS';
-export const ADAPT_FAILURE = 'ADAPT_FAILURE';
-export function adapt(updated_trial) {
-	return (dispatch, getState) => {
-		dispatch({type: ADAPT})
-		try {
-			let current_slot = getState().learn.current_slot,
-				adapt_trial,
-				mc_choices,
-				request_choices,
-				request_stem,
-				stem;
-			updated_trial = Object.assign({...updated_trial}, {
-				type: 'adapt',
-			})
-			dispatch({type: ADAPT_SUCCESS, new_format})
-			dispatch(newTrial(updated_trial))
-			if(current_slot.format !== new_format) {
-				current_slot['format'] = new_format;
-				dispatch(updateSlot(current_slot))
-			}
-		} catch(err) {
-			dispatch({
-				type: ADAPT_FAILURE,
-				error: Error(err)
-			})
-		}
-	}
-}
-
-// export const SHOW_FEEDBACK = 'SHOW_FEEDBACK'
-
-
-/*
 @params:
 @purpose: dispatch to store to update view to show correct view
 */
 export const SHOW_CORRECT = 'SHOW_CORRECT';
-// export function showCorrect() {
-// 	return {
-// 		type: SHOW_CORRECT
-// 	}
-// }
-
 
 /*
 @params:
 @purpose: dispatch to store to update view to show completed sequence (full)
 */
 export const SHOW_COMPLETED_SEQUENCE = 'SHOW_COMPLETED_SEQUENCE';
-// export function showCompletedSequence() {
-// 	return {
-// 		type: SHOW_COMPLETED_SEQUENCE
-// 	}
-// }
-
 
 /*
 @params:
@@ -713,34 +630,6 @@ export function nextRound() {
 
 export const UPDATING_STATE = 'UPDATING_STATE';
 export const UPDATE_CURRENT_ROUND = 'UPDATE_CURRENT_ROUND'
-
-
-/* Show completed round or sequence */
-
-// .then(() => {
-// 	var state = getState().learn,
-// 		slots = state.slots,
-// 		current_sequence = state.current_sequence,
-// 		current_round = state.current_round,
-// 		cmi = state.current_round_index,
-// 		rounds = state.rounds,
-// 		round_slots = current_round;
-// 	if(slots.filter(slot => !slot.completed).length === 0) {
-// 		current_sequence['type'] = 'completed';
-// 		dispatch(updateSequence(current_sequence))
-// 		return;
-// 	}
-// 	if(!current_sequence.completed && current_sequence.type !== 'completed') {
-// 		if(round_slots.filter(slot => !slot.completed).length === 0) {
-// 			rounds.map((miniseq) => {
-// 				if(rounds.indexOf(miniseq) == cmi) {
-// 					miniseq.completed = true
-// 				}
-// 			})
-// 			dispatch({type: SHOW_COMPLETE_MINISEQ, rounds})
-// 		}
-// 	}
-// })
 
 
 

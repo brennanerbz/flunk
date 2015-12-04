@@ -364,38 +364,13 @@ export function fetchTrials() {
 @params: slot_id, cue_visible, image, correct_index_choice, nonde,
 truefalse, all_of_the_above, format, click_to_answer, type_index_to_answer, cue_target_reversal, reverse_truefalse, reverse_mc, format_chosen_by_user, help_chosen_by_user,
 subject, synonyms, augs, related_terms, nonemc_choices, mc_choices, truefalse_target_shown, stem, alt_cues, start
-@purpose: send a POST request to create a new trial. will need to use state of slot and previous trial (if any) to determine the displayed augs/format and cue
+@purpose: send a POST request to create a new trial.
 */
 export const NEW_TRIAL = 'NEW_TRIAL';
 export const NEW_TRIAL_SUCCESS = 'NEW_TRIAL_SUCCESS';
 export const NEW_TRIAL_FAILURE = 'NEW_TRIAL_FAILURE';
-var _default_trial = {
-	slot_id: 0,
-	cue_visible: '',
-	image: '',
-	correct_index_choice: '',
-	none: false,
-	truefalse: false,
-	all_of_the_above: false, 
-	format: '', 
-	click_to_answer: false,
-	type_index_to_answer: false,
-	cue_target_reversal: false,
-	reverse_truefalse: false,
-	reverse_mc: false,
-	format_chosen_by_user: false,
-	help_chosen_by_user: false,
-	subjects: null,
-	synonyms: null,
-	augs: null,
-	related_terms: null,
-	nonemc_choices: null,
-	mc_choices: null,
-	truefalse_target_shown: null,
-	stem: null,
-	alt_cues: null,
-	start: null
-}
+var _default_trial = {}
+// recall | pic | related | augN | nonemc | mc | stem | peek | copy
 export function newTrial(trial) {
 	return (dispatch, getState) => {
 		dispatch({type: NEW_TRIAL})
@@ -406,35 +381,23 @@ export function newTrial(trial) {
 			s = new Date(),
 		  	start = s.toISOString().replace("T", " ").replace("Z", "");
 		if(current_slot.completed) {
+			dispatch({type: SHOW_CORRECT})
+			dispatch({type: RECEIVE_LEARN_SUCCESS})
 			return;
-		}
-		for(var _trialprop in trial) {
-			if(trial[_trialprop] instanceof Array) {
-				trial[_trialprop] = trial[_trialprop].join("|")
-			}
 		}
 		if (trial.type == 'return') {
 			new_trial = trial
-		} else if (trial.type == null) {
+
+		} else if (trial.type == null || trial.type == 'adapt') {
 			new_trial = Object.assign({..._default_trial}, {
 				slot_id: current_slot.id,
-				cue_visible: current_slot['item']['cue'],
-				format: 'recall',
 				start: start
 			})
-		} else if (trial.type == 'adapt') {
-			new_trial = Object.assign({..._default_trial}, {
-				slot_id: current_slot.id,
-				cue_visible: trial.cue_visible,
-				format: trial.format,
-				mc_choices: trial.mc_choices || null,
-				stem: trial.stem || null,
-				start: start
-			})
-		} else if (trial.type == 'hint') {
+
+		} else  {
 			new_trial = Object.assign({...trial}, {
 				help_chosen_by_user: true,
-				augs: trial.new_aug,
+				format: trial.type,
 				start: start
 			})
 		}
@@ -459,41 +422,6 @@ export function newTrial(trial) {
 	}
 }
 
-/* Helper for format / diff settings */
-export const CHANGE_FORMAT = 'CHANGE_FORMAT';
-export const CHANGE_FORMAT_ERROR = 'CHANGE_FORMAT_ERROR';
-
-export function newFormat(last_trial, state) {
-	return (dispatch, getState) => {
-		try {
-			let working_obj,
-				current_slot = state.learn.current_slot;
-			if(last_trial !== null) {
-				working_obj = last_trial;
-			} else {
-				working_obj = current_slot;
-			}
-			let all_formats = ['gen', 'trans', 'recall', 'nonemc', 'mc', 'truefalse', 'stem', 'peek', 'copy'],
-				current_formats = ['recall', 'mc', 'stem', 'copy'],
-				current_index = current_formats.indexOf(working_obj['format']),
-				next_index = current_index + 1;
-			if (next_index >= 3) {
-				next_index = 3
-			}
-			const new_format = current_formats[next_index];
-			dispatch({type: CHANGE_FORMAT, new_format})
-			
-			return new_format;
-		} catch(err) {
-			dispatch({
-				type: CHANGE_FORMAT_ERROR,
-				error: Error(err)
-			})
-		}
-	}
-}
-
-
 /* Helper for deciding which hint to show next */
 export const NEW_HINT = 'NEW_HINT';
 export const NEW_HINT_SUCCESS = 'NEW_HINT_SUCCESS';
@@ -503,27 +431,14 @@ export function hint(response) {
 		dispatch({type: NEW_HINT})
 		let current_trial = getState().learn.current_trial,
 			id = current_trial.id,
-			current_slot = getState().learn.current_slot,
-			augs = current_slot['augs'],
-			recent_aug = current_trial.augs ? current_trial['augs'][0] : null,
-			index = recent_aug !== null ? augs.indexOf(recent_aug) : 0,
-			next_index = index + 1;
+			current_slot = getState().learn.current_slot;
 		axios.put(`${api_url}/trials/${id}`, 
 			response
 		).then((res) => {
 			let updated_trial = res.data;
 			dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
-			if (next_index >= augs.length) {
-				next_index = augs.length;
-			}
-			if (augs.length > 0 && recent_aug == null) {
-				next_index = 0;
-			}
-			let new_aug = augs[next_index]
-			current_trial['new_aug'] = new_aug;
-			current_trial['type'] = 'hint';
+			current_trial['type'] = 'aug';
 			dispatch(newTrial(current_trial))
-			dispatch({type: NEW_HINT_SUCCESS, new_aug})
 		})
 		.catch(() => {
 			dispatch({
@@ -543,11 +458,6 @@ export const UPDATE_TRIAL = 'UPDATE_TRIAL';
 export const UPDATE_TRIAL_SUCCESS = 'UPDATE_TRIAL_SUCCESS';
 export const UPDATE_TRIAL_FAILURE = 'UPDATE_TRIAL_FAILURE';
 export const GRADING = 'GRADING';
-function willUpdateTrial() {
-	return {
-		type: UPDATE_TRIAL
-	}
-}
 export function updateTrial(response) {  
 	return (dispatch, getState) => {
 		dispatch({type: GRADING})
@@ -590,25 +500,14 @@ export function adapt(updated_trial) {
 	return (dispatch, getState) => {
 		dispatch({type: ADAPT})
 		try {
-			let new_format = dispatch(newFormat(updated_trial, getState())),
-				current_slot = getState().learn.current_slot,
+			let current_slot = getState().learn.current_slot,
 				adapt_trial,
 				mc_choices,
 				request_choices,
 				request_stem,
 				stem;
-			if(new_format == 'mc') {
-				mc_choices = current_slot['mc']
-				request_choices = mc_choices.join('|')
-			} else if (new_format == 'stem') {
-				stem = current_slot['stem']
-				request_stem = stem.join("|")
-			}
 			updated_trial = Object.assign({...updated_trial}, {
 				type: 'adapt',
-				format: new_format,
-				mc_choices: request_choices !== undefined ? request_choices : null,
-				stem: request_stem !== undefined ? request_stem : null
 			})
 			dispatch({type: ADAPT_SUCCESS, new_format})
 			dispatch(newTrial(updated_trial))

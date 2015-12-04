@@ -284,11 +284,11 @@ export default function learn(state = initial_learnstate, action) {
 				current_trial: action.updated_trial,
 				trial: action.updated_trial
 			}
-		case ADAPT_SUCCESS:
-			return {
-				...state,
-				current_slot: Object.assign({...state.current_slot}, {format: action.new_format})
-			}
+		// case ADAPT_SUCCESS:
+		// 	return {
+		// 		...state,
+		// 		current_slot: Object.assign({...state.current_slot}, {format: action.new_format})
+		// 	}
 		// case NEW_HINT_SUCCESS:
 		// 	let shouldShowHint = action.new_aug !== undefined ? true : false;
 		// 					   // && action.new_aug.indexOf(state.trial.censored_cue) !== -1;

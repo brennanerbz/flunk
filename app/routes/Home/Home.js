@@ -7,6 +7,7 @@ import { pushState } from 'redux-router';
 require('./Home.scss');
 
 import * as actionCreators from '../../actions/usersets';
+import * as transferActions from '../../actions/transfer';
 
 import SetList from '../../components/SetList/SetList';
 import ActivityList from '../../components/ActivityList/ActivityList';
@@ -19,6 +20,7 @@ import OnlineUserList from '../../components/OnlineUserList/OnlineUserList';
 	dispatch => ({
 		...bindActionCreators({
 			...actionCreators,
+			...transferActions,
 			pushState,
 		}, dispatch)
 	})
@@ -28,29 +30,16 @@ export default class Home extends Component {
 		
 	}
 
-	// intervalPoll = {}
-
 	componentWillMount() {
+		this.props.clearTransferState()
 		this.props.fetchAssignments(1)
 	}	
-
-	// assignmentPoll() {
-	// 	const { pollAssignments } = this.props;
-	// 	pollAssignments(1)
-	// }
 
 	componentDidMount() {
 		setTimeout(() => {
 			this.props.pollAssignments(1)
 		}, 1000)
-		// this.intervalPoll = setInterval(() => {
-		// 	::this.assignmentPoll(1)
-		// }, 2500)
 	}
-
-	// componentWillUnmount() {
-	// 	clearInterval(this.intervalPoll)
-	// }
 	
 	render() {	
 		const { sets, isFetching } = this.props;	 

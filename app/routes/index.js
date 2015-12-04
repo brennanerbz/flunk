@@ -12,7 +12,11 @@ import LoginPage from './LoginPage/LoginPage';
 import Home from './Home/Home';
 import CreateSet from './CreateSet/CreateSet';
 import Import from './Import/Import';
+
 import Profile from './Profile/Profile';
+import ProfileCreated from '../components/Profile/ProfileCreated/ProfileCreated';
+import ProfileStudied from '../components/Profile/ProfileStudied/ProfileStudied';
+
 import Learn from './Learn/Learn';
 
 import SetView from './Set/Set';
@@ -36,7 +40,10 @@ const routes = (
             <Route path="info" component={Info}/>
         </Route>
 
-        <Route path="profile/:id" component={Profile} />     
+        <Route path="profile/:id" component={Profile} >
+            <IndexRoute component={ProfileCreated}/>
+            <Route path="studied" component={ProfileStudied}/>
+        </Route>
 
         <Route path="createset" component={CreateSet} />
         <Route path="createset/:id" component={CreateSet}/>

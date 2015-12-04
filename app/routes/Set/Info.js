@@ -16,6 +16,7 @@ export default class Info extends Component {
 					doc={this.props.doc}
 					item_count={this.props.item_count}
 					purpose={this.props.purpose}
+					set={this.props.set}
 					subjects={this.props.subjects}
 					pushState={this.props.pushState}
 				/>

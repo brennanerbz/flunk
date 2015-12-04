@@ -9,8 +9,8 @@ export default class ProfileTabs extends Component {
 		return(
 			<div className="tabs_container">
 				<ul className="tabs_list">
-					<li className={classnames({'active': this.props.tab == 'created'}, "tab_item created_tab")}
-						onClick={() => this.props.changeTabs('created')}>
+					<li className={classnames({'active': this.props.tab.length == 0}, "tab_item created_tab")}
+						onClick={() => this.props.changeTabs('')}>
 						Created
 					</li>
 					<li className={classnames({'active': this.props.tab == 'studied'}, "tab_item created_tab")}

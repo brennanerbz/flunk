@@ -11,21 +11,29 @@ export default class ProfileCreated extends Component {
 	}
 
 	render() {
-		let sets = this.props.created_sets
-				   .filter(set => set.finalized !== null)
+		let sets = this.props.created_sets,
+			length = this.props.createdset_count,
+			{ profilestate } = this.props,
+			username = profilestate.username;
+		const null_sets = require('../../../assets/null_sets.png')
 		return(
 			<div>
 			{
-				sets.length == 0
-				&&
-				<h1 className="no_sets">{}</h1>
-			}
-			{
-				sets.length > 0
+				length > 0
 				&&
 				<SetList sets={sets} profile={true}/>
+			}
+			{
+				length <= 0
+				&&
+				<div className="no_sets">
+					<img className="" src={null_sets}/>
+					<h1 className="set_count"><b>{username}</b> hasn't created any sets</h1>
+				</div>
 			}
 			</div>
 		);
 	}
 }
+
+// <h1 className="set_count">{username} has created {sets.length} sets</h1>

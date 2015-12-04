@@ -51,6 +51,27 @@
 	}
 	.profile_setlist_container {
 		padding-top: 15px;
+		.no_sets {
+			margin: 70px auto;
+			max-width: 900px;
+			min-width: 700px;
+			padding-right: 3em;
+			img {
+				margin: 0 auto;
+				display: table;
+				height: 175px;
+			}
+			h1 {
+				margin-top: 25px;
+				text-align: center;
+				&.set_count {
+					font-size: 1.15rem;
+					font-weight: 400;
+					padding-bottom: 15px;
+					color: #666;
+				}
+			}
+		}
 	}
 	.profile_info {
 		width: 90%;

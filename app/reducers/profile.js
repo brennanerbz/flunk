@@ -19,9 +19,9 @@ const initial_profilestate = {
 	assignments: [],
 	studied_sets: [],
 	created_sets: [],
-	studiedset_count: '',
-	createdset_count: '',
-	createditems_count: ''
+	studiedset_count: 0,
+	createdset_count: 0,
+	createditems_count: 0
 }
 
 export default function profile(state = initial_profilestate, action) {
@@ -56,14 +56,16 @@ export default function profile(state = initial_profilestate, action) {
 				}).forEach(assign => {
 					created.push(assign.set)
 				})
+			studied = studied.filter(set => set.finalized !== null)
+			created = created.filter(set => set.finalized !== null)
 			return {
 				...state,
 				isFetchingProfile: false,
 				assignments: assignments,
 				studied_sets: studied,
-				studiedset_count: studied.length,
+				studiedset_count: studied.length - 1,
 				created_sets: created,
-				createdset_count: created.length
+				createdset_count: created.length - 1
 			}
 		case CLEAR_PROFILE:
 			return {

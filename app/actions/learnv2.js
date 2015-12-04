@@ -560,7 +560,7 @@ export function updateTrial(response) {
 		).then(res => {
 			let updated_trial = res.data;
 			dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
-			if(updated_trial.correct) {
+			if(updated_trial.accuracy < 200) {
 				current_slot['completed'] = true;
 				dispatch(updateSlot(current_slot))
 				dispatch({type: SHOW_CORRECT})

@@ -397,6 +397,7 @@ export default class Learn extends Component {
 													{...this.props}/>
 											: null
 										}
+										
 										<div className="debug_feedback">
 											<div className="debug_cell">
 												<p>Previous</p>
@@ -428,4 +429,5 @@ export default class Learn extends Component {
 		);
 	}
 }
+
 

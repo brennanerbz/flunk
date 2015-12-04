@@ -13,7 +13,7 @@ export default class ProfileCreated extends Component {
 	render() {
 		let sets = this.props.created_sets,
 			length = this.props.createdset_count,
-			{ profilestate } = this.props,
+			{ profilestate, pushState } = this.props,
 			username = profilestate.username;
 		const null_sets = require('../../../assets/null_sets.png')
 		return(
@@ -21,7 +21,7 @@ export default class ProfileCreated extends Component {
 			{
 				length > 0
 				&&
-				<SetList sets={sets} profile={true}/>
+				<SetList pushState={pushState} sets={sets} profile={true}/>
 			}
 			{
 				length <= 0

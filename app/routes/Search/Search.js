@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 import { Link } from 'react-router';
 import { pushState } from 'redux-router';
+import DocumentTitle from 'react-document-title';
+
 
 import * as searchactions from '../../actions/search';
 
@@ -153,33 +155,35 @@ export default class Search extends Component {
 		const { query } = this.props.params,
 			  { loc, searching, items, noResults, root_path } = this.props;
 		return(
-			<div className="search_page">
-				<nav className="search_tabs">
-					<SearchTabs changeTab={(tab) => this.setState({current_tab: tab})} {...this.props}/>
-				</nav>
-				<article className={classnames("search_content", "no_sidenav_container", {'sets_page': true}, {"searching": searching})}>
-					{
-						loc.pathname.indexOf('concepts') !== -1 && items !== null
-						? <SearchConcepts query={query} {...this.props}/>
-						: null
-					}
-					{
-						loc.pathname.indexOf('sets') !== -1
-						? <SearchSets query={query} {...this.props}/>
-						: null
-					}
-					{
-						loc.pathname.indexOf('users') !== -1
-						? <SearchPeople query={query} {...this.props}/>
-						: null
-					}
-					{
-						!searching && !noResults
-						? <SearchPaging tab={this.state.current_tab} {...this.props}/>
-						: null
-					}
-				</article>
-			</div>
+			<DocumentTitle title={`Ace Search`}>
+				<div className="search_page">
+					<nav className="search_tabs">
+						<SearchTabs changeTab={(tab) => this.setState({current_tab: tab})} {...this.props}/>
+					</nav>
+					<article className={classnames("search_content", "no_sidenav_container", {'sets_page': true}, {"searching": searching})}>
+						{
+							loc.pathname.indexOf('concepts') !== -1 && items !== null
+							? <SearchConcepts query={query} {...this.props}/>
+							: null
+						}
+						{
+							loc.pathname.indexOf('sets') !== -1
+							? <SearchSets query={query} {...this.props}/>
+							: null
+						}
+						{
+							loc.pathname.indexOf('users') !== -1
+							? <SearchPeople query={query} {...this.props}/>
+							: null
+						}
+						{
+							!searching && !noResults
+							? <SearchPaging tab={this.state.current_tab} {...this.props}/>
+							: null
+						}
+					</article>
+				</div>
+			</DocumentTitle>
 		);
 	}
 }

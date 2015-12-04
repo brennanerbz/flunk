@@ -19,7 +19,7 @@ export default class Upload extends Component {
 			  transform = require('../../assets/transform.png'),
 			  set = require('../../assets/set_icon_grey.png');
 		return(
-			<DocumentTitle title='Upload - Ace'>
+			<DocumentTitle title='Import | Ace'>
 				<div className="upload_page">
 					<div className="upload_container">
 						<div id="upload_progress">

@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import DocumentTitle from 'react-document-title';
+
 import moment from 'moment';
 import * as learnactions from '../../actions/learnv2';
 import * as setactions from '../../actions/usersets';
@@ -38,6 +40,7 @@ import SequenceSummary from '../../components/Learn/SequenceSummary/SequenceSumm
 	showCompletedSequence: state.learn.isShowingCompletedSequence,
 	showFeedback: state.learn.isShowingFeedback,
 	slots: state.learn.slots,
+	current_sequence: state.learn.current_sequence,
 	current_slot: state.learn.current_slot,
 	previous_trial: state.learn.previous_trial,
 	current_trial: state.learn.current_trial,
@@ -185,6 +188,7 @@ export default class Learn extends Component {
 		const { current_slot,
 				previous_trial,
 				current_trial,
+				current_sequence,
 				slots,
 				newSequence, 
 				isFetchingTrials,
@@ -290,132 +294,137 @@ export default class Learn extends Component {
 		}
 		
 		return (
-			<div className="learn_page"
-				 ref="learn_page"
-				 id="learn_page">
-				
-				{
-					showLearn
-					? <div className="spinner_container">	
-				 	  	  <div className="big_spinner learn">
-				 	  	  	<div className="sk-fading-circle">
-				 	  	  	  <div className="sk-circle1 sk-circle"></div>
-				 	  	  	  <div className="sk-circle2 sk-circle"></div>
-				 	  	  	  <div className="sk-circle3 sk-circle"></div>
-				 	  	  	  <div className="sk-circle4 sk-circle"></div>
-				 	  	  	  <div className="sk-circle5 sk-circle"></div>
-				 	  	  	  <div className="sk-circle6 sk-circle"></div>
-				 	  	  	  <div className="sk-circle7 sk-circle"></div>
-				 	  	  	  <div className="sk-circle8 sk-circle"></div>
-				 	  	  	  <div className="sk-circle9 sk-circle"></div>
-				 	  	  	  <div className="sk-circle10 sk-circle"></div>
-				 	  	  	  <div className="sk-circle11 sk-circle"></div>
-				 	  	  	  <div className="sk-circle12 sk-circle"></div>
-				 	  	  	</div>
-				 	  	  </div>
-				 	    <span className="loading_label">Loading</span>
-				 	    <span className="loading"><span>.</span><span>.</span><span>.</span></span>
-			 	      </div>
-			 	    : null
-				}
-								 
-				 {
-					!showLearn && slots !== undefined
-					? <div>
-						<SeqControl {...this.props}/>
-							<div className={classnames("no_sidenav_container learn_container", 
-										   {"round_summary": isShowingCompletedRound})}>
-								<div>
-									{
-										current_slot !== undefined 
-										&& trial !== undefined 
-										&& !isShowingCompletedRound
-										&& !showCompletedSequence
-										? <LearnCard 
-											   updateValue={(value) => ::this.updateStateWithUserResponse(value)}
-											   submitAnswer={(response) => ::this.handleUserResponse(response)}
-											   getHint={(response) => ::this.handleGetHint(response)}
-											   ref="learn_card"
-											   slot={current_slot !== undefined ? current_slot : null} 
-											   slots={slots} 
-											   trial={this.props.trial}
-											   cue={current_slot.item !== undefined ? current_slot.item.cue : null}
-											   {...this.props}/>
-										: null
-									}
-									{
-										showCorrect && !isShowingCompletedRound && !showCompletedSequence
-										? <ShowCorrect correctMiniSequence={isShowingCompletedRound} 
-													   {...this.props}/>
-										: null
-									}
-									{
-										showCompletedSequence
-										? <SequenceSummary {...this.props}/>
-										: null
-									}
-									{
-										isShowingCompletedRound && !showCompletedSequence
-										? <ReactCSSTransitionGroup transitionName="fade_in" 
-								     							   transitionEnterTimeout={500} 
-								     							   transitionLeaveTimeout={500}>
-											<RoundSummary {...this.props}/>
-										  </ReactCSSTransitionGroup>
-										: null
-									}
-									{
-										!showCompletedSequence && isShowingCompletedRound 
-										? <a className="link continue_link" 
-										     onClick={() => this.props.nextRound()}>
-										     Press any key to continue to next round</a>
-										: null
-									}												
-									{
-										!showCorrect && !showCompletedSequence && !isShowingCompletedRound 
-										? <DiffControls getHint={::this.handleHint} {...this.props} />
-										: null
-									}
-									{
-										showFeedback
-										? null
-										// ? <LearnFeedback slot={current_slot} trial={this.props.trial} />	
-										: null
-									}
-									{
-										(!showCorrect 
-										&& !showCompletedSequence || !isShowingCompletedRound) 
-										&& (showHint && trial.augs !== null) 
-										? <Hint hints={trial.augs.length > 0 ? trial.augs : null} 
-												{...this.props}/>
-										: null
-									}
-									<div className="debug_feedback">
-										<div className="debug_cell">
-											<p>Previous</p>
-											{
-												debug_prev_trial.map((x, i) => {
-													return <p className="feedback_key" key={i}>{x}</p>
-												})
-											}
+			<DocumentTitle title={!showLearn && current_sequence.set.title !== undefined 
+							? `Learn: ${current_sequence.set.title}` 
+							: "Loading Learn..."}>
+
+				<div className="learn_page"
+					 ref="learn_page"
+					 id="learn_page">
+					
+					{
+						showLearn
+						? <div className="spinner_container">	
+					 	  	  <div className="big_spinner learn">
+					 	  	  	<div className="sk-fading-circle">
+					 	  	  	  <div className="sk-circle1 sk-circle"></div>
+					 	  	  	  <div className="sk-circle2 sk-circle"></div>
+					 	  	  	  <div className="sk-circle3 sk-circle"></div>
+					 	  	  	  <div className="sk-circle4 sk-circle"></div>
+					 	  	  	  <div className="sk-circle5 sk-circle"></div>
+					 	  	  	  <div className="sk-circle6 sk-circle"></div>
+					 	  	  	  <div className="sk-circle7 sk-circle"></div>
+					 	  	  	  <div className="sk-circle8 sk-circle"></div>
+					 	  	  	  <div className="sk-circle9 sk-circle"></div>
+					 	  	  	  <div className="sk-circle10 sk-circle"></div>
+					 	  	  	  <div className="sk-circle11 sk-circle"></div>
+					 	  	  	  <div className="sk-circle12 sk-circle"></div>
+					 	  	  	</div>
+					 	  	  </div>
+					 	    <span className="loading_label">Loading</span>
+					 	    <span className="loading"><span>.</span><span>.</span><span>.</span></span>
+				 	      </div>
+				 	    : null
+					}
+									 
+					 {
+						!showLearn && slots !== undefined
+						? <div>
+							<SeqControl {...this.props}/>
+								<div className={classnames("no_sidenav_container learn_container", 
+											   {"round_summary": isShowingCompletedRound})}>
+									<div>
+										{
+											current_slot !== undefined 
+											&& trial !== undefined 
+											&& !isShowingCompletedRound
+											&& !showCompletedSequence
+											? <LearnCard 
+												   updateValue={(value) => ::this.updateStateWithUserResponse(value)}
+												   submitAnswer={(response) => ::this.handleUserResponse(response)}
+												   getHint={(response) => ::this.handleGetHint(response)}
+												   ref="learn_card"
+												   slot={current_slot !== undefined ? current_slot : null} 
+												   slots={slots} 
+												   trial={this.props.trial}
+												   cue={current_slot.item !== undefined ? current_slot.item.cue : null}
+												   {...this.props}/>
+											: null
+										}
+										{
+											showCorrect && !isShowingCompletedRound && !showCompletedSequence
+											? <ShowCorrect correctMiniSequence={isShowingCompletedRound} 
+														   {...this.props}/>
+											: null
+										}
+										{
+											showCompletedSequence
+											? <SequenceSummary {...this.props}/>
+											: null
+										}
+										{
+											isShowingCompletedRound && !showCompletedSequence
+											? <ReactCSSTransitionGroup transitionName="fade_in" 
+									     							   transitionEnterTimeout={500} 
+									     							   transitionLeaveTimeout={500}>
+												<RoundSummary {...this.props}/>
+											  </ReactCSSTransitionGroup>
+											: null
+										}
+										{
+											!showCompletedSequence && isShowingCompletedRound 
+											? <a className="link continue_link" 
+											     onClick={() => this.props.nextRound()}>
+											     Press any key to continue to next round</a>
+											: null
+										}												
+										{
+											!showCorrect && !showCompletedSequence && !isShowingCompletedRound 
+											? <DiffControls getHint={::this.handleHint} {...this.props} />
+											: null
+										}
+										{
+											showFeedback
+											? null
+											// ? <LearnFeedback slot={current_slot} trial={this.props.trial} />	
+											: null
+										}
+										{
+											(!showCorrect 
+											&& !showCompletedSequence || !isShowingCompletedRound) 
+											&& (showHint && trial.augs !== null) 
+											? <Hint hints={trial.augs.length > 0 ? trial.augs : null} 
+													{...this.props}/>
+											: null
+										}
+										<div className="debug_feedback">
+											<div className="debug_cell">
+												<p>Previous</p>
+												{
+													debug_prev_trial.map((x, i) => {
+														return <p className="feedback_key" key={i}>{x}</p>
+													})
+												}
+											</div>
+											<div className="debug_cell">
+												<p>Current</p>
+												{
+													debug_curr_trial.map((x, i) => {
+														return <p className="feedback_key" key={i}>{x}</p>
+													})
+												}
+											</div>
 										</div>
-										<div className="debug_cell">
-											<p>Current</p>
-											{
-												debug_curr_trial.map((x, i) => {
-													return <p className="feedback_key" key={i}>{x}</p>
-												})
-											}
+										<div className="feedback">
+											<a className="feedback_link">Feedback</a>
 										</div>
 									</div>
-									<div className="feedback">
-										<a className="feedback_link">Feedback</a>
-									</div>
-								</div>
-							 </div> 
-						 </div>
-					: null
-				}
-			</div>
+								 </div> 
+							 </div>
+						: null
+					}
+				</div>
+			</DocumentTitle>
 		);
 	}
 }

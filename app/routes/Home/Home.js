@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 import { Link } from 'react-router';
 import { pushState } from 'redux-router';
+import DocumentTitle from 'react-document-title';
 require('./Home.scss');
 
 import * as actionCreators from '../../actions/usersets';
@@ -44,40 +45,42 @@ export default class Home extends Component {
 	render() {	
 		const { sets, isFetching } = this.props;	 
 		return(
-			<div className="main_content">
-				<div className="page_header_wrapper">
-					{
-					!isFetching
-					? <h1 className="page_header">Home</h1>
-					: 
-					<div className="big_spinner">
-						<div className="sk-fading-circle">
-						  <div className="sk-circle1 sk-circle"></div>
-						  <div className="sk-circle2 sk-circle"></div>
-						  <div className="sk-circle3 sk-circle"></div>
-						  <div className="sk-circle4 sk-circle"></div>
-						  <div className="sk-circle5 sk-circle"></div>
-						  <div className="sk-circle6 sk-circle"></div>
-						  <div className="sk-circle7 sk-circle"></div>
-						  <div className="sk-circle8 sk-circle"></div>
-						  <div className="sk-circle9 sk-circle"></div>
-						  <div className="sk-circle10 sk-circle"></div>
-						  <div className="sk-circle11 sk-circle"></div>
-						  <div className="sk-circle12 sk-circle"></div>
-						</div>
-					</div>
-					}
-				</div>
-				<div className="row">
-					<div className="col-sm-12 col-md-11 col-lg-12">	
+			<DocumentTitle title="Learn more, work less">
+				<div className="main_content">
+					<div className="page_header_wrapper">
 						{
-							typeof sets == undefined || sets.length === 0
-							? null
-							: <SetList {...this.props} />
-						}									
-					</div>					
-				</div>	
-			</div>
+						!isFetching
+						? <h1 className="page_header">Home</h1>
+						: 
+						<div className="big_spinner">
+							<div className="sk-fading-circle">
+							  <div className="sk-circle1 sk-circle"></div>
+							  <div className="sk-circle2 sk-circle"></div>
+							  <div className="sk-circle3 sk-circle"></div>
+							  <div className="sk-circle4 sk-circle"></div>
+							  <div className="sk-circle5 sk-circle"></div>
+							  <div className="sk-circle6 sk-circle"></div>
+							  <div className="sk-circle7 sk-circle"></div>
+							  <div className="sk-circle8 sk-circle"></div>
+							  <div className="sk-circle9 sk-circle"></div>
+							  <div className="sk-circle10 sk-circle"></div>
+							  <div className="sk-circle11 sk-circle"></div>
+							  <div className="sk-circle12 sk-circle"></div>
+							</div>
+						</div>
+						}
+					</div>
+					<div className="row">
+						<div className="col-sm-12 col-md-11 col-lg-12">	
+							{
+								typeof sets == undefined || sets.length === 0
+								? null
+								: <SetList {...this.props} />
+							}									
+						</div>					
+					</div>	
+				</div>
+			</DocumentTitle>
 		);
 	}
 }

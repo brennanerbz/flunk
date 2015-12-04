@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 import { pushState } from 'redux-router';
+import DocumentTitle from 'react-document-title';
+
 require('./Set.scss')
 
 import * as setactions from '../../actions/set';
@@ -84,51 +86,53 @@ export default class Set extends Component {
 			})
 		})
 		return(
-			<div className="set_view main_content">
-				{
-					!isFetching
-					? <div className="row">
-						<div className="col-sm-9 col-md-10 col-lg-10">
-							<SetHeader 
-								assignment={this.props.assignment}
-								creator_id={this.props.creator_id}
-								creator_username={this.props.creator_username} 
-								id={this.props.id}
-								item_count={this.props.item_count}
-								set={this.props.set}
-								title={this.props.title}
-								user={this.props.user}
-								
-							/>		
-							<Tabs 
-								location={this.props.loc}
-								id={this.props.id}
-								pushState={this.props.pushState}
-							/>
+			<DocumentTitle title={this.props.set.title !== undefined ? `${this.props.set.title} | Ace` : 'Loading...'}>
+				<div className="set_view main_content">
+					{
+						!isFetching
+						? <div className="row">
+							<div className="col-sm-9 col-md-10 col-lg-10">
+								<SetHeader 
+									assignment={this.props.assignment}
+									creator_id={this.props.creator_id}
+									creator_username={this.props.creator_username} 
+									id={this.props.id}
+									item_count={this.props.item_count}
+									set={this.props.set}
+									title={this.props.title}
+									user={this.props.user}
+									
+								/>		
+								<Tabs 
+									location={this.props.loc}
+									id={this.props.id}
+									pushState={this.props.pushState}
+								/>
 
-							{ setChildrenWithProps }		
+								{ setChildrenWithProps }		
 
+							</div>
 						</div>
-					</div>
-					: 
-					<div className="big_spinner">
-						<div className="sk-fading-circle">
-						  <div className="sk-circle1 sk-circle"></div>
-						  <div className="sk-circle2 sk-circle"></div>
-						  <div className="sk-circle3 sk-circle"></div>
-						  <div className="sk-circle4 sk-circle"></div>
-						  <div className="sk-circle5 sk-circle"></div>
-						  <div className="sk-circle6 sk-circle"></div>
-						  <div className="sk-circle7 sk-circle"></div>
-						  <div className="sk-circle8 sk-circle"></div>
-						  <div className="sk-circle9 sk-circle"></div>
-						  <div className="sk-circle10 sk-circle"></div>
-						  <div className="sk-circle11 sk-circle"></div>
-						  <div className="sk-circle12 sk-circle"></div>
+						: 
+						<div className="big_spinner">
+							<div className="sk-fading-circle">
+							  <div className="sk-circle1 sk-circle"></div>
+							  <div className="sk-circle2 sk-circle"></div>
+							  <div className="sk-circle3 sk-circle"></div>
+							  <div className="sk-circle4 sk-circle"></div>
+							  <div className="sk-circle5 sk-circle"></div>
+							  <div className="sk-circle6 sk-circle"></div>
+							  <div className="sk-circle7 sk-circle"></div>
+							  <div className="sk-circle8 sk-circle"></div>
+							  <div className="sk-circle9 sk-circle"></div>
+							  <div className="sk-circle10 sk-circle"></div>
+							  <div className="sk-circle11 sk-circle"></div>
+							  <div className="sk-circle12 sk-circle"></div>
+							</div>
 						</div>
-					</div>
-				}
-			</div>
+					}
+				</div>
+			</DocumentTitle>
 		);
 	}
 }

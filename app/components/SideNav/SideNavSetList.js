@@ -57,10 +57,14 @@ export default class SetList extends Component {
 				</h2>
 				<ul className="sidenav_list">
 					{
-						assignments.map((assig, i) => <SideNavSetListItem {...this.props}
-							 									 assig={assig}
-																 index={i} 
-																 key={'side' + assig.id + i} />)
+						assignments.map((assig, i) => { 
+							return (
+								<SideNavSetListItem {...this.props}
+				 									 assig={assig}
+													 index={i} 
+													 key={'side' + assig.id + i} />
+								)
+							})
 					}					
 					<Link to="/createset" className="sidenav_create list_more">Create a study set...</Link>
 				</ul>

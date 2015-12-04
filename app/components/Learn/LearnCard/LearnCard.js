@@ -19,7 +19,6 @@ export default class LearnCard extends Component {
 	render() {
 		const { showCorrect, 
 				showCompletedSeq, 
-				trial, 
 				slots, 
 				cue,
 				current_slot } = this.props;

@@ -112,16 +112,6 @@ const initial_learnstate = {
 		
 }
 
-Array.prototype.clean = function(deleteValue) {
-  for (var i = 0; i < this.length; i++) {
-    if (this[i] == deleteValue) {         
-      this.splice(i, 1);
-      i--;
-    }
-  }
-  return this;
-};
-
 export default function learn(state = initial_learnstate, action) {
 	switch(action.type) {
 
@@ -284,19 +274,6 @@ export default function learn(state = initial_learnstate, action) {
 				current_trial: action.updated_trial,
 				trial: action.updated_trial
 			}
-		// case ADAPT_SUCCESS:
-		// 	return {
-		// 		...state,
-		// 		current_slot: Object.assign({...state.current_slot}, {format: action.new_format})
-		// 	}
-		// case NEW_HINT_SUCCESS:
-		// 	let shouldShowHint = action.new_aug !== undefined ? true : false;
-		// 					   // && action.new_aug.indexOf(state.trial.censored_cue) !== -1;
-		// 	return {
-		// 		...state,
-		// 		isShowingHint: shouldShowHint,
-		// 		trial: Object.assign({...state.trial}, {augs: action.new_aug})
-		// 	}
 		case SHOW_CORRECT:
 			return {
 				...state,

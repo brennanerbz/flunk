@@ -37,10 +37,10 @@ export default class LearnHelp extends Component {
 											 current_trial={current_trial}/>
 						}
 						{
-							current_slot.format !== null
-							&& current_slot.format !== 'recall'
+							current_trial.format !== null
+							&& current_trial.format !== 'recall'
 							&&
-							<Help current_slot={current_slot} />
+							<Help current_trial={current_trial} />
 						}
 					</ol>
 				}

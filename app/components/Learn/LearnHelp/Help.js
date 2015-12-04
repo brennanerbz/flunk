@@ -11,10 +11,10 @@ export default class Help extends Component {
 	}
 
 	renderHelp() {
-		const { current_slot } = this.props;
+		const { current_trial } = this.props;
 		
 		// recall | pic | related | augN | nonemc | mc | stem | peek | copy
-		switch(current_slot.format) {
+		switch(current_trial.format) {
 			case 'recall':
 				return;
 			case 'related':
@@ -22,13 +22,13 @@ export default class Help extends Component {
 			case 'nonemc':
 			case 'mc':
 			 	return (
-			 		<MultipleChoice choices={current_slot.mc !== undefined ? current_slot.mc : null}/>
+			 		<MultipleChoice choices={current_trial.mc !== undefined ? current_trial.mc : null}/>
 			 	) 
 			case 'stem':
 			case 'peek':
 			case 'copy':
 				return (
-					<Target diff={current_slot.format} stem={current_slot.stem} target={current_slot.item.target}/>
+					<Target diff={current_trial.format} stem={current_trial.stem} target={current_trial.item.target}/>
 				)
 			case 'aug':
 			default:
@@ -37,33 +37,30 @@ export default class Help extends Component {
 	}
 
 	render() {
-		const { current_slot } = this.props;
+		const { current_trial } = this.props;
 		return(
 			<li className="bot">
 				<div className="message help">
 					<div className="">
-						<p className={classnames("diff_label", {'mc_label': current_slot.format == 'mc' || current_slot.format == 'nonemc'  })}>
+						<p className={classnames("diff_label", 
+							{'mc_label': current_trial.format == 'mc' || current_trial.format == 'nonemc'  })}>
 						{ 
-							current_slot.format == 'mc' || current_slot.format == 'nonemc'
-							? "Multiple Choice:"
-							: null
+							current_trial.format == 'mc' || current_trial.format == 'nonemc'
+							&& "Multiple Choice:"
 						}
 						{
-							current_slot.format == 'stem'
-							? "Fill in the blank:"
-							: null
+							current_trial.format == 'stem'
+							&& "Fill in the blank:"
 						}
 						{
-							current_slot.format == 'copy' || current_slot.format == 'peek'
-							? 'Correct answer:'
-							: null
+							current_trial.format == 'copy' || current_trial.format == 'peek'
+							&& 'Correct answer:'
 						}
 						</p>
 					</div>
 					{
-						current_slot.completion == null
-						? ::this.renderHelp()
-						: null
+						current_slot.completion !== null
+						&& ::this.renderHelp()
 					}
 				</div>
 			</li>

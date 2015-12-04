@@ -44,7 +44,6 @@ import SequenceSummary from '../../components/Learn/SequenceSummary/SequenceSumm
 	current_slot: state.learn.current_slot,
 	previous_trial: state.learn.previous_trial,
 	current_trial: state.learn.current_trial,
-	trial: state.learn.trial,
 	sets: state.sets.set_items
 	}),
 	dispatch => ({
@@ -180,10 +179,6 @@ export default class Learn extends Component {
  		this.refs.learn_card.sendEvent(event, hint)
  	}
 
- 	handleGetHint(response) {
- 		this.props.hint(response)
- 	}
-
 	render() {
 		const { current_slot,
 				previous_trial,
@@ -200,7 +195,6 @@ export default class Learn extends Component {
 				showHint,
 				skipSlot, 
 				nextSlot,
-				trial,
 				params} = this.props;
 		let debug_prev_trial = [],
 			debug_curr_trial =[]
@@ -336,17 +330,15 @@ export default class Learn extends Component {
 									<div>
 										{
 											current_slot !== undefined 
-											&& trial !== undefined 
+											&& current_trial !== undefined 
 											&& !isShowingCompletedRound
 											&& !showCompletedSequence
 											? <LearnCard 
 												   updateValue={(value) => ::this.updateStateWithUserResponse(value)}
 												   submitAnswer={(response) => ::this.handleUserResponse(response)}
-												   getHint={(response) => ::this.handleGetHint(response)}
+												   getHint={(response) => ::this.props.hint(response)}
 												   ref="learn_card"
 												   slot={current_slot !== undefined ? current_slot : null} 
-												   slots={slots} 
-												   trial={this.props.trial}
 												   cue={current_slot.item !== undefined ? current_slot.item.cue : null}
 												   {...this.props}/>
 											: null
@@ -379,21 +371,16 @@ export default class Learn extends Component {
 											: null
 										}												
 										{
-											!showCorrect && !showCompletedSequence && !isShowingCompletedRound 
+											!showCorrect 
+											&& !showCompletedSequence && !isShowingCompletedRound 
 											? <DiffControls getHint={::this.handleHint} {...this.props} />
-											: null
-										}
-										{
-											showFeedback
-											? null
-											// ? <LearnFeedback slot={current_slot} trial={this.props.trial} />	
 											: null
 										}
 										{
 											(!showCorrect 
 											&& !showCompletedSequence || !isShowingCompletedRound) 
-											&& (showHint && trial.augs !== null) 
-											? <Hint hints={trial.augs.length > 0 ? trial.augs : null} 
+											&& (showHint && current_trial.augs !== null) 
+											? <Hint hints={current_trial.augs.length > 0 ? current_trial.augs : null} 
 													{...this.props}/>
 											: null
 										}

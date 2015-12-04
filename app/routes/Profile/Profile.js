@@ -61,6 +61,13 @@ export default class Profile extends Component {
 		fetchProfilePage(params.id)
 	}
 
+	componentWillReceiveProps(nextProps) {
+		const { params, fetchProfilePage } = this.props;
+		if(params.id !== nextProps.params.id) {
+			fetchProfilePage(nextProps.params.id)
+		}
+	}
+
 	componentWillUnmount() {
 		let { clearProfile } = this.props;
 		clearProfile()

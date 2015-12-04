@@ -1197,7 +1197,7 @@ textarea:hover:ms-input-placeholder {
 	background: #fff;
 	opacity: 1!important;
 	box-shadow: 0 5px 10px rgba(0,0,0,.12);
-	border-radius: 6px;
+	border-radius: 4px;
 	border: 1px solid rgba(0,0,0,.15);
 	ul {
 		list-style-type:none;
@@ -1243,7 +1243,7 @@ textarea:hover:ms-input-placeholder {
 				text-overflow:ellipsis;
 				white-space:nowrap;
 				outline:0;
-				border-radius:.25rem;
+				border-radius: 4px;
 				letter-spacing: 0.01em;
 			}
 			&.highlighted, &:hover {

@@ -8,6 +8,7 @@ require('./SideNav.scss');
 
 @connect(state =>({
 	loc: state.router.location,
+	user_id: state.user.user.id
 }))
 export default class SideNav extends Component {
 	static propTypes = {

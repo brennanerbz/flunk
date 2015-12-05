@@ -49,9 +49,8 @@ export default class Home extends Component {
 				<div className="main_content">
 					<div className="page_header_wrapper">
 						{
-						!isFetching
-						? <h1 className="page_header">Home</h1>
-						: 
+						isFetching
+						&&
 						<div className="big_spinner">
 							<div className="sk-fading-circle">
 							  <div className="sk-circle1 sk-circle"></div>
@@ -71,7 +70,7 @@ export default class Home extends Component {
 						}
 					</div>
 					<div className="row">
-						<div className="col-sm-12 col-md-11 col-lg-12">	
+						<div className="col-sm-12 col-md-10">	
 							{
 								typeof sets == undefined || sets.length === 0
 								? null

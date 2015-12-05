@@ -1,14 +1,11 @@
 .day_divider {
-	// margin-right: -.125rem;
-	margin: 0.5rem -18px 0 -1.5rem;
-	padding: .5rem 55px .5rem 1.5rem;
+	margin: 0;
 	line-height: 1.2rem;
 	font-size: 0.95rem;
 	font-family: "Lato";
-	color: #555459;
-	font-weight: 900;
+	color: #ccc;
+	font-weight: 400;
 	letter-spacing: 0.01em;
-	text-align: center;
 	cursor: default;
 	clear: both;
 	position: relative;
@@ -22,18 +19,16 @@
 	hr {
 		position: absolute;
 		border-top: 1px solid #DDD;
-		top: 1.1rem;
+		top: 1.85rem;
 		right: 18px;
-		left: 1.5rem;
+		left: 0rem;
 		margin: 0;
 	}
 	.day_divider_label {
-		background:#fff;
-		padding: 0 1rem;
+		padding: 0 0rem;
 		display: inline-block;
 		margin: 0 auto;
 		position: relative;
-
 	}		
 }
 .sets_container {
@@ -66,6 +61,7 @@
 		-webkit-border-radius: 7px;
 		-moz-border-radius: 7px;
 		border-bottom: 1px solid #e8e8e8;	
+		margin-top: 1em;
 		&:hover {
 			// background-color: #FAFAFA!important;
 			border-color: rgba(0,0,0,.1)!important;

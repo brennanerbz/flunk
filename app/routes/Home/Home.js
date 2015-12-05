@@ -14,7 +14,7 @@ import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import SetList from '../../components/SetList/SetList';
 
 /* Smart wrapper container for Recent Set List */
-import RecentActivityContainer from '../../components/SetList/SmartComponents/RecentActivityContainer';
+import SetListContainer from '../../components/SetList/SmartComponents/SetListContainer';
 
 @connect(state => ({
 	assignments: state.sets.assignments,
@@ -55,7 +55,7 @@ export default class Home extends Component {
 					</div>
 					{ 
 						!isFetching
-						&& <RecentActivityContainer {...this.props}/> 
+						&& <SetListContainer {...this.props}/> 
 					}
 				</div>
 			</DocumentTitle>

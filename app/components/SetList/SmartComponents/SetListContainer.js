@@ -34,21 +34,24 @@ export default class SetListSections extends Component {
 	static propTypes = {
 	}
 
-	renderSection(arr) {
-		return (
-			arr.length > 0
-			&&
-			<li className="recent_section">
-				<h1 className="recent_section_title">{arr.charAt(0).toUpperCase() + arr.slice(1)}</h1>
-				<SetListView assignments={arr} />
-			</li>
-		)
-	}
-
 	render() {
 		const { assignments } = this.props;
+		let sections = this.computeSections(assignments)
+		return(
+			<ul className="recent_view_sections">				
+				{ 
+					::this.renderSections(sections).map(val => {
+						return val;
+					})
+				}
+			</ul>
+		);
+	}
+
+	computeSections(assignments) {
 		let sections = {
 			drafts: [],
+			today: [],
 			yesterday: [],
 			this_week: [],
 			last_week: [],
@@ -61,19 +64,18 @@ export default class SetListSections extends Component {
 			study_date,
 			today_date = moment().utc(),
 			diff;
+
 		for(var i = 0; i < assignments.length; i++) {
 			assignment = assignments[i];
+			study_date = moment.utc(assignment.studied)
+			diff = today_date.diff(study_date, 'days')
 			if(assignment.set.finalized == null) {
 				sections.drafts.push(assignment)
-				return;
 			}
-			study_date = moment.utc(assignment.studied)
-			if(moment(today_date).isSame(study_date), 'day') {
+			else if(moment(today_date).isSame(study_date), 'day') {
 				sections.today.push(assignment)
-				return;
 			}
-			diff = today_date.diff(study_date, 'days')
-			if(diff === 1) {
+			else if(diff === 1) {
 				sections.yesterday.push(assignment)
 			} else if (1 < diff <= 6) {
 				sections.this_week.push(assignment)
@@ -87,29 +89,46 @@ export default class SetListSections extends Component {
 			
 			if(!(moment(today_date).isSame(study_date), 'month')) {
 				month = moment.month(study_date)
-				section.months.push({
+				sections.months.push({
 					month: month,
 					assignment: assignment
 				})
-				return;
 			}
 		}
-		if(section.months.length > 0) {
-			section.months = section.months.reduce((months, m) => {
+		if(sections.months.length > 0) {
+			sections.months = sections.months.reduce((months, m) => {
 				months[m[0]] = months[m[0]] || []
 				months[m[0]].push({
 					assignment: m[1]
 				})
 			}, [])
 		}
-		console.log(sections)
-		return(
-			<ul className="recent_view_sections">				
-				{
-					::this.renderSection(arr)
-				}
-			</ul>
-		);
+		return sections;
+	}
+
+	renderSections(sections) {
+		let rendered_sections = [],
+			section_name;
+		for(var prop in sections) {
+			if(sections.hasOwnProperty(prop)) {
+				if(sections[prop].length > 0) {
+					if(prop.indexOf('_') !== -1) {
+						section_name = prop.split("_").join(" ")
+					} else {
+						section_name = prop;
+					}
+					rendered_sections.push(
+						<li key={prop} className="recent_section">
+							<h1 className="recent_section_title">{
+								section_name.charAt(0).toUpperCase() + section_name.slice(1)
+							}</h1>
+							<SetListView assignments={sections[prop]} />
+						</li>
+					)
+				}					
+			}
+		}
+		return rendered_sections;
 	}
 }
 

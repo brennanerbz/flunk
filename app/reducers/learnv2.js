@@ -214,22 +214,18 @@ export default function learn(state = initial_learnstate, action) {
 				...state,
 				isFetchingTrials: false,
 				trials: action.trials,
-				trial: action.trials.slice(-1)[0]
 			}
 		case NEW_TRIAL_SUCCESS:
-			const _newtrials = state.trials.concat(action._trial),
-				 showHint = true;
+			const _newtrials = state.trials.concat(action._trial);
 			return {
 				...state,
 				previous_trial: state.current_trial,
-				isShowingHint: showHint,
 				isFetchingLearn: false,
 				isFetchingTrials: false,
 				isShowingCorrect: false,
 				isShowingCompletedRound: false,
 				trials: _newtrials,
 				current_trial: action._trial,
-				trial: action._trial
 			}
 		case UPDATE_SEQUENCE_SUCCESS:
 			let _slot = state.slots.filter(slot => slot.order === action.sequence.position)[0],

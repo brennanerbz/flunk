@@ -45,27 +45,30 @@ export default function profile(state = initial_profilestate, action) {
 			}
 		case RECEIVE_USER_ASSIGNMENTS_SUCCESS:
 			let studied = [],
+				s_count = 0,
 				created = [],
+				c_count = 0,
 				_user = action.user,
-				assignments = action.assignments;
-			assignments.forEach(assig => {
-				studied.push(assig.set)
-			});
-			assignments.filter(assig => {
-				return assig.set.creator_id === _user.id
-				}).forEach(assign => {
-					created.push(assign.set)
-				})
-			studied = studied.filter(set => set.finalized !== null)
-			created = created.filter(set => set.finalized !== null)
+				assignments = action.assignments.filter(a => a.set.finalized !== null);
+			for(var i = 0; i < assignments.length; i++) {
+				let assignment = assignments[i]
+				if(assignment.studied !== null) {
+					studied.push(assignment.set)
+					s_count++
+				}
+				if(assignment.set.creator_id === _user.id) {
+					created.push(assignment.set)
+					c_count++
+				}
+			}
 			return {
 				...state,
 				isFetchingProfile: false,
 				assignments: assignments,
 				studied_sets: studied,
-				studiedset_count: studied.length - 1,
+				studiedset_count: s_count,
 				created_sets: created,
-				createdset_count: created.length - 1
+				createdset_count: c_count
 			}
 		case CLEAR_PROFILE:
 			return {

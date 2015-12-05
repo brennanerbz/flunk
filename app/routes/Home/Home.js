@@ -10,11 +10,14 @@ require('./Home.scss');
 import * as actionCreators from '../../actions/usersets';
 import * as transferActions from '../../actions/transfer';
 
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import SetList from '../../components/SetList/SetList';
-import ActivityList from '../../components/ActivityList/ActivityList';
-import OnlineUserList from '../../components/OnlineUserList/OnlineUserList';
+
+/* Smart wrapper container for Recent Set List */
+import RecentActivityContainer from '../../components/SetList/SmartComponents/RecentActivityContainer';
 
 @connect(state => ({
+	assignments: state.sets.assignments,
 	sets: state.sets.sets,
 	isFetching: state.sets.isFetchingAssignments
 	}), 
@@ -48,44 +51,35 @@ export default class Home extends Component {
 			<DocumentTitle title="Learn more, work less">
 				<div className="main_content">
 					<div className="page_header_wrapper">
-						{
-						isFetching
-						&&
-						<div className="big_spinner">
-							<div className="sk-fading-circle">
-							  <div className="sk-circle1 sk-circle"></div>
-							  <div className="sk-circle2 sk-circle"></div>
-							  <div className="sk-circle3 sk-circle"></div>
-							  <div className="sk-circle4 sk-circle"></div>
-							  <div className="sk-circle5 sk-circle"></div>
-							  <div className="sk-circle6 sk-circle"></div>
-							  <div className="sk-circle7 sk-circle"></div>
-							  <div className="sk-circle8 sk-circle"></div>
-							  <div className="sk-circle9 sk-circle"></div>
-							  <div className="sk-circle10 sk-circle"></div>
-							  <div className="sk-circle11 sk-circle"></div>
-							  <div className="sk-circle12 sk-circle"></div>
-							</div>
-						</div>
-						}
+						{ isFetching && <LoadingSpinner />}
 					</div>
-					<div className="row">
-						<div className="col-sm-12 col-md-10">	
-							{
-								typeof sets == undefined || sets.length === 0
-								? null
-								: <SetList {...this.props} />
-							}									
-						</div>					
-					</div>	
+					{ 
+						!isFetching
+						&& <RecentActivityContainer {...this.props}/> 
+					}
 				</div>
 			</DocumentTitle>
 		);
 	}
 }
 
-// -- Supplemental activity feed 
-// <div className="supplemental col-md-4 col-lg-3 remove_small">
-// 	<ActivityList />
-// 	<OnlineUserList />
-// </div>	
+/*
+<div className="row">
+	<div className="col-sm-12 col-md-10">	
+		{
+			sets !== undefined 
+			&& sets.length !== 0
+			&& <SetList {...this.props} />
+		}
+	</div>					
+</div>
+
+/*
+import ActivityList from '../../components/ActivityList/ActivityList';
+import OnlineUserList from '../../components/OnlineUserList/OnlineUserList';
+-- Supplemental activity feed 
+<div className="supplemental col-md-4 col-lg-3 remove_small">
+	<ActivityList />
+	<OnlineUserList />
+</div>	
+*/

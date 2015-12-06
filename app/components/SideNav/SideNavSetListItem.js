@@ -19,7 +19,7 @@ export default class SideNavSetListItem extends Component {
 				<Link to={`/set/${set.id}`} className="sidenav_setitem_name">
 					<span className="overflow_ellipsis">
 						<span className="prefix_icon">
-							<img src={path == set.id ? set_icon_active : set_icon} className="set_icon"/>
+							<img src={set_icon} className="set_icon"/>
 						</span>
 						{set_name}
 					</span>

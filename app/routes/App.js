@@ -71,8 +71,10 @@ export default class FlunkApp extends Component {
 		return( 
 			<div>
 				<Header root_path={root_path}/>
-				{::this.renderSideNav()}
-				{childrenWithProps}
+				<div className="outer_shell">
+					{::this.renderSideNav()}
+					{childrenWithProps}
+				</div>
 			</div>
 		);
 	}

@@ -53,11 +53,11 @@ export default function profile(state = initial_profilestate, action) {
 			for(var i = 0; i < assignments.length; i++) {
 				let assignment = assignments[i]
 				if(assignment.studied !== null) {
-					studied.push(assignment.set)
+					studied.push(assignment)
 					s_count++
 				}
 				if(assignment.set.creator_id === _user.id) {
-					created.push(assignment.set)
+					created.push(assignment)
 					c_count++
 				}
 			}

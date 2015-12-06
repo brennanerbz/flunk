@@ -9,16 +9,17 @@
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     z-index: 300;
+    width: 100%;
+    border-bottom: 1px solid #e8e8e8;
     .header_container {
         z-index: 300;
         background: #fff;
-        border-bottom: 1px solid #e8e8e8;
+        width: 1020px;
+        margin: 0 auto;
         min-width: 905px!important;
         padding-bottom: 10px;
         padding-top: 7px;
         position: relative;
-        padding-left: 30px;
-        padding-right: 30px;
         &.no_border {
             border: none!important;
         }
@@ -81,7 +82,7 @@
                 margin-top: 3px;
                 display: block;
                 position: absolute;
-                right: 20px;
+                right: 0px;
                 top: 5px;
                 .upload {
                     color: #555;
@@ -95,7 +96,7 @@
                 div {
                     &.header_search {
                         margin-top: 3px;
-                        margin-left: 105px;
+                        margin-left: 18px;
                         width: 100%;
                         max-width: 420px;
                         overflow: hidden;

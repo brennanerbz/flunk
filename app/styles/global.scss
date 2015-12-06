@@ -44,6 +44,12 @@ input {
 	}
 }
 
+.outer_shell {
+	width: 1020px;
+	margin: 0 auto;
+}
+
+
 .card {
 	border: none!important;
 }
@@ -830,11 +836,10 @@ button:focus, input[type="button"]:focus {
 
 // Main content // 
 .main_content {
-	position: absolute;
-	width: 78%;
-	float: left;
-	margin-left: 260px;
-	margin-top: 90px;
+	padding-top: 75px;
+	padding-left: 180px;
+	padding-bottom: 2em;
+	min-height: 425px;
 }
 .page_header {
 	font-family: 'Lato';

@@ -40,11 +40,7 @@ export default class SetList extends Component {
 			<div className="sidenav_sets_wrapper">
 				<Link to="/createset">
 				<span className="side_icon new_set_btn">
-					<img src={add_circle_icon} 
-						 ref="set_action"
-						 className="new_set_icon"
-						 data-toggle="tooltip" 
-					  	 title="Create a study set"></img>
+					
 				</span>
 				</Link>
 				<h2 ref='set_header' 
@@ -72,3 +68,9 @@ export default class SetList extends Component {
 		);
 	}
 }
+
+// <img src={add_circle_icon} 
+// 	 ref="set_action"
+// 	 className="new_set_icon"
+// 	 data-toggle="tooltip" 
+//   	 title="Create a study set"></img>

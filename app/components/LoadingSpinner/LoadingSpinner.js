@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+require('./LoadingSpinner.scss')
 
 export default class LoadingSpinner extends Component {
 	static propTypes = {
@@ -6,21 +7,19 @@ export default class LoadingSpinner extends Component {
 
 	render() {
 		return(
-			<div className="big_spinner">
-				<div className="sk-fading-circle">
-				  <div className="sk-circle1 sk-circle"></div>
-				  <div className="sk-circle2 sk-circle"></div>
-				  <div className="sk-circle3 sk-circle"></div>
-				  <div className="sk-circle4 sk-circle"></div>
-				  <div className="sk-circle5 sk-circle"></div>
-				  <div className="sk-circle6 sk-circle"></div>
-				  <div className="sk-circle7 sk-circle"></div>
-				  <div className="sk-circle8 sk-circle"></div>
-				  <div className="sk-circle9 sk-circle"></div>
-				  <div className="sk-circle10 sk-circle"></div>
-				  <div className="sk-circle11 sk-circle"></div>
-				  <div className="sk-circle12 sk-circle"></div>
-				</div>
+			<div className="spinner">
+			  <div className="bar1"></div>
+			  <div className="bar2"></div>
+			  <div className="bar3"></div>
+			  <div className="bar4"></div>
+			  <div className="bar5"></div>
+			  <div className="bar6"></div>
+			  <div className="bar7"></div>
+			  <div className="bar8"></div>
+			  <div className="bar9"></div>
+			  <div className="bar10"></div>
+			  <div className="bar11"></div>
+			  <div className="bar12"></div>
 			</div>
 		);
 	}

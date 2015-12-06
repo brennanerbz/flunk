@@ -8,8 +8,10 @@ import DocumentTitle from 'react-document-title';
 
 
 import * as profileactions from '../../actions/profile';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
 
-/* Parent Components */
+
+/* Child Components */
 import ProfilePic from '../../components/Profile/ProfilePic/ProfilePic';
 import ProfileName from '../../components/Profile/ProfileName/ProfileName';
 import ProfileTabs from '../../components/Profile/ProfileTabs/ProfileTabs';
@@ -88,25 +90,9 @@ export default class Profile extends Component {
 					{
 						isFetchingProfile
 						?
-						<div className="big_spinner">
-							<div className="sk-fading-circle">
-							  <div className="sk-circle1 sk-circle"></div>
-							  <div className="sk-circle2 sk-circle"></div>
-							  <div className="sk-circle3 sk-circle"></div>
-							  <div className="sk-circle4 sk-circle"></div>
-							  <div className="sk-circle5 sk-circle"></div>
-							  <div className="sk-circle6 sk-circle"></div>
-							  <div className="sk-circle7 sk-circle"></div>
-							  <div className="sk-circle8 sk-circle"></div>
-							  <div className="sk-circle9 sk-circle"></div>
-							  <div className="sk-circle10 sk-circle"></div>
-							  <div className="sk-circle11 sk-circle"></div>
-							  <div className="sk-circle12 sk-circle"></div>
-							</div>
-						</div>
+						<LoadingSpinner/>
 						:
-						<div className={classnames({'col-sm-11 col-md-11': school == undefined},
-												   {'col-sm-9 col-md-8': school !== undefined})}>
+						<div>
 							<header className="profile_header">
 								<ProfilePic/>
 								<ProfileName {...this.props}/>

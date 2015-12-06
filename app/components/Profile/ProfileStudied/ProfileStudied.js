@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import SetList from '../../SetList/SetList';
+import SetListContainer from '../../SetList/SmartComponents/SetListContainer';
 
 /*
 @connect/dispatch
@@ -20,7 +20,7 @@ export default class ProfileStudied extends Component {
 				{
 					length > 0
 					&&
-					<SetList pushState={pushState} sets={sets} profile={true}/>
+					<SetListContainer pushState={pushState} assignments={sets} profile={true}/>
 				}
 				{
 					length <= 0

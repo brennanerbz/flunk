@@ -181,7 +181,7 @@ export default class CreateSetPage extends Component {
 							type={this.state.modal_type}
 							pushState={this.props.pushState}
 							/>
-					<div className={classnames("CreateSetPage no_sidenav_container", {"rendered": rendered })}>
+					<div className={classnames("CreateSetPage", {"rendered": rendered })}>
 					{
 						isLoadingSet
 						?

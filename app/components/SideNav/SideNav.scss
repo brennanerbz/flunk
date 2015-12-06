@@ -3,28 +3,30 @@
 	font-family: "Slack-Lato";
 	-webkit-font-smoothing: antialiased;
 	top: 45px;
-	width: 220px;
+	width: 145px;
 	float: left;
 	position: fixed;
 	background:#fff;
-	// border-right: 1px solid #fafafa;
-	box-shadow: 0px 1px 1px 0px rgba(146,146,146,0.50);
+	border-right: 1px solid #fafafa;
+	// box-shadow: 0px 1px 1px 0px rgba(146,146,146,0.50);
 	color: #383F45;
 	padding-top: 2rem;	
 	.sidenav_main {
 		margin-bottom: 1.5rem;
 	}
 	.sidenav_header {
-		margin: 0 30px 0.25rem;
+		margin: 0 0px 0rem;
 		text-align: left;
 		font-size: 0.8rem;
-		font-family: "Slack-Lato";
+		letter-spacing: 0.01em;
+		-webkit-font-smoothing: antialiased;
 		font-weight: 700;
 		line-height: 15px;
 		opacity: 0.6;
 		text-transform: uppercase;	
 		position: relative;
 		width: 165px;
+		color: #A8AEB3;
 		cursor:pointer;
 		&:hover {
 			opacity: 1;
@@ -87,7 +89,8 @@
 		list-style-type: none;
 		text-align: left;
 		margin: 0 1px 0 0;
-		width: 204px;
+		// width: 204px;
+		width: 100%;
 		li {
 			font-size: 15px;
 			// letter-spacing: 0.015rem;
@@ -95,11 +98,12 @@
 			line-height: 1.5rem;
 			height: 1.5rem;
 			margin-right: 1px;
+			padding-left: 0px;
 			position: relative;
 			a {
-				padding: 0 0 0 30px;
-				color: #383F45;
-				opacity: 0.6;
+				padding: 0 0 0 0px;
+				color: #0060C6;
+				opacity: 0.95;
 				display: block;
 				height: 1.5rem;
 				border-top-right-radius: 2px;
@@ -127,14 +131,16 @@
 			    	}
 			    }
 			    &:hover {
-			    	background: #f2f2f2;				 
+			    	background: #fafafa;				 
 			    }			    			    
 			}
 		}
 		li.active {
 			a {
-			background: #CAD1D9;
-			color: #FFF;
+			// background: #CAD1D9;
+			// color: #FFF;
+			// font-weight: 700;
+			color: #555459;
 			opacity: 1;
 			.prefix_icon {
 				opacity: 1;
@@ -144,20 +150,21 @@
 	}
 	.list_more {
 		display: inline-block;
-		margin: .25rem 30px;
+		margin: 0 0 0 0px;
 		font-size: .8rem;
-		font-weight: 700;
-		color: #383F45;
-		border-bottom: 1px dotted #383F45;
-		opacity: 0.6;
+		font-weight: 400;
+		color: #A8AEB3;
+		border-bottom: 1px dotted #A8AEB3;
+		opacity: 1;
 		-webkit-transition: .1s;
 	    -moz-transition: .1s;
 	    transition: .1s;
 		cursor: pointer;		
 		&:hover {
-			opacity: 0.6;
-			border-bottom: 1px solid #383F45;	
+			opacity: 1;
+			border-bottom: 1px solid #4E5665;	
 			text-decoration: none;
+			color: #4E5665;
 		}
 	}	
 }

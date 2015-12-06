@@ -92,7 +92,7 @@ export default class Set extends Component {
 				<div className="set_view main_content">
 					{
 						!isFetching
-						? <div className="row">
+						? <div className="">
 							<div className="">
 								<SetHeader 
 									assignment={this.props.assignment}

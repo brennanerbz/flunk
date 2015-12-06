@@ -89,9 +89,8 @@ export default class Header extends Component {
 				root_path == 'login'
 				? null
 				:
-				<div className="header_positioner">
-					<div className={classnames("header_container", 
-						{'no_border': root_path == 'createset' || root_path == 'import'  })}>				
+				<div className={classnames("header_positioner", {'no_border': root_path == 'createset' || root_path == 'import'  })}>
+					<div className={classnames("header_container")}>				
 						<div className='header'>
 							{ 
 								isFetching || fetchingLearn

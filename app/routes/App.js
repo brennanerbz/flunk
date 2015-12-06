@@ -31,22 +31,6 @@ export default class FlunkApp extends Component {
 		error: PropTypes.string
 	}
 
-	renderSideNav() {
-		const route = this.props.router.location.pathname;
-		if     (route.indexOf('createset') !== -1 
-			 || route.indexOf('learn') !== -1 
-			 || route.indexOf('search') !== -1
-			 || route.indexOf('error') !== -1) { return; }
-		else if(route.indexOf('set') !== -1
-			 || route.indexOf('profile') !== -1
-			 || route == '/') {
-			return (
-				<SideNav {...this.props} />
-			);
-		}
-		else if(route !== '/') { return }
-	}
-
 	componentWillMount() {
 		const { fetchAssignments, fetchUser } = this.props; 
 		// on mounting, will load user object and assignments
@@ -55,13 +39,42 @@ export default class FlunkApp extends Component {
 		fetchAssignments(1)
 	}
 
+	renderSideNav() {
+		let route = this.props.router.location.pathname,
+			count = route.match(/\//g).length,
+			regex = count >= 2 ? /\/(.*?)\// : /\/(.*)/,
+			root_path;
+		route !== '/' ? root_path = regex.exec(route)[1] : root_path = '/'
+		if     (route.indexOf('createset') !== -1 
+			 || route.indexOf('learn') !== -1 
+			 || route.indexOf('error') !== -1) { return; }
+		else if(route.indexOf('set') !== -1
+			 || route.indexOf('search') !== -1
+			 || route.indexOf('profile') !== -1
+			 || route == '/') {
+			return (
+				<SideNav {...this.props} root_path={root_path} />
+			);
+		}
+		else if(route !== '/') { return }
+	}
+
 	render() {
-	const route = this.props.router.location.pathname;	
+		let route = this.props.router.location.pathname,
+			count = route.match(/\//g).length,
+			regex = count >= 2 ? /\/(.*?)\// : /\/(.*)/,
+			root_path;
+		route !== '/' ? root_path = regex.exec(route)[1] : root_path = '/'
+		var childrenWithProps = React.Children.map(this.props.children, (child) => {
+			return React.cloneElement(child, { root_path: root_path })
+		})
 		return( 
 			<div>
-				<Header/>
-				{::this.renderSideNav()}
-				{this.props.children}
+				<Header root_path={root_path}/>
+				<div className="outer_shell">
+					{::this.renderSideNav()}
+					{childrenWithProps}
+				</div>
 			</div>
 		);
 	}

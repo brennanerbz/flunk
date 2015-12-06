@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 import { Link } from 'react-router';
 import { pushState } from 'redux-router';
+import DocumentTitle from 'react-document-title';
+
 
 import * as searchactions from '../../actions/search';
 
@@ -24,6 +26,7 @@ require('./Search.scss');
 	searching: state.search.searching,
 	noResults: state.search.noResults,
 	query: state.search.query,
+	result_count: state.search.result_count,
 	items: state.search.items,
 	term: state.search.term,
 	definitions: state.search.definitions,
@@ -70,7 +73,8 @@ export default class Search extends Component {
 				users,
 				searchItems,
 				searchSets,
-				searchUsers } = this.props;
+				searchUsers,
+				root_path } = this.props;
 		let index = params.query.indexOf('&'),
 			query,
 			page_index;
@@ -81,18 +85,20 @@ export default class Search extends Component {
 		} 
 		else query = params.query;
 		query = query.toLowerCase().trim()
-		if(loc.pathname.indexOf('concepts') !== -1 && items == null) { 
-			searchItems(query, page_index);
-			this.setState({current_tab: 'concepts'});
+		if(root_path == 'search') {
+			if(loc.pathname.indexOf('concepts') !== -1 && items == null) { 
+				searchItems(query, page_index);
+				this.setState({current_tab: 'concepts'});
+			}
+			if(loc.pathname.indexOf('sets') !== -1 && items == null) {
+				searchSets(query, page_index);
+				this.setState({current_tab: 'sets'});
+			} 
+			if(loc.pathname.indexOf('users') !== -1 && items == null) {
+				searchUsers(query, page_index);
+				this.setState({current_tab: 'users'});
+			}
 		}
-		if(loc.pathname.indexOf('sets') !== -1 && items == null) {
-			searchSets(query, page_index);
-			this.setState({current_tab: 'sets'});
-		} 
-		if(loc.pathname.indexOf('users') !== -1 && items == null) {
-			searchUsers(query, page_index);
-			this.setState({current_tab: 'users'});
-		} 
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -148,35 +154,37 @@ export default class Search extends Component {
 
 	render() {
 		const { query } = this.props.params,
-			  { loc, searching, items, noResults } = this.props;
+			  { loc, searching, items, noResults, root_path } = this.props;
 		return(
-			<div className="search_page">
-				<nav className="search_tabs">
-					<SearchTabs changeTab={(tab) => this.setState({current_tab: tab})} {...this.props}/>
-				</nav>
-				<article className={classnames("search_content", "no_sidenav_container", {'sets_page': true}, {"searching": searching})}>
-					{
-						loc.pathname.indexOf('concepts') !== -1 && items !== null
-						? <SearchConcepts query={query} {...this.props}/>
-						: null
-					}
-					{
-						loc.pathname.indexOf('sets') !== -1
-						? <SearchSets query={query} {...this.props}/>
-						: null
-					}
-					{
-						loc.pathname.indexOf('users') !== -1
-						? <SearchPeople query={query} {...this.props}/>
-						: null
-					}
-					{
-						!searching && !noResults
-						? <SearchPaging tab={this.state.current_tab} {...this.props}/>
-						: null
-					}
-				</article>
-			</div>
+			<DocumentTitle title={`Ace Search`}>
+				<div className="search_page">
+					<nav className="search_tabs">
+						<SearchTabs changeTab={(tab) => this.setState({current_tab: tab})} {...this.props}/>
+					</nav>
+					<article className={classnames("search_content", {'sets_page': true}, {"searching": searching})}>
+						{
+							loc.pathname.indexOf('concepts') !== -1 && items !== null
+							? <SearchConcepts query={query} {...this.props}/>
+							: null
+						}
+						{
+							loc.pathname.indexOf('sets') !== -1
+							? <SearchSets query={query} {...this.props}/>
+							: null
+						}
+						{
+							loc.pathname.indexOf('users') !== -1
+							? <SearchPeople query={query} {...this.props}/>
+							: null
+						}
+						{
+							!searching && !noResults
+							? <SearchPaging tab={this.state.current_tab} {...this.props}/>
+							: null
+						}
+					</article>
+				</div>
+			</DocumentTitle>
 		);
 	}
 }

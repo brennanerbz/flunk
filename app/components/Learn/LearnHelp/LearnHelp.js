@@ -2,75 +2,49 @@ import React, { Component, PropTypes } from 'react';
 require('./LearnHelp.scss')
 import classnames from 'classnames';
 // import Hint from './Hint';
-import Related from './Related';
-import MultipleChoice from './MultipleChoice';
-import Target from './Target';
+import Help from './Help';
+
+/* Feedback Convo */
+import FeedbackMessage from './FeedbackMessage';
+import UserAnswer from './UserAnswer';
 
 export default class LearnHelp extends Component {
 	static propTypes = {
 	}
 
-	// recall | pic | related | augN | nonemc | mc | stem | peek | copy
-
-	renderHelp() {
-		const { current_slot } = this.props;
-		
-		switch(current_slot.format) {
-			case 'recall':
-				return;
-			case 'related':
-				return;
-			case 'nonemc':
-			case 'mc':
-			 	return (
-			 		<MultipleChoice choices={current_slot.mc !== undefined ? current_slot.mc : null}/>
-			 	) 
-			case 'stem':
-			case 'peek':
-			case 'copy':
-				return (
-					<Target diff={current_slot.format} stem={current_slot.stem} target={current_slot.item.target}/>
-				)
-			case 'aug':
-			default:
-				break;
-		}
-	}
-
 	render() {
-		const { slot, current_slot } = this.props;
+		const { slot, current_slot, current_trial, previous_trial } = this.props;
 		return(
-			<div className="learn_help">
-				<div className="">
-					<p className={classnames("diff_label", {'mc_label': current_slot.format == 'mc' || current_slot.format == 'nonemc'  })}>
-					{ 
-						current_slot.format == 'mc' || current_slot.format == 'nonemc'
-						? "Multiple Choice:"
-						: null
-					}
-					{
-						current_slot.format == 'stem'
-						? "Fill in the blank:"
-						: null
-					}
-					{
-						current_slot.format == 'copy' || current_slot.format == 'peek'
-						? 'Correct answer:'
-						: null
-					}
-					</p>
-				</div>
+			<section className="learn_help">
 				{
-					current_slot.completion == null
-					? ::this.renderHelp()
-					: null
+					current_trial !== undefined && current_slot !== undefined
+					&&
+					<ol className="conversation">
+						{
+							previous_trial.answer !== null 
+							&& previous_trial.answer !== undefined
+							&& previous_trial.answer.length > 0 
+							&&
+							<UserAnswer previous_trial={previous_trial}
+										current_trial={current_trial} />
+						}
+						{
+							previous_trial.feedback !== null 
+							&& previous_trial.feedback !== undefined
+							&& previous_trial.feedback.length > 0
+							&&
+							<FeedbackMessage previous_trial={previous_trial}
+											 current_trial={current_trial}/>
+						}
+						{
+							current_trial.format !== null
+							&& current_trial.format !== 'recall'
+							&&
+							<Help current_trial={current_trial} />
+						}
+					</ol>
 				}
-			</div>
+			</section>
 		);
 	}
 }
-
-// case 'related':
-// 	return (
-// 		<Related related={trial.related}/>
-// 	);

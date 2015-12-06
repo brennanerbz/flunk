@@ -18,7 +18,6 @@ export default class ItemList extends Component {
 		})
 		return(
 			<div className="item_list_container">
-				<p className="item_count_label">Terms: <span className="item_count">{item_count}</span></p>
 				{
 					::this.renderEditLink(assignment, set, user) 
 					?

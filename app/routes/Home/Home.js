@@ -4,21 +4,27 @@ import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 import { Link } from 'react-router';
 import { pushState } from 'redux-router';
+import DocumentTitle from 'react-document-title';
 require('./Home.scss');
 
 import * as actionCreators from '../../actions/usersets';
+import * as transferActions from '../../actions/transfer';
 
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import SetList from '../../components/SetList/SetList';
-import ActivityList from '../../components/ActivityList/ActivityList';
-import OnlineUserList from '../../components/OnlineUserList/OnlineUserList';
+
+/* Smart wrapper container for Recent Set List */
+import SetListContainer from '../../components/SetList/SmartComponents/SetListContainer';
 
 @connect(state => ({
+	assignments: state.sets.assignments,
 	sets: state.sets.sets,
 	isFetching: state.sets.isFetchingAssignments
 	}), 
 	dispatch => ({
 		...bindActionCreators({
 			...actionCreators,
+			...transferActions,
 			pushState,
 		}, dispatch)
 	})
@@ -28,73 +34,54 @@ export default class Home extends Component {
 		
 	}
 
-	// intervalPoll = {}
-
 	componentWillMount() {
+		this.props.clearTransferState()
 		this.props.fetchAssignments(1)
 	}	
-
-	// assignmentPoll() {
-	// 	const { pollAssignments } = this.props;
-	// 	pollAssignments(1)
-	// }
 
 	componentDidMount() {
 		setTimeout(() => {
 			this.props.pollAssignments(1)
 		}, 1000)
-		// this.intervalPoll = setInterval(() => {
-		// 	::this.assignmentPoll(1)
-		// }, 2500)
 	}
-
-	// componentWillUnmount() {
-	// 	clearInterval(this.intervalPoll)
-	// }
 	
 	render() {	
 		const { sets, isFetching } = this.props;	 
 		return(
-			<div className="main_content">
-				<div className="page_header_wrapper">
-					{
-					!isFetching
-					? <h1 className="page_header">Home</h1>
-					: 
-					<div className="big_spinner">
-						<div className="sk-fading-circle">
-						  <div className="sk-circle1 sk-circle"></div>
-						  <div className="sk-circle2 sk-circle"></div>
-						  <div className="sk-circle3 sk-circle"></div>
-						  <div className="sk-circle4 sk-circle"></div>
-						  <div className="sk-circle5 sk-circle"></div>
-						  <div className="sk-circle6 sk-circle"></div>
-						  <div className="sk-circle7 sk-circle"></div>
-						  <div className="sk-circle8 sk-circle"></div>
-						  <div className="sk-circle9 sk-circle"></div>
-						  <div className="sk-circle10 sk-circle"></div>
-						  <div className="sk-circle11 sk-circle"></div>
-						  <div className="sk-circle12 sk-circle"></div>
-						</div>
+			<DocumentTitle title="Learn more, work less">
+				<div className="main_content">
+					<div style={{ marginBottom: '25px' }} className="page_header_wrapper">
+						{ isFetching && "Loading..." }
+						{ isFetching && <LoadingSpinner />}
+						{ !isFetching && "Recent"}
 					</div>
+					{ 
+						!isFetching
+						&& <SetListContainer {...this.props}/> 
 					}
 				</div>
-				<div className="row">
-					<div className="col-sm-12 col-md-11 col-lg-12">	
-						{
-							typeof sets == undefined || sets.length === 0
-							? null
-							: <SetList {...this.props} />
-						}									
-					</div>					
-				</div>	
-			</div>
+			</DocumentTitle>
 		);
 	}
 }
 
-// -- Supplemental activity feed 
-// <div className="supplemental col-md-4 col-lg-3 remove_small">
-// 	<ActivityList />
-// 	<OnlineUserList />
-// </div>	
+/*
+<div className="row">
+	<div className="col-sm-12 col-md-10">	
+		{
+			sets !== undefined 
+			&& sets.length !== 0
+			&& <SetList {...this.props} />
+		}
+	</div>					
+</div>
+
+/*
+import ActivityList from '../../components/ActivityList/ActivityList';
+import OnlineUserList from '../../components/OnlineUserList/OnlineUserList';
+-- Supplemental activity feed 
+<div className="supplemental col-md-4 col-lg-3 remove_small">
+	<ActivityList />
+	<OnlineUserList />
+</div>	
+*/

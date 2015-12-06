@@ -40,11 +40,7 @@ export default class SetList extends Component {
 			<div className="sidenav_sets_wrapper">
 				<Link to="/createset">
 				<span className="side_icon new_set_btn">
-					<img src={add_circle_icon} 
-						 ref="set_action"
-						 className="new_set_icon"
-						 data-toggle="tooltip" 
-					  	 title="Create a study set"></img>
+					
 				</span>
 				</Link>
 				<h2 ref='set_header' 
@@ -57,10 +53,14 @@ export default class SetList extends Component {
 				</h2>
 				<ul className="sidenav_list">
 					{
-						assignments.map((assig, i) => <SideNavSetListItem {...this.props}
-							 									 assig={assig}
-																 index={i} 
-																 key={'side' + assig.id + i} />)
+						assignments.map((assig, i) => { 
+							return (
+								<SideNavSetListItem {...this.props}
+				 									 assig={assig}
+													 index={i} 
+													 key={'side' + assig.id + i} />
+								)
+							})
 					}					
 					<Link to="/createset" className="sidenav_create list_more">Create a study set...</Link>
 				</ul>
@@ -68,3 +68,9 @@ export default class SetList extends Component {
 		);
 	}
 }
+
+// <img src={add_circle_icon} 
+// 	 ref="set_action"
+// 	 className="new_set_icon"
+// 	 data-toggle="tooltip" 
+//   	 title="Create a study set"></img>

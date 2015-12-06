@@ -2,7 +2,8 @@ import axios from 'axios';
 import moment from 'moment'; 
 import request from 'superagent';
 
-let api_url = 'http://127.0.0.1:5000/webapi/v2.0';
+const server = require('./api'),
+	  api_url = server.api_url;
 
 export const SEARCH = 'SEARCH';
 export function requestSearch() {
@@ -40,6 +41,7 @@ export function searchItems(term, page_index) {
 		dispatch({ type: SEARCH })
 		try {
 			let items,
+				count,
 				query = term.toLowerCase().trim(),
 				index;
 			if(page_index !== undefined) {
@@ -50,10 +52,9 @@ export function searchItems(term, page_index) {
 			request
 			.get(`${api_url}/items/search/?search=${term}&start=${index}`)
 			.end((err, res) => { 
-				console.log('us')
-				console.log(res.body)
+				count= res.body.total_items_count
 				items = res.body.items 
-				dispatch({type: RECEIVE_ITEMS_SUCCESS, items, query, index})
+				dispatch({type: RECEIVE_ITEMS_SUCCESS, items, count, query, index})
 			})
 			// await axios.get(`${api_url}/items/search/?search=${term}&start=${index}`).then(res => items = res.data.items)
 		} catch(err) {
@@ -75,6 +76,7 @@ export function searchSets(set_title, page_index) {
 		dispatch({ type: SEARCH })
 		try {
 			let sets,
+				count,
 				query = set_title.toLowerCase().trim(),
 				index;
 			if(page_index !== undefined) {
@@ -84,13 +86,11 @@ export function searchSets(set_title, page_index) {
 			}
 			request
 			.get(`${api_url}/sets/search/?search=${set_title}&start=${index}`)
-			// .set('Access-Control-Allow-Origin', '*')
 			.end((err, res) => { 
 				sets = res.body.sets 
-				dispatch({type: RECEIVE_SETS_SUCCESS, sets, query, index})
+				count = res.body.total_sets_count
+				dispatch({type: RECEIVE_SETS_SUCCESS, sets, count, query, index})
 			})
-			// axios.get(`${api_url}/sets/search/?search=${set_title}&start=${index}`).then(res => sets = res.data.sets)
-			// dispatch({type: RECEIVE_SETS_SUCCESS, sets, query, index})
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_SETS_FAILURE,
@@ -105,11 +105,12 @@ export const REQUEST_USERS = 'REQUEST_USERS';
 export const RECEIVE_USERS_SUCCESS = 'RECEIVE_USERS_SUCCESS';
 export const RECEIVE_USERS_FAILURE = 'RECEIVE_USERS_FAILURE';
 export function searchUsers(user, page_index) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		if(getState().search.searchFlag) return;
 		dispatch({ type: SEARCH })
 		try {
 			let users,
+				count,
 				query = user.toLowerCase().trim(),
 				index;
 			if(page_index !== undefined) {
@@ -117,8 +118,14 @@ export function searchUsers(user, page_index) {
 			} else {
 				index = 0;
 			}
-			await axios.get(`${api_url}/users/search/?search=${user}&start=${index}`).then(res => users = res.data.users)
-			dispatch({type: RECEIVE_USERS_SUCCESS, users, query, index})
+			request
+			.get(`${api_url}/users/search/?search=${user}&start=${index}`)
+			.end((err, res) => {
+				console.log(res.body)
+				count = res.body.total_users_count
+				users = res.body.users
+				dispatch({type: RECEIVE_USERS_SUCCESS, users, count, query, index})
+			})
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_USERS_FAILURE,

@@ -26,9 +26,9 @@ var secondary_actions = {
 var _icon = {
 	position: 'absolute',
 	display: 'inline-block',
-	height: '18px',
+	height: '16px',
 	top: '6px',
-	left: '10px',
+	left: '8px',
 	opacity: '0.8'
 }
 var _smallicon = {
@@ -97,7 +97,7 @@ export default class SubSetActions extends Component {
 	render() {
 		const { set, createset } = this.props,
 			member_icon = require('../../../assets/profile_icon.png'),
-			share_icon = require('../../../assets/share_icon.png'),
+			share_icon = require('../../../assets/share.png'),
 			more_icon = require('../../../assets/more_icon.png');
 		let dir;
 		if(this.props.right) {

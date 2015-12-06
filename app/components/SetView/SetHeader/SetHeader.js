@@ -29,7 +29,7 @@ export default class SetHeader extends Component {
 				</div>
 				<div className="main_actions">
 					<Link to={`/learn/${id}`}>
-						<button className="button button-primary">
+						<button className="button green">
 						Learn</button>
 					</Link>
 					<SubSetActions set={true} 

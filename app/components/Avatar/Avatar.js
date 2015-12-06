@@ -11,7 +11,7 @@ export default class Avatar extends Component {
 		const { is_create_set, user, pushState } = this.props;
 		return(
 			<span className={classnames({'avatar-table': is_create_set})}>
-			<button className="button button-borderless button-outline">
+			<button style={{paddingLeft: '0'}} className="button button-borderless button-outline">
 			<div className={classnames(
 				{'inline-avatar': is_create_set}
 				)}>

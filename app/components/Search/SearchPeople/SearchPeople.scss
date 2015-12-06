@@ -1,8 +1,16 @@
 .search_people_container {
 	display: block;
 	position: relative;
-	width: 540px!important;
+	margin-top: 1.5em;
+	h2 {
+		letter-spacing: 0.01em;
+		display: inline-block;
+		font-size: 14.5px;
+	    color: #888;
+		padding: 0;
+	}
 	.people_list {
+		margin-top: 1em;
 		.search_user_item {
 			display: table;
 			margin-bottom: 0px!important;

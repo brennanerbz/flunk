@@ -2,8 +2,8 @@ import axios from 'axios';
 import moment from 'moment'; 
 import _ from 'lodash';
 
-const api_url = 'http://127.0.0.1:5000/webapi/v2.0';
-
+const server = require('./api'),
+	  api_url = server.api_url;
 
 // /sets/<int: set_id>/associations/
 // /users/<int: user_id>/assignments/					GET

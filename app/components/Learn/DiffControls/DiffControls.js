@@ -15,7 +15,7 @@ export default class DiffControls extends Component {
 
 	
 	shouldHideHintButton(trial_hints, slot_hints) {
-		if((trial_hints && slot_hints) !== null) {
+		if((trial_hints && slot_hints) !== null && (trial_hints && slot_hints) !== undefined) {
 			return slot_hints.length === 0 || slot_hints.slice(-1)[0].indexOf(trial_hints[0]) !== -1
 		}
 	}
@@ -27,19 +27,21 @@ export default class DiffControls extends Component {
 			  shouldhide = ::this.shouldHideHintButton(trial_hints, slot_hints);  
 		return(
 			<span className="diff_controls">
-				<button className={classnames("button button-primary", 
+				<button className={classnames("button green", 
 						{"disabled": shouldhide })}
 					    onClick={this.props.getHint}>Hint</button>
-				<a className="toggle_btn"
-				   ref="more_actions"				   
-				   title="More actions"
-				   data-toggle="tooltip" 
-				   data-placement="bottom" >
-					<i className="">
-						<img className="diff_icon" src={more}/>
-					</i>					
-				</a>				
 			</span>
 		);
 	}
 }
+
+
+// <a className="toggle_btn"
+//    ref="more_actions"				   
+//    title="More actions"
+//    data-toggle="tooltip" 
+//    data-placement="bottom" >
+// 	<i className="">
+// 		<img className="diff_icon" src={more}/>
+// 	</i>					
+// </a>

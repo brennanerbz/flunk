@@ -31,7 +31,11 @@ export default class SeqControl extends Component {
 					Round {round_index}
 					</div> 
 				</div>
-				<SignPosts {...this.props} />
+				{
+					this.props.current_round.length > 0
+					&&
+					<SignPosts {...this.props} />
+				}
 				<span className="">
 					<button className="button button-outline startover_btn"
 						    type="button"

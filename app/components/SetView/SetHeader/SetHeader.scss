@@ -23,7 +23,7 @@
 		.set_title {
 			font-size: 1.5em;
 			font-family: "Lato";
-			font-weight: 900;
+			font-weight: 700;
 			letter-spacing: 0.01em;
 			margin-bottom: 10px;
 		}
@@ -43,11 +43,11 @@
 
 .toggle_btn {	
 	margin-left: 10px;
-	width: 32px;
+	width: 35px;
 	height: 32px;
-	border-radius: 2px;
-	border: 1px solid rgba(0,0,0,.1);
-	box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+	background-image: linear-gradient(-180deg, #FFFFFF 0%, #FCFCFC 100%);
+	border: 1px solid #D1D1D3;
+	border-radius: 3px;
 	position: relative;
 	color: #67686e;
 	background: #fff;

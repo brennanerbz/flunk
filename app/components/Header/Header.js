@@ -60,13 +60,6 @@ export default class Header extends Component {
 		});
 	}
 
-	findSetMenuPos() {
-		let node = this.refs['set_name'];
-		const new_rect = node.getBoundingClientRect()
-		const rect = window.getComputedStyle(node)
-		return new_rect;
-	}
-
 	handleSelect(choice) {
 		// console.log(choice)
 	}
@@ -74,8 +67,9 @@ export default class Header extends Component {
 	render() {
 		const logo = require('./assets/FlunkLogo.png'),
 			  mini_logo = require('../../assets/color_hash.png'),
-			  create_icon = require('../../assets/compose.png'),
-			  dropdown_icon = require('../../assets/dropdown_arrow.png'),
+			  create_icon = require('../../assets/compose_dark.png'),
+			  import_icon = require('../../assets/import_dark.png'),
+			  arrow_left = require('../../assets/arrow_left.png'),
 			  { loc, 
 			  	sets, 
 			  	isFetching, 
@@ -84,19 +78,19 @@ export default class Header extends Component {
 			  	learn_set,
 			  	set_id,
 			  	pushState,
-			  	logged_in
+			  	logged_in,
+			  	root_path
 			  } = this.props;
 		let id = loc.pathname.replace(/\D/g,''),
 			set = sets[id];
 		return(
 			<div>
 			{
-				loc.pathname.indexOf('login') !== -1
+				root_path == 'login'
 				? null
 				:
-				<div className="header_positioner">
-					<div className={classnames("header_container", 
-						{'no_border': loc.pathname.indexOf('createset') !== -1 ? true : false })}>				
+				<div className={classnames("header_positioner", {'no_border': root_path == 'createset' || root_path == 'import'  })}>
+					<div className={classnames("header_container")}>				
 						<div className='header'>
 							{ 
 								isFetching || fetchingLearn
@@ -112,12 +106,12 @@ export default class Header extends Component {
 							</div>
 							<div className="header_content">
 								{
-									loc.pathname.indexOf('/createset') !== -1
+									root_path == 'createset' || root_path == 'import'
 									? null
 									: <SearchBox {...this.props}/>
 								}
 								{
-									loc.pathname.indexOf('/learn') !== -1 || loc.pathname.indexOf('/createset') !==  -1
+									root_path == 'createset' || root_path == 'import' || root_path == 'learn'
 									? null
 									: <button className="create_set_btn_group"
 											  onClick={() => { 
@@ -125,38 +119,55 @@ export default class Header extends Component {
 											  }}>
 											<img className="create_icon" src={create_icon}/>
 											<Link className="button create-set-button button-outline" to="">
-															Create a study set					
+															Create study set					
 											</Link>	
 									  </button>
 								}
-								{ !fetchingLearn && loc.pathname.indexOf('/learn') !== -1 ? 
+								{
+									root_path == 'createset' || root_path == 'import' || root_path == 'learn'
+									? null
+									: <button className="create_set_btn_group import"
+											  onClick={() => { 
+											  	pushState(null, '/import') 
+											  }}>
+											<img className="create_icon import" src={import_icon}/>
+											<Link className="button import create-set-button button-outline" to="">
+															Import					
+											</Link>	
+									  </button>
+								}
+								{ !fetchingLearn && root_path == 'learn' ? 
 								<span className="open_set_container set_name_wrapper"
 								      ref="set_name_wrapper">
 										<Link to={`/set/${set_id}`} className="open_set_btn"
-												// onClick={::this.openSetMenu}
-											    // onBlur={::this.closeSetMenu}
 											    ref="open_set_btn">
+											    <span>
+											    	<img style={{
+											    		height: '10.5px',
+											    		marginRight: '7.5px'
+											    	}}
+											    	 src={arrow_left}/>
+											    </span>
+											    <h1 className="set_hash"
+											    	style={{
+											    		paddingTop: '6px',
+											    		fontSize: '14.5px'
+											    	}}
+											    >Back to set</h1>
 												<h1 className="set_name"
-													ref="set_name"><span className="set_hash">#</span>{learn_set.title.toLowerCase()}</h1>
-												<span>
-													<img className="dropdown_menu_icon icon" 
-													 src={dropdown_icon}/>
-												</span>
+													style={{
+														display: 'none'
+													}}
+													ref="set_name">{learn_set.title}</h1>
 										</Link>
 								</span>						
 								: null }
 							</div>
 							<div className="header_user">
 								{
-									logged_in
+									root_path !== 'createset'
 									&&
-									<Avatar {...this.props}/>
-								}
-								{
-									loc.pathname.indexOf('createset') == -1  
-									&&
-									<div className="button-group">
-										<button className="button upload_button">Upload</button>
+									<div className="button-group" style={{display: 'inline-block'}}>
 										{
 											!logged_in
 											&&
@@ -166,6 +177,11 @@ export default class Header extends Component {
 											</button>
 										}	
 									</div>
+								}
+								{
+									logged_in
+									&&
+									<Avatar {...this.props}/>
 								}
 							</div>
 						</div>

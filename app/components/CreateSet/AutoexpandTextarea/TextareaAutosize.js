@@ -95,9 +95,16 @@ export default class TextareaAutosize extends Component {
 	      		  }}
 	      		  onFocus={() => {
 	      		  	this.setState({blurred: true})
-	      		  	}
-	      		  }
-      		  	  onBlur={() => this.props.titleBlur()}
+	      		  	if(typeof this.props.focus == 'function') {
+      		  	  		this.props.focus()
+      		  	  	}}}
+      		  	  onBlur={() => {
+      		  	  	if(typeof this.props.blur == 'function') {
+      		  	  		this.props.blur()
+      		  	  	} 
+      		  	  	if(typeof this.props.titleBlur == 'function') {
+      		  	  		this.props.titleBlur()
+      		  	  	}}}
 	              onKeyDown={this.handleKeyDown} 
 	              tabIndex={tabIndex}
 	              ref={`textarea${tabIndex}`}>

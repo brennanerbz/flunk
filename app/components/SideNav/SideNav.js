@@ -8,6 +8,7 @@ require('./SideNav.scss');
 
 @connect(state =>({
 	loc: state.router.location,
+	user_id: state.user.user.id
 }))
 export default class SideNav extends Component {
 	static propTypes = {
@@ -24,17 +25,21 @@ export default class SideNav extends Component {
 	}
 
 	render() {
-		let pathname = this.props.loc.pathname,
-			regex = /\/(.*?)\//,
-			root_path;
-		pathname !== '/' ? root_path = regex.exec(pathname) : root_path = '/'
-		console.log(root_path)
-		console.log('working fine')
 		return(
 			<div className="sidenav">
 					<Main {...this.props}/>	
 					<SideNavSetList {...this.props}/>
 					<div className="clear_both"></div>
+					<div className="page_footer">
+						<ul className="footer_list">
+							<li className="footer_link">
+								<a>Help</a>
+							</li>
+							<li className="footer_link">
+								<a>Privacy</a>
+							</li>
+						</ul>
+					</div>
 			</div>
 		);
 	}

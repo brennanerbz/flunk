@@ -58,7 +58,7 @@ export default class LearnInput extends Component {
  
 	handleSubmit = (e, arg) => {
 		e.preventDefault()
-		const { submitAnswer, getHint } = this.props,
+		const { submitAnswer } = this.props,
 			  d = new Date(),
 			  response_time = d.toISOString().replace('T', " ").replace("Z", ""),
 			  reaction_time = this.state.reaction_time !== null ? this.state.reaction_time : response_time,
@@ -95,7 +95,7 @@ export default class LearnInput extends Component {
 			    	   className={classnames({'correct_answer': this.state.correct})}/>
 			   	</form>
 			   	<span className="">
-			   		<button className="button answer_btn" 
+			   		<button style={{height: '34px'}} className="button primary" 
 			   			    type="button"
 			   			    onClick={::this.handleSubmit}>Answer</button>
 			   	</span>

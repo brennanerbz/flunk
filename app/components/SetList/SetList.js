@@ -5,7 +5,7 @@ import assign from 'lodash/object/assign';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-const styles = require('./SetList.scss');
+const styles = require('./Style/SetList.scss');
 
 import SetListItem from './SetListItem';
 

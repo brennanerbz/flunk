@@ -18,6 +18,7 @@ var initial_searchstate = {
 	searchFlag: false,
 	noResults: false,
 	query: '',
+	result_count: 0,
 	items: null,
 	item_page: 0,
 	item_page_prev_index: 0,
@@ -93,7 +94,8 @@ export default function search(state = initial_searchstate, action) {
 				item_page: item_pages.page,
 				item_page_prev_index: item_pages.prev_index,
 				item_page_next_index: item_pages.next_index,
-				query: action.query
+				query: action.query,
+				result_count: action.count
 			}
 		case REQUEST_SETS:
 			return {
@@ -111,7 +113,8 @@ export default function search(state = initial_searchstate, action) {
 				set_page: set_pages.page,
 				set_page_prev_index: set_pages.prev_index,
 				set_page_next_index: set_pages.next_index,
-				query: action.query
+				query: action.query,
+				result_count: action.count
 			}
 		case REQUEST_USERS:
 			return {
@@ -129,7 +132,8 @@ export default function search(state = initial_searchstate, action) {
 				user_page: user_pages.page,
 				user_page_prev_index: user_pages.prev_index,
 				user_page_next_index: user_pages.next_index,
-				query: action.query
+				query: action.query,
+				result_count: action.count
 			}
 		case CLEAR_PAGES:
 			return {

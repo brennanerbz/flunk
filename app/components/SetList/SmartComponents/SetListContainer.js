@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 
+require('../Style/SetList.scss');
 import SetListView from '../Views/SetListView';
 
 export default class SetListContainer extends Component {
@@ -29,18 +30,17 @@ export default class SetListContainer extends Component {
 		);
 	}
 }
-
-export default class SetListSections extends Component {
+class SetListSections extends Component {
 	static propTypes = {
 	}
 
 	render() {
-		const { assignments } = this.props;
-		let sections = this.computeSections(assignments)
+		const { assignments } = this.props,
+				sections = this.computeSections(assignments)
 		return(
 			<ul className="recent_view_sections">				
 				{ 
-					::this.renderSections(sections).map(val => {
+					this.renderSections(sections).map(val => {
 						return val;
 					})
 				}
@@ -122,7 +122,7 @@ export default class SetListSections extends Component {
 							<h1 className="recent_section_title">{
 								section_name.charAt(0).toUpperCase() + section_name.slice(1)
 							}</h1>
-							<SetListView assignments={sections[prop]} />
+							<SetListView section={section_name} assignments={sections[prop]} />
 						</li>
 					)
 				}					

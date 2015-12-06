@@ -1,0 +1,9 @@
+TODO:
+
+1. display the censored cue
+and report this cue that is displayed within the trial
+
+
+
+Use the trial.type for user commands to adjust diff. Pass in value
+// recall | pic | related | augN | nonemc | mc | stem | peek | copy

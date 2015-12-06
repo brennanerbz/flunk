@@ -67,7 +67,8 @@ export default class Header extends Component {
 	render() {
 		const logo = require('./assets/FlunkLogo.png'),
 			  mini_logo = require('../../assets/color_hash.png'),
-			  create_icon = require('../../assets/compose.png'),
+			  create_icon = require('../../assets/compose_dark.png'),
+			  import_icon = require('../../assets/import_dark.png'),
 			  arrow_left = require('../../assets/arrow_left.png'),
 			  { loc, 
 			  	sets, 
@@ -119,7 +120,20 @@ export default class Header extends Component {
 											  }}>
 											<img className="create_icon" src={create_icon}/>
 											<Link className="button create-set-button button-outline" to="">
-															Create a study set					
+															Create study set					
+											</Link>	
+									  </button>
+								}
+								{
+									root_path == 'createset' || root_path == 'import' || root_path == 'learn'
+									? null
+									: <button className="create_set_btn_group import"
+											  onClick={() => { 
+											  	pushState(null, '/import') 
+											  }}>
+											<img className="create_icon import" src={import_icon}/>
+											<Link className="button import create-set-button button-outline" to="">
+															Import					
 											</Link>	
 									  </button>
 								}
@@ -155,11 +169,6 @@ export default class Header extends Component {
 									root_path !== 'createset'
 									&&
 									<div className="button-group" style={{display: 'inline-block'}}>
-										<Link className="upload" to="/import">
-											<button className="button upload_button">
-											Import
-											</button>
-										</Link>
 										{
 											!logged_in
 											&&

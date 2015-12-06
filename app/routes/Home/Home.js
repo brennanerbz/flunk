@@ -50,7 +50,8 @@ export default class Home extends Component {
 		return(
 			<DocumentTitle title="Learn more, work less">
 				<div className="main_content">
-					<div className="page_header_wrapper">
+					<div style={{ marginBottom: '25px' }} className="page_header_wrapper">
+						Recent
 						{ isFetching && <LoadingSpinner />}
 					</div>
 					{ 

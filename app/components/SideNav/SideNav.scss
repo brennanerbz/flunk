@@ -1,6 +1,7 @@
 
 .sidenav {
 	font-family: "Slack-Lato";
+	-webkit-font-smoothing: antialiased;
 	top: 45px;
 	width: 220px;
 	float: left;
@@ -112,7 +113,7 @@
 			    }
 			    .prefix_icon {
 			    	font-weight: 300;
-			    	opacity: .5;
+			    	opacity: 1;
 			    	margin-top: -0.1rem;
 			    	margin-right: 0.5rem;
 			    	img {

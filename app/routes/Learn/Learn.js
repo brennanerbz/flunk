@@ -12,6 +12,8 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 require('./Learn.scss');
 
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
+
 /* Components */
 import LearnCard from '../../components/Learn/LearnCard/LearnCard';
 import ShowCorrect from '../../components/Learn/ShowCorrect/ShowCorrect';
@@ -299,24 +301,11 @@ export default class Learn extends Component {
 					{
 						showLearn
 						? <div className="spinner_container">	
-					 	  	  <div className="big_spinner learn">
-					 	  	  	<div className="sk-fading-circle">
-					 	  	  	  <div className="sk-circle1 sk-circle"></div>
-					 	  	  	  <div className="sk-circle2 sk-circle"></div>
-					 	  	  	  <div className="sk-circle3 sk-circle"></div>
-					 	  	  	  <div className="sk-circle4 sk-circle"></div>
-					 	  	  	  <div className="sk-circle5 sk-circle"></div>
-					 	  	  	  <div className="sk-circle6 sk-circle"></div>
-					 	  	  	  <div className="sk-circle7 sk-circle"></div>
-					 	  	  	  <div className="sk-circle8 sk-circle"></div>
-					 	  	  	  <div className="sk-circle9 sk-circle"></div>
-					 	  	  	  <div className="sk-circle10 sk-circle"></div>
-					 	  	  	  <div className="sk-circle11 sk-circle"></div>
-					 	  	  	  <div className="sk-circle12 sk-circle"></div>
-					 	  	  	</div>
-					 	  	  </div>
-					 	    <span className="loading_label">Loading</span>
-					 	    <span className="loading"><span>.</span><span>.</span><span>.</span></span>
+				 	  	  		<LoadingSpinner />
+				 	  	  		<div className="message">
+						 	    	<span className="">Loading</span>
+						 	    	<span className="loading"><span>.</span><span>.</span><span>.</span></span>
+					 	    	</div>
 				 	      </div>
 				 	    : null
 					}

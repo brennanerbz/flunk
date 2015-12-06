@@ -291,16 +291,22 @@ input {
 
 :global .spinner_container {
 	z-index: 101;
-	position: fixed;
-	top: 28%;
-	left: 44%;
+	// position: fixed;
+	display: table;
+	margin: 120px auto;
+	.message {
+		display: table;
+		margin: -10px auto;
+		margin-left: -25px;
+
+	}
 }
 .loading_label  {
 	display: table-cell;
 	position: relative;
-	font-size: 21px;
-	left: 6px;
-	top: 8px;
+	font-size: 17px;
+	left: 0px;
+	top: 0px;
 }
 @keyframes blink {
     /**
@@ -330,8 +336,6 @@ input {
 	display: table-cell;
 	position: relative;
 	font-size: 21px;
-	left: 8px;
-	top: 8px;
 	&:not(:first-child) {
 		span {
 	    /**

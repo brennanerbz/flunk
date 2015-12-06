@@ -30,6 +30,16 @@ export default class SideNav extends Component {
 					<Main {...this.props}/>	
 					<SideNavSetList {...this.props}/>
 					<div className="clear_both"></div>
+					<div className="page_footer">
+						<ul className="footer_list">
+							<li className="footer_link">
+								Help
+							</li>
+							<li className="footer_link">
+								Privacy
+							</li>
+						</ul>
+					</div>
 			</div>
 		);
 	}

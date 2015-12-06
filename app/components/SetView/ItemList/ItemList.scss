@@ -15,7 +15,7 @@
 	    -moz-user-select: text;
 	    -ms-user-select: text;
 	    user-select: text;
-	    // -webkit-font-smoothing: antialiased;
+	    -webkit-font-smoothing: antialiased;
 	    &:not(:first-child) {
 	    	border-top: 1px solid #eee;
 	    }

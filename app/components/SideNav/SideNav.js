@@ -33,10 +33,10 @@ export default class SideNav extends Component {
 					<div className="page_footer">
 						<ul className="footer_list">
 							<li className="footer_link">
-								Help
+								<a>Help</a>
 							</li>
 							<li className="footer_link">
-								Privacy
+								<a>Privacy</a>
 							</li>
 						</ul>
 					</div>

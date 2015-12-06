@@ -1,6 +1,8 @@
 .search_page {
-	margin-top: 65px;
-	min-width: 790px;
+	padding-top: 65px;
+	padding-left: 170px;
+	padding-bottom: 2em;
+	min-height: 425px;
 	&.no_sidenav_container {
 		padding-left: 15px!important;
 	}
@@ -20,7 +22,6 @@
 				ul {
 					&.tabs_list {
 						margin-bottom: -1px;
-						padding-left: 141px;
 					}
 					li {
 						display: inline-block;

@@ -47,9 +47,9 @@ export default class FlunkApp extends Component {
 		route !== '/' ? root_path = regex.exec(route)[1] : root_path = '/'
 		if     (route.indexOf('createset') !== -1 
 			 || route.indexOf('learn') !== -1 
-			 || route.indexOf('search') !== -1
 			 || route.indexOf('error') !== -1) { return; }
 		else if(route.indexOf('set') !== -1
+			 || route.indexOf('search') !== -1
 			 || route.indexOf('profile') !== -1
 			 || route == '/') {
 			return (

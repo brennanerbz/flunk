@@ -3,6 +3,7 @@
 	position: relative;
 	width: 540px!important;
 	.sets_list {
+		margin-top: 20px;
 		width: 100%;
 		.search_set_item {
 			width: 100%!important;
@@ -11,7 +12,7 @@
 			.set_icon_container {
 				display: table-cell;
 				position: relative;
-				opacity: 0.2;
+				opacity: 0.5;
 				padding-right: 25px;
 				cursor: pointer;
 				img {

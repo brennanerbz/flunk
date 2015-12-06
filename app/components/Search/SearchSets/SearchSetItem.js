@@ -16,7 +16,7 @@ export default class SearchSetItem extends Component {
 	}
 
 	render() {
-		let set_icon = require('../../../assets/set_icon.png'),
+		let set_icon = require('../../../assets/set_icon_lines.png'),
 			  { set, pushState, query } = this.props;
 		return(
 			<li className="search_set_item">

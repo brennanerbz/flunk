@@ -9,9 +9,16 @@ export default class SearchPeople extends Component {
 	}
 
 	render() {
-		const { users, query, searching } = this.props;
+		const { users, query, result_count, searching } = this.props;
 		return(
 			<div className="search_people_container">
+				<h2 className="header">
+					{
+						searching
+						? "Searching"
+						: `About ${result_count} results for '${query}'`
+					}
+				</h2>
 				<ul className="people_list">
 					{
 						users !== null && users.length > 0

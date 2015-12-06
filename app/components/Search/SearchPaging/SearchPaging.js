@@ -28,6 +28,7 @@ export default class SearchPaging extends Component {
 			  	pushState,
 			  	tab,
 			  	query,
+			  	result_count,
 			  	item_page,
 			  	item_page_prev_index,
 			  	item_page_next_index,
@@ -38,7 +39,7 @@ export default class SearchPaging extends Component {
 			  	user_page_prev_index,
 			  	user_page_next_index
 			  } = this.props;
-		let page, prev_index, p_active, next_index, n_active = true;
+		let page, page_count, prev_index, p_active, next_index, n_active = true;
 		switch(tab) {
 			case 'concepts':
 				page = item_page
@@ -60,9 +61,16 @@ export default class SearchPaging extends Component {
 		}
 		if(prev_index === 0 && page === 1) p_active = false 
 		else p_active = true
-		// TODO: need full results count
-		// if(next_index === 100 && page === 100) n_active = false 
-		// else n_active = true
+		if(result_count > 10) {
+			page_count = Math.ceil((result_count + 10 - 1) / 10)
+		} else {
+			page_count = 1
+		}
+		if(page === page_count) {
+			n_active = false
+		} else {
+			n_active = true
+		}
 		return(
 			<div className="search_paging">
 				<a className={classnames("page_backward", { "disabled": !p_active })}
@@ -81,7 +89,7 @@ export default class SearchPaging extends Component {
 						 className={classnames("left previous", { "disabled": !p_active } )}/>
 				</a>
 				
-				<span className="page_text">Page {page}</span>
+				<span className="page_text">Page {page} of {page_count}</span>
 
 				<a className={classnames("page_forward", { "disabled": !n_active })}
 				   onMouseEnter={() => this.setState({next_hover: true})}

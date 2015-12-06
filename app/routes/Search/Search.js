@@ -26,6 +26,7 @@ require('./Search.scss');
 	searching: state.search.searching,
 	noResults: state.search.noResults,
 	query: state.search.query,
+	result_count: state.search.result_count,
 	items: state.search.items,
 	term: state.search.term,
 	definitions: state.search.definitions,

@@ -1,8 +1,10 @@
 .search_page {
-	padding-top: 65px;
+	padding-top: 75px;
 	padding-left: 170px;
 	padding-bottom: 2em;
 	min-height: 425px;
+	letter-spacing: 0.01em;
+	// -webkit-font-smoothing: antialiased;
 	&.no_sidenav_container {
 		padding-left: 15px!important;
 	}
@@ -10,7 +12,6 @@
 		display: block;
 		&.search_tabs {
 			position: relative;
-			line-height: 38px;			
 			&:after, &:before {
 				display: table;
 			}
@@ -18,26 +19,50 @@
 				clear: both;
 			}
 			.tabs_container {
-				border-bottom: 1px solid #f3f3f3;
 				ul {
 					&.tabs_list {
-						margin-bottom: -1px;
-					}
-					li {
-						display: inline-block;
-						cursor: pointer;
-						&.tab_item {
-							padding: 0 24px;
-							padding-bottom: 7.5px;
-							&.active {
-								border-bottom: 3px solid #2AB27B;
+						margin: 0;
+						padding: 0;
+						list-style-type: none;
+						li {
+							&.tab_item {
+								cursor: pointer;
+								position: relative;
+								display: inline-block;
+								vertical-align: top;
+								z-index: 2;
+								text-align: center;
+								border: 1px solid #71B7F1;
+								border-bottom-color: #bdc4c9;
+								border-right: none;
+								&.right_most {
+									border-right: 1px solid #71B7F1;
+								    border-top-right-radius: 5px;
+								}
+								&:first-child {
+									margin-left: 0;
+									border-top-left-radius: 5px
+								}
+								&.active {
+									cursor: default;
+									border: 1px solid #bdc4c9;
+									border-bottom-color: #fff;
+									a {
+										text-decoration: none;
+										color: #3d464d;
+									}
+									+.tab_item {
+										border-left: none;
+									}
+								}
+								a {
+									font-size: 15px;
+									padding: 11px 22px;
+									display: table-cell;
+									vertical-align: top;
+									color: #006FC8;
+								}
 							}
-							&:not(.active) {
-								opacity: 0.6;
-							}
-						}
-						&:hover {
-							opacity: 1!important;
 						}
 					}
 				}
@@ -45,14 +70,8 @@
 		}
 	}
 	.search_content {
-		&.no_sidenav_container {
-			margin-top: 15px!important;
-			margin-left: 167px!important; 
-			padding-left: 0!important;
-			&.sets_page {
-				margin-left: 139px!important;
-			}
-		}
+		margin-top: -1px;
+		border-top: 1px solid #bdc4c9;
 		&.searching {
 			opacity: 0.4;
 		}

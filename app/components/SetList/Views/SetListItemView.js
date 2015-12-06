@@ -39,7 +39,7 @@ export default class SetListItemView extends Component {
 					</div>
 					<div className="set_list_item_actions">
 						<div className="inner">
-							<button className="button upload_button">Share</button>
+							<button className="button outline">Share</button>
 							<SetListItemActionsView 
 							 	handleToggleSelect=""
 							 	handleOpen=""

@@ -11,13 +11,13 @@ export default class SearchTabs extends Component {
 		return(
 			<div className="tabs_container">
 				<ul className="tabs_list">
-					<li className={classnames("tab_item sets_tab", 
+					<li className={classnames("tab_item", 
 											 {"active": pathname.indexOf('sets') !== -1})}
 						onClick={() => { 
 							pushState(null, `/search/sets/${query}`)
 							changeTab('sets') 
 						}}>
-						Sets
+						<a>Sets</a>
 					</li>
 					<li className={classnames("tab_item concepts_tab", 
 								   			 {"active": pathname.indexOf('concepts') !== -1})}
@@ -25,25 +25,19 @@ export default class SearchTabs extends Component {
 							pushState(null, `/search/concepts/${query}`) 
 							changeTab('concepts') 
 						}}>
-						Concepts
+						<a>Concepts</a>
 					</li>
 					
-					<li className={classnames("tab_item people_tab", 
+					<li className={classnames("tab_item right_most", 
 											 {"active": pathname.indexOf('users') !== -1})}
 						onClick={() => { 
 							pushState(null, `/search/users/${query}`)
 							changeTab('users') 
 						}}>
-						People
+						<a>People</a>
 					</li>
 				</ul>
 			</div>
 		);
 	}
 }
-
-    // position: fixed;
-    // line-height: 38px;
-    // background-color: #fff;
-    // z-index: 101;
-    // width: 100%;

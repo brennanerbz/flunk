@@ -9,6 +9,56 @@
 	src: url('../../fonts/Lato-Regular.ttf') format('truetype'); 
 }
 
+/* Set List Actions */
+.set_list_item_actions {
+	position: relative;
+	width: 155px;
+	padding-left: 15px;
+	padding-right: 16px;
+	text-align: right;
+	.inner { 
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 600px;
+		padding: 4px 12px;
+		pointer-events: none;
+		overflow: hidden;
+		button {
+			margin-left: 5px;
+			display: inline-block;
+			vertical-align: middle;
+			// &:first-child {
+			// 	box-shadow: -8px 0 32px 16px #fff;
+			// }
+		}
+		.more_actions {
+			display: inline-block;
+			vertical-align: middle;
+			position: relative;
+			width: 32px;
+			height: 32px;
+			> * {
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			.placeholder {
+				top: 13px;
+				left: 12px;
+				display: inline-block;
+				vertical-align: middle;
+			}
+			.more_actions_button {
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+		}
+	}
+}
+/* ------------------------- */
+
 * {
   box-sizing: border-box;
 }
@@ -510,6 +560,10 @@ $width: 70px;
 			border-radius: 3px;
 		}
 	}
+	&.outline {
+		background-image: linear-gradient(-180deg, #FFFFFF 0%, #FCFCFC 100%);
+		border: 1px solid #D1D1D3;
+	}
 	&.primary {
 		color: #fff;
 		background-image: linear-gradient(-180deg, #5992F3 0%, #3E82F7 100%);
@@ -841,7 +895,7 @@ button:focus, input[type="button"]:focus {
 // Main content // 
 .main_content {
 	padding-top: 75px;
-	padding-left: 180px;
+	padding-left: 170px;
 	padding-bottom: 2em;
 	min-height: 425px;
 }

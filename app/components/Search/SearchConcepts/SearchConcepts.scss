@@ -5,9 +5,8 @@
 	.spotlight_search {
 		display: block;
 		position: relative;
-		width: 585px;
 		background-color: #fff;
-		box-shadow: 0 1px 4px #e3e3e3;
+		// box-shadow: 0 1px 4px #e3e3e3;
 		padding: 20px 20px 20px 20px !important;
 		border: 1px solid #e3e3e3;
 		border-radius: 3px;	
@@ -23,7 +22,6 @@
 		padding: 20px 0;
 		margin-top: 20px;
 		margin-left: 20px;
-		max-width: 540px;
 		.related_table {
 			display: table;
 			ul {
@@ -126,7 +124,6 @@
 	}
 	ul {
 		&.definition_list, &.example_list {
-			max-width: 540px;
 			margin-left: 0px;
 			padding-bottom: 0;
 			margin-bottom: 0;

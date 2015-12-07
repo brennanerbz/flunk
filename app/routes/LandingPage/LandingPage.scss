@@ -10,20 +10,21 @@
 		padding-top: 0.5em;
 		display: block;
 		position: relative;
-		padding-bottom: 4.75em;
+		padding-bottom: 7em;
 		margin: 0 auto;
 		box-sizing: border-box;
 		max-width: 1015px;
-		padding-left: 1.59rem;
-		padding-right: 1.59rem;
+		padding-left: 0.1rem;
+		padding-right: 0.1rem;
 		.marketing_copy {
 			position: absolute;
 			max-width: 745px;
-			top: 122px;
-			left: 1.59rem;
+			top: 4.5em;
+			left: 1rem;
 			h1 {
+				font-family: "Open Sans";
 				font-size: 30px;
-				font-weight: 700;
+				font-weight: 300;
 			}
 			img {
 				margin-top: 65px;
@@ -31,9 +32,12 @@
 			}
 			p {
 				&.product_description {
-					font-size: 1.06rem;
+					-webkit-font-smoothing: antialiased;
+					font-size: 1.18rem;
 					color: #777777;
 					margin-top: 15px;
+					font-family: "Open Sans";
+					font-weight: 400;
 				}
 			}
 			ul {
@@ -59,7 +63,10 @@
 		}
 		.sign_up {
 			display: inline-block;
-			padding-left: 585px;
+			padding-left: 605px;
+			.sign_up_container {
+				margin-top: 4.5em;
+			}
 		}
 	}
 	.sample_transform {
@@ -106,16 +113,20 @@
 							width: 470px;
 							font-size: 1.875rem;
 						    line-height: 2.25rem;
-						    font-weight: 400;
+						    font-weight: 300;
+						    font-family: "Open Sans";
 						    margin: 0;
 						}
 						p {
-							font-size: 1.06rem;
 							width: 470px;
 							line-height: 1.62rem;
 							color: #777777;
 							padding-top: 1em;
 							padding-bottom: 1em;
+							-webkit-font-smoothing: antialiased;
+							font-size: 1.06rem;
+							font-family: "Open Sans";
+							font-weight: 400;
 						}
 					}
 				}
@@ -161,7 +172,8 @@
 		h3 {
 			font-size: 30px;
 			line-height: 2.5rem;
-			font-weight: 900;
+			font-family: "Open Sans";
+			font-weight: 300;
 		}
 		img {
 			height: 170px;
@@ -173,7 +185,16 @@
 		display: table;
 		margin: 0 auto;
 		padding-top: 1.5em;
-		padding-bottom: 2.5em;
+		padding-bottom: 3.5em;
+		.start_now {
+			font-size: 1.18rem;
+			margin-top: 15px;
+			font-family: "Open Sans";
+			font-weight: 300!important;
+		}
+		.sign_up_form {
+			max-width: 320px;
+		}
 	}
 	.footer {
 		position: absolute;

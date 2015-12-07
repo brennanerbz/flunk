@@ -6,19 +6,21 @@
 		padding-left: 50px;
 		padding-right: 50px;
 		font-family: "Lato";
-		padding-top: 2.5em;
+		padding-top: 8.5em;
 		.sign_in_content {
 			min-width: 315px;
 			.card {
-				padding-top: 30px;
 				padding: 1.5em;
+				padding-top: 10px;
 				width: 350px;
 			}
 			.header {
 				h4 {
+					font-family: "Open Sans";
 					font-size: 28px;
-					font-weight: 700;
+					font-weight: 300;
 					margin-bottom: 20px;
+					text-align: left;
 				}
 			}
 			.sign_in {

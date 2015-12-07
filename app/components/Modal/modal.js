@@ -218,7 +218,9 @@ export default class Modal extends Component {
 				 aria-labelledby="myModalLabel"
 				 aria-hidden="true">
 				<div className={classnames({"sign_up": type == 'log_in'}, "modal-dialog")} role="document">
-					<div className="modal-content">
+					<div className={classnames("modal-content", {
+						"no_shadow": type == 'log_in'
+					})}>
 					<div className={classnames("modal-header", 
 						{ "settings": type == 'settings' },
 						{ "sign_up": type == 'log_in'}

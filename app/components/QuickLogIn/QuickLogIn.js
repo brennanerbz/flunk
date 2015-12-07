@@ -21,25 +21,6 @@ export default class QuickLogIn extends Component {
 			<div className="quick_login_container">
 				<div className="card">
 					<img className="icon arrow up" src={arrow_up} />
-					<div className="log_in_group">
-						<button className="google_button button">
-							<img className="icon" 
-								 src={g_icon}/>
-							Log in with Google
-						</button>
-						<button className="facebook_button button">
-							<img className="icon"
-								 src={f_icon}/>
-							Log in with Facebook
-						</button>
-						<div className="day_divider">
-							<hr className="separator"/>
-							<i className="copy_only"/>
-							<div className="day_divider_label">
-								or
-							</div>
-						</div>
-					</div>
 					<form className="log_in_form"
 						  onSubmit={::this.submitLogIn}
 						  onBlur={() => this.props.closePopout()}>
@@ -56,3 +37,25 @@ export default class QuickLogIn extends Component {
 		);
 	}
 }
+/*
+<div className="log_in_group">
+	<button className="google_button button">
+		<img className="icon" 
+			 src={g_icon}/>
+		Log in with Google
+	</button>
+	<button className="facebook_button button">
+		<img className="icon"
+			 src={f_icon}/>
+		Log in with Facebook
+	</button>
+	<div className="day_divider">
+		<hr className="separator"/>
+		<i className="copy_only"/>
+		<div className="day_divider_label">
+			or
+		</div>
+	</div>
+</div>
+
+*/

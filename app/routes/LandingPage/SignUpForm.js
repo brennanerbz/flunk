@@ -42,7 +42,7 @@ export default class SignUpForm extends Component {
 								?
 								<div>
 									<h4>Sign Up</h4>
-									<p>Welcome to the beta version.</p>
+									<p>It's free.</p>
 								</div>
 								:
 								<div>
@@ -51,25 +51,7 @@ export default class SignUpForm extends Component {
 							}
 						</div>
 					}
-					<div className="sign_up_group">
-						<button className="google_button button">
-							<img className="icon" 
-								 src={g_icon}/>
-							Sign up with Google
-						</button>
-						<button className="facebook_button button">
-							<img className="icon"
-								 src={f_icon}/>
-							Sign up with Facebook
-						</button>
-						<div className="day_divider">
-							<hr className="separator"/>
-							<i className="copy_only"/>
-							<div className="day_divider_label">
-								or
-							</div>
-						</div>
-					</div>
+					
 					<form className="sign_up_form"
 						  onSubmit={::this.submitSignUp}>
 						<input ref="first_name" placeholder="First name" autoFocus={this.props.shouldAutoFocus}/>
@@ -77,9 +59,9 @@ export default class SignUpForm extends Component {
 						<input placeholder="Email"/>
 						<input type="password" placeholder="Password"/>
 						<p className="">By clicking Sign Up, you agree to our <a>Terms of Service</a> and <a>Data Policy</a></p>
-						<button className="button green"
+						<button className="button primary"
 							    onClick={::this.submitSignUp}>
-							   	Sign Up
+							   	Sign up for Beta
 						</button>
 					</form>
 				</div>
@@ -87,3 +69,24 @@ export default class SignUpForm extends Component {
 		);
 	}
 }
+
+
+// <div className="sign_up_group">
+// 	<button className="google_button button">
+// 		<img className="icon" 
+// 			 src={g_icon}/>
+// 		Sign up with Google
+// 	</button>
+// 	<button className="facebook_button button">
+// 		<img className="icon"
+// 			 src={f_icon}/>
+// 		Sign up with Facebook
+// 	</button>
+// 	<div className="day_divider">
+// 		<hr className="separator"/>
+// 		<i className="copy_only"/>
+// 		<div className="day_divider_label">
+// 			or
+// 		</div>
+// 	</div>
+// </div>

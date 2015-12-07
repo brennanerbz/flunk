@@ -1240,6 +1240,10 @@ textarea:hover:ms-input-placeholder {
 	border-radius: 0.5rem;
 	box-shadow: 0 4px 1pc rgba(0,0,0,.5)!important;
 	font-family: "Lato";
+	&.no_shadow {
+		box-shadow: none!important;
+		border: 1px solid #e8e8e8;
+	}
 }
 
 .modal-backdrop {

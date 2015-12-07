@@ -29,7 +29,7 @@ export default class LandingPage extends Component {
 			<div className="landing_page">
 				<div className="landing_page_container">
 					<div className="marketing_copy">
-						<h1>Join the Spark beta</h1>
+						<h1>Join the Acuit beta</h1>
 						<p className="product_description">A new, automated learning tool for students and teachers <br/>  to save time by transforming their documents into:</p>
 						<ul>
 							<li>

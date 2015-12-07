@@ -6,19 +6,17 @@ export default class ConceptHeader extends Component {
 	}
 
 	render() {
-		// debugger
-		const { term } = this.props;
-		let term_name, subjects, subs = [], tag_icon = require('../../../assets/tag.png');
-		if(term == undefined) return;
-		term_name = term.target;
-		subjects = term.subjects.slice(0, 3);
-		subs;
-	subjects.forEach(sub => {
-		subs.push("#" + sub.name.toLowerCase())
-	})
+		const { term, subjects } = this.props;
+		let subs = [], tag_icon = require('../../../assets/tag.png');		
+		if(subjects !== null) {
+			subjects.forEach((sub, i) => {
+				if(i >= 3) return;
+				subs.push("#" + sub.name.toLowerCase())
+			})
+		}
 	return(
 			<div className={classnames("concept_header", { "subjects": subjects.length > 0 })}>
-				<h4 className="search_query">{term_name}</h4>
+				<h4 className="search_query">{term}</h4>
 				{
 					subjects !== null && subjects.length > 0
 					?

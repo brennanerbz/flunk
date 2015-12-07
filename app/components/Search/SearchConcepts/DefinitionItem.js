@@ -5,25 +5,29 @@ export default class DefinitionItem extends Component {
 	static propTypes = {
 	}
 
-	renderDef(def, term) {
+	renderDef(def, term, query) {
 		if(def == null) return {__html: null}
-		def = def.replace(new RegExp('(^|\\s)(' + term + ')(\\s|$)','ig'), '$1<b>$2</b>$3') 
+		def = def
+		.replace(term, `<i>${term}</i>`)
+		.replace(query, `<b>${query}</b>`) 
 		return {
 			__html: def
 		}
 	}
 
 	render() {
-		const { content, index, solo } = this.props;
+		const { definition, index, query } = this.props;
 		return(
-			<li className={classnames("definition_item", 
-							 {"only_child": solo})}>
+			<li className={classnames("definition_item")}>
 				<p className="definition"
-				   dangerouslySetInnerHTML={::this.renderDef(content.cue, content.target)}></p>
-				<span className="source">{content.creator.username}</span>
+				   dangerouslySetInnerHTML={
+				   	::this.renderDef(
+				   		definition.cue,
+				   		definition.target,
+				   		query
+				   	)
+				   }></p>
 			</li>
 		);
 	}
 }
-
-// <p className="def_index">{index + 1}</p>

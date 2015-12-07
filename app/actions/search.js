@@ -56,7 +56,6 @@ export function searchItems(term, page_index) {
 				items = res.body.items 
 				dispatch({type: RECEIVE_ITEMS_SUCCESS, items, count, query, index})
 			})
-			// await axios.get(`${api_url}/items/search/?search=${term}&start=${index}`).then(res => items = res.data.items)
 		} catch(err) {
 			dispatch({
 				type: RECEIVE_ITEMS_FAILURE,

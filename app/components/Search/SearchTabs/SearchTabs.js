@@ -25,7 +25,7 @@ export default class SearchTabs extends Component {
 							pushState(null, `/search/concepts/${query}`) 
 							changeTab('concepts') 
 						}}>
-						<a>Concepts</a>
+						<a>Terms</a>
 					</li>
 					
 					<li className={classnames("tab_item right_most", 

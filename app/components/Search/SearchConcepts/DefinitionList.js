@@ -8,7 +8,7 @@ export default class DefinitionList extends Component {
 	render() {
 		const { definitions } = this.props;
 		if(definitions == undefined || definitions.length == 0) return <div></div>
-		let sliced_definitions = definitions.slice(0, 3),
+		let sliced_definitions = definitions.slice(0, 1),
 			first_definition = sliced_definitions[0],
 			subjects = first_definition.subjects;
 		return( 

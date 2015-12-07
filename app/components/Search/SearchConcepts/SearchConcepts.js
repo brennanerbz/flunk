@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+
+import FactList from './FactList';
+
 import ConceptHeader from './ConceptHeader';
 import DefinitionList from './DefinitionList';
 
@@ -17,11 +20,13 @@ export default class SearchConcepts extends Component {
 	}
 
 	render() {
-		const { definitions, examples, related } = this.props;
+		const { definitions, examples, facts, related } = this.props;
 		return(
 			<div className="search_concept_container">
 				{
-					(definitions == null || definitions.length === 0) && (examples == null || examples.length === 0)
+					(definitions == null || definitions.length === 0) 
+					&& (examples == null || examples.length === 0)
+					&& (facts == null || facts.length === 0)
 					?
 					<NullSearchResults {...this.props}/>
 					: null
@@ -30,31 +35,20 @@ export default class SearchConcepts extends Component {
 					definitions !== null && definitions.length > 0
 					?
 					<div className="spotlight_search">
-						{
-							definitions !== undefined 
-							?
-							<ConceptHeader {...this.props} />
-							: null
-						}
+						<ConceptHeader {...this.props} />
 						<DefinitionList {...this.props}/>
 					</div>
 					: null
 				}
 				{
+					facts !== null && facts.length > 0
+					&&
+					<FactList facts={facts} />
+				}
+				{
 					(examples !== null && examples.length > 0) &&  (definitions !== null && definitions.length > 0) 
 					?
 					<ExampleList {...this.props}/>
-					: null
-				}
-				{
-					(examples !== null && examples.length > 0) && (definitions == null || definitions.length === 0)
-					? 
-					<div>
-						<div className="spotlight_search">
-							<ExampleItem content={examples[0]} solo={true} {...this.props}/>
-						</div>
-						<ExampleList spotlight={true} {...this.props}/>
-					</div>
 					: null
 				}
 				{

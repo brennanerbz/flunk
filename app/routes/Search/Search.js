@@ -30,6 +30,7 @@ require('./Search.scss');
 	items: state.search.items,
 	term: state.search.term,
 	definitions: state.search.definitions,
+	facts: state.search.facts,
 	examples: state.search.examples,
 	related: state.search.related,
 	sets: state.search.sets,

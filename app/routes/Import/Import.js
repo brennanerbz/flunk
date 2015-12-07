@@ -1,16 +1,45 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { pushState } from 'redux-router';
 import DocumentTitle from 'react-document-title';
+
+/* Actions */
+import * as importactions from '../../actions/import';
+/* Components */
 import AutoexpandTextarea from '../../components/CreateSet/AutoexpandTextarea/AutoexpandTextarea';
+import Modal from '../../components/Modal/modal';
 require('./Import.scss');
 
+@connect(state => ({
+		logged_in: state.user.logged_in,
+		upload: state.upload
+	}), 
+	dispatch => ({
+		...bindActionCreators({
+			...importactions,
+			pushState
+		}, dispatch)
+	})
+)
 export default class Upload extends Component {
 	static propTypes = {
 	}
 
 	state = {
 		drop_box_hover: false,
-		link_focused: false
+		link_focused: false,
+		import_prompt_modal: false,
+		modal_type: 'log_in'
+	}
+
+	componentDidMount() {
+		if(!this.props.logged_in) {
+			this.setState({
+				import_prompt_modal: true
+			})
+		}
 	}
 
 	render() {
@@ -21,6 +50,11 @@ export default class Upload extends Component {
 		return(
 			<DocumentTitle title='Import | Ace'>
 				<div className="upload_page">
+					<Modal  open={this.state.import_prompt_modal} 
+							type={this.state.modal_type}
+							import={true}
+							pushState={this.props.pushState}
+							/>
 					<div className="upload_container">
 						<div id="upload_progress">
 						</div>
@@ -47,7 +81,7 @@ export default class Upload extends Component {
 									<AutoexpandTextarea focus={() => this.setState({link_focused: true})} 
 														blur={() => this.setState({link_focused: false})}
 														placeholder="Link or text..."
-														autoFocus={true} />
+														autoFocus={this.props.logged_in} />
 								</div>
 								<button className="button green">Create</button>
 							</div>

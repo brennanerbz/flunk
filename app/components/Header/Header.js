@@ -86,7 +86,7 @@ export default class Header extends Component {
 		return(
 			<div>
 			{
-				root_path == 'login'
+				root_path == 'login' || root_path == 'signup'
 				? null
 				:
 				<div className={classnames("header_positioner", {'no_border': root_path == 'createset' || root_path == 'import'  })}>

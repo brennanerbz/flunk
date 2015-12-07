@@ -30,15 +30,15 @@ export default class LandingPage extends Component {
 				<div className="landing_page_container">
 					<div className="marketing_copy">
 						<h1>Join the Spark beta</h1>
-						<p className="product_description">We're working on a new, automated learning tool for students <br/>  and teachers to save time by transforming their documents into:</p>
+						<p className="product_description">A new, automated learning tool for students and teachers <br/>  to save time by transforming their documents into:</p>
 						<ul>
 							<li>
 								<img src={chat}/>
-								<p>Practicable questions</p>
+								<p>Interactive questions</p>
 							</li>
 							<li>
 								<img src={doc}/>
-								<p>Study guides</p>
+								<p>Outlines</p>
 							</li>
 							<li>
 								<img src={cards}/>
@@ -51,7 +51,7 @@ export default class LandingPage extends Component {
 						</ul>
 					</div>
 					<div className="sign_up">
-						<SignUpForm />
+						<SignUpForm shouldAutoFocus={true} />
 					</div>
 				</div>
 				<div className="sample_transform">
@@ -100,12 +100,12 @@ export default class LandingPage extends Component {
 				</div>
 				<section className="happy_users">
 					<div className="section_content">
-						<h3>Thousands of happy students, including:</h3>
+						<h3>Thousands of happy beta testers, from:</h3>
 						<img src={school_logos} />
 					</div>
 				</section>
 				<div className="last_call">
-					<SignUpForm last_call={true} />
+					<SignUpForm shouldAutoFocus={false} last_call={true} />
 				</div>
 				<div className="footer">	
 					<ul className="footer_links">

@@ -236,6 +236,7 @@ export default class CreateSetPage extends Component {
 								updateSetSubjects={this.props.updateSetSubjects}
 								user={this.props.user}
 								pushState={this.props.pushState}
+								shouldAutoFocus={!this.state.login_prompt_modal}
 							/>                 
 							<div className="container">
 								<div className="CreateSetPage-list">

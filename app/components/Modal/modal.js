@@ -196,7 +196,7 @@ export default class Modal extends Component {
 			  { pushState } = this.props;
 		return (
 			<div className="modal-body sign_up">
-				<SignUpForm modal={true}/>
+				<SignUpForm modal={true} shouldAutoFocus={true}/>
 				<p className="log_in_link">Already have an account? 
 					<a onClick={() => pushState(null, '/login')}> Log In</a>
 				</p>
@@ -266,8 +266,12 @@ export default class Modal extends Component {
 								: null
 							}
 							{
-								type == 'log_in'
+								type == 'log_in' && !this.props.import
 								&& 'Sign up for free to create study sets'
+							}
+							{
+								type == 'log_in' && this.props.import
+								&& 'Sign up for free to transform documents'
 							}
 						</h3>
 					</div>

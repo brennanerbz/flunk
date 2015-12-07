@@ -15,6 +15,11 @@ export default class SignUpForm extends Component {
 				modal_version: true
 			})
 		}
+		setTimeout(() => {
+			if(!this.props.last_call) {
+				$(this.refs.first_name).focus()
+			}
+		}, 300)
 	}
 
 	submitSignUp(e) {
@@ -37,7 +42,7 @@ export default class SignUpForm extends Component {
 								?
 								<div>
 									<h4>Sign Up</h4>
-									<p>Welcome to a new world.</p>
+									<p>Welcome to the beta version.</p>
 								</div>
 								:
 								<div>
@@ -67,7 +72,7 @@ export default class SignUpForm extends Component {
 					</div>
 					<form className="sign_up_form"
 						  onSubmit={::this.submitSignUp}>
-						<input placeholder="First name" autoFocus={this.state.modal_version}/>
+						<input ref="first_name" placeholder="First name" autoFocus={this.props.shouldAutoFocus}/>
 						<input placeholder="Last name"/>
 						<input placeholder="Email"/>
 						<input type="password" placeholder="Password"/>

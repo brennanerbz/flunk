@@ -7,6 +7,7 @@ import profile from './profile';
 import user from './user';
 import search from './search';
 import transfer from './transfer';
+import upload from './import'; // Need better naming convention for this view
 import { routerStateReducer } from 'redux-router';
 
 const reducers = combineReducers({
@@ -18,6 +19,7 @@ const reducers = combineReducers({
 	user,
 	search,
 	transfer,
+	upload,
 	router: routerStateReducer
 });
 

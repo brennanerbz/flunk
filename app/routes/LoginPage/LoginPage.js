@@ -73,7 +73,11 @@ export default class LogInPage extends Component {
 							</form>
 						</div>
 						<div className="backup">
-							Don't have an account? <a className="link">Create account</a>
+							Don't have an account?  &nbsp;
+							<a className="link"
+							   onClick={() => pushState(null, '/signup')}>
+							   Create account
+							</a>
 						</div>
 					</div>
 				</div>

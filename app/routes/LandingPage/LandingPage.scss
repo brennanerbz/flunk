@@ -19,7 +19,7 @@
 		.marketing_copy {
 			position: absolute;
 			max-width: 745px;
-			top: 200px;
+			top: 135px;
 			left: 1.59rem;
 			h1 {
 				font-size: 30px;
@@ -34,6 +34,23 @@
 					font-size: 1.06rem;
 					color: #777777;
 					margin-top: 15px;
+				}
+			}
+			ul {
+				li {
+					padding: 10px 0 10px 0;
+					display: table;
+					vertical-align: middle;
+					img {
+						margin-top: 0!important;
+						display: table-cell;
+						float: left;
+						height: 20px;
+					}
+					p {
+						color: #777777;
+						margin-left: 45px;
+					}
 				}
 			}
 		}

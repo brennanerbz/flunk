@@ -37,7 +37,7 @@ export default class SignUpForm extends Component {
 								?
 								<div>
 									<h4>Sign Up</h4>
-									<p>It's free.</p>
+									<p>Welcome to a new world.</p>
 								</div>
 								:
 								<div>

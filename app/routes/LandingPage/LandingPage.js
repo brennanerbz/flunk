@@ -15,18 +15,40 @@ export default class LandingPage extends Component {
 	render() {
 		const compose = require('../../assets/compose.png'),
 			  upload = require('../../assets/upload.png'),
-			  chat = require('../../assets/chat.png'),
+			  // chat = require('../../assets/chat.png'),
 			  desk = require('../../assets/desk_drawing.png'),
 			  file_formats = require('../../assets/file_formats.png'),
 			  sample_share = require('../../assets/sample_share.png'),
 			  sample_learn = require('../../assets/sample_learn.png'),
-			  school_logos = require('../../assets/sample_schools.png');
+			  school_logos = require('../../assets/sample_schools.png'),
+			  chat = require('../../assets/chat_icon.png'),
+			  doc = require('../../assets/set_icon_lines.png'),
+			  cards = require('../../assets/flashcards.png'),
+			  quiz = require('../../assets/quiz_program.png');
 		return(		
 			<div className="landing_page">
 				<div className="landing_page_container">
 					<div className="marketing_copy">
-						<h1>A <span className="underline">learning tool</span> that does the <br /> hard work for you</h1>
-						<p className="product_description">Ace can take the material in front of you, <br/> and turn it into practicable questions.</p>
+						<h1>Join the Spark beta</h1>
+						<p className="product_description">We're working on a new, automated learning tool for students <br/>  and teachers to save time by transforming their documents into:</p>
+						<ul>
+							<li>
+								<img src={chat}/>
+								<p>Practicable questions</p>
+							</li>
+							<li>
+								<img src={doc}/>
+								<p>Study guides</p>
+							</li>
+							<li>
+								<img src={cards}/>
+								<p>Flashcards</p>
+							</li>
+							<li>
+								<img src={quiz}/>
+								<p>Tests</p>
+							</li>
+						</ul>
 					</div>
 					<div className="sign_up">
 						<SignUpForm />

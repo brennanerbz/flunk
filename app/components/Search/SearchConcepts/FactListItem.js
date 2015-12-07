@@ -8,8 +8,8 @@ export default class FactListItem extends Component {
 	renderFact(fact, term, query) {
 		if(fact == null) return {__html: null}
 		fact = fact
-		.replace(term, `<i>${term}</i>`)
-		.replace(query, `<b>${query}</b>`) 
+		.replace(new RegExp('(^|\\s)(' + term + ')(\\s|$)','ig'), '$1<i>$2</i>$3')
+		.replace(query, `<b>${query}</b>`)  
 		return {
 			__html: fact
 		}

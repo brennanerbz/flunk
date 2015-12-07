@@ -7,9 +7,11 @@ export default class DefinitionItem extends Component {
 
 	renderDef(def, term, query) {
 		if(def == null) return {__html: null}
+		let d = def
+		console.log(query)
 		def = def
-		.replace(term, `<i>${term}</i>`)
-		.replace(query, `<b>${query}</b>`) 
+		.replace(new RegExp('(^|\\s)(' + term + ')(\\s|$)','ig'), '$1<i>$2</i>$3')
+		.replace(query, `<b>${query}</b>`)		 
 		return {
 			__html: def
 		}
@@ -17,7 +19,6 @@ export default class DefinitionItem extends Component {
 
 	render() {
 		const { definition, index, query } = this.props;
-		console.log(definition)
 		return(
 			<li className="definition_item">
 				<p className="definition"

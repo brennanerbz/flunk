@@ -9,10 +9,10 @@ export default class ExampleList extends Component {
 	}
 
 	render() {
-		const { examples } = this.props;
+		const { examples, term } = this.props;
 		return(
-			<div className="concept_result_container">
-				<p className="example_label">Examples:</p>
+			<div className="term_container">
+				<p className="example_label">Examples of {term}:</p>
 				<ul className="example_list">
 					{
 						examples.map((x, i) => {
@@ -21,6 +21,7 @@ export default class ExampleList extends Component {
 									index={i} 
 									key={i} 
 									example={x}
+									query={this.props.query}
 								/>
 							);
 						})

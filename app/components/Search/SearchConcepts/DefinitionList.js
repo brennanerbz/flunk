@@ -9,7 +9,7 @@ export default class DefinitionList extends Component {
 		const { definitions } = this.props;
 		console.log(definitions)
 		return( 
-			<div className="definition_list_container">
+			<div className="definition_list_container term_container">
 				<ul className="definition_list">
 					{
 						definitions.map((def, i) => {
@@ -17,6 +17,7 @@ export default class DefinitionList extends Component {
 								<DefinitionItem 
 									key={i}
 									definition={def}
+									query={this.props.query}
 								/>
 							)
 						})

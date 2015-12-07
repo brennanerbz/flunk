@@ -11,7 +11,7 @@ export default class ExampleItem extends Component {
 	renderExample(ex, term, query) {
 		if(ex == null) return {__html: null}
 		ex = ex
-		.replace(term, `<i>${term}</i>`)
+		.replace(new RegExp('(^|\\s)(' + term + ')(\\s|$)','ig'), '$1<i>$2</i>$3')
 		.replace(query, `<b>${query}</b>`) 
 		return {
 			__html: ex
@@ -19,7 +19,8 @@ export default class ExampleItem extends Component {
 	}
 
 	render() {
-		const { example, index, query } = this.props;
+		const { example, index, query } = this.props,
+			wiki = require('../../../assets/wiki.png')
 		return(
 			<li className="example_item">
 				<p className="example"
@@ -30,8 +31,22 @@ export default class ExampleItem extends Component {
 				   		query
 				   	)
 				   }></p>
+				<div className="source">
+					<div className="info">
+						
+						<span className="heading">
+						{example.creator.username}
+						</span>
+						
+					</div>
+				</div>
 			</li>
 		);
 	}
 }
-
+/*
+<p className="sub_heading">
+</p>
+// <span>Source: </span>
+// <img className="source_icon" src={wiki} />
+*/

@@ -7,14 +7,14 @@ export default class FactList extends Component {
 	}
 
 	render() {
-		const { facts } = this.props;
+		const { facts, term} = this.props;
 		return(
-			<div className="concept_result_container">
-				<h2>Facts:</h2>
+			<div className="concept_result_container term_container">
+				<h2>Facts about {term}:</h2>
 				<ul className="fact_list">
 					{
 						facts.map((fact, i) => {
-							return <FactListItem key={i} fact={fact} />
+							return <FactListItem key={i} fact={fact} query={this.props.query} />
 						})
 					}
 				</ul>

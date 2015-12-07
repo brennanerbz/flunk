@@ -43,7 +43,10 @@ export default class SearchConcepts extends Component {
  				}
 				{
 					length > 0
-					&& ::this.renderItemSections(item_sections)
+					&& 
+					::this.renderItemSections(item_sections).map(section => {
+						return section
+					})
 				}
 				{
 					this.props.related !== null && this.props.related.length > 0

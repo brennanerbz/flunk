@@ -156,7 +156,8 @@ export default class Search extends Component {
 
 	render() {
 		const { query } = this.props.params,
-			  { loc, searching, items, noResults, root_path } = this.props;
+			  { loc, searching, items, noResults } = this.props,
+			  base = loc.pathname.split('/')[2]
 		return(
 			<DocumentTitle title={`Ace Search`}>
 				<div className="search_page">
@@ -165,17 +166,17 @@ export default class Search extends Component {
 					</nav>
 					<article className={classnames("search_content", {'sets_page': true}, {"searching": searching})}>
 						{
-							loc.pathname.indexOf('concepts') !== -1 && items !== null
+							base == 'concepts' && items !== null
 							? <SearchConcepts query={query} {...this.props}/>
 							: null
 						}
 						{
-							loc.pathname.indexOf('sets') !== -1
+							base == 'sets'
 							? <SearchSets query={query} {...this.props}/>
 							: null
 						}
 						{
-							loc.pathname.indexOf('users') !== -1
+							base == 'users'
 							? <SearchPeople query={query} {...this.props}/>
 							: null
 						}

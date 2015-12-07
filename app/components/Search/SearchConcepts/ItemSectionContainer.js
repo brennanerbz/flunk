@@ -18,31 +18,35 @@ export default class ItemSectionContainer extends Component {
 		examples: []
 	}
 
-	componentDidMount() {
-		const { section } = this.props;
-		this.setState({
-			term: section[0].item.target,
-			subjects: section[0].item.subjects
-		})
-		let item;
-		section.forEach(i => {
-			item = i.item;
+	renderSection(section) {
+		let item, definitions = [], facts = [], examples =[];
+		for(var i = 0; i < section.length; i++) {
+			let item = section[i].item;
 			if(item.type == 'definition') {
-				this.setState({
-					definitions: this.state.definitions.push(item)
-				})
+				definitions.push(item)
 			}
 			if(item.type == 'fact') {
-				this.setState({
-					facts: this.state.facts.push(item)
-				})
+				facts.push(item)
 			}
 			if(item.type == 'example') {
-				this.setState({
-					examples: this.state.examples.push(item)
-				})
+				examples.push(item)
 			}
+		}
+		this.setState({
+			term: section[0].item.target,
+			subjects: section[0].item.subjects,
+			definitions: definitions,
+			facts: facts,
+			examples: examples
 		})
+	}
+
+	componentDidMount() {
+		this.renderSection(this.props.section)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.renderSection(nextProps.section)
 	}
 
 	render() {
@@ -60,7 +64,7 @@ export default class ItemSectionContainer extends Component {
 					this.state.definitions.length > 0
 					&&
 					<DefinitionList 
-						definitions={definitions}
+						definitions={this.state.definitions}
 						query={this.props.query}
 						term={this.state.term}/>
 				}
@@ -68,7 +72,7 @@ export default class ItemSectionContainer extends Component {
 					this.state.facts.length > 0
 					&&
 					<FactList 
-						facts={facts}
+						facts={this.state.facts}
 						query={this.props.query}
 						term={this.state.term}/>
 				}
@@ -76,7 +80,7 @@ export default class ItemSectionContainer extends Component {
 					this.state.examples.length > 0
 					&&
 					<ExampleList 
-						examples={examples}
+						examples={this.state.examples}
 						query={this.props.query}
 						term={this.state.term}/>
 				}

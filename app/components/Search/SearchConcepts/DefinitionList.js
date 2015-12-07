@@ -7,18 +7,18 @@ export default class DefinitionList extends Component {
 
 	render() {
 		const { definitions } = this.props;
+		console.log(definitions)
 		return( 
 			<div className="definition_list_container">
 				<ul className="definition_list">
 					{
-						definitions.map((x, i) => {
+						definitions.map((def, i) => {
 							return (
 								<DefinitionItem 
-									index={i} 
-									key={i} 
-									definiton={x}
-									/>
-							);
+									key={i}
+									definition={def}
+								/>
+							)
 						})
 					}
 				</ul>

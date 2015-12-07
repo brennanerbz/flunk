@@ -21,12 +21,12 @@ export default class ExampleItem extends Component {
 	render() {
 		const { example, index, query } = this.props;
 		return(
-			<li className={classnames("example_item")}>
+			<li className="example_item">
 				<p className="example"
 				   dangerouslySetInnerHTML={
 				   	::this.renderExample(
-				   		definition.cue,
-				   		definition.target,
+				   		example.cue,
+				   		example.target,
 				   		query
 				   	)
 				   }></p>

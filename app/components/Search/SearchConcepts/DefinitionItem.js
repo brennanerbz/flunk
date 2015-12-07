@@ -17,8 +17,9 @@ export default class DefinitionItem extends Component {
 
 	render() {
 		const { definition, index, query } = this.props;
+		console.log(definition)
 		return(
-			<li className={classnames("definition_item")}>
+			<li className="definition_item">
 				<p className="definition"
 				   dangerouslySetInnerHTML={
 				   	::this.renderDef(

@@ -14,7 +14,7 @@ export default class FactList extends Component {
 				<ul className="fact_list">
 					{
 						facts.map((fact, i) => {
-							return <FactListItem fact={fact} />
+							return <FactListItem key={i} fact={fact} />
 						})
 					}
 				</ul>

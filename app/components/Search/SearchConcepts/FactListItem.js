@@ -18,12 +18,12 @@ export default class FactListItem extends Component {
 	render() {
 		const { fact, index, query } = this.props;
 		return(
-			<li className={classnames("fact_item")}>
+			<li className="fact_item">
 				<p className="fact"
 				   dangerouslySetInnerHTML={
 				   	::this.renderFact(
-				   		definition.cue,
-				   		definition.target,
+				   		fact.cue,
+				   		fact.target,
 				   		query
 				   	)
 				   }>

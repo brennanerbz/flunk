@@ -49,6 +49,7 @@ export default class FlunkApp extends Component {
 			 || root_path == 'learn'
 			 || root_path == 'error') { return; }
 		else if(root_path == 'set'
+			 || root_path == 'settings'
 			 || root_path == 'search'
 			 || root_path == 'profile'
 			 || route == '/') {

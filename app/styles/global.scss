@@ -97,6 +97,9 @@ input {
 .outer_shell {
 	width: 1020px;
 	margin: 0 auto;
+	&.void {
+		width: 100%;
+	}
 }
 
 

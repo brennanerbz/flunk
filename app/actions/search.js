@@ -52,6 +52,7 @@ export function searchItems(term, page_index) {
 			request
 			.get(`${api_url}/items/search/?search=${term}&start=${index}`)
 			.end((err, res) => { 
+				console.log(res.body)
 				count= res.body.total_items_count
 				items = res.body.items 
 				dispatch({type: RECEIVE_ITEMS_SUCCESS, items, count, query, index})

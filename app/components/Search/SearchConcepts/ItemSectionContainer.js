@@ -5,7 +5,6 @@ import DefinitionList from './DefinitionList';
 import FactList from './FactList';
 import ExampleList from './ExampleList';
 
-
 export default class ItemSectionContainer extends Component {
 	static propTypes = {
 	}

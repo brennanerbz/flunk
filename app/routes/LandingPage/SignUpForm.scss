@@ -48,12 +48,29 @@
 			}
 		}
 		.day_divider {
-			margin-top: 0!important;
-			padding: 0.5rem 16px 0.5rem 1.5rem;
+			margin: 1.2rem 0;
+			padding: 0;
 			min-width: 308px;
+			text-align: center;
+		    cursor: default;
+		    clear: both;
+		    position: relative;
+			hr {
+				position: absolute;
+			    border-top: 1px solid #e8e8e8;
+			    top: .75rem;
+			    right: 0;
+			    left: 0;
+			    margin: 0;
+			}
 			.day_divider_label {
-				font-weight: 400;
-				color: #ccc;
+				background: #fff;
+			    padding: .05rem .75rem;
+			    display: inline-block;
+			    margin: 0 auto;
+			    position: relative;
+			    border-radius: .25rem;
+			    color: #ccc;
 			}
 		}
 		.sign_up_group {

@@ -26,6 +26,7 @@ var initial_searchstate = {
 	term: null,
 	term_name: null,
 	definitions: null,
+	facts: null,
 	examples: null,
 	related: null,
 	sets: null,
@@ -62,23 +63,24 @@ export default function search(state = initial_searchstate, action) {
 			}
 		case REQUEST_ITEMS:
 			return {
-				...state,
-				// searching: true
+				...state
 			}
 		case RECEIVE_ITEMS_SUCCESS:
-			let term = {}, definitions = [], examples = [], related = [], items = action.items, query = action.query;
-			items.forEach((item, i) => { 
-				if (item.target.toLowerCase().trim() == query.toLowerCase().trim()) {
-					if(item.cue !== null) {
-						if(item.cue.indexOf(query) == -1) definitions.push(item)
-						if(item.cue.indexOf(query) !== -1) examples.push(item)
+			let term = {}, definitions = [], facts=[], examples = [], related = [], items = action.items, query = action.query;
+			related = items.filter(item => {item.target !== items[0].target})
+			items = items.filter(item => item.target == items[0].target)
+			if(items !== undefined) {
+				term = items[0]
+				items.forEach((item, i) => { 
+					if(item.type == 'definition') {
+						definitions.push(item)
+					} else if (item.type == 'fact') {
+						facts.push(item)
+					} else if (item.type == 'example') {
+						examples.push(item)
 					}
-				}
-				if (item.target !== query) related.push(item)
-			})
-			if(definitions !== undefined && definitions[0] !== undefined) term = definitions[0]
-			else if (examples !== undefined && examples[0] !== undefined) term = examples[0]
-			else term = null
+				})
+			}
 			let item_pages = pages(action.index)
 			return {
 				...state,
@@ -89,6 +91,7 @@ export default function search(state = initial_searchstate, action) {
 				term: term,
 				term_name: term !== null ? term.target : null,
 				definitions: definitions,
+				facts: facts,
 				examples: examples,
 				related: related,
 				item_page: item_pages.page,

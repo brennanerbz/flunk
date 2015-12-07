@@ -6,7 +6,7 @@
 		display: block;
 		position: relative;
 		background-color: #fff;
-		// box-shadow: 0 1px 4px #e3e3e3;
+		// box-shadow: 0 1px 2px #e3e3e3;
 		padding: 20px 20px 20px 20px !important;
 		border: 1px solid #e3e3e3;
 		border-radius: 3px;	
@@ -99,10 +99,10 @@
 			color: #000;
 		}
 	}
-	.example_list_container, .null_results_container {
+	.concept_result_container, .null_results_container {
 		margin-top: 15px;
 		margin-left: 20px;
-		.example_label {
+		.example_label, h2 {
 			font-size: 17px;
 			color: #9991a0;
 		}
@@ -163,6 +163,7 @@
 		p {
 			margin-bottom: 0!important;
 			&.definition {
+				max-width: 620px;
 				display: block;
 				position: relative;
 				font-size: 16px;

@@ -25,7 +25,7 @@ export default class SearchSets extends Component {
 			<div className="search_sets_container">
 				<h2 className="header">
 					{
-						searching
+						searching && result_count > 0
 						? "Searching"
 						: `About ${result_count} results for '${query}'`
 					}

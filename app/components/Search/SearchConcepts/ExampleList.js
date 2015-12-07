@@ -29,7 +29,7 @@ export default class ExampleList extends Component {
 			sliced_examples = examples.slice(0, 3)
 		}
 		return(
-			<div className="example_list_container">
+			<div className="concept_result_container">
 				{
 					this.state.should_render_list
 					?

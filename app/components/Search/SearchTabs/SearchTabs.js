@@ -19,22 +19,21 @@ export default class SearchTabs extends Component {
 						}}>
 						<a>Sets</a>
 					</li>
-					<li className={classnames("tab_item concepts_tab", 
-								   			 {"active": pathname.indexOf('concepts') !== -1})}
-						onClick={() => { 
-							pushState(null, `/search/concepts/${query}`) 
-							changeTab('concepts') 
-						}}>
-						<a>Terms</a>
-					</li>
-					
-					<li className={classnames("tab_item right_most", 
+					<li className={classnames("tab_item", 
 											 {"active": pathname.indexOf('users') !== -1})}
 						onClick={() => { 
 							pushState(null, `/search/users/${query}`)
 							changeTab('users') 
 						}}>
 						<a>People</a>
+					</li>
+					<li className={classnames("tab_item concepts_tab right_most", 
+								   			 {"active": pathname.indexOf('concepts') !== -1})}
+						onClick={() => { 
+							pushState(null, `/search/concepts/${query}`) 
+							changeTab('concepts') 
+						}}>
+						<a>Terms</a>
 					</li>
 				</ul>
 			</div>

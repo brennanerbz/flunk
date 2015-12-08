@@ -233,7 +233,7 @@ export default class Learn extends Component {
 											&& current_trial !== undefined 
 											&& !isShowingCompletedRound
 											&& !showCompletedSequence
-											? <LearnCard 
+											&& <LearnCard 
 												   updateValue={(value) => ::this.updateStateWithUserResponse(value)}
 												   submitAnswer={(response) => ::this.handleUserResponse(response)}
 												   getHint={(response) => ::this.props.hint(response)}
@@ -241,34 +241,26 @@ export default class Learn extends Component {
 												   slot={current_slot !== undefined ? current_slot : null} 
 												   cue={current_slot.item !== undefined ? current_slot.item.cue : null}
 												   {...this.props}/>
-											: null
 										}
 										{
 											showCorrect && !isShowingCompletedRound && !showCompletedSequence
-											? <ShowCorrect correctMiniSequence={isShowingCompletedRound} 
+											&& <ShowCorrect correctMiniSequence={isShowingCompletedRound} 
 														   {...this.props}/>
-											: null
-										}
-										{
-											showCompletedSequence
-											? <SequenceSummary {...this.props}/>
-											: null
 										}
 										{
 											isShowingCompletedRound && !showCompletedSequence
-											? <ReactCSSTransitionGroup transitionName="fade_in" 
-									     							   transitionEnterTimeout={500} 
-									     							   transitionLeaveTimeout={500}>
-												<RoundSummary {...this.props}/>
-											  </ReactCSSTransitionGroup>
-											: null
+											&& 
+											<RoundSummary {...this.props}/>
+										}
+										{
+											showCompletedSequence && !isShowingCompletedRound
+											&&<SequenceSummary {...this.props}/>
 										}
 										{
 											!showCompletedSequence && isShowingCompletedRound 
-											? <a style={{marginLeft: '-10px'}} className="link continue_link" 
+											&& <a style={{marginLeft: '0px'}} className="link continue_link" 
 											     onClick={() => this.props.nextRound()}>
 											     Press any key to continue to next round</a>
-											: null
 										}												
 										{
 											!showCorrect 

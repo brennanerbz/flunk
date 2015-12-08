@@ -1,5 +1,6 @@
 .learn_page{
 	position: relative;
+	color: #2A2A2A;
 	.feedback {
 		border: none!important;
 		position: absolute;
@@ -15,14 +16,15 @@
 	.learn_container {
 		font-family: "Lato";
 		letter-spacing: 0.01em;
-		max-width: 705px!important;
+		max-width: 715px!important;
 		// padding-left: 10px;
 		// padding-top: 20px;
-		margin-left: 200px!important;
-		margin-top: 70px;
-		border: 1px solid #e3e3e3;
+		margin-left: 165px!important;
+		// margin-top: 55px;
+		// border: 1px solid #e3e3e3;
 		border-radius: 3px;
 		padding: 1.2em;
+		padding-top: 4.5em;
 		&.no_border {
 			border: none!important;
 		}

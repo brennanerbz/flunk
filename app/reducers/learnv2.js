@@ -280,7 +280,8 @@ export default function learn(state = initial_learnstate, action) {
 			return {
 				...state,
 				isShowingCorrect: true,
-				isUpdatingState: false
+				isUpdatingState: false,
+				// current_trial: {}
 			}
 		case SHOW_COMPLETE_ROUND:
 			return {
@@ -316,6 +317,7 @@ export default function learn(state = initial_learnstate, action) {
 				...state,
 				isShowingCorrect: next_correct,
 				current_slot: action.next_slot,
+				current_trial: {},
 				user_answer: null,
 				feedback: null
 			}

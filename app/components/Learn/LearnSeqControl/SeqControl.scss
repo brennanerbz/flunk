@@ -1,5 +1,5 @@
 .seq_control {
-	width: 180px;
+	width: 160px;
 	position: absolute;
 	left: 0;
 	float: left;
@@ -13,22 +13,22 @@
 	border-color: #fff!important;
 	&.top-to-bottom {
 	    -webkit-border-image: 
-	      -webkit-gradient(linear, 0 0, 0 100%, from(#e8e8e8), to(rgba(0, 0, 0, 0))) 1 100%;
+	      -webkit-gradient(linear, 0 0, 0 100%, from(#e8e8e8), to(rgba(0, 0, 0, .055))) 1 100%;
 	    -webkit-border-image: 
-	      -webkit-linear-gradient(#e8e8e8, rgba(0, 0, 0, 0)) 1 100%;
+	      -webkit-linear-gradient(#e8e8e8, rgba(0, 0, 0, .055)) 1 100%;
 	    -moz-border-image:
-	      -moz-linear-gradient(#e8e8e8, rgba(0, 0, 0, 0)) 1 100%;    
+	      -moz-linear-gradient(#e8e8e8, rgba(0, 0, 0, .055)) 1 100%;    
 	    -o-border-image:
-	      -o-linear-gradient(#e8e8e8, rgba(0, 0, 0, 0)) 1 100%;
+	      -o-linear-gradient(#e8e8e8, rgba(0, 0, 0, .055)) 1 100%;
 	    border-image:
-	      linear-gradient(to bottom, #e8e8e8, rgba(0, 0, 0, 0)) 1 100%;
+	      linear-gradient(to bottom, #e8e8e8, rgba(0, 0, 0, .055)) 1 100%;
       	border-right: 1px solid;
       	border-left: 1px solid #fff!important;
 	}
 	.round_divider {
 		// margin-right: -.125rem;
 		margin: -5px 0px 0 0em;
-		padding: .5rem 0px 0rem 0rem;
+		padding: 5rem 0px 0rem 0rem;
 		line-height: 1.2rem;
 		font-size: 1rem;
 		font-family: "Calibri";

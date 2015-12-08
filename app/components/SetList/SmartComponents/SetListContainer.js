@@ -122,7 +122,10 @@ class SetListSections extends Component {
 							<h1 className="recent_section_title">{
 								section_name.charAt(0).toUpperCase() + section_name.slice(1)
 							}</h1>
-							<SetListView section={section_name} assignments={sections[prop]} />
+							<SetListView 
+								pushState={this.props.pushState}
+								section={section_name} 
+								assignments={sections[prop]} />
 						</li>
 					)
 				}					

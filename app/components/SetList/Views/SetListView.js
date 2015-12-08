@@ -13,6 +13,7 @@ export default class SetListView extends Component {
 				{
 					this.props.assignments.map((assignment, i) => {
 						return <SetListItemContainer 
+								pushState={this.props.pushState} 
 								section={this.props.section}
 								key={i} 
 								assignment={assignment}/>

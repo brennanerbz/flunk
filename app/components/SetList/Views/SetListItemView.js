@@ -13,7 +13,8 @@ export default class SetListItemView extends Component {
 	 		  set_icon_complete = require('../../../assets/set_icon_lines.png'),
 			  set_icon_blank = require('../../../assets/set_icon_90.png')
 		return(
-			<li className="set_item">
+			<li className="set_item"
+				onClick={this.props.handleClick}>
 				<div className="set_list_item_wrapper">
 					<div className="set_list_item_icon">
 						<span className="file_icon">

@@ -12,10 +12,6 @@ export default class LearnInput extends Component {
 		correct: false
 	}
 
-	// shouldComponentUpdate(nextProps) {
-	// 	return this.props.current_slot.id == nextProps.current_slot.id
-	// }		
-
 	componentDidMount() {
 		this.setState({
 			correct: false

@@ -46,7 +46,7 @@ export default class LearnCard extends Component {
 								? null
 								: <a className="dont_know_btn link"
 							   		 onClick={(event) => this.refs.learn_input.handleSubmit(event)}>
-							  		 Don't know
+							  		 Hint
 								 </a>
 							}
 						</div>

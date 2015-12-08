@@ -25,15 +25,16 @@
 			}
 			.message {
 				background: white;
-			    padding: 5.5px 12.5px;
+				padding: 4.5px;
+			    // padding: 5.5px 12.5px;
 				border-radius: 3px;
-				border: 1px solid #e8e8e8;
+				// border: 1px solid #e8e8e8;
 				p {
 					font-size: 17.5px;
 					margin: 0;
 				}
 				&.help {
-					padding: 13px 16.5px;
+					// padding: 13px 16.5px;
 					.mc_choices {
 						margin-left: -7px;
 						.mc_item {

@@ -8,14 +8,14 @@ export default class SeqControl extends Component {
 
 	}
 
-	componentDidMount() {
-		$('.seq_control').height($(window).height() - 50)
-		window.addEventListener('resize', this.resizeSideNav);
-	}
+	// componentDidMount() {
+	// 	$('.seq_control').height($(window).height() - 50)
+	// 	window.addEventListener('resize', this.resizeSideNav);
+	// }
 
-	resizeSideNav = () => {
-		$('.seq_control').height($(window).height() - 50)
-	}
+	// resizeSideNav = () => {
+	// 	$('.seq_control').height($(window).height() - 50)
+	// }
 
 	shouldComponentUpdate(nextProps) {
 		return !nextProps.isShowingCompletedRound

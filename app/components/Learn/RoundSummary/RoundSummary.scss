@@ -1,4 +1,6 @@
 .summary {
+	margin-top: -10px;
+	margin-left: -10px;
 	.summary_header {
 		font-size: 22px;
 		padding-left: 10px;
@@ -6,12 +8,12 @@
 	}
 	.summary_table {
 		-webkit-font-smoothing: antialiased;
-		background: #FBFAF8;
+		background: #fcfcfc;
 		// border-spacing: 0!important;
 		margin-bottom: 20px;
-		width: 100%;
+		width: 95%;
 		border-collapse: separate;
-		border-radius: 0.25em;
+		border-radius: 3px;
 		border: 1px solid rgba(214,210,203,0.3);
 		td {
 			border-bottom: 1px solid rgba(214,210,203,0.3);

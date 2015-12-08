@@ -207,6 +207,7 @@ export default class Learn extends Component {
 				<div className="learn_page"
 					 ref="learn_page"
 					 id="learn_page">
+					 <div className="learn_wrapper">
 					
 					{
 						showLearn
@@ -224,6 +225,7 @@ export default class Learn extends Component {
 						? <div>
 							<SeqControl {...this.props}/>
 								<div className={classnames("learn_container", 
+											   {'no_border': isShowingCompletedRound || showCompletedSequence },
 											   {"round_summary": isShowingCompletedRound})}>
 									<div>
 										{
@@ -263,7 +265,7 @@ export default class Learn extends Component {
 										}
 										{
 											!showCompletedSequence && isShowingCompletedRound 
-											? <a className="link continue_link" 
+											? <a style={{marginLeft: '-10px'}} className="link continue_link" 
 											     onClick={() => this.props.nextRound()}>
 											     Press any key to continue to next round</a>
 											: null
@@ -271,6 +273,7 @@ export default class Learn extends Component {
 										{
 											!showCorrect 
 											&& !showCompletedSequence && !isShowingCompletedRound 
+											&& false // temp value
 											? <DiffControls getHint={::this.handleHint} {...this.props} />
 											: null
 										}
@@ -284,14 +287,13 @@ export default class Learn extends Component {
 										}
 										
 										
-										<div className="feedback">
-											<a className="feedback_link">Feedback</a>
-										</div>
+
 									</div>
 								 </div> 
 							 </div>
 						: null
 					}
+					</div>
 				</div>
 			</DocumentTitle>
 		);
@@ -299,6 +301,12 @@ export default class Learn extends Component {
 }
 
 /*
+
+<div style={{
+	position: 'absolute'
+}} className="feedback">
+	<a className="feedback_link">Feedback</a>
+</div>
 <div className="debug_feedback">
 	<div className="debug_cell">
 		<p>Previous</p>

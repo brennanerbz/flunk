@@ -58,7 +58,7 @@ export default class SequenceSummary extends Component {
 						</tr>
 					</tbody>
 				</table>
-				<button className="button button-primary"
+				<button className="button primary"
 						onClick={() => this.props.newSequence(null)}>
 						Start new sequence</button>
 			</div>

@@ -59,7 +59,7 @@ export default class Upload extends Component {
 						<div id="upload_progress">
 						</div>
 						<div className="prompt_box">
-							<h1>Create a new study set</h1>
+							<h1>Instantly create</h1>
 							<div className="drop_box"
 								 onMouseOver={() => this.setState({drop_box_hover: true})}
 								 onMouseLeave={() => this.setState({drop_box_hover: false})}>

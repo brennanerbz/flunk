@@ -1,13 +1,15 @@
 .seq_control {
 	width: 180px;
+	position: absolute;
+	left: 0;
 	float: left;
-	position: fixed;
 	background: #fff;
 	color: #383F45;
-	padding-top: 2rem;
-	padding-left: 1.5em;
-	padding-right: 1.5em;
-	border-left: 1px solid #fff!important;
+	padding-top: 0.25rem;
+	padding-left: 1.2em;
+	padding-right: 1.2em;
+	height: 200px;
+	// border-left: 1px solid #fafafa!important;
 	border-color: #fff!important;
 	&.top-to-bottom {
 	    -webkit-border-image: 

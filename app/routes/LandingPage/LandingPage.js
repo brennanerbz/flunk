@@ -30,25 +30,7 @@ export default class LandingPage extends Component {
 				<div className="landing_page_container">
 					<div className="marketing_copy">
 						<h1>Join the Flunkt beta</h1>
-						<p className="product_description">A new, automated learning tool for students and teachers <br/>  to save time by transforming their documents into:</p>
-						<ul>
-							<li>
-								<img src={chat}/>
-								<p>Interactive questions</p>
-							</li>
-							<li>
-								<img src={doc}/>
-								<p>Outlines</p>
-							</li>
-							<li>
-								<img src={cards}/>
-								<p>Flashcards</p>
-							</li>
-							<li>
-								<img src={quiz}/>
-								<p>Tests</p>
-							</li>
-						</ul>
+						<p className="product_description">A new, automated learning tool for students and teachers <br/>  to save time by transforming their documents into <br/> interactive questions.</p>
 					</div>
 					<div className="sign_up">
 						<SignUpForm shouldAutoFocus={true} />
@@ -123,6 +105,27 @@ export default class LandingPage extends Component {
 		);
 	}
 }
+
+/*
+<ul>
+	<li>
+		<img src={chat}/>
+		<p>Interactive questions</p>
+	</li>
+	<li>
+		<img src={doc}/>
+		<p>Outlines</p>
+	</li>
+	<li>
+		<img src={cards}/>
+		<p>Flashcards</p>
+	</li>
+	<li>
+		<img src={quiz}/>
+		<p>Tests</p>
+	</li>
+</ul>
+*/
 
 // <button className="google_button button">
 // 	<img className="icon" 

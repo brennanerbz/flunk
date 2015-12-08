@@ -12,6 +12,10 @@ export default class LearnHelp extends Component {
 	static propTypes = {
 	}
 
+	componentWillReceiveProps() {
+		
+	}
+
 	render() {
 		const { slot, current_slot, current_trial, user_answer, feedback } = this.props;
 		return(

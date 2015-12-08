@@ -13,7 +13,7 @@ export default class NullSearchResults extends Component {
 		if(pathname.indexOf('sets') !== -1) path = 'sets'
 		if(pathname.indexOf('users') !== -1) path = 'people'
 		return(
-			<div className="null_results_container">
+			<div style={{margin: '0'}} className="null_results_container">
 				<p>Your search - <b>"{query}"</b> did not match any {path}</p>
 				<p>Suggestions:</p>
 				<ul className="null_list">

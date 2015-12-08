@@ -39,7 +39,7 @@ export default class SearchConcepts extends Component {
 				{
 					length === 0
 					&&
-					<NullSearchResults {...this.props} />
+					<NullSearchResults style={{margin: '0'}} {...this.props} />
  				}
 				{
 					length > 0

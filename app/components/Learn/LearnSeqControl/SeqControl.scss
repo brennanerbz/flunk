@@ -3,12 +3,26 @@
 	float: left;
 	position: fixed;
 	background: #fff;
-	// box-shadow: 0px 1px 1px 0px rgba(146,146,146,0.50);
-	border-right: 1px solid #e8e8e8;
 	color: #383F45;
 	padding-top: 2rem;
-	padding-left: 0em;
+	padding-left: 1.5em;
 	padding-right: 1.5em;
+	border-left: 1px solid #fff!important;
+	border-color: #fff!important;
+	&.top-to-bottom {
+	    -webkit-border-image: 
+	      -webkit-gradient(linear, 0 0, 0 100%, from(#e8e8e8), to(rgba(0, 0, 0, 0))) 1 100%;
+	    -webkit-border-image: 
+	      -webkit-linear-gradient(#e8e8e8, rgba(0, 0, 0, 0)) 1 100%;
+	    -moz-border-image:
+	      -moz-linear-gradient(#e8e8e8, rgba(0, 0, 0, 0)) 1 100%;    
+	    -o-border-image:
+	      -o-linear-gradient(#e8e8e8, rgba(0, 0, 0, 0)) 1 100%;
+	    border-image:
+	      linear-gradient(to bottom, #e8e8e8, rgba(0, 0, 0, 0)) 1 100%;
+      	border-right: 1px solid;
+      	border-left: 1px solid #fff!important;
+	}
 	.round_divider {
 		// margin-right: -.125rem;
 		margin: -5px 0px 0 0em;

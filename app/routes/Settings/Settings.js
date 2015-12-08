@@ -48,7 +48,7 @@ export default class Settings extends Component {
 									<strong>Ace Password</strong>
 									<input className="text" type="password" name="currentPassword"/>
 								</label>
-								<button className="button green">Update Email</button>
+								<button className="button primary">Update Email</button>
 								<p>
 									If you forgot your password, you can <a>reset your password</a>.
 								</p>
@@ -75,7 +75,7 @@ export default class Settings extends Component {
 									<strong>Confirm New Password</strong>
 									<input className="text" type="password" name="confirmPassword"/>
 								</label>
-								<button className="button green">Update Password</button>
+								<button className="button primary">Update Password</button>
 								<p>
 									If you forgot your password, you can <a>reset your password</a>.
 								</p>
@@ -99,7 +99,7 @@ export default class Settings extends Component {
 									<strong>Ace Password</strong>
 									<input className="text" type="password" name="newPassword"/>
 								</label>
-								<button className="button green">Update Username</button>
+								<button className="button primary">Update Username</button>
 								<p>
 									If you forgot your password, you can <a>reset your password</a>.
 								</p>

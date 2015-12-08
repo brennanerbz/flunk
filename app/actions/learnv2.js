@@ -411,7 +411,7 @@ export function updateTrial(response) {
 			let updated_trial = res.data;
 			dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
 			/* TODO: Make the best decision on what to show based on accuracy, grading codes and .correct */
-			if(updated_trial.accuracy < 200) {
+			if(updated_trial.correct) {
 				current_slot['completed'] = true;
 				dispatch(updateSlot(current_slot))
 				dispatch({type: SHOW_CORRECT})

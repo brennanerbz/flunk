@@ -19,7 +19,8 @@ import * as user from '../actions/user';
 @connect(
 	state => ({ 
 		router: state.router,
-		logged_in: state.user.logged_in
+		logged_in: state.user.logged_in,
+		showing_error: state.error_page.show_error
 	 }),
 	dispatch => ({
 		...bindActionCreators({
@@ -51,6 +52,7 @@ export default class FlunkApp extends Component {
 		route !== '/' ? root_path = regex.exec(route)[1] : root_path = '/'
 		if     (root_path == 'createset'
 			 || root_path == 'learn'
+			 || this.props.showing_error
 			 || root_path == 'error') { return; }
 		else if(root_path == 'set'
 			 || root_path == 'settings'

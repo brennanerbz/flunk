@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 require('./SeqControl.scss');
 import SignPosts from './SignPosts';
+import classnames from 'classnames';
 
 export default class SeqControl extends Component {
 	static propTypes = {
@@ -23,7 +24,7 @@ export default class SeqControl extends Component {
 	render() {
 		const { round_index } = this.props;
 		return(
-			<div className="seq_control">
+			<div className={classnames("seq_control", "top-to-bottom")}>
 				<div className="round_divider">
 					<hr className="separator"/>
 					<i className="copy_only"/>
@@ -39,7 +40,7 @@ export default class SeqControl extends Component {
 					}
 				</div>
 				<span className="start_over">
-					<button className="button button-outline startover_btn"
+					<button className="button outline"
 						    type="button"
 						    onClick={() => { 
 						    	this.props.newSequence(null)

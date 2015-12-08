@@ -83,7 +83,7 @@ export default class Upload extends Component {
 														placeholder="Link or text..."
 														autoFocus={this.props.logged_in} />
 								</div>
-								<button className="button green">Create</button>
+								<button className="button primary">Create</button>
 							</div>
 						</div>
 						<div className="instructions">

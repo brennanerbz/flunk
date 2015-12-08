@@ -8,6 +8,7 @@ import user from './user';
 import search from './search';
 import transfer from './transfer';
 import upload from './import'; // Need better naming convention for this view
+import error_page from './error';
 import { routerStateReducer } from 'redux-router';
 
 const reducers = combineReducers({
@@ -20,6 +21,7 @@ const reducers = combineReducers({
 	search,
 	transfer,
 	upload,
+	error_page,
 	router: routerStateReducer
 });
 

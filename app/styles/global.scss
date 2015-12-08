@@ -564,12 +564,19 @@ $width: 70px;
 		}
 	}
 	&.outline {
-		background-image: linear-gradient(-180deg, #FFFFFF 0%, #FCFCFC 100%);
-		border: 1px solid #D1D1D3;
+		background: #fff;
+	   	border: 1px solid #bbb;
+	   	color: #47525d!important;
+	   	&:hover {
+	   		background: -webkit-linear-gradient(#fffffe, #f2f2f2);
+	   		background: linear-gradient(#fffffe, #f2f2f2);
+	   		box-shadow: none;
+	   	}
 	}
 	&.primary {
 		color: #fff;
-		background-image: linear-gradient(-180deg, #5992F3 0%, #3E82F7 100%);
+		// background-image: linear-gradient(-180deg, #5992F3 0%, #3E82F7 100%);
+		background: linear-gradient(#168eef, #007ee5);
 		border: 1px solid #2F73EB;
 		border-radius: 3px;
 	}

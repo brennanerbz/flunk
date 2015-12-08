@@ -13,7 +13,7 @@ export default class LearnHelp extends Component {
 	}
 
 	render() {
-		const { slot, current_slot, current_trial, previous_trial } = this.props;
+		const { slot, current_slot, current_trial, user_answer, feedback } = this.props;
 		return(
 			<section className="learn_help">
 				{
@@ -21,19 +21,16 @@ export default class LearnHelp extends Component {
 					&&
 					<ol className="conversation">
 						{
-							previous_trial.answer !== null 
-							&& previous_trial.answer !== undefined
-							&& previous_trial.answer.length > 0 
-							&&
-							<UserAnswer previous_trial={previous_trial}
+							user_answer !== null 
+							&& user_answer.length > 0
+							&& 
+							<UserAnswer user_answer={user_answer}
 										current_trial={current_trial} />
 						}
 						{
-							previous_trial.feedback !== null 
-							&& previous_trial.feedback !== undefined
-							&& previous_trial.feedback.length > 0
-							&&
-							<FeedbackMessage previous_trial={previous_trial}
+							feedback !== null
+							&& 
+							<FeedbackMessage feedback={feedback}
 											 current_trial={current_trial}/>
 						}
 						{

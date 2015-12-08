@@ -5,14 +5,14 @@ export default class FeedbackMessage extends Component {
 	}
 
 	render() {
-		const { previous_trial, current_trial} = this.props;
+		const { feedback, current_trial} = this.props;
 		return(
 			<li className="bot">
 				{
-					previous_trial.feedback !== null && previous_trial.feedback.length > 0
+					feedback !== null
 					&&
 					<div className="message">
-						<p>{previous_trial.feedback}</p>
+						<p>{feedback}</p>
 					</div>
 				}
 			</li>

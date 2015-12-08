@@ -102,10 +102,11 @@ const initial_learnstate = {
 
 	trials: [],
 	previous_trial: {},
+	user_answer: null,
+	feedback: null,
 	current_trial: {},
 	trial: {},
 
-	
 	rounds: [],
 	current_round: {},
 	current_round_index: null,
@@ -182,7 +183,9 @@ export default function learn(state = initial_learnstate, action) {
 				slot_index: null,
 				rounds: [],
 				current_round: {},
-				current_round_index: null
+				current_round_index: null,
+				user_answer: null,
+				feedback: null
 			}
 		case RECEIVE_SLOTS_SUCCESS:
 			let slots = action.slots,
@@ -219,7 +222,6 @@ export default function learn(state = initial_learnstate, action) {
 			const _newtrials = state.trials.concat(action._trial);
 			return {
 				...state,
-				previous_trial: state.current_trial,
 				isFetchingLearn: false,
 				isFetchingTrials: false,
 				isShowingCorrect: false,
@@ -241,7 +243,8 @@ export default function learn(state = initial_learnstate, action) {
 				current_sequence: action.sequence,
 				position: action.sequence.position,
 				current_slot: _slot,
-				isUpdatingState: false
+				isUpdatingState: false,
+				previous_trial: action.sequence.position !== state.position ? {} : state.previous_trial
 			}
 		case UPDATE_SLOT_SUCCESS:
 			return {
@@ -268,7 +271,8 @@ export default function learn(state = initial_learnstate, action) {
 					: trial
 				}),
 				current_trial: action.updated_trial,
-				trial: action.updated_trial
+				user_answer: action.updated_trial.answer,
+				feedback: action.updated_trial.feedback
 			}
 		case SHOW_CORRECT:
 			return {
@@ -307,7 +311,9 @@ export default function learn(state = initial_learnstate, action) {
 			return {
 				...state,
 				isShowingCorrect: next_correct,
-				current_slot: action.next_slot
+				current_slot: action.next_slot,
+				user_answer: null,
+				feedback: null
 			}
 		case RECEIVE_LEARN_SUCCESS:
 			return {

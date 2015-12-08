@@ -1,5 +1,6 @@
 .learn_page{
 	margin-top: -15px;
+	padding-top: 4.5em;
 	.feedback {
 		border: none!important;
 		position: absolute;
@@ -16,10 +17,9 @@
 		font-family: "Lato";
 		letter-spacing: 0.01em;
 		max-width: 800px!important;
-		padding-right: 85px;
 		padding-left: 10px;
 		padding-top: 20px;
-		margin-left: 230px!important;
+		margin-left: 200px!important;
 		&.round_summary {
 			max-width: 850px!important;
 			padding-right: 0!important;

@@ -404,6 +404,7 @@ export function updateTrial(response) {
 			current_trial = state.current_trial,
 			current_slot = state.current_slot,
 			trial_id = current_trial.id;
+		console.log(response)
 		axios.put(`${api_url}/trials/${trial_id}`, 
 			response
 		).then(res => {

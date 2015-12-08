@@ -17,6 +17,7 @@ export default class MultipleChoice extends Component {
 
 	render() {
 		const { choices } = this.props;
+		console.log(choices)
 		return (
 			<div>				
 				<ul className="mc_choices">

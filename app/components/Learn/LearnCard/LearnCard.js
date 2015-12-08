@@ -21,6 +21,7 @@ export default class LearnCard extends Component {
 				showCompletedSeq, 
 				slots, 
 				cue,
+				current_trial,
 				current_slot } = this.props;
 		return(
 			<div>
@@ -31,7 +32,7 @@ export default class LearnCard extends Component {
 							{
 								showCorrect
 								? <h4 className="correct_label">
-									Correct
+									{current_trial.feedback}
 								  </h4>
 								: null
 							}

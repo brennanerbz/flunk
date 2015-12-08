@@ -404,13 +404,14 @@ export function updateTrial(response) {
 			current_trial = state.current_trial,
 			current_slot = state.current_slot,
 			trial_id = current_trial.id;
+		console.log(response)
 		axios.put(`${api_url}/trials/${trial_id}`, 
 			response
 		).then(res => {
 			let updated_trial = res.data;
 			dispatch({type: UPDATE_TRIAL_SUCCESS, updated_trial})
 			/* TODO: Make the best decision on what to show based on accuracy, grading codes and .correct */
-			if(updated_trial.accuracy < 200) {
+			if(updated_trial.correct) {
 				current_slot['completed'] = true;
 				dispatch(updateSlot(current_slot))
 				dispatch({type: SHOW_CORRECT})

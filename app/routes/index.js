@@ -8,6 +8,7 @@ import Index from './Index/Index';
 
 import LandingPage from './LandingPage/LandingPage';
 import LoginPage from './LoginPage/LoginPage';
+import SignUp from './SignUp/SignUp';
 
 import Home from './Home/Home';
 import CreateSet from './CreateSet/CreateSet';
@@ -34,6 +35,7 @@ const routes = (
         <Route path="/" component={Home}/>
         <Route path="landing" component={LandingPage}/>
         <Route path="login" component={LoginPage}/>
+        <Route path="signup" component={SignUp}/>
 
         <Route path='set/:id' component={SetView}>
             <IndexRoute component={Terms}/>

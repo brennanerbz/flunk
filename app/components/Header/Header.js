@@ -86,7 +86,7 @@ export default class Header extends Component {
 		return(
 			<div>
 			{
-				root_path == 'login'
+				root_path == 'login' || root_path == 'signup'
 				? null
 				:
 				<div className={classnames("header_positioner", {'no_border': root_path == 'createset' || root_path == 'import'  })}>
@@ -106,7 +106,7 @@ export default class Header extends Component {
 							</div>
 							<div className="header_content">
 								{
-									root_path == 'createset' || root_path == 'import'
+									root_path == 'createset' || root_path == 'import' 
 									? null
 									: <SearchBox {...this.props}/>
 								}
@@ -153,7 +153,7 @@ export default class Header extends Component {
 											    		paddingTop: '6px',
 											    		fontSize: '14.5px'
 											    	}}
-											    >Back to set</h1>
+											    >Back to {learn_set.title}</h1>
 												<h1 className="set_name"
 													style={{
 														display: 'none'

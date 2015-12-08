@@ -1,12 +1,12 @@
 .sign_up_container {
 	.card {
 		padding: 2.5em;
-		max-width: 380px;
+		max-width: 450px;
 		font-family: "Lato";
 		.message {
 			h4 {
-
-				font-weight: 700;
+				font-family: "Open Sans";
+				font-weight: 300;
 				letter-spacing: 0.01em;
 				font-size: 28px;
 				&.start_now {
@@ -16,12 +16,30 @@
 				}
 			}
 			p {
+				font-family: "Open Sans";
+				font-weight: 300;
 				margin-bottom: 15px;
 			}
 		}
 		.sign_up_form {
 			width: 100%;
+			::-webkit-input-placeholder {
+			   color: #47525D;
+			}
+
+			:-moz-placeholder { /* Firefox 18- */
+			   color: #47525D;  
+			}
+
+			::-moz-placeholder {  /* Firefox 19+ */
+			   color: #47525D;  
+			}
+
+			:-ms-input-placeholder {  
+			   color: #47525D;  
+			}
 			input {
+				-webkit-font-smoothing: antialiased;
 				display: block;
 				width: 100%;
 				margin-top: 10px;
@@ -42,18 +60,33 @@
 				margin-top: 10px;
 			}
 			button {
-				&.green {
-					width: 100%;
-				}
+				width: 100%;
 			}
 		}
 		.day_divider {
-			margin-top: 0!important;
-			padding: 0.5rem 16px 0.5rem 1.5rem;
+			margin: 1.2rem 0;
+			padding: 0;
 			min-width: 308px;
+			text-align: center;
+		    cursor: default;
+		    clear: both;
+		    position: relative;
+			hr {
+				position: absolute;
+			    border-top: 1px solid #e8e8e8;
+			    top: .75rem;
+			    right: 0;
+			    left: 0;
+			    margin: 0;
+			}
 			.day_divider_label {
-				font-weight: 400;
-				color: #ccc;
+				background: #fff;
+			    padding: .05rem .75rem;
+			    display: inline-block;
+			    margin: 0 auto;
+			    position: relative;
+			    border-radius: .25rem;
+			    color: #ccc;
 			}
 		}
 		.sign_up_group {

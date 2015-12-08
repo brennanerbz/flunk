@@ -23,13 +23,17 @@ export default class SearchSets extends Component {
 		const { query, sets, result_count, searching } = this.props; 
 		return(
 			<div className="search_sets_container">
-				<h2 className="header">
-					{
-						searching && result_count > 0
-						? "Searching"
-						: `About ${result_count} results for '${query}'`
-					}
-				</h2>
+				{
+					result_count > 0
+					&&
+					<h2 className="header">
+						{
+							searching 
+							? "Searching"
+							: `About ${result_count} results for '${query}'`
+						}
+					</h2>
+				}
 				{
 				sets !== null && sets.length > 0
 				?

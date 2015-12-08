@@ -33,7 +33,6 @@
 			font-size: 14px;
 			line-height: 0.75;
 			a {
-				color: #57AD67;
 				margin-left: 4px;
 			}
 		}
@@ -45,22 +44,20 @@
 	margin-left: 10px;
 	width: 35px;
 	height: 32px;
-	background-image: linear-gradient(-180deg, #FFFFFF 0%, #FCFCFC 100%);
-	border: 1px solid #D1D1D3;
+	background: #fff;
+   	border: 1px solid #bbb;
+   	color: #47525d!important;
+   	&:hover {
+   		background: -webkit-linear-gradient(#fffffe, #f2f2f2);
+   		background: linear-gradient(#fffffe, #f2f2f2);
+   		box-shadow: none;
+   	}
 	border-radius: 3px;
 	position: relative;
-	color: #67686e;
-	background: #fff;
-	opacity: 0.75;
+	opacity: 1;
 	display: inline-block;
 	cursor: pointer;
-	&.active {
-		box-shadow: inset 0px 1px 3px 0px rgba(81,79,79,0.50);
-	}
 	&:active {
 		box-shadow: inset 0px 1px 3px 0px rgba(81,79,79,0.50);
-	}
-	&:hover {
-		opacity: 1;
 	}
 }

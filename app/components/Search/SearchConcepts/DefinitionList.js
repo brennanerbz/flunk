@@ -7,18 +7,19 @@ export default class DefinitionList extends Component {
 
 	render() {
 		const { definitions } = this.props;
-		if(definitions == undefined || definitions.length == 0) return <div></div>
-		let sliced_definitions = definitions.slice(0, 1),
-			first_definition = sliced_definitions[0],
-			subjects = first_definition.subjects;
+		console.log(definitions)
 		return( 
-			<div className="definition_list_container">
+			<div className="definition_list_container term_container">
 				<ul className="definition_list">
 					{
-						sliced_definitions.map((x, i) => {
+						definitions.map((def, i) => {
 							return (
-								<DefinitionItem solo={sliced_definitions.length === 1} index={i} key={i} content={x} {...this.props} />
-							);
+								<DefinitionItem 
+									key={i}
+									definition={def}
+									query={this.props.query}
+								/>
+							)
 						})
 					}
 				</ul>

@@ -13,11 +13,21 @@ export default class SetListItemContainer extends Component {
 	// handle methods
 
 	render() {
+		let root_route;
 		return(
 			<SetListItemView 
 				section={this.props.section}
 				assignment={this.props.assignment}
-				handleClick=""
+				handleClick={() => {
+					if(this.props.section == 'drafts') {
+						root_route = 'createset'
+					} else {
+						root_route = 'set'
+					}
+					this.props.pushState(null, 
+					`/${root_route}/${this.props.assignment.set.id}`
+					)}
+				}
 				handleToggleSelect=""
 				handleOpen=""
 				handleDelete=""

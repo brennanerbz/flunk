@@ -97,6 +97,9 @@ input {
 .outer_shell {
 	width: 1020px;
 	margin: 0 auto;
+	&.void {
+		width: 100%;
+	}
 }
 
 
@@ -530,8 +533,11 @@ $width: 70px;
 	&:hover {		
 		-moz-transition:  0.1 ease-in-out;
 		transition: 0.1 ease-in-out;
-		box-shadow: inset 0 -2px rgba(0,0,0,.25);
+		// box-shadow: inset 0 -2px rgba(0,0,0,.25);
 		border: none;	
+	}
+	&:active {
+		box-shadow: inset 0px 1px 3px 0px rgba(81,79,79,0.50);
 	}
 	&:focus {
 		outline: none;
@@ -554,21 +560,29 @@ $width: 70px;
 		color: #555459;
 		margin-right: 10px;
 		&:hover {
-			box-shadow: none;
 			background-image: linear-gradient(-180deg, #FFFFFF 0%, #F6F7F8 75%);
 			border: 1px solid #ccc;
 			border-radius: 3px;
 		}
 	}
 	&.outline {
-		background-image: linear-gradient(-180deg, #FFFFFF 0%, #FCFCFC 100%);
-		border: 1px solid #D1D1D3;
+		background: #fff;
+	   	border: 1px solid #bbb;
+	   	color: #47525d!important;
+	   	&:hover {
+	   		background: -webkit-linear-gradient(#fffffe, #f2f2f2);
+	   		background: linear-gradient(#fffffe, #f2f2f2);
+	   	}
 	}
 	&.primary {
 		color: #fff;
-		background-image: linear-gradient(-180deg, #5992F3 0%, #3E82F7 100%);
+		// background-image: linear-gradient(-180deg, #5992F3 0%, #3E82F7 100%);
+		background: linear-gradient(#168eef, #007ee5);
 		border: 1px solid #2F73EB;
 		border-radius: 3px;
+		&:hover {
+			background-image: linear-gradient(-180deg, #0394FF 0%, #007BE8 100%);
+		}
 	}
 	&.green {
 		background-image: linear-gradient(-180deg, #23C486 0%, #1DB379 100%);
@@ -1237,11 +1251,15 @@ textarea:hover:ms-input-placeholder {
 	border-radius: 0.5rem;
 	box-shadow: 0 4px 1pc rgba(0,0,0,.5)!important;
 	font-family: "Lato";
+	&.no_shadow {
+		box-shadow: none!important;
+		border: 1px solid #e8e8e8;
+	}
 }
 
 .modal-backdrop {
 	z-index: 1000;
-	background: #fff!important;
+	// background: #fff!important;
 }
 
 

@@ -5,26 +5,13 @@ export default class UserAnswer extends Component {
 	}
 
 	render() {
-		const { previous_trial } = this.props;
-		let answer = previous_trial.answer !== undefined
-					? previous_trial.answer 
-					: null
+		const { user_answer } = this.props;
 		return(
 			<li className="user">
-				{
-					answer !== null && answer.length > 0
-					&&
 					<div className="message">
-						<p>{ answer }</p>
+						<p>{ user_answer }</p>
 					</div>
-				}
 			</li>
 		);
 	}
 }
-
-// {
-// 	answer.length == 0
-// 	&& <p>...</p>
-// }
-

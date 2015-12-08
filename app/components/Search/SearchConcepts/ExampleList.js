@@ -6,51 +6,27 @@ export default class ExampleList extends Component {
 	}
 
 	state = {
-		should_render_list: true
-	}
-
-	componentWillMount() {
-		const { examples, spotlight } = this.props; // TODO: soon to be in-context-example
-		let sliced_examples, example;
-		if(spotlight) {
-			sliced_examples = examples.slice(1, 4)
-		} else {
-			sliced_examples = examples.slice(0, 3)
-		}
-		if(sliced_examples == undefined || sliced_examples.length == 0) this.setState({should_render_list: false});
 	}
 
 	render() {
-		const { examples, spotlight } = this.props; // TODO: soon to be in-context-example
-		let sliced_examples, example;
-		if(spotlight) {
-			sliced_examples = examples.slice(1, 4)
-		} else {
-			sliced_examples = examples.slice(0, 3)
-		}
+		const { examples, term } = this.props;
 		return(
-			<div className="concept_result_container">
-				{
-					this.state.should_render_list
-					?
-					<div>
-						<p className="example_label">Examples:</p>
-						<ul className="example_list">
-							{
-								sliced_examples.map((x, i) => {
-									return (
-										<ExampleItem index={i} 
-													 key={i} 
-													 content={x}
-													 {...this.props} />
-									);
-								})
-							}
-						</ul>
-					</div>
-					: null
-				}
-				
+			<div className="term_container">
+				<p className="example_label">Examples of {term}:</p>
+				<ul className="example_list">
+					{
+						examples.map((x, i) => {
+							return (
+								<ExampleItem 
+									index={i} 
+									key={i} 
+									example={x}
+									query={this.props.query}
+								/>
+							);
+						})
+					}
+				</ul>
 			</div>
 		)
 	}

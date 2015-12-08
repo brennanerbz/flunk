@@ -37,7 +37,7 @@ export default class SearchPeople extends Component {
 					}
 					{
 						users !== null && users.length == 0  
-						? <NullSearchResults {...this.props}/>
+						? <NullSearchResults  style={{margin: '0'}} {...this.props}/>
 						: null
 					}
 				</ul>

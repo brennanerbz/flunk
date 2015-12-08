@@ -15,21 +15,43 @@ export default class LandingPage extends Component {
 	render() {
 		const compose = require('../../assets/compose.png'),
 			  upload = require('../../assets/upload.png'),
-			  chat = require('../../assets/chat.png'),
+			  // chat = require('../../assets/chat.png'),
 			  desk = require('../../assets/desk_drawing.png'),
 			  file_formats = require('../../assets/file_formats.png'),
 			  sample_share = require('../../assets/sample_share.png'),
 			  sample_learn = require('../../assets/sample_learn.png'),
-			  school_logos = require('../../assets/sample_schools.png');
+			  school_logos = require('../../assets/sample_schools.png'),
+			  chat = require('../../assets/chat_icon.png'),
+			  doc = require('../../assets/set_icon_lines.png'),
+			  cards = require('../../assets/flashcards.png'),
+			  quiz = require('../../assets/quiz_program.png');
 		return(		
 			<div className="landing_page">
 				<div className="landing_page_container">
 					<div className="marketing_copy">
-						<h1>A <span className="underline">learning tool</span> that does the <br /> hard work for you</h1>
-						<p className="product_description">Ace can take the material in front of you, <br/> and turn it into practicable questions.</p>
+						<h1>Join the Flunkt beta</h1>
+						<p className="product_description">A new, automated learning tool for students and teachers <br/>  to save time by transforming their documents into:</p>
+						<ul>
+							<li>
+								<img src={chat}/>
+								<p>Interactive questions</p>
+							</li>
+							<li>
+								<img src={doc}/>
+								<p>Outlines</p>
+							</li>
+							<li>
+								<img src={cards}/>
+								<p>Flashcards</p>
+							</li>
+							<li>
+								<img src={quiz}/>
+								<p>Tests</p>
+							</li>
+						</ul>
 					</div>
 					<div className="sign_up">
-						<SignUpForm />
+						<SignUpForm shouldAutoFocus={true} />
 					</div>
 				</div>
 				<div className="sample_transform">
@@ -78,12 +100,12 @@ export default class LandingPage extends Component {
 				</div>
 				<section className="happy_users">
 					<div className="section_content">
-						<h3>Thousands of happy students, including:</h3>
+						<h3>Thousands of happy beta testers, from:</h3>
 						<img src={school_logos} />
 					</div>
 				</section>
 				<div className="last_call">
-					<SignUpForm last_call={true} />
+					<SignUpForm shouldAutoFocus={false} last_call={true} />
 				</div>
 				<div className="footer">	
 					<ul className="footer_links">

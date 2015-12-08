@@ -1,9 +1,29 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router'
+import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as erroractions from '../../actions/error';
 require('./ErrorPage.scss')
 
+@connect(state => ({
+	}),
+	dispatch => ({
+		...bindActionCreators({
+			...erroractions
+		}, dispatch)
+	})
+)
 export default class ErrorPage extends Component {
 	static propTypes = {
+	}
+
+	componentDidMount() {
+		this.props.showError()
+	}
+
+	componentWillUnmount() {
+		this.props.hideError()
 	}
 
 	render() {

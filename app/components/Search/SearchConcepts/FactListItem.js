@@ -5,20 +5,28 @@ export default class FactListItem extends Component {
 		fact: PropTypes.object
 	}
 
-	renderCue(cue, term) {
-		var re = new RegExp('('+term+')', 'gi'),
-			cue = cue.replace(re, '<b>$1</b>'); 
-		return { 
-			__html:	cue
+	renderFact(fact, term, query) {
+		if(fact == null) return {__html: null}
+		fact = fact
+		.replace(new RegExp('(^|\\s)(' + term + ')(\\s|$)','ig'), '$1<i>$2</i>$3')
+		.replace(query, `<b>${query}</b>`)  
+		return {
+			__html: fact
 		}
 	}
 
 	render() {
-		const { fact } = this.props;
+		const { fact, index, query } = this.props;
 		return(
-			<li className="definition_item">
-				<p className="definition"
-				   dangerouslySetInnerHTML={::this.renderCue(fact.cue, fact.target)}>
+			<li className="fact_item">
+				<p className="fact"
+				   dangerouslySetInnerHTML={
+				   	::this.renderFact(
+				   		fact.cue,
+				   		fact.target,
+				   		query
+				   	)
+				   }>
 				</p>
 			</li>
 		);

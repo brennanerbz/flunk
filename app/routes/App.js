@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 import { pushState } from 'redux-router';
+import classnames from 'classnames';
 /* Styles */
 const styles = require('../styles/global.scss');
 /* Components */
@@ -16,7 +17,11 @@ import * as actions from '../actions/usersets';
 import * as user from '../actions/user';
 
 @connect(
-	state => ({ router: state.router }),
+	state => ({ 
+		router: state.router,
+		logged_in: state.user.logged_in,
+		showing_error: state.error_page.show_error
+	 }),
 	dispatch => ({
 		...bindActionCreators({
 			...actions,
@@ -47,6 +52,7 @@ export default class FlunkApp extends Component {
 		route !== '/' ? root_path = regex.exec(route)[1] : root_path = '/'
 		if     (root_path == 'createset'
 			 || root_path == 'learn'
+			 || this.props.showing_error
 			 || root_path == 'error') { return; }
 		else if(root_path == 'set'
 			 || root_path == 'settings'
@@ -72,7 +78,9 @@ export default class FlunkApp extends Component {
 		return( 
 			<div>
 				<Header root_path={root_path}/>
-				<div className="outer_shell">
+				<div className={classnames("outer_shell", {
+					"void": root_path == 'landing' && !this.props.logged_in
+				})}>
 					{::this.renderSideNav()}
 					{childrenWithProps}
 				</div>

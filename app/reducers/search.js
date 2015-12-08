@@ -20,14 +20,10 @@ var initial_searchstate = {
 	query: '',
 	result_count: 0,
 	items: null,
+	item_sections: null,
 	item_page: 0,
 	item_page_prev_index: 0,
 	item_page_next_index: 0,
-	term: null,
-	term_name: null,
-	definitions: null,
-	facts: null,
-	examples: null,
 	related: null,
 	sets: null,
 	set_page: 0,
@@ -66,34 +62,23 @@ export default function search(state = initial_searchstate, action) {
 				...state
 			}
 		case RECEIVE_ITEMS_SUCCESS:
-			let term = {}, definitions = [], facts=[], examples = [], related = [], items = action.items, query = action.query;
-			related = items.filter(item => {item.target !== items[0].target})
-			items = items.filter(item => item.target == items[0].target)
-			if(items !== undefined) {
-				term = items[0]
-				items.forEach((item, i) => { 
-					if(item.type == 'definition') {
-						definitions.push(item)
-					} else if (item.type == 'fact') {
-						facts.push(item)
-					} else if (item.type == 'example') {
-						examples.push(item)
-					}
-				})
-			}
-			let item_pages = pages(action.index)
+			let item_sections = {},
+				item_pages = pages(action.index)
+			item_sections = action.items.reduce((section, val) => {
+					section[val['target']] = section[val['target']] || []
+					section[val['target']].push({
+						item: val
+					})
+					return section
+				}, {})
 			return {
 				...state,
 				searching: false,
 				searchFlag: false,
 				noResults: action.items.length === 0,
 				items: action.items,
-				term: term,
-				term_name: term !== null ? term.target : null,
-				definitions: definitions,
-				facts: facts,
-				examples: examples,
-				related: related,
+				item_sections: item_sections,
+				// related: related,
 				item_page: item_pages.page,
 				item_page_prev_index: item_pages.prev_index,
 				item_page_next_index: item_pages.next_index,

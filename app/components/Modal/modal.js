@@ -196,7 +196,7 @@ export default class Modal extends Component {
 			  { pushState } = this.props;
 		return (
 			<div className="modal-body sign_up">
-				<SignUpForm modal={true}/>
+				<SignUpForm modal={true} shouldAutoFocus={true}/>
 				<p className="log_in_link">Already have an account? 
 					<a onClick={() => pushState(null, '/login')}> Log In</a>
 				</p>
@@ -218,7 +218,9 @@ export default class Modal extends Component {
 				 aria-labelledby="myModalLabel"
 				 aria-hidden="true">
 				<div className={classnames({"sign_up": type == 'log_in'}, "modal-dialog")} role="document">
-					<div className="modal-content">
+					<div className={classnames("modal-content", {
+						"no_shadow": true
+					})}>
 					<div className={classnames("modal-header", 
 						{ "settings": type == 'settings' },
 						{ "sign_up": type == 'log_in'}
@@ -238,7 +240,7 @@ export default class Modal extends Component {
 						{
 							type == 'settings'
 							? <button type="button"
-									  className="button button-primary button-small float_right"
+									  className="button primary button-small float_right"
 									  data-dismiss="modal" >
 							  Done
 							  </button>
@@ -266,8 +268,12 @@ export default class Modal extends Component {
 								: null
 							}
 							{
-								type == 'log_in'
+								type == 'log_in' && !this.props.import
 								&& 'Sign up for free to create study sets'
+							}
+							{
+								type == 'log_in' && this.props.import
+								&& 'Sign up for free to transform documents'
 							}
 						</h3>
 					</div>
@@ -299,7 +305,7 @@ export default class Modal extends Component {
 						?
 						<div className="modal-footer">
 							<button type="button" 
-									className="button button-outline" 
+									className="button outline" 
 									data-dismiss="modal">
 									Cancel
 							</button>
@@ -307,7 +313,7 @@ export default class Modal extends Component {
 								type !== 'confirm'
 								? 
 								<button type="button" 
-										className="button button-primary" 
+										className="button primary" 
 										data-dismiss='modal'
 										onClick={type == 'textarea' ? ::this.changePurpose : null}>
 										{

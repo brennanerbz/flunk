@@ -33,10 +33,10 @@
 		}
 	}
 	.saving_label {
-		position: absolute;
+		position: fixed;
 		display: block;
-		top: 20px;
-		left: 150px;
+		top: 15px;
+		left: 280px;
 		z-index: 999!important;
 		padding-left: 1pc;
 		margin-right: 75pt;

@@ -13,7 +13,8 @@ export default class CreateSetTitle extends Component {
 		return(
 			<div className="CreateSetHeader-section CreateSetHeader-section-title">
 				<div className="CreateSetHeader-textarea">
-					<AutoexpandTextarea				
+					<AutoexpandTextarea	
+						autoFocus={this.props.shouldAutoFocus}			
 						tabIndex={indexForTab}
 						{...this.props}
 					/>

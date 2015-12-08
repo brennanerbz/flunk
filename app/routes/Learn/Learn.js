@@ -44,8 +44,9 @@ import SequenceSummary from '../../components/Learn/SequenceSummary/SequenceSumm
 	slots: state.learn.slots,
 	current_sequence: state.learn.current_sequence,
 	current_slot: state.learn.current_slot,
-	previous_trial: state.learn.previous_trial,
 	current_trial: state.learn.current_trial,
+	feedback: state.learn.feedback,
+	user_answer: state.learn.user_answer,
 	sets: state.sets.set_items
 	}),
 	dispatch => ({
@@ -183,7 +184,6 @@ export default class Learn extends Component {
 
 	render() {
 		const { current_slot,
-				previous_trial,
 				current_trial,
 				current_sequence,
 				slots,
@@ -198,96 +198,6 @@ export default class Learn extends Component {
 				skipSlot, 
 				nextSlot,
 				params} = this.props;
-		let debug_prev_trial = [],
-			debug_curr_trial =[]
-		if(!current_slot.completed) {
-			for(var prop in previous_trial) {
-				switch(prop) {
-					case 'accuracy':
-						debug_prev_trial.push(prop + ": " + previous_trial[prop])
-						break;
-					case 'answer':
-						debug_prev_trial.push(prop + ": " + previous_trial[prop])
-						break;
-					case 'feedback':
-						debug_prev_trial.push(prop + ": " + previous_trial[prop])
-						break;
-					case 'grading':
-						debug_prev_trial.push(prop + ": " + previous_trial[prop])
-						break;
-					case 'message':
-						debug_prev_trial.push(prop + ": " + previous_trial[prop])
-						break;
-					case 'praise':
-						debug_prev_trial.push(prop + ": " + previous_trial[prop])
-						break;
-					case 'reaction_time':
-						debug_prev_trial.push(prop + ": " + previous_trial[prop])
-						break;
-					case 'response_time':
-						debug_prev_trial.push(prop + ": " + previous_trial[prop])
-						break;
-					default:
-						break;
-				}
-			}
-		}
-		for(var prop in current_trial) {
-			if(current_slot.completed) {
-				switch(prop) {	
-					case 'accuracy':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'answer':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'feedback':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'grading':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'message':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'praise':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'reaction_time':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'response_time':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-				}
-			} else {
-				switch(prop) {
-					case 'click_to_answer':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'censored_cue':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'format':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'expected_accuracy':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'probability_correct':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'predicted_reaction_time':
-						debug_curr_trial.push(prop + ": " + current_trial[prop])
-						break;
-					case 'predicted_response_time':
-						debug_prev_trial.push(prop + ": " + previous_trial[prop])
-						break;
-					default:
-						break;
-				}
-			}
-		}
 		
 		return (
 			<DocumentTitle title={!showLearn && current_sequence.set.title !== undefined 
@@ -309,12 +219,11 @@ export default class Learn extends Component {
 				 	      </div>
 				 	    : null
 					}
-									 
 					 {
 						!showLearn && slots !== undefined
 						? <div>
 							<SeqControl {...this.props}/>
-								<div className={classnames("no_sidenav_container learn_container", 
+								<div className={classnames("learn_container", 
 											   {"round_summary": isShowingCompletedRound})}>
 									<div>
 										{
@@ -374,24 +283,7 @@ export default class Learn extends Component {
 											: null
 										}
 										
-										<div className="debug_feedback">
-											<div className="debug_cell">
-												<p>Previous</p>
-												{
-													debug_prev_trial.map((x, i) => {
-														return <p className="feedback_key" key={i}>{x}</p>
-													})
-												}
-											</div>
-											<div className="debug_cell">
-												<p>Current</p>
-												{
-													debug_curr_trial.map((x, i) => {
-														return <p className="feedback_key" key={i}>{x}</p>
-													})
-												}
-											</div>
-										</div>
+										
 										<div className="feedback">
 											<a className="feedback_link">Feedback</a>
 										</div>
@@ -405,5 +297,28 @@ export default class Learn extends Component {
 		);
 	}
 }
+
+/*
+<div className="debug_feedback">
+	<div className="debug_cell">
+		<p>Previous</p>
+		{
+			debug_prev_trial.map((x, i) => {
+				return <p className="feedback_key" key={i}>{x}</p>
+			})
+		}
+	</div>
+	<div className="debug_cell">
+		<p>Current</p>
+		{
+			debug_curr_trial.map((x, i) => {
+				return <p className="feedback_key" key={i}>{x}</p>
+			})
+		}
+	</div>
+</div>
+*/
+
+										
 
 

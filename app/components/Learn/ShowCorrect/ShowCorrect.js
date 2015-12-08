@@ -6,18 +6,18 @@ export default class ShowCorrect extends Component {
 	}	
 
 	shouldComponentUpdate(nextProps) {
-		return this.props.current_slot.id == nextProps.current_slot.id || this.props.trial.answer == nextProps.trial.answer
+		return this.props.current_slot.id == nextProps.current_slot.id || this.props.current_trial.answer == nextProps.current_trial.answer
 	}
 	
 	render() {
 		const { current_slot,
-			    trial, 
+			    current_trial, 
 			    showCompletedSequence
 			  } = this.props;
 		return(
 			<div className="show_correct_container">
 				<div className="show_correct">
-					<p className="correct_answer">{trial.answer}</p>
+					<p className="correct_answer">{current_slot.item.target}</p>
 				</div>
 				<a className="continue_btn"
 				   onClick={showCompletedSequence 

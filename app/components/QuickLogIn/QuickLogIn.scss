@@ -1,11 +1,11 @@
 .quick_login_container {
 	z-index: 99999999;
-	background-image: linear-gradient(-180deg, #535353 0%, #FFFFFF 100%);
+	background-image: linear-gradient(-180deg, #555 0%, transparent 100%);
 	.card {
 		z-index: 300;
 		position: absolute;
 		top: 45px;
-		right: 30.5px;
+		right: 8.5px;
 		background: #fff;
 		box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
 		width: 220px;
@@ -62,13 +62,29 @@
 				}
 			}
 			.day_divider {
-				margin-top: -7px !important;
-				padding: 0.5rem 16px 0.5rem 1.5rem;
-				min-width: 195px;
+				margin: 0.2rem 0 0.4rem 0;
+				padding: 0;
+				min-width: 100%;
+				text-align: center;
+			    cursor: default;
+			    clear: both;
+			    position: relative;
+				hr {
+					position: absolute;
+				    border-top: 1px solid #e8e8e8;
+				    top: .75rem;
+				    right: 0;
+				    left: 0;
+				    margin: 0;
+				}
 				.day_divider_label {
-					font-weight: 400;
-					color: #ccc;
 					background: #fff;
+				    padding: .05rem .75rem;
+				    display: inline-block;
+				    margin: 0 auto;
+				    position: relative;
+				    border-radius: .25rem;
+				    color: #ccc;
 				}
 			}
 		}

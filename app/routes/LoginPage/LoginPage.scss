@@ -1,8 +1,4 @@
 .sign_in_page_container {
-	position: absolute;
-	top: 0px;
-	bottom: 0;
-	width: 100%;
 	.sign_in_page {
 		margin: 0 auto;
 		min-width: 905px!important;
@@ -10,19 +6,21 @@
 		padding-left: 50px;
 		padding-right: 50px;
 		font-family: "Lato";
-		padding-top: 2.5em;
+		padding-top: 8.5em;
 		.sign_in_content {
 			min-width: 315px;
 			.card {
-				padding-top: 30px;
 				padding: 1.5em;
+				padding-top: 10px;
 				width: 350px;
 			}
 			.header {
 				h4 {
-					font-size: 24px;
-					font-weight: 700;
+					font-family: "Open Sans";
+					font-size: 28px;
+					font-weight: 300;
 					margin-bottom: 20px;
+					text-align: left;
 				}
 			}
 			.sign_in {
@@ -38,11 +36,29 @@
 				}
 			}
 			.day_divider {
-				padding: 0.5rem 16px 0.5rem 1.5rem;
-				min-width: 0;
+				margin: 1.2rem 0;
+				padding: 0;
+				min-width: 308px;
+				text-align: center;
+			    cursor: default;
+			    clear: both;
+			    position: relative;
+				hr {
+					position: absolute;
+				    border-top: 1px solid #e8e8e8;
+				    top: .75rem;
+				    right: 0;
+				    left: 0;
+				    margin: 0;
+				}
 				.day_divider_label {
-					font-weight: 400;
-					color: #ccc;
+					background: #fff;
+				    padding: .05rem .75rem;
+				    display: inline-block;
+				    margin: 0 auto;
+				    position: relative;
+				    border-radius: .25rem;
+				    color: #ccc;
 				}
 			}
 			.sign_up_group {
@@ -90,7 +106,7 @@
 				margin-bottom: 45px;
 				cursor: pointer;
 				img {
-					height: 25px;
+					height: 45px;
 				}
 			}
 			.instruction {

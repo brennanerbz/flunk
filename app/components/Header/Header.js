@@ -106,7 +106,7 @@ export default class Header extends Component {
 							</div>
 							<div className="header_content">
 								{
-									root_path == 'createset' || root_path == 'import' || root_path == 'learn'
+									root_path == 'createset' || root_path == 'import' 
 									? null
 									: <SearchBox {...this.props}/>
 								}

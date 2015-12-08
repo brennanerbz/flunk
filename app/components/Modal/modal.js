@@ -219,7 +219,7 @@ export default class Modal extends Component {
 				 aria-hidden="true">
 				<div className={classnames({"sign_up": type == 'log_in'}, "modal-dialog")} role="document">
 					<div className={classnames("modal-content", {
-						"no_shadow": type == 'log_in'
+						"no_shadow": true
 					})}>
 					<div className={classnames("modal-header", 
 						{ "settings": type == 'settings' },
@@ -240,7 +240,7 @@ export default class Modal extends Component {
 						{
 							type == 'settings'
 							? <button type="button"
-									  className="button button-primary button-small float_right"
+									  className="button primary button-small float_right"
 									  data-dismiss="modal" >
 							  Done
 							  </button>
@@ -305,7 +305,7 @@ export default class Modal extends Component {
 						?
 						<div className="modal-footer">
 							<button type="button" 
-									className="button button-outline" 
+									className="button outline" 
 									data-dismiss="modal">
 									Cancel
 							</button>
@@ -313,7 +313,7 @@ export default class Modal extends Component {
 								type !== 'confirm'
 								? 
 								<button type="button" 
-										className="button button-primary" 
+										className="button primary" 
 										data-dismiss='modal'
 										onClick={type == 'textarea' ? ::this.changePurpose : null}>
 										{

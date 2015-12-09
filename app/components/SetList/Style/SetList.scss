@@ -32,9 +32,10 @@
 									border-bottom: 1px solid #e5e5e5;
 									padding: 12px 0;
 									cursor: pointer;
+									z-index: 1;
 									&:hover {
-										border-color: #e8e8e8;
-										background: #fafafa;
+										border-color: #E1F1FE;
+										background: #F4FAFF;
 									}
 									.set_list_item_wrapper {
 										display: table;
@@ -53,6 +54,7 @@
 												height: 32px;
 												margin: auto;
 												opacity: 0.45;
+												z-index: 1000;
 												img {
 													max-width: 100%;
 													width: 26px;

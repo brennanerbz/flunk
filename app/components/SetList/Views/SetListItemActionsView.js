@@ -6,9 +6,10 @@ export default class SetListItemActionsView extends Component {
 	}
 
 	render() {
+		const more = require('../../../assets/elipses.png');
 		return(
 			<div className="more_actions">
-				<img className="placeholder"/>
+				<img className="placeholder" src={more}/>
 				<div className="more_actions_button">
 					<button
 						className="button outline"
@@ -22,6 +23,7 @@ export default class SetListItemActionsView extends Component {
 						vertical_displacement={0}
 						horizontal_displacement={0}
 					>
+						<img className="" src={more}/>
 					</button>
 				</div>
 			</div>

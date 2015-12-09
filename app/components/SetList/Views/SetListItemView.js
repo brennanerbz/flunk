@@ -39,7 +39,7 @@ export default class SetListItemView extends Component {
 							}
 						</div>
 						<div className="sub_heading">
-							{moment(assignment.set.studied).fromNow()}
+							by {assignment.set.creator.username}
 						</div>
 					</div>
 					<div className="set_list_item_actions">
@@ -65,5 +65,9 @@ export default class SetListItemView extends Component {
 		);
 	}
 }
+
+/* Old sub-heading 
+{moment(assignment.set.studied).fromNow()}
+*/
 
 

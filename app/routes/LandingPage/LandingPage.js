@@ -41,7 +41,7 @@ export default class LandingPage extends Component {
 					Transform a YouTube video or Wikipedia article
 					</p>
 					<input placeholder="Link goes here"/>
-					<button className="button primary">Try it</button>
+					<button className="button outline">Try it</button>
 				</div>
 				<div className="product_slides">
 					<ul className="slide_list">
@@ -52,17 +52,17 @@ export default class LandingPage extends Component {
 									Drag, drop and transform.
 								</h1>
 								<p className="product_description">
-									Not just a link or your class notes, but <b>all your files,</b> images, videos, PDFs, and documents can be dropped into Ace and <b>transformed into study sets. </b> 
+									Not just a link or your class notes, but <b>all your files,</b> images, videos, PDFs, and documents can be dropped into Ace and <b>transformed into practicable questions. </b> 
 								</p>
 							</section>
 						</li>
 						<li className="slide" id="share">
 							<section>
 								<h1 className="header">
-									Collaborate with a few clicks.
+									Collaborate without pressure.
 								</h1>
 								<p className="product_description"> 
-									Send material with just a click to whoever you choose—<b>one person, your team, or your entire class.</b> You also have the choice to keep your material private. It's all up to you.
+									Now you can share material <b>without having to worry</b> if what you made is good enough. Flunkt uses the source material you put in to create the new documents. Of course, you can still make all the changes you want.
 								</p>
 								<img src={sample_share}/>
 							</section>
@@ -71,10 +71,10 @@ export default class LandingPage extends Component {
 							<section>
 								<img src={sample_learn}/>
 								<h1 className="header">
-									Learn your stuff, with help from us.
+									Learn your stuff, with enhancements.
 								</h1>
 								<p className="product_description">
-									 You map in or upload your material, and Ace adapts with <b>more examples, facts and step-by-step feedback</b> right where you need it.
+									 Bombing a test means embarrasment for you. Flunkt adapts to the material you put in with <b>more examples, facts and step-by-step feedback</b> so you never feel overwhelmed on test day.
 								</p>
 							</section>
 						</li>

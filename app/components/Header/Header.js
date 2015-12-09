@@ -111,6 +111,7 @@ export default class Header extends Component {
 								{
 									root_path == 'landing' && !logged_in 
 									&& <LandingLinks 
+										pushState={pushState}
 										popout={() => this.setState({popover: true})}
 									/>
 								}
@@ -227,12 +228,13 @@ class LandingLinks extends Component {
 	}
 
 	render() {
+		const { pushState } = this.props;
 		return(
 			<ul className="landing_links">
-				<li>
+				<li onClick={() => pushState(null, '/createset')}>
 					<a>Create study set</a>
 				</li>
-				<li>
+				<li onClick={() => pushState(null, '/import')}>
 					<a>Import</a>
 				</li>
 				<li className="sign_in_button"

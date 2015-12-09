@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
-require('../../SetView/Tabs/Tabs.scss');
+// require('../../SetView/Tabs/Tabs.scss');
 
 export default class ProfileTabs extends Component {
 	static propTypes = {
@@ -8,15 +8,29 @@ export default class ProfileTabs extends Component {
 
 	render() {
 		return(
-			<div className="tab_set">
-				<a className={classnames({'selected': this.props.tab.length == 0})}
-					onClick={() => this.props.changeTabs('')}>
-					Created
-				</a>
-				<a className={classnames({'selected': this.props.tab == 'studied'})}
-					onClick={() => this.props.changeTabs('studied')}>
-					Studied
-				</a>
+			<div style={{
+				marginTop: '-1px',
+				borderBottom: '1px solid #bdc4c9'
+			}} className="tabs_container">
+				<ul style={{
+					marginBottom: '-1px'
+
+				}} className="tabs_list">
+					<li className={classnames("tab_item", 
+											 {"active":this.props.tab.length == 0})}
+						onClick={() => { 
+							this.props.changeTabs('')
+						}}>
+						<a>Studied</a>
+					</li>
+					<li className={classnames("tab_item concepts_tab right_most", 
+								   			 {"active":this.props.tab == 'studied'})}
+						onClick={() => { 
+							this.props.changeTabs('studied')
+						}}>
+						<a>Created</a>
+					</li>
+				</ul>
 			</div>
 		);
 	}

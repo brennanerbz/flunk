@@ -50,6 +50,7 @@ export default class SetListItemView extends Component {
 								<button className="button outline">Share</button>
 							}
 							<SetListItemActionsView 
+								mouseIsOver={mouseIsOver}
 							 	handleToggleSelect=""
 							 	handleOpen=""
 							 	handleDelete=""

@@ -30,7 +30,7 @@ export default class LandingPage extends Component {
 				<div className="landing_page_container">
 					<div className="marketing_copy">
 						<h1>Join the Flunkt beta</h1>
-						<p className="product_description">A new, automated learning tool for students and teachers <br/>  to save time by transforming their documents into <br/> interactive questions.</p>
+						<p className="product_description">A new, automated learning tool that helps you<br/> transform your documents into <br/> interactive questions.</p>
 					</div>
 					<div className="sign_up">
 						<SignUpForm shouldAutoFocus={true} />

@@ -59,7 +59,13 @@ export default class SignUpForm extends Component {
 						<input placeholder="Email"/>
 						<input type="password" placeholder="Password"/>
 						<p className="">By clicking Sign Up, you agree to our <a>Terms of Service</a> and <a>Data Policy</a></p>
-						<button className="button primary"
+						<button style={{
+							fontSize: '16px',
+							fontWeight: '600',
+							background: '#1C93F4',
+							borderColor: '#007BE8',
+							height: '36px'
+						}}className="button primary"
 							    onClick={::this.submitSignUp}>
 							   	Sign up for Beta
 						</button>

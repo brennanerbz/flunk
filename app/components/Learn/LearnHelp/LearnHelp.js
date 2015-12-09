@@ -12,8 +12,23 @@ export default class LearnHelp extends Component {
 	static propTypes = {
 	}
 
-	componentWillReceiveProps() {
-		
+	state = {
+		user_answer: null,
+		current_trial: null
+	}
+
+	componentDidMount() {
+		this.setState({
+			user_answer: this.props.user_answer,
+			current_trial: this.props.current_trial
+		})
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if(this.props.current_slot !== nextProps.current_slot) {
+			this.setState({
+			})
+		}
 	}
 
 	render() {

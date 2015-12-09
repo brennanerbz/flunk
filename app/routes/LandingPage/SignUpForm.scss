@@ -42,13 +42,26 @@
 				-webkit-font-smoothing: antialiased;
 				display: block;
 				width: 100%;
-				margin-top: 10px;
-				&:nth-child(2), &:first-child {
-					width: 48%;
-					display: inline-block;
+				margin-top: 5px;
+				height: 36px;
+				&:not(:focus) {
+					border: 1px solid #D0D4D9!important;
+				}
+				box-shadow: none;
+				&:first-child {
+					width: calc(50% - 2px);
+					display: absolute!important;
+					float: left;
+					margin-right: 4px;
+				}
+				&:nth-child(2) {
+					margin-left: 0;
+					width: calc(50% - 3px);
+					float: left;
+					margin-bottom: 5px;
 				}
 				&:first-child {
-					margin-right: 10px;
+					margin-right: 5px;
 				}
 				&:last-child {
 					margin-bottom: 10px;

@@ -5,12 +5,39 @@ export default class QuickLogIn extends Component {
 	static propTypes = {
 	}
 
-	submitLogIn() {
+	state = {
+		focused: false,
+		isLoggingIn: false
+	}
 
+	submitLogIn() {
+		this.setState({isLoggingIn: true})
+		setTimeout(() => {
+			this.setState({isLoggingIn: false})
+		}, 500)
 	}
 
 	componentDidMount() {
+		this.setState({
+			focused: true,
+			isLoggingIn: false
+		})
 		this.refs.email.focus()
+	}
+
+	close() {
+		setTimeout(() => {
+			if(!this.state.focused && !this.state.isLoggingIn) {
+				this.props.closePopout()
+			}
+		}, 100)
+	}
+
+	componentWillUnmount() {
+		this.setState({
+			focused: false,
+			isLoggingIn: false
+		})
 	}
 
 	render() {
@@ -18,20 +45,27 @@ export default class QuickLogIn extends Component {
 			  f_icon = require('../../assets/facebook_logo.png'),
 			  arrow_up = require('../../assets/arrow_up.png');
 		return(
-			<div className="quick_login_container">
-				<div className="card">
-					<img className="icon arrow up" src={arrow_up} />
-					<form className="log_in_form"
-						  onSubmit={::this.submitLogIn}
-						  onBlur={() => this.props.closePopout()}>
-						<input placeholder="Email" ref="email" autoFocus={true}/>
-						<input type="password" placeholder="Password"/>
+			<div className="quick_login_container"
+				>
+				<div className="card"  onBlur={::this.close}>
+					<div className="log_in_form">
+						<input 
+							placeholder="Email" 
+							ref="email" 
+							autoFocus={true} 
+							onFocus={() => this.setState({focused: true})}
+							onBlur={() => this.setState({focused: false})} />
+						<input 
+							type="password" 
+							placeholder="Password"  
+							onFocus={() => this.setState({focused: true})} 
+							onBlur={() => this.setState({focused: false})}/>
 						<button className="button primary"
 							    onClick={::this.submitLogIn}>
 							   	Log In
 						</button>
 						<a className="forgot">Forgot password?</a>
-					</form>
+					</div>
 				</div>
 			</div>
 		);

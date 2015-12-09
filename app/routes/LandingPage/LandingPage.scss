@@ -3,6 +3,9 @@
 	top: 72.5px;
 	bottom: 0;
 	width: 100%;
+	* {
+		-webkit-font-smoothing: antialiased;
+	}
 	.landing_page_container {
 		min-width: 905px!important;
 		width: 100%;

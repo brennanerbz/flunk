@@ -74,7 +74,7 @@ export default class LandingPage extends Component {
 									Learn your stuff, with enhancements.
 								</h1>
 								<p className="product_description">
-									 Bombing a test means embarrasment for you. Flunkt adapts to the material you put in with <b>more examples, facts and step-by-step feedback</b> so you never feel overwhelmed on test day.
+									 Bombing a test or losing an argument means embarrasment. Flunkt adapts to the material you put in with <b>more examples, facts and step-by-step feedback</b> so you never feel overwhelmed when the challenge arises.
 								</p>
 							</section>
 						</li>

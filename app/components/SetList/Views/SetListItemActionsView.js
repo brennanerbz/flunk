@@ -10,8 +10,8 @@ export default class SetListItemActionsView extends Component {
 			<div className="more_actions">
 				<img className="placeholder"/>
 				<div className="more_actions_button">
-					<div
-					// bubble
+					<button
+						className="button outline"
 						anchor_bottom={false}
 						arrow_position="top"
 						autoFocus={false}
@@ -22,7 +22,7 @@ export default class SetListItemActionsView extends Component {
 						vertical_displacement={0}
 						horizontal_displacement={0}
 					>
-					</div>
+					</button>
 				</div>
 			</div>
 		);

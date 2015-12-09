@@ -9,11 +9,15 @@ export default class SetListItemView extends Component {
 	}
 
 	render() {
-		const { assignment, section } = this.props,
+		const { assignment, 
+				section,
+				mouseIsOver } = this.props,
 	 		  set_icon_complete = require('../../../assets/set_icon_lines.png'),
 			  set_icon_blank = require('../../../assets/set_icon_90.png')
 		return(
 			<li className="set_item"
+				onMouseOver={this.props.mouseOver}
+				onMouseLeave={this.props.mouseLeft}
 				onClick={this.props.handleClick}>
 				<div className="set_list_item_wrapper">
 					<div className="set_list_item_icon">
@@ -40,7 +44,11 @@ export default class SetListItemView extends Component {
 					</div>
 					<div className="set_list_item_actions">
 						<div className="inner">
-							<button className="button outline">Share</button>
+							{
+								mouseIsOver
+								&&
+								<button className="button outline">Share</button>
+							}
 							<SetListItemActionsView 
 							 	handleToggleSelect=""
 							 	handleOpen=""

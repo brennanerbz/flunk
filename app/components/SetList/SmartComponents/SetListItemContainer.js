@@ -7,7 +7,7 @@ export default class SetListItemContainer extends Component {
 	}
 
 	state = {
-
+		hovering: false
 	}
 
 	// handle methods
@@ -18,6 +18,13 @@ export default class SetListItemContainer extends Component {
 			<SetListItemView 
 				section={this.props.section}
 				assignment={this.props.assignment}
+				mouseOver={() => {
+					this.setState({hovering: true})
+				}}
+				mouseLeft={() => {
+					this.setState({hovering: false})
+				}}
+				mouseIsOver={this.state.hovering}
 				handleClick={() => {
 					if(this.props.section == 'drafts') {
 						root_route = 'createset'

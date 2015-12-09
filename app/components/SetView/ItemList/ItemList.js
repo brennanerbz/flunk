@@ -20,15 +20,6 @@ export default class ItemList extends Component {
 		return(
 			<div className="item_list_container">
 				<ItemListActions {...this.props}/>
-				{
-					::this.renderEditLink(assignment, set, user) 
-					?
-					<a  className="item_actions"
-					    onClick={() => pushState(null, `/createset/${set.id}`)}>
-						Edit
-					</a>
-					: null
-				}
 				
 				<ul className="item_list">
 					{sorted_asssociations.map((asc, i) => {
@@ -42,3 +33,15 @@ export default class ItemList extends Component {
 		);
 	}
 } 
+
+/*
+{
+	::this.renderEditLink(assignment, set, user) 
+	?
+	<a  className="item_actions"
+	    onClick={() => pushState(null, `/createset/${set.id}`)}>
+		Edit
+	</a>
+	: null
+}
+*/

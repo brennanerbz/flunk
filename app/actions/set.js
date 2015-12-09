@@ -76,22 +76,77 @@ export const REQUEST_ASSIGNMENT = 'REQUEST_ASSIGNMENT';
 export const RECEIVE_ASSIGNMENT_SUCCESS = 'RECEIVE_ASSIGNMENT_SUCCESS';
 export const RECEIVE_ASSIGNMENT_FAILURE = 'RECEIVE_ASSIGNMENT_FAILURE';
 export const HAS_NOT_STUDIED = 'HAS_NOT_STUDIED';
-export function fetchAssignment(id) {
-	return async(dispatch, getState) => {
+export function fetchAssignment(set_id) {
+	return (dispatch, getState) => {
 		dispatch({type: REQUEST_ASSIGNMENT})
-		try {
-			let assignment;
-			await axios.get(`${api_url}/assignments/${id}`).then((res) => assignment = res.data)
-			console.log(assignment)
-			dispatch({type: RECEIVE_ASSIGNMENT_SUCCESS, assignment})
-		} catch(err) {
-			dispatch({
-				type: RECEIVE_ASSIGNMENT_FAILURE,
-				error: Error(err)
+		let assignment = getState().sets.assignments
+			.filter(assignment => Number(assignment.set_id) === Number(set_id))
+			[0],
+			assignment_id;
+		if(assignment !== undefined) {
+			assignment_id = assignment.id
+			dispatch(fetchCases(assignment_id))
+			request
+			.get(`${api_url}/assignments/${assignment_id}`)
+			.end((err, res) => {
+				if(res.ok) {
+					assignment = res.body
+					dispatch({type: RECEIVE_ASSIGNMENT_SUCCESS, assignment})
+				}
+				else {
+					dispatch({
+						type: RECEIVE_ASSIGNMENT_FAILURE,
+						error: Error(err)
+					})
+				}
 			})
+		} else {
+			dispatch(createAssignment(set_id))
 		}
 	}
 }
+
+var _assignmenttemplate = {
+	user_id: null,
+	set_id: null,
+	new_sequence_difficulty: 'intermediate',
+	starred: false,
+	deadline: null,
+	wallpaper: null,
+	permission: 'nonadmin',
+	privacy: 'public'
+}
+export const CREATE_ASSIGNMENT = 'CREATE_ASSIGNMENT';
+export const CREATE_ASSIGNMENT_SUCCESS = 'CREATE_ASSIGNMENT_SUCCESS';
+export const CREATE_ASSIGNMENT_FAILURE = 'CREATE_ASSIGNMENT_FAILURE';
+export function createAssignment(set_id, permission) { 
+	return (dispatch, getState) => {
+		dispatch({type: CREATE_ASSIGNMENT})
+		let user_id = getState().user.user.id,
+			assignment = Object.assign({..._assignmenttemplate}, {
+				user_id: user_id,
+				set_id: set_id,
+				permission: permission || 'nonadmin'
+			}) 
+		request
+		.post(`${api_url}/assignments/`)
+		.send(assignment)
+		.end((err, res) => {
+			if(res.ok) {
+				assignment = res.body
+				dispatch({type: CREATE_ASSIGNMENT_SUCCESS, assignment})
+				dispatch(fetchCases(assignment.id))
+			}
+			else {
+				dispatch({
+					type: CREATE_ASSIGNMENT_FAILURE,
+					error: Error(err)
+				})
+			}
+		})
+	}
+}
+
 
 
 /*
@@ -104,8 +159,6 @@ export function updateAssignent(id) {
 		try {
 			await axios.put(`${api_url}/assignments${id}`).then((res) => {
 				let new_assignment = res.data;
-				console.log("new_assignment")
-				console.log(new_assignment)
 				dispatch({type: UPDATE_ASSIGNMENT_SUCCESS, new_assignment })
 			})
 		} catch(err) {
@@ -117,6 +170,36 @@ export function updateAssignent(id) {
 	}
 }
 
+
+export const FETCH_CASES_SUCCESS = 'FETCH_CASES_SUCCESS';
+export const FETCH_CASES_FAILURE = 'FETCH_CASES_FAILURE';
+export function fetchCases(assignment_id) {
+	return (dispatch, getState) => {
+		let cases;
+		request
+		.get(`${api_url}/assignments/${assignment_id}/cases`)
+		.end((err, res) => {
+			console.log(res.body)
+			dispatch({type: FETCH_CASES_SUCCESS })
+		})
+	}
+}	
+
+
+/* TODO */
+export const UPDATE_CASES_SUCCESS = 'UPDATE_CASES_SUCCESS';
+export const UPDATE_CASES_FAILURE = 'UPDATE_CASES_FAILURE';
+export function updateCase(assignment_id) {
+	return (dispatch, getState) => {
+		let cases;
+		request
+		.get(`${api_url}/assignments/${assignment_id}/cases`)
+		.end((err, res) => {
+			console.log(res.body)
+			dispatch({type: FETCH_CASES_SUCCESS })
+		})
+	}
+}	
 
  
 export const CLEAR_SETVIEW = 'CLEAR_SETVIEW';

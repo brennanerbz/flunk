@@ -51,9 +51,10 @@ export default class Set extends Component {
 	}
 
 	componentWillMount() {
-		const { params, fetchSet, fetchAssociations } = this.props;
+		const { params, fetchSet, fetchAssociations, fetchAssignment } = this.props;
 		fetchSet(params.id)
 		fetchAssociations(params.id)
+		fetchAssignment(params.id)
 	}
 
 	componentWillReceiveProps(nextProps) {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import request from 'superagent';
 import moment from 'moment'; 
 import _ from 'lodash';
 
@@ -196,36 +197,38 @@ export const UPDATE_SET = 'UPDATE_SET';
 export const UPDATE_SET_SUCCESS = 'UPDATE_SET_SUCCESS';
 export const UPDATE_SET_FAILURE = 'UPDATE_SET_FAILURE';
 export function updateSet(_set, ...args) {
-	return async(dispatch, getState) => {
+	return (dispatch, getState) => {
 		dispatch({type: UPDATE_SET})
-		try {
-			let set = Object.assign({}, set_update_values);
-			for(var key in set) {
-				if(_set[key]) {
-					set[key] = _set[key]
-				}
+		let set = Object.assign({}, set_update_values);
+		for(var key in set) {
+			if(_set[key]) {
+				set[key] = _set[key]
 			}
-			if(args !== null && args.length > 0) {
-				for(var i = 0; i < args.length; i++) {
-					let arg = args[i],
-						name = arg.name,
-						prop = arg.prop;
-					if(set.hasOwnProperty(name)) {
-						set[name] = prop
-					}
-				}
-			}
-			await axios.put(`${api_url}/sets/${_set.id}`, 
-				set 
-			)
-			.then(res => set = res.data)
-			dispatch({type: UPDATE_SET_SUCCESS, set})
-		} catch(err) {
-			dispatch({
-				type: UPDATE_SET_FAILURE,
-				error: Error(err)
-			})
 		}
+		if(args !== null && args.length > 0) {
+			for(var i = 0; i < args.length; i++) {
+				let arg = args[i],
+					name = arg.name,
+					prop = arg.prop;
+				if(set.hasOwnProperty(name)) {
+					set[name] = prop
+				}
+			}
+		}
+		request
+		.put(`${api_url}/sets/${_set.id}`)
+		.send(set)
+		.end((err, res) => {
+			if(res.ok) {
+				set = res.body
+				dispatch({type: UPDATE_SET_SUCCESS, set})	
+			} else {
+				dispatch({
+					type: UPDATE_SET_FAILURE,
+					error: Error(err)
+				})
+			}
+		})
 	}
 }
 

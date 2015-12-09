@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 require('./ItemList.scss');
 import Item from './Item';
+import ItemListActions from './ItemListActions';
 
 export default class ItemList extends Component {
 	static propTypes = {
@@ -18,6 +19,7 @@ export default class ItemList extends Component {
 		})
 		return(
 			<div className="item_list_container">
+				<ItemListActions {...this.props}/>
 				{
 					::this.renderEditLink(assignment, set, user) 
 					?
@@ -39,4 +41,4 @@ export default class ItemList extends Component {
 			</div>
 		);
 	}
-}
+} 

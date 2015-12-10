@@ -6,18 +6,50 @@ import keyMirror from 'key-mirror';
 const server = require('./api'),
 	  api_url = server.api_url;
 
-// TODO: add cookie support
+
+function checkCookies() {
+	if(document.cookie.length > 0) {
+		let user = {}
+		const cookies = document.cookie.split(";")
+		user['id'] = Number(cookies[0].substr(6))
+		user['token'] = cookies[1].substr(7)
+		return user;
+	}
+}
+
+function getToken(email, password, id) {
+	request
+	.get(`${api_url}/token`)
+	.auth(email, password)
+	.end((err, res) => {
+		if(res.ok) {
+			document.cookie = '__fid' + '=' + id + ";" 
+			document.cookie = "__ftkn" + "=" + res.body.token + ";"
+		}
+	})
+}
+
 export const REQUEST_USER = 'REQUEST_USER'
 export const RECEIVE_USER_SUCCESS = 'RECEIVE_USER_SUCCESS'
 export const RECEIVE_USER_FAILURE = 'RECEIVE_USER_FAILURE'
-export function fetchUser(user_id, username) {
+export function fetchUser(pushState, route) {
 	return (dispatch, getState) => {
 		dispatch({type: REQUEST_USER})
-		let user;
-		axios.get(`${api_url}/users/${user_id}`)
+		let user = checkCookies()
+		if(user == undefined) {
+			if(route == '/') {
+				pushState(null, '/landing')
+			}
+			dispatch({type: RECEIVE_USER_FAILURE})
+			return false;
+		}
+		axios.get(`${api_url}/users/${user.id}`)
 		.then(res => { 
-			user = res.data
+			user = {}
+			user = Object.assign({...res.data})
+			delete user['password']
 			dispatch({type: RECEIVE_USER_SUCCESS, user}) 
+			return true
 		})
 		.catch(() => {
 			dispatch({
@@ -40,10 +72,10 @@ export function createUser(user_info) {
 		.send(user_info)
 		.end((err, res) => {
 			if(res.ok) {
-				localStorage.setItem('username', user_info.username)
-				dispatch(getToken(user_info.username, user_info.password))
-				new_user = res.body
+				new_user = {}
+				new_user = Object.assign({...res.body}, {password: null})
 				dispatch({type: CREATE_USER_SUCCESS, new_user})
+				getToken(user_info.email, user_info.password, new_user.id)
 			} else {
 				dispatch({
 					type: CREATE_USER_FAILURE,
@@ -54,18 +86,6 @@ export function createUser(user_info) {
 	}
 }
 
-function getToken(username, password) {
-	return(dispatch, getState) => {
-		console.log(localStorage)
-		// request
-		// .get(`${api_url}/token`)
-		// .auth(username, password)
-		// .end((err, res) => {
-		// 	if(res.ok) {
-		// 		console.log(res.body)
-		// 	}
-		// })
-	}
-}
+
 
 

@@ -20,7 +20,14 @@ export default function user(state = _userinitialstate, action) {
 			return {
 				...state,
 				isFetchingUser: false,
-				user: action.user
+				user: action.user,
+				logged_in: true
+			}
+		case RECEIVE_USER_FAILURE:
+			return {
+				...state,
+				isFetchingUser: false,
+				logged_in: false
 			}
 		default:
 			return state;

@@ -25,7 +25,8 @@ import * as user from '../actions/user';
 	dispatch => ({
 		...bindActionCreators({
 			...actions,
-			...user
+			...user,
+			pushState
 		}, dispatch)
 	})
 )
@@ -36,12 +37,12 @@ export default class FlunkApp extends Component {
 		error: PropTypes.string
 	}
 
+
 	componentWillMount() {
-		const { fetchAssignments, fetchUser } = this.props; 
-		// on mounting, will load user object and assignments
-		// TODO: use cookies/localstorage to query for user
-		fetchUser(1)
-		fetchAssignments(1)
+		const { fetchAssignments, fetchUser, pushState, router } = this.props; 
+		if(fetchUser(pushState, router.location.pathname)) {
+			fetchAssignments()
+		}
 	}
 
 	renderSideNav() {

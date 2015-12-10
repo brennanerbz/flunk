@@ -30,10 +30,11 @@ import ErrorPage from './ErrorPage/ErrorPage';
 
 import fillStore from '../utils/fillStore'; 
 
+
 const routes = (
     <Route component={FlunkApp}>
-        <Route path="/" component={Home}/>
-        <Route path="landing" component={LandingPage}/>
+        <Route path="/" sharedRoot/>
+
         <Route path="login" component={LoginPage}/>
         <Route path="signup" component={SignUp}/>
 
@@ -58,7 +59,7 @@ const routes = (
         <Route path="search/sets/:query" component={Search}/>
         <Route path="search/users/:query" component={Search}/>
 
-        <Route path="settings" component={Settings}/>
+        <Route path="settings" component={Settings} requireAuth/>
 
         <Route path="*" component={ErrorPage}/>
     </Route>
@@ -76,18 +77,20 @@ function walk(routes, cb) {
 
 /* Parent: ../Root.js */
 export default (store, client) => {
-  return walk(Route.createRouteFromReactElement(routes), route => {
-    route.onEnter = (nextState, transition) => {
-      // const loggedIn = !!store.getState().auth.token;
-      // if (route.requireAuth && !loggedIn) {
-      //   transition.to(...redirectBackAfter('/login', nextState));
-      if (client) {
-        fillStore(store, nextState, [route.component]);
-      }
-    }
-  });
+    return walk(Route.createRouteFromReactElement(routes), route => {
+        route.onEnter = (nextState, replaceState) => {
+            const loggedIn = store.getState().user.logged_in;
+            if(route.sharedRoot && !loggedIn) {
+                route.component = LandingPage
+            } else if (route.sharedRoot && loggedIn) {
+                route.component = Home
+            }
+            if (route.requireAuth && !loggedIn) {
+                replaceState(nextState, '/login');
+            }
+            if (client) {
+                fillStore(store, nextState, [route.component]);
+            }
+        }
+    });
 };
-// <Route path="/">
-//   <Route component={LandingPage}/>
-//   <Route component={Home}/>
-// </Route>

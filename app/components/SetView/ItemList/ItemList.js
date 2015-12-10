@@ -32,16 +32,15 @@ export default class ItemList extends Component {
 		}),
 		starred_instances;
 		if(this.state.filterStarred && this.props.total_starred > 0) {
-			starred_instances = cases.filter(_case => _case.starred)
+			starred_instances = [];
+			for(var i = 0; i < cases.length; i++) {
+				if(cases[i].starred) {
+					starred_instances.push(cases[i].association_id)
+				}
+			}	
 			sorted_asssociations = sorted_asssociations.filter(asc => {
-				asc.id == starred_instances.filter(instance => instance.association_id == asc.id)[0].association_id
+				return asc.id == starred_instances[starred_instances.indexOf(asc.id)]
 			})
-			console.log(sorted_asssociations)
-			// sorted_asssociations = sorted_asssociations
-			// .filter(asc => { 
-			// 	asc.id == starred_instances
-			// 			 .filter(instance => instance.association_id == asc.id)[0].asssociation_id
-			// })
 		}
 		let _case;
 		return(

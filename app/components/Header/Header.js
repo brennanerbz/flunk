@@ -92,8 +92,8 @@ export default class Header extends Component {
 				<div className={classnames("header_positioner", 
 					{'no_border': root_path == 'createset' 
 					|| root_path == 'import'
-					|| root_path == 'landing' && !logged_in  })}>
-					<div className={classnames("header_container", {"landing": root_path == 'landing' && !logged_in})}>				
+					|| root_path == '/' && !logged_in  })}>
+					<div className={classnames("header_container", {"landing": root_path == '/' && !logged_in})}>				
 						<div className='header'>
 							{ 
 								isFetching || fetchingLearn
@@ -109,7 +109,7 @@ export default class Header extends Component {
 							</div>
 							<div className="header_content">
 								{
-									root_path == 'landing' && !logged_in 
+									root_path == '/' && !logged_in 
 									&& <LandingLinks 
 										pushState={pushState}
 										popout={() => this.setState({popover: true})}
@@ -119,7 +119,7 @@ export default class Header extends Component {
 									root_path == 'createset' 
 									|| root_path == 'import' 
 									|| root_path == 'learn' 
-									|| (root_path == 'landing' && !logged_in)
+									|| (root_path == '/' && !logged_in)
 									? null
 									: <SearchBox {...this.props}/>
 								}
@@ -127,7 +127,7 @@ export default class Header extends Component {
 									root_path == 'createset' 
 									|| root_path == 'import' 
 									|| root_path == 'learn'
-									|| (root_path == 'landing' && !logged_in )
+									|| (root_path == '/' && !logged_in )
 									? null
 									: <button className="create_set_btn_group"
 											  onClick={() => { 
@@ -143,7 +143,7 @@ export default class Header extends Component {
 									root_path == 'createset' 
 									|| root_path == 'import' 
 									|| root_path == 'learn'
-									|| (root_path == 'landing' && !logged_in )
+									|| (root_path == '/' && !logged_in )
 									? null
 									: <button className="create_set_btn_group import"
 											  onClick={() => { 
@@ -184,7 +184,7 @@ export default class Header extends Component {
 							</div>
 							<div className="header_user">
 								{
-									root_path !== 'createset' || (root_path == 'landing' && !logged_in )
+									root_path !== 'createset' || (root_path == '/' && !logged_in )
 									&&
 									<div className="button-group" style={{display: 'inline-block'}}>
 										{

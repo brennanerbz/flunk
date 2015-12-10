@@ -44,14 +44,21 @@ export default class SignUpForm extends Component {
 	}
 
 	handleSubmit() {
-		const { createUser } = this.props;
+		const { signUp, pushState } = this.props;
 		let user_info = {}
 		for(var prop in this.state) {
 			if(prop !== 'modal_version') {
 				user_info[prop] = this.state[prop]
 			}
 		}
-		createUser(user_info)
+		signUp(user_info, pushState)
+		this.setState({
+			first_name: null,
+			last_name: null,
+			username: null,
+			email: null,
+			password: null
+		})
 	}
 
 	render() {

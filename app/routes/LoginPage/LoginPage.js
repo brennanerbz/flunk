@@ -7,6 +7,7 @@ import classnames from 'classnames';
 import { Link } from 'react-router';
 import { pushState } from 'redux-router';
 
+import * as useractions from '../../actions/user';
 
 @connect(state => ({
 	user: state.user.user,
@@ -15,12 +16,27 @@ import { pushState } from 'redux-router';
 	}), 
 	dispatch => ({
 		...bindActionCreators({
+			...useractions,
 			pushState
 		}, dispatch)
 	})
 )
 export default class LogInPage extends Component {
 	static propTypes = {
+	}
+
+	state = {
+		email: null,
+		password: null
+	}
+
+	handleLogIn() {
+		const { logIn } = this.props;
+		logIn(this.state.email, this.state.password)
+		this.setState({
+			email: null,
+			password: null
+		})
 	}
 
 	render() {
@@ -41,16 +57,45 @@ export default class LogInPage extends Component {
 							<div className="header">
 								<h4>Log In</h4>
 							</div>
-						
-							
-							<form className="sign_in">
+							<form className="sign_in"
+								  onSubmit={(e) => {
+								  	e.preventDefault()
+								  	::this.handleLogIn()
+								  }}>
 								<input className=""
+									   placeholder="Email"
 									   autoFocus={true}
-									   placeholder="Email"/>
+									   value={this.state.email}
+									   onChange={(e) => {
+									   	this.setState({
+									   		email: e.target.value
+									   	});
+									   }}
+									   onInput={(e) => {
+									   	if(e.which == 13) {
+									   		::this.handleLogIn()
+									   	}
+									   }}
+									   />
 								<input className=""
 									   type="password"
-									   placeholder="Password"/>
-								<button className="button primary">
+									   placeholder="Password"
+									   value={this.state.password}
+									   onChange={(e) => {
+									   	this.setState({
+									   		password: e.target.value
+									   	});
+									   }}
+									   onInput={(e) => {
+									   	if(e.which == 13) {
+									   		::this.handleLogIn()
+									   	}
+									   }}
+									   />
+								<button className="button primary"
+									    onClick={() => {
+									    	::this.handleLogIn()
+									    }}>
 									Log In 
 								</button>
 							</form>
@@ -65,7 +110,7 @@ export default class LogInPage extends Component {
 					</div>
 				</div>
 				<div className="close"
-					 onClick={() => pushState(null, '/landing')}>
+					 onClick={() => pushState(null, '/')}>
 					<div className="close_icon material-icons">
 						clear
 					</div>

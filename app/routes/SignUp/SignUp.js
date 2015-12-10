@@ -47,7 +47,7 @@ export default class SignUp extends Component {
 					</div>
 				</div>
 				<div className="close"
-					 onClick={() => pushState(null, '/landing')}>
+					 onClick={() => pushState(null, '/')}>
 					<div className="close_icon material-icons">
 						clear
 					</div>

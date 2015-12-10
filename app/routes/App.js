@@ -39,8 +39,8 @@ export default class FlunkApp extends Component {
 
 
 	componentWillMount() {
-		const { fetchAssignments, fetchUser, pushState, router } = this.props; 
-		if(fetchUser(pushState, router.location.pathname)) {
+		const { fetchAssignments, checkLoggedIn, pushState, router } = this.props; 
+		if(checkLoggedIn(pushState, router.location.pathname)) {
 			fetchAssignments()
 		}
 	}
@@ -54,7 +54,8 @@ export default class FlunkApp extends Component {
 		if     (root_path == 'createset'
 			 || root_path == 'learn'
 			 || this.props.showing_error
-			 || root_path == 'error') { return; }
+			 || root_path == 'error'
+			 || !this.props.logged_in) { return; }
 		else if(root_path == 'set'
 			 || root_path == 'settings'
 			 || root_path == 'search'
@@ -80,7 +81,7 @@ export default class FlunkApp extends Component {
 			<div>
 				<Header root_path={root_path}/>
 				<div className={classnames("outer_shell", {
-					"void": root_path == 'landing' && !this.props.logged_in
+					"void": root_path == '/' && !this.props.logged_in
 				})}>
 					{::this.renderSideNav()}
 					{childrenWithProps}

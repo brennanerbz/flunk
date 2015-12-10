@@ -24,9 +24,10 @@ export default class ItemContent extends Component {
 	}
 
 	render() {
-		const { item } = this.props;
+		const { item, _case, assignment } = this.props;
 		return(
-			<div className="text">
+			<div className={classnames("text", 
+				{'not_studied': _case == null || assignment.studied == null })}>
 				{::this.renderTarget(item.target)}
 				{::this.renderCue(item.cue)}
 			</div>

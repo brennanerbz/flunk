@@ -7,25 +7,71 @@ export default class ItemList extends Component {
 	static propTypes = {
 	}
 
+	state = {
+		filterStarred: false
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if(nextProps.total_starred === 0) {
+			this.setState({
+				filterStarred: false
+			})
+		}
+	}
+
+
 	renderEditLink(assignment, set, user) {
 		if(assignment.permission == 'nonadmin') return true
 		if(assignment.permission == 'admin' && set.creator_id == user.id) return true
 	}
 
 	render() {
-		const { item_count, items, associations, assignment, pushState, set, user } = this.props;
+		const { item_count, items, associations, cases, assignment, pushState, set, user, isFetchingSupplemental } = this.props;
 		let sorted_asssociations = associations.sort((a, b) => {
 			return a.order - b.order
-		})
+		}),
+		starred_instances;
+		if(this.state.filterStarred && this.props.total_starred > 0) {
+			starred_instances = cases.filter(_case => _case.starred)
+			sorted_asssociations = sorted_asssociations.filter(asc => {
+				asc.id == starred_instances.filter(instance => instance.association_id == asc.id)[0].association_id
+			})
+			console.log(sorted_asssociations)
+			// sorted_asssociations = sorted_asssociations
+			// .filter(asc => { 
+			// 	asc.id == starred_instances
+			// 			 .filter(instance => instance.association_id == asc.id)[0].asssociation_id
+			// })
+		}
+		let _case;
 		return(
 			<div className="item_list_container">
-				<ItemListActions {...this.props}/>
-				
+				{
+					this.props.total_starred > 0
+					&&
+					<ItemListActions 
+						{...this.props}
+						selectAll={() => {
+							this.setState({filterStarred: false})
+						}}
+						selectStarred={() => {
+							this.setState({filterStarred: true})
+						}}
+					/>
+				}
 				<ul className="item_list">
 					{sorted_asssociations.map((asc, i) => {
+						_case = this.props.cases !== undefined
+						? this.props.cases.filter(c => c.association_id == asc.id)[0]
+						: null
 						return <Item key={i} 
+									 assignment={this.props.assignment}
+									 association={asc}
 									 item={asc.item} 
+									 _case={_case}
+									 updateCase={this.props.updateCase}
 									 pushState={pushState}
+									 isFetchingSupplemental={isFetchingSupplemental}
 						/>
 					})}
 				</ul>

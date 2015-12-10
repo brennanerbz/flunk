@@ -177,26 +177,42 @@ export function fetchCases(assignment_id) {
 	return (dispatch, getState) => {
 		let cases;
 		request
-		.get(`${api_url}/assignments/${assignment_id}/cases`)
+		.get(`${api_url}/assignments/${assignment_id}/instances`)
 		.end((err, res) => {
-			console.log(res.body)
-			dispatch({type: FETCH_CASES_SUCCESS })
+			cases = res.body.instances
+			dispatch({type: FETCH_CASES_SUCCESS, cases })
 		})
 	}
 }	
 
 
-/* TODO */
-export const UPDATE_CASES_SUCCESS = 'UPDATE_CASES_SUCCESS';
-export const UPDATE_CASES_FAILURE = 'UPDATE_CASES_FAILURE';
-export function updateCase(assignment_id) {
+var default_case = {
+	starred: false,
+	hidden: false,
+	message: null
+}
+export const UPDATE_CASE_SUCCESS = 'UPDATE_CASE_SUCCESS';
+export const UPDATE_CASE_FAILURE = 'UPDATE_CASE_FAILURE';
+export function updateCase(_case, ...args) {
 	return (dispatch, getState) => {
-		let cases;
+		let updated_case = Object.assign({}, default_case)
+		if(args.length > 0) {
+			for(var i = 0; i < args.length; i++) {
+				if(args[i].hasOwnProperty('starred')) {
+					updated_case.starred = args[i].starred
+				}
+			}
+		}
 		request
-		.get(`${api_url}/assignments/${assignment_id}/cases`)
+		.put(`${api_url}/instances/${_case.id}`)
+		.send(updated_case)
 		.end((err, res) => {
-			console.log(res.body)
-			dispatch({type: FETCH_CASES_SUCCESS })
+			if(res.ok) {
+				updated_case = res.body
+				dispatch({type: UPDATE_CASE_SUCCESS, updated_case })
+			} else {
+				dispatch({type: UPDATE_CASE_FAILURE})
+			}
 		})
 	}
 }	

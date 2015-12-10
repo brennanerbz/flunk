@@ -24,6 +24,7 @@ import Tabs from '../../components/SetView/Tabs/Tabs';
 	loc: state.router.location,
 	user: state.user.user,
 	isFetching: state.setView.isFetchingSet,
+	isFetchingSupplemental: state.setView.isFetchingSupplemental,
 	set: state.setView.set,
 	assignment: state.setView.assignment,
 	creator_id: state.setView.set.creator_id,
@@ -35,7 +36,10 @@ import Tabs from '../../components/SetView/Tabs/Tabs';
 	subjects: state.setView.subjects,
 	doc: state.setView.doc,
 	associations: state.setView.associations,
-	items: state.setView.items
+	items: state.setView.items,
+	cases: state.setView.cases,
+	total_starred: state.setView.total_starred,
+	isFetchingSupplemental: state.setView.isFetchingSupplemental
 	}),
 	dispatch => ({
 		...bindActionCreators({
@@ -62,6 +66,7 @@ export default class Set extends Component {
 			this.props.clearSetView()
 			this.props.fetchSet(nextProps.params.id)
 			this.props.fetchAssociations(nextProps.params.id)
+			this.props.fetchAssignment(nextProps.params.id)
 		}
 	}
 
@@ -72,11 +77,15 @@ export default class Set extends Component {
 	}
 
 	render() {
-		const { isFetching, associations } = this.props;
+		const { isFetching, isFetchingSupplemental, associations } = this.props;
 		var setChildrenWithProps = React.Children.map(this.props.children, (child) => {
 			return React.cloneElement(child, {
 				assignment: this.props.assignment,
 				associations: this.props.associations,
+				cases: this.props.cases,
+				total_starred: this.props.total_starred,
+				isFetchingSupplemental: this.props.isFetchingSupplemental,
+				updateCase: this.props.updateCase,
 				creator_id: this.props.creator_id,
 				creator_username: this.props.creator_username, 
 				id: this.props.id,

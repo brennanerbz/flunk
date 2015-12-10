@@ -27,6 +27,11 @@ import {
 	UPDATE_ASSIGNMENT_SUCCESS,
 	UPDATE_ASSIGNMENT_FAILURE,
 
+	FETCH_CASES_SUCCESS,
+	FETCH_CASES_FAILURE,
+	UPDATE_CASE_SUCCESS,
+	UPDATE_CASE_FAILURE,
+
 	CLEAR_SETVIEW
 } from '../actions/set';
 
@@ -43,6 +48,9 @@ const initial_setstate = {
 	item_count: null,
 	associations: [],
 	items: [],
+	isFetchingSupplemental: false,
+	cases: [], // organized by association id as key
+	total_starred: 0,
 	subjects: [],
 	doc: null,
 	has_studied: null,
@@ -59,6 +67,7 @@ export default function setView(state = initial_setstate, action) {
 		case REQUEST_SET:
 			return {
 				...state,
+				isFetchingSupplemental: true,
 				isFetchingSet: true
 			}
 
@@ -86,8 +95,8 @@ export default function setView(state = initial_setstate, action) {
 				...state,
 				associations: action.associations,
 				items: items,
-				item_count: items.length,
-				isFetchingSet: false
+				item_count: items.length
+				// isFetchingSet: false
 			}
 		case RECEIVE_ASSIGNMENT_SUCCESS:
 			let assignment = action.assignment,
@@ -114,6 +123,27 @@ export default function setView(state = initial_setstate, action) {
 			return {
 				...state,
 				isFetchingSet: false
+			}
+		case FETCH_CASES_SUCCESS:
+			let total_starred = 0;
+			for(var c = 0; c < action.cases.length; c++) {
+				if(action.cases[c].starred) total_starred++
+			}
+			return {
+				...state,
+				isFetchingSupplemental: false,
+				cases: action.cases,
+				total_starred: total_starred
+			}
+		case UPDATE_CASE_SUCCESS:
+			return {
+				...state,
+				cases: state.cases.map(_case => {
+					return _case.id === action.updated_case.id
+						   ? action.updated_case
+						   : _case
+				}),
+				total_starred: action.updated_case.starred ? state.total_starred + 1 : state.total_starred - 1
 			}
 		case CLEAR_SETVIEW:
 			return {

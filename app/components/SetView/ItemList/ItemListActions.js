@@ -6,24 +6,29 @@ export default class ItemListActions extends Component {
 	}
 
 	render() {
-		const star = require('../../../assets/star.png')
+		const star = require('../../../assets/star.png'),
+			  { total_starred } = this.props;
 		return(
 			<div className="item_list_actions">
 				<ul className="select_actions">
-					<li className="select active">
-						<a className="">
-						Study all {this.props.item_count} terms
-						</a>
+					<li 
+						className="select active"
+						onClick={this.props.selectAll}>
+							<a className="">
+							Study all {this.props.item_count} terms
+							</a>
 					</li>
-					<li className="select">
-						<a className="">
-						Study &nbsp;
-						{0} &nbsp;
-						<span>
-							<img src={star}/>
-						</span>
-						&nbsp; terms only
-						</a>
+					<li 
+						className="select"
+						onClick={this.props.selectStarred}>
+							<a className="">
+								Study &nbsp;
+								{total_starred} &nbsp;
+								<span>
+									<img src={star}/>
+								</span>
+								&nbsp; terms only
+							</a>
 					</li>
 				</ul>
 			</div>

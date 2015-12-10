@@ -19,14 +19,19 @@ export default class ItemActions extends Component {
 	render() {
 		const star = require('../../../assets/star.png'),
 			  gold_star = require('../../../assets/gold_star.png'),
-			{ mouseIsOver } = this.props;
+			{ mouseIsOver, starred } = this.props;
 		return(
 			<div className="actions">
 				<div className="icons">
 					{
 						!mouseIsOver
 						&&
-						<img className="placeholder" src={star} />
+						<img className="placeholder" 
+							src={
+								starred
+								? gold_star
+								: star
+							} />
 					}
 					{
 						mouseIsOver
@@ -35,6 +40,7 @@ export default class ItemActions extends Component {
 								data-toggle="tooltip"
 								data-placement="bottom"
 								title="Select"
+								onClick={this.props.handleStar}
 								onMouseOver={() => {
 									this.setState({
 										mouseIsOverActions: true
@@ -47,7 +53,7 @@ export default class ItemActions extends Component {
 								}}>
 							<img 
 								src={
-									this.state.mouseIsOverActions
+									this.state.mouseIsOverActions || starred
 									?
 									gold_star
 									:

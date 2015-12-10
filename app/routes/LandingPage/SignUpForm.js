@@ -1,12 +1,33 @@
 import React, { Component, PropTypes } from 'react';
+import classnames from 'classnames';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { pushState } from 'react-redux';
+
+import * as useractions from '../../actions/user';
 require('./SignUpForm.scss');
 
+@connect(state => ({
+		user: state.user.user
+	}),
+	dispatch => ({
+		...bindActionCreators({
+			...useractions,
+			pushState
+		}, dispatch)
+	})
+)
 export default class SignUpForm extends Component {
 	static propTypes = {
 	}
 
 	state = {
-		modal_version: false
+		modal_version: false,
+		first_name: null,
+		last_name: null,
+		password: null,
+		email: null,
+		username: null // temp
 	}
 
 	componentDidMount() {
@@ -22,9 +43,15 @@ export default class SignUpForm extends Component {
 		}, 300)
 	}
 
-	submitSignUp(e) {
-		e.preventDefault()
-		console.log(e.target.value)
+	handleSubmit() {
+		const { createUser } = this.props;
+		let user_info = {}
+		for(var prop in this.state) {
+			if(prop !== 'modal_version') {
+				user_info[prop] = this.state[prop]
+			}
+		}
+		createUser(user_info)
 	}
 
 	render() {
@@ -52,13 +79,55 @@ export default class SignUpForm extends Component {
 						</div>
 					}
 					
-					<form className="sign_up_form"
-						  onSubmit={::this.submitSignUp}>
-						<input ref="first_name" placeholder="First name" autoFocus={this.props.shouldAutoFocus}/>
-						<input placeholder="Last name"/>
-						<input placeholder="Email"/>
-						<input type="password" placeholder="Password"/>
-						<p className="">By clicking Sign Up, you agree to our <a>Terms of Service</a> and <a>Data Policy</a></p>
+					<form 
+						className="sign_up_form"
+						onSubmit={(e) => {
+						  	e.preventDefault()
+						  	::this.handleSubmit()
+						}}>
+						<input 
+							ref="first_name" 
+							placeholder="First name" 
+							autoFocus={this.props.shouldAutoFocus}
+							value={this.state.first_name}
+							onChange={(e) => {
+								this.setState({first_name: e.target.value})
+							}}/>
+						<input 
+							placeholder="Last name"
+							value={this.state.last_name}
+							onChange={(e) => {
+								this.setState({last_name: e.target.value})
+							}}/>
+						<input 
+							placeholder="Email"
+							value={this.state.email}
+							onChange={(e) => {
+								this.setState({email: e.target.value})
+							}}/>
+						<input 
+							placeholder="Username"
+							value={this.state.username}
+							onChange={(e) => {
+								this.setState({username: e.target.value})
+							}}/>
+						<input 
+							type="password" 
+							placeholder="Password"
+							value={this.state.password}
+							onChange={(e) => {
+								this.setState({password: e.target.value})
+							}}
+							onInput={(e) => {
+								if(e.which == 13) {
+									::this.handleSubmit()
+								}
+							}}
+							/>
+						<p className="">
+							By clicking Sign Up, you agree to our 
+							<a>Terms of Service</a> and <a>Data Policy</a>
+						</p>
 						<button style={{
 							fontSize: '16px',
 							fontWeight: '600',
@@ -66,7 +135,7 @@ export default class SignUpForm extends Component {
 							borderColor: '#007BE8',
 							height: '36px'
 						}}className="button primary"
-							    onClick={::this.submitSignUp}>
+							    onClick={::this.handleSubmit}>
 							   	Sign up for Beta
 						</button>
 					</form>
@@ -77,6 +146,22 @@ export default class SignUpForm extends Component {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Facebook and Google */
 // <div className="sign_up_group">
 // 	<button className="google_button button">
 // 		<img className="icon" 

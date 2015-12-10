@@ -7,7 +7,7 @@ import {
 var _userinitialstate = {
 	isFetchingUser: false,
 	user: {},
-	logged_in: true
+	logged_in: false
 }
 export default function user(state = _userinitialstate, action) {
 	switch(action.type) {

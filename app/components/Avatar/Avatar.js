@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 const styles = require('./Avatar.scss');
 
-import BubbleDropdown from '../BubbleDropdown/BubbleDropdown';
+import BubbleDropdown from '../Dropdown/Dropdown';
 
 export default class Avatar extends Component {
 	static propTypes = {
@@ -13,17 +13,14 @@ export default class Avatar extends Component {
 		dropdown_active: false
 	}
 
-	computePos() {
-		const node = this.refs.target;
-		let pos = node.getComputedStyle()
-		return pos;
-	}
+	
 
 	render() {
 		const { is_create_set, user, pushState } = this.props;
 		return(
-			<span ref="target" className={classnames('bubble_dropdown_target', {"active": this.state.active})}>
+			<span style={{position: 'relative'}} className={classnames({"active": this.state.active})}>
 				<button style={{paddingLeft: '0'}} 
+						ref="target" 
 					 	className="button button-borderless button-outline"
 					 	onClick={() => {
 					 		this.setState({dropdown_active: !this.state.dropdown_active})
@@ -42,7 +39,8 @@ export default class Avatar extends Component {
 					this.state.dropdown_active
 					&&
 					<BubbleDropdown 
-						parentStyle={::this.computePos}
+						target_node={this.refs.target}
+						header_menu={true}
 					/>
 				}
 			</span>

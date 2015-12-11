@@ -64,6 +64,7 @@ export default class LogInPage extends Component {
 								  }}>
 								<input className=""
 									   placeholder="Email"
+									   type="text"
 									   autoFocus={true}
 									   value={this.state.email}
 									   onChange={(e) => {
@@ -71,7 +72,7 @@ export default class LogInPage extends Component {
 									   		email: e.target.value
 									   	});
 									   }}
-									   onInput={(e) => {
+									   onKeyDown={(e) => {
 									   	if(e.which == 13) {
 									   		::this.handleLogIn()
 									   	}
@@ -86,7 +87,7 @@ export default class LogInPage extends Component {
 									   		password: e.target.value
 									   	});
 									   }}
-									   onInput={(e) => {
+									   onKeyDown={(e) => {
 									   	if(e.which == 13) {
 									   		::this.handleLogIn()
 									   	}

@@ -27,22 +27,46 @@ function getToken(email, password, id) {
 			if(id !== undefined) document.cookie = '__fid' + '=' + id + ";" 
 			document.cookie = "__ftkn" + "=" + res.body.token + ";"
 			return res.body.token
+		} else if(!res.ok) {
+			if(res.status == 401) return false;
 		}
 	})
 }
 
+export function checkLoggedIn() {
+	let user = checkCookies()
+	if(user == undefined) {
+		noUserFound()
+		return { 
+			type: 'LOGGED_IN_FAILURE',
+			logged_in: false 
+		};
+	}
+	else {
+		return { 
+			type: 'LOGGED_IN_SUCCESS',
+			logged_in: true 
+		};
+	}
+}
+
+export function noUserFound() {
+	return ({
+		type: RECEIVE_USER_FAILURE
+	})
+}
 
 export const REQUEST_USER = 'REQUEST_USER'
 export const RECEIVE_USER_SUCCESS = 'RECEIVE_USER_SUCCESS'
 export const RECEIVE_USER_FAILURE = 'RECEIVE_USER_FAILURE'
-export function checkLoggedIn(pushState, route) {
+
+export const REQUEST_ASSIGNMENTS = 'REQUEST_ASSIGNMENTS';
+export const RECEIVE_ASSIGNMENTS_SUCCESS = 'RECEIVE_ASSIGNMENTS_SUCCESS';
+
+export function fetchUser() {
 	return (dispatch, getState) => {
 		dispatch({type: REQUEST_USER})
 		let user = checkCookies()
-		if(user == undefined) {
-			dispatch({type: RECEIVE_USER_FAILURE})
-			return false;
-		}
 		request
 		.get(`${api_url}/users/${user.id}`)
 		.end((err, res) => {
@@ -50,7 +74,16 @@ export function checkLoggedIn(pushState, route) {
 				user = {}
 				user = Object.assign({...res.body})
 				delete user['password']
-				dispatch({type: RECEIVE_USER_SUCCESS, user}) 
+				dispatch({type: RECEIVE_USER_SUCCESS, user})
+				dispatch({type: REQUEST_ASSIGNMENTS })
+				request
+				.get(`${api_url}/users/${user.id}/assignments/`) 
+				.end((err, res) => {
+					if(res.ok) {
+						let assignments = res.body.assignments;
+						dispatch({type: RECEIVE_ASSIGNMENTS_SUCCESS, assignments })
+					}
+				})
 				return true
 			}
 			else {
@@ -71,6 +104,7 @@ export function logIn(email, password) {
 	return (dispatch, getState) => {
 		dispatch({type: LOGIN_USER})
 		let token = getToken(email, password)
+		if(token == 401 || token == undefined) return false;
 		request
 		.get(`${api_url}/users/login`)
 		.auth(user.token)
@@ -81,12 +115,14 @@ export function logIn(email, password) {
 				delete user['password']
 				document.cookie = '__fid' + '=' + user.id + ";" 
 				dispatch({type: LOGIN_USER_SUCCESS, user}) 
+				return true;
 			}
 			else {
 				dispatch({
 					type: RECEIVE_USER_FAILURE,
 					error: Error(err)
 				})
+				return false;
 			}
 		})
 	}

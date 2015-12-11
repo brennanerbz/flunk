@@ -29,13 +29,19 @@ export default class QuickLogIn extends Component {
 		email: null,
 		password: null,
 		focused: false,
-		isLoggingIn: false
+		isLoggingIn: false,
+		showError: false
 	}
 
 	submitLogIn() {
 		this.setState({isLoggingIn: true})
-		const { logIn } = this.props;
-		logIn(this.state.email, this.state.password)
+		const { logIn, pushState } = this.props;
+		if(!logIn(this.state.email, this.state.password)){
+			this.setState({
+				showError: true
+			})
+			return;
+		}
 		setTimeout(() => {
 			this.setState({
 				isLoggingIn: false,
@@ -80,21 +86,30 @@ export default class QuickLogIn extends Component {
 						<input 
 							placeholder="Email" 
 							ref="email" 
+							type="text"
 							autoFocus={true} 
+							value={this.state.email}
 							onFocus={() => this.setState({focused: true})}
 							onBlur={() => this.setState({focused: false})} 
-							onChange={(e) => this.setState({email: e.target.value})}
-							onInput={(e) => {
-								if(e.which == 13) ::this.submitLogIn()
+							onChange={(e) => {
+								this.setState({email: e.target.value})
+							}}
+							onKeyDown={(e) => {
+								if(e.keyCode == 13) { 
+									::this.submitLogIn() 
+								}
 							}}/>
 						<input 
 							type="password" 
 							placeholder="Password"  
+							value={this.state.password}
 							onFocus={() => this.setState({focused: true})} 
 							onBlur={() => this.setState({focused: false})}
 							onChange={(e) => this.setState({password: e.target.value})}
-							onInput={(e) => {
-								if(e.which == 13) ::this.submitLogIn()
+							onKeyDown={(e) => {
+								if(e.keyCode == 13) { 
+									::this.submitLogIn()
+								}
 							}}/>
 						<button className="button primary"
 							    onClick={::this.submitLogIn}>

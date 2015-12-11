@@ -19,7 +19,8 @@ import SetListContainer from '../../components/SetList/SmartComponents/SetListCo
 @connect(state => ({
 	assignments: state.sets.assignments,
 	sets: state.sets.sets,
-	isFetching: state.sets.isFetchingAssignments
+	isFetching: state.sets.isFetchingAssignments,
+	user_id: state.user.user.id
 	}), 
 	dispatch => ({
 		...bindActionCreators({
@@ -34,17 +35,38 @@ export default class Home extends Component {
 		
 	}
 
+	state = {
+		assignments: []
+	}
+
 	componentWillMount() {
-		this.props.clearTransferState()
-		this.props.fetchAssignments(1)
+		const { user_id, clearTransferState, fetchAssignments, pollAssignments} = this.props;
+		clearTransferState()
 	}	
 
+	checkChangedAssignments(arr1, arr2) {
+		if(arr1.length !== arr2.length)
+			return false;
+		for(var i = arr1.length; i--;) {
+			if(arr1[i] !== arr2[i])
+				return false;
+		}
+		return true;
+	}
+
 	componentDidMount() {
+		const { user_id, pollAssignments, assignments } = this.props;
+		let poll = this.checkChangedAssignments(this.state.assignments, assignments)
+		this.setState({
+			assignments: assignments
+		})
 		setTimeout(() => {
-			this.props.pollAssignments(1)
+			if(poll) {
+				pollAssignments(Number(document.cookie.split(';')[0].substr(6)))
+			}
 		}, 1000)
 	}
-	
+
 	render() {	
 		const { sets, isFetching } = this.props;	 
 		return(
@@ -64,6 +86,11 @@ export default class Home extends Component {
 		);
 	}
 }
+
+
+
+
+
 
 /*
 <div className="row">

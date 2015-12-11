@@ -95,6 +95,7 @@ export default class SignUpForm extends Component {
 						<input 
 							ref="first_name" 
 							placeholder="First name" 
+							type="text"
 							autoFocus={this.props.shouldAutoFocus}
 							value={this.state.first_name}
 							onChange={(e) => {
@@ -102,12 +103,14 @@ export default class SignUpForm extends Component {
 							}}/>
 						<input 
 							placeholder="Last name"
+							type="text"
 							value={this.state.last_name}
 							onChange={(e) => {
 								this.setState({last_name: e.target.value})
 							}}/>
 						<input 
 							placeholder="Email"
+							type="text"
 							value={this.state.email}
 							onChange={(e) => {
 								this.setState({email: e.target.value})

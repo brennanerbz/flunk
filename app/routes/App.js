@@ -39,10 +39,8 @@ export default class FlunkApp extends Component {
 
 
 	componentWillMount() {
-		const { fetchAssignments, checkLoggedIn, pushState, router } = this.props; 
-		if(checkLoggedIn(pushState, router.location.pathname)) {
-			fetchAssignments()
-		}
+		const { fetchAssignments, checkLoggedIn, fetchUser, pushState, router } = this.props; 
+		if(checkLoggedIn().logged_in) fetchUser()
 	}
 
 	renderSideNav() {

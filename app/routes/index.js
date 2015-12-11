@@ -75,11 +75,13 @@ function walk(routes, cb) {
   return routes;
 }
 
+import * as useractions from '../actions/user';
+
 /* Parent: ../Root.js */
 export default (store, client) => {
     return walk(Route.createRouteFromReactElement(routes), route => {
         route.onEnter = (nextState, replaceState) => {
-            const loggedIn = store.getState().user.logged_in;
+            const loggedIn = useractions.checkLoggedIn().logged_in 
             if(route.sharedRoot && !loggedIn) {
                 route.component = LandingPage
             } else if (route.sharedRoot && loggedIn) {

@@ -11,7 +11,7 @@ export default class Avatar extends Component {
 	}
 
 	state = {
-		dropdown_active: false,
+		dropdown_active: false
 	}
 	
 	render() {
@@ -38,7 +38,7 @@ export default class Avatar extends Component {
 							{ !is_create_set
 							 && <span className="">
 							 {user.username}</span> }
-							 
+
 						</a>
 					</div>
 				</button>

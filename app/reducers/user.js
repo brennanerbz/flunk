@@ -51,8 +51,9 @@ export default function user(state = _userinitialstate, action) {
 				logged_in: true
 			}
 		case LOGIN_USER_SUCCESS:
+			let user = action.user || {}
 			return {
-				user: action.user,
+				user: user,
 				logged_in: true
 			}
 		case RECEIVE_USER_FAILURE:

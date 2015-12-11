@@ -50,13 +50,15 @@ export function checkLoggedIn() {
 	if(user == undefined) {
 		noUserFound()
 		return { 
-			type: 'LOGGED_IN_FAILURE',
+			type: 'LOGIN_USER_FAILURE',
+			user: null,
 			logged_in: false 
 		};
 	}
 	else {
 		return { 
-			type: 'LOGGED_IN_SUCCESS',
+			type: 'LOGIN_USER_SUCCESS',
+			user: null,
 			logged_in: true 
 		};
 	}

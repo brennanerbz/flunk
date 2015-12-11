@@ -24,7 +24,8 @@ export default class BubbleDropdown extends Component {
 		const node = this.props.target_node;
 		let parent_pos = node.getBoundingClientRect(),
 			bubble_pos = this.refs.bubble.getBoundingClientRect()
-
+		console.log(parent_pos)
+		console.log(bubble_pos)
 		this.setState({
 			dropdown_style: {
 				top: parent_pos.height + 'px',

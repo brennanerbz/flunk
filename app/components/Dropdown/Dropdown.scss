@@ -50,6 +50,9 @@
 			float: left;
 			height: 36px;
 			width: 32px;
+			.avatar_component {
+				margin-top: -4px;
+			}
 		}
 		.clickable {
 			cursor: pointer;

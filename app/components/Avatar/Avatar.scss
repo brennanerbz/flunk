@@ -67,7 +67,6 @@
 .user_name {
 	color: #555549;
 	opacity: 0.8;
-	margin-left: 10px;
 	&:hover {
 		color: #555459;
 		opacity: 1;
@@ -75,6 +74,9 @@
 	}
 	img {
 		margin-right: 10px;
+	}
+	.avatar_component {
+		margin-left: -30px;
 	}
 }
 

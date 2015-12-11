@@ -46,6 +46,14 @@
 		font-size: 14px;
 		color: #000;
 		margin: -7px 0 10px;
+		.avatar_container {
+			float: left;
+			height: 36px;
+			width: 32px;
+		}
+		.clickable {
+			cursor: pointer;
+		}
 	}
 	ul {
 		margin: 0;

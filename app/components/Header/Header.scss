@@ -127,7 +127,7 @@
                     border: 0px none;  
                     cursor: pointer; 
                     .site_icon {
-                        width: 56px;
+                        width: 66px;
                     }
                 }
             }
@@ -142,6 +142,10 @@
                 .upload {
                     color: #555;
                     text-decoration: none;
+                }
+                .avatar_component {
+                    float: left;
+                    margin-right: 10px;
                 }
             }
             .header_content {

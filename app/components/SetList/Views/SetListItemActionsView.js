@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import BubbleDropDown from '../../BubbleDropDown/BubbleDropDown';
+import BubbleDropDown from '../../Dropdown/Dropdown';
 
 export default class SetListItemActionsView extends Component {
 	static propTypes = {

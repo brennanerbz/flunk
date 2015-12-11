@@ -64,11 +64,13 @@ class BubbleDropdownContents extends Component {
 		return (
 			<div className="account_dropdown">
 				<div className="title">
-					<ViewerAvatar 
-						defaultAvatar=""
-						photoUrl=""
-						dimension={24}
-					/>
+					<div className="avatar_container clickable">
+						<ViewerAvatar 
+							defaultAvatar=""
+							photoUrl=""
+							dimension={24}
+						/>
+					</div>
 				</div>
 				<ul>
 					<li className="first_standalone">

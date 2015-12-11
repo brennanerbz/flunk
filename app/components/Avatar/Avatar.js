@@ -30,8 +30,15 @@ export default class Avatar extends Component {
 						{'inline-avatar': is_create_set}
 						)}>
 						<a className="user_name">
-							<ViewerAvatar defaultAvatar={defaultAvatar} dimension={32} photoUrl="" />
-							{ !is_create_set && <span className="">{user.username}</span> }
+							<ViewerAvatar 
+								defaultAvatar={defaultAvatar} 
+								dimension={32} 
+								photoUrl="" />
+
+							{ !is_create_set
+							 && <span className="">
+							 {user.username}</span> }
+							 
 						</a>
 					</div>
 				</button>

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classnames from 'classnames';
 import { Link } from 'react-router';
-import { pushState } from 'redux-router';
+import { pushState, replaceState } from 'redux-router';
 
 import * as useractions from '../../actions/user';
 
@@ -17,7 +17,8 @@ import * as useractions from '../../actions/user';
 	dispatch => ({
 		...bindActionCreators({
 			...useractions,
-			pushState
+			pushState,
+			replaceState
 		}, dispatch)
 	})
 )
@@ -35,20 +36,17 @@ export default class QuickLogIn extends Component {
 
 	submitLogIn() {
 		this.setState({isLoggingIn: true})
-		const { logIn, pushState } = this.props;
-		if(!logIn(this.state.email, this.state.password)){
-			this.setState({
-				showError: true
-			})
-			return;
-		}
+		const { getToken, pushState, replaceState} = this.props;
+		getToken(this.state.email, this.state.password, replaceState)
 		setTimeout(() => {
 			this.setState({
 				isLoggingIn: false,
+				focused: false,
 				email: null,
 				password: null
 			})
-		}, 500)
+			this.close()
+		}, 250)
 	}
 
 	componentDidMount() {

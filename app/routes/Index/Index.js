@@ -21,27 +21,16 @@ export default class Index extends Component {
 	static propTypes = {
 	}
 
-	state = {
-		render: 'landing_page'
-	}
-
-	componentWillMount() {
-		const { router, logged_in, pushState } = this.props;
-		if(!logged_in) this.setState({ render: 'home'})
-	}
-
 	render() {
 		return(
 			<div>
 				{
-					this.state.render == 'landing_page'
-					? <LandingPage />
-					: null
+					!this.props.logged_in
+					&& <LandingPage />
 				}
 				{
-					this.state.render == 'home'
-					? <Home />
-					: null
+					this.props.logged_in
+					&& <Home />
 				}
 			</div>
 		);

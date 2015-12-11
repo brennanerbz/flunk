@@ -3,20 +3,38 @@ import {
 	RECEIVE_USER_SUCCESS,
 	RECEIVE_USER_FAILURE,
 	CREATE_USER_SUCCESS,
-	CREATE_USER_FAILURE
+	CREATE_USER_FAILURE,
+	FETCH_TOKEN,
+	FETCH_TOKEN_SUCCESS,
+	FETCH_TOKEN_FAILURE,
+	LOGIN_USER,
+	LOGIN_USER_SUCCESS,
+	LOGIN_USER_FAILURE
 } from '../actions/user';
 
 var _userinitialstate = {
 	isFetchingUser: false,
+	isFetchingToken: false,
+	token: null,
 	user: {},
 	logged_in: false
 }
 export default function user(state = _userinitialstate, action) {
 	switch(action.type) {
+		case FETCH_TOKEN:
+			return {
+				...state,
+				isFetchingToken: true
+			}
 		case REQUEST_USER:
 			return {
 				...state,
 				isFetchingUser: true
+			}
+		case FETCH_TOKEN_SUCCESS: 
+			return {
+				...state,
+				isFetchingToken: false
 			}
 		case RECEIVE_USER_SUCCESS:
 			return {
@@ -32,11 +50,21 @@ export default function user(state = _userinitialstate, action) {
 				user: action.new_user,
 				logged_in: true
 			}
+		case LOGIN_USER_SUCCESS:
+			return {
+				user: action.user,
+				logged_in: true
+			}
 		case RECEIVE_USER_FAILURE:
 			return {
 				...state,
 				isFetchingUser: false,
 				logged_in: false
+			}
+		case FETCH_TOKEN_FAILURE:
+			return {
+				...state,
+				isFetchingToken: false
 			}
 		case CREATE_USER_FAILURE:
 		default:

@@ -33,7 +33,7 @@ import fillStore from '../utils/fillStore';
 
 const routes = (
     <Route component={FlunkApp}>
-        <Route path="/" sharedRoot/>
+        <Route path="/" component={Index}/>
 
         <Route path="login" component={LoginPage}/>
         <Route path="signup" component={SignUp}/>
@@ -82,11 +82,6 @@ export default (store, client) => {
     return walk(Route.createRouteFromReactElement(routes), route => {
         route.onEnter = (nextState, replaceState) => {
             const loggedIn = useractions.checkLoggedIn().logged_in 
-            if(route.sharedRoot && !loggedIn) {
-                route.component = LandingPage
-            } else if (route.sharedRoot && loggedIn) {
-                route.component = Home
-            }
             if (route.requireAuth && !loggedIn) {
                 replaceState(nextState, '/login');
             }

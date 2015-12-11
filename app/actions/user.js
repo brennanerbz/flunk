@@ -1,5 +1,7 @@
 import axios from 'axios';
 import request from 'superagent';
+var _Promise = require('promise');
+var agent = require('superagent-promise')(require('superagent'), _Promise);
 import moment from 'moment';
 import keyMirror from 'key-mirror';
 
@@ -7,7 +9,7 @@ const server = require('./api'),
 	  api_url = server.api_url;
 
 
-function checkCookies() {
+export function checkCookies() {
 	let user = {}
 	if(document.cookie.length > 0) {
 		const cookies = document.cookie.split(";")
@@ -18,19 +20,29 @@ function checkCookies() {
 }
 
 
-function getToken(email, password, id) {
-	request
-	.get(`${api_url}/token`)
-	.auth(email, password)
-	.end((err, res) => {
-		if(res.ok) {
-			if(id !== undefined) document.cookie = '__fid' + '=' + id + ";" 
-			document.cookie = "__ftkn" + "=" + res.body.token + ";"
-			return res.body.token
-		} else if(!res.ok) {
-			if(res.status == 401) return false;
-		}
-	})
+export const FETCH_TOKEN = 'FETCH_TOKEN'
+export const FETCH_TOKEN_FAILURE = 'FETCH_TOKEN_FAILURE'
+export const FETCH_TOKEN_SUCCESS = 'FETCH_TOKEN_SUCCESS'
+export function getToken(email, password, replaceState) {
+	return(dispatch, getState) => {
+		if(getState().user.isFetchingToken) return;
+		dispatch({type: FETCH_TOKEN})
+		var token;
+		request
+		.get(`${api_url}/token`)
+		.auth(email, password)
+		.end((err, res) => {
+			if(err) {
+				document.cookie = "__fid=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+				document.cookie = "__ftkn=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+				dispatch({type: FETCH_TOKEN_FAILURE})
+			} else {
+				token = res.body.token
+				dispatch({type: FETCH_TOKEN_SUCCESS, token})
+				dispatch(logIn(token, replaceState))
+			}
+		})
+	}
 }
 
 export function checkLoggedIn() {
@@ -100,29 +112,26 @@ export function fetchUser() {
 export const LOGIN_USER = 'LOGIN_USER';
 export const LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS';
 export const LOGIN_USER_FAILURE = 'LOGIN_USER_FAILURE';
-export function logIn(email, password) {
+export function logIn(token, replaceState) {
 	return (dispatch, getState) => {
 		dispatch({type: LOGIN_USER})
-		let token = getToken(email, password)
-		if(token == 401 || token == undefined) return false;
 		request
 		.get(`${api_url}/users/login`)
-		.auth(user.token)
+		.auth(token, '')
 		.end((err, res) => {
 			if(res.ok) {
-				user = {}
-				user = Object.assign({...res.body})
+				let user = Object.assign({...res.body})
 				delete user['password']
 				document.cookie = '__fid' + '=' + user.id + ";" 
+				document.cookie = "__ftkn" + "=" + token + ";"
 				dispatch({type: LOGIN_USER_SUCCESS, user}) 
-				return true;
+				replaceState(null, '/')
 			}
 			else {
 				dispatch({
-					type: RECEIVE_USER_FAILURE,
+					type: LOGIN_USER_FAILURE,
 					error: Error(err)
 				})
-				return false;
 			}
 		})
 	}

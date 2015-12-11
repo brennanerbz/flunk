@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 
 import ViewerAvatar from '../Avatar/ViewerAvatar';
+import SpriteDiv from '../Sprite/SpriteDiv';
 
 require('./Dropdown.scss');
 export default class BubbleDropdown extends Component {
@@ -16,16 +17,39 @@ export default class BubbleDropdown extends Component {
 		}
 	}
 
+	hide() {
+		const { hideDropdown } = this.props;
+		$(document).click((event) => { 
+		    if(!$(event.target).closest(this.refs.bubble).length) {
+		        if($(this.refs.bubble).is(":visible")) {
+		            hideDropdown()
+		        }
+		    }        
+		})
+	}
+
 	componentDidMount() {
 		this.computePos()
+		window.addEventListener('click', ::this.hide)
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('click', ::this.hide)
 	}
 
 	computePos() {
 		const node = this.props.target_node;
 		let parent_pos = node.getBoundingClientRect(),
 			bubble_pos = this.refs.bubble.getBoundingClientRect()
-		console.log(parent_pos)
-		console.log(bubble_pos)
+		if(this.props.set_list_item) {
+			this.setState({
+				dropdown_style: {
+					top: parent_pos.height + 10 + 'px',
+					left: parent_pos.right - bubble_pos.right + 'px'
+				}
+			})
+			return;
+		}
 		this.setState({
 			dropdown_style: {
 				top: parent_pos.height + 'px',
@@ -39,7 +63,8 @@ export default class BubbleDropdown extends Component {
 			<div ref="bubble" style={this.state.dropdown_style} 
 				className={classnames("bubble_dropdown", 
 					{ 'header_menu': this.props.header_menu },
-					{ 'top_right': this.props.header_menu }
+					{ 'top_right': this.props.header_menu || this.props.set_list_item },
+					{ 'far_right': this.props.set_list_item }
 				)}>
 				<BubbleDropdownContents 
 					anchor_bottom={false}
@@ -52,6 +77,7 @@ export default class BubbleDropdown extends Component {
 	}
 }
 
+
 class BubbleDropdownContents extends Component {
 	static propTypes = {
 
@@ -61,25 +87,67 @@ class BubbleDropdownContents extends Component {
 		
 	}
 
+	renderSetDropdown() {
+		let actions = ['Learn', 'Open', 'Edit', 'Delete']
+		return(
+			<ul className="set_actions_list">
+				{
+					actions.map(action => {
+						return (
+							<li className="set_action" key={action}>
+								<a className="">
+									<SpriteDiv
+										name={action.toLowerCase()}
+										text={action}
+									/>
+								</a>	
+							</li>
+						)
+					})
+				}
+			</ul>
+		)
+	}
+
 	renderAccountDropdown() {
+		const { user } = this.props,
+				defaultAvatar = require('../../assets/defaultAvatar.png')
 		return (
 			<div className="account_dropdown">
-				<div className="title">
-					<div className="avatar_container clickable">
+				<div className="title clickable"
+					onClick={() => {
+						this.props.pushState(null, `/profile/${user.id}`)
+						this.props.hideDropdown()
+					}}>
+					<div className="avatar_container">
 						<ViewerAvatar 
-							defaultAvatar=""
+							defaultAvatar={defaultAvatar}
 							photoUrl=""
 							dimension={24}
 						/>
 					</div>
+					<div className="name_container">
+						<span className="name">
+							{user.username}
+						</span>
+					</div>
 				</div>
 				<ul>
-					<li className="first_standalone">
+					<li className="divider">
+					</li>
+					<li className="first_standalone"
+						onClick={() => {
+							this.props.pushState(null, '/settings')
+							this.props.hideDropdown()
+						}}>
 						<a className="standalone">
 						Settings
 						</a>
 					</li>
-					<li>
+					<li onClick={() => {
+						this.props.logOut(this.props.pushState)
+						this.props.hideDropdown()
+					}}>
 						<a className="standalone">
 						Log out
 						</a>
@@ -95,6 +163,10 @@ class BubbleDropdownContents extends Component {
 				{
 					this.props.header_menu
 					&& ::this.renderAccountDropdown()
+				}
+				{
+					this.props.set_list_item
+					&& ::this.renderSetDropdown()
 				}
 				{
 					this.props.show_arrow

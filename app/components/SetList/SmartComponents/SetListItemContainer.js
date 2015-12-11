@@ -35,12 +35,21 @@ export default class SetListItemContainer extends Component {
 					`/${root_route}/${this.props.assignment.set.id}`
 					)}
 				}
-				handleToggleSelect=""
-				handleOpen=""
-				handleDelete=""
-				handleEdit=""
-				handleCopy=""
-				handleShare=""
+				handleShare={() => {
+
+				}}
+				handleLearn={() => {
+
+				}}
+				handleOpen={() => {
+					
+				}}
+				handleEdit={() => {
+					
+				}}
+				handleDelete={() => {
+					
+				}}
 			/>
 		);
 	}

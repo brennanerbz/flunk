@@ -139,6 +139,25 @@ export function logIn(token, replaceState) {
 	}
 }
 
+export const LOGOUT_USER = 'LOGOUT_USER';
+export const LOGOUT_USER_SUCCESS = 'LOGOUT_USER_SUCCESS';
+export const LOGOUT_USER_FAILURE = 'LOGOUT_USER_FAILURE';
+export function logOut(pushState) {
+	return (dispatch, getState) => {
+		dispatch({type: LOGOUT_USER})
+		document.cookie = "__fid=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+		document.cookie = "__ftkn=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+		setTimeout(() => {
+			if(document.cookie.length == 0) {
+				dispatch({type: LOGOUT_USER_SUCCESS}) 
+				pushState(null, '/')
+			} else {
+				dispatch({type: LOGOUT_USER_FAILURE}) 
+			}
+		}, 5)		
+	}
+}
+
 export const CREATE_USER = 'CREATE_USER'
 export const CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS'
 export const CREATE_USER_FAILURE = 'CREATE_USER_FAILURE'

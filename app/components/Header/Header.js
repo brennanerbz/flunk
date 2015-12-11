@@ -12,6 +12,8 @@ import Avatar from '../Avatar/Avatar';
 import Menu from '../Menu/Menu';
 import QuickLogIn from '../QuickLogIn/QuickLogIn';
 
+import * as useractions from '../../actions/user';
+
 @connect(state => ({
 	loc: state.router.location,
 	sets: state.sets.sets,
@@ -26,6 +28,7 @@ import QuickLogIn from '../QuickLogIn/QuickLogIn';
 	}),
 	dispatch => ({
 		...bindActionCreators({
+			...useractions,
 			pushState
 		}, dispatch)
 	})

@@ -17,10 +17,10 @@ export default class SetListItemView extends Component {
 		return(
 			<li className="set_item"
 				onMouseOver={this.props.mouseOver}
-				onMouseLeave={this.props.mouseLeft}
-				onClick={this.props.handleClick}>
+				onMouseLeave={this.props.mouseLeft}>
 				<div className="set_list_item_wrapper">
-					<div className="set_list_item_icon">
+					<div className="set_list_item_icon"
+						 onClick={this.props.handleClick}>
 						<span className="file_icon">
 							<img src={section !== 'drafts' 
 								 ? set_icon_complete 
@@ -28,7 +28,8 @@ export default class SetListItemView extends Component {
 								 className="icon_img"/>
 						</span>
 					</div>
-					<div className="set_list_item_details">
+					<div className="set_list_item_details"
+						 onClick={this.props.handleClick}>
 						<div className={classnames("heading", {
 							'draft': section == 'drafts'
 						})}>
@@ -47,16 +48,16 @@ export default class SetListItemView extends Component {
 							{
 								mouseIsOver
 								&&
-								<button className="button outline">Share</button>
+								<button 
+									className="button outline"
+									onClick={this.props.handleShare}>
+									Share
+								</button>
 							}
 							<SetListItemActionsView 
 								mouseIsOver={mouseIsOver}
-							 	handleToggleSelect=""
-							 	handleOpen=""
-							 	handleDelete=""
-							 	handleEdit=""
-							 	handleCopy=""
-							 	handleShare=""
+								assignment={assignment}
+							 	{...this.props}
 							/>
 						</div>
 					</div>

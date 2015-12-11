@@ -18,14 +18,14 @@ export default class Avatar extends Component {
 		const { is_create_set, user, pushState } = this.props,
 			defaultAvatar = require('../../assets/defaultAvatar.png');
 		return(
-			<span style={{position: 'relative'}} className={classnames({"active": this.state.active})}>
+			<span style={{position: 'relative'}} 
+				  className={classnames({"active": this.state.active})}>
 				<button style={{paddingLeft: '0'}} 
 						ref="target" 
 					 	className="button button-borderless button-outline"
 					 	onClick={() => {
 					 		this.setState({dropdown_active: !this.state.dropdown_active})
-					 	}}
-					 	>
+					 	}}>
 					<div className={classnames(
 						{'inline-avatar': is_create_set}
 						)}>
@@ -46,8 +46,14 @@ export default class Avatar extends Component {
 					this.state.dropdown_active
 					&&
 					<BubbleDropdown 
+						hideDropdown={() => {
+							this.setState({dropdown_active: false})
+						}}
 						target_node={this.refs.target}
 						header_menu={true}
+						user={this.props.user}
+						pushState={this.props.pushState}
+						logOut={this.props.logOut}
 					/>
 				}
 			</span>

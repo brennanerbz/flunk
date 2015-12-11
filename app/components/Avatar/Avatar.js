@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 const styles = require('./Avatar.scss');
 
+import ViewerAvatar from './ViewerAvatar';
 import BubbleDropdown from '../Dropdown/Dropdown';
 
 export default class Avatar extends Component {
@@ -10,13 +11,12 @@ export default class Avatar extends Component {
 	}
 
 	state = {
-		dropdown_active: false
+		dropdown_active: false,
 	}
-
 	
-
 	render() {
-		const { is_create_set, user, pushState } = this.props;
+		const { is_create_set, user, pushState } = this.props,
+			defaultAvatar = require('../../assets/defaultAvatar.png');
 		return(
 			<span style={{position: 'relative'}} className={classnames({"active": this.state.active})}>
 				<button style={{paddingLeft: '0'}} 
@@ -30,7 +30,7 @@ export default class Avatar extends Component {
 						{'inline-avatar': is_create_set}
 						)}>
 						<a className="user_name">
-							<img src="https://cdn-images-1.medium.com/fit/c/72/72/0*Un7eHMAQh62QX1LO.jpg" className="avatar-img"/>
+							<ViewerAvatar defaultAvatar={defaultAvatar} dimension={32} photoUrl="" />
 							{ !is_create_set && <span className="">{user.username}</span> }
 						</a>
 					</div>

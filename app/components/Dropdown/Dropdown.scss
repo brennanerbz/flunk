@@ -13,4 +13,66 @@
 	    min-width: 165px;
 	    max-width: 195px;
 	}
+	&.top_right {
+		.bubble_arrow_border, .bubble_arrow {
+			border: solid transparent;
+			height: 0;
+			width: 0;
+			position: absolute;
+			pointer-events: none;
+			bottom: 100%;
+			left: 75%;
+		}
+		.bubble_arrow_border {
+			border-bottom-color: rgba(61,70,77,0.1);
+			border-width: 7px 11px;
+		    margin-left: -11px;
+		}
+		.bubble_arrow {
+			border-bottom-color: #fff;
+			border-width: 6px 9px;
+			margin-left: -9px;
+		}
+	}
+	.bubble_arrow_border, .bubble_arrow {
+		border: solid transparent;
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+	.title {
+		width: 100%;
+		font-size: 14px;
+		color: #000;
+		margin: -7px 0 10px;
+	}
+	ul {
+		margin: 0;
+		padding: 0;
+		li {
+			float: none;
+			display: block;
+			margin: 0 -20px;
+			z-index: 100;
+			list-style: none;
+			position: relative;
+			cursor: pointer;
+			&:hover {
+				background: #fafafa;
+			}
+			a {
+				text-decoration: none;
+				padding: 5px 20px;
+				display: block;
+				zoom: 1;
+				min-width: 165px;
+			}
+		}
+	}
 }
+
+
+
+
+

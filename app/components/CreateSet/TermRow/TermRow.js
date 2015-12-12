@@ -8,86 +8,97 @@ export default class TermRow extends Component {
 	}
 
 	state = {
-		is_mouse_over: false, 
-		active_row: false,
-		active_side: 0, /* 0 = 'term' & 1 = 'definition' */
-		total_count: 2,
-		terms: null,	
-		definitions: null,
-		index: null
-	}
-
-	sparkNewRow(index, total_count) {
-		if(this.state.total_count !== total_count && index == total_count - 1) {
-			this.setState({ 
-				active_row: true,
-				active_side: 0
-			})
+			is_mouse_over: false, 
+			active_row: false,
+			active_side: 0, /* 0 = 'term' & 1 = 'definition' */
+			total_count: 2,
+			terms: null,	
+			definitions: null,
+			index: null,
+			locked_in: false
 		}
-	}
 
-	componentWillMount() {
-		const { association, item, index, total_count, able_to_spark } = this.props;
-		this.setState({
-			index: index,
-			total_count: total_count
-		});
-		if(total_count > 2 && able_to_spark) {
-			this.sparkNewRow(index, total_count)
+		sparkNewRow(index, total_count) {
+			if(this.state.total_count !== total_count && index == total_count - 1) {
+				this.setState({ 
+					active_row: true,
+					active_side: 0
+				})
+			}
 		}
-	}
 
-	componentWillReceiveProps(nextProps) {
-		if(document.activeElement == document.body) this.setState({ active_row: false })
-	}
+		componentWillMount() {
+			const { association, item, index, total_count, able_to_spark } = this.props;
+			this.setState({
+				index: index,
+				total_count: total_count,
+				association: association,
+				item: item !== undefined ? item : null
+			});
+			if(total_count > 2 && able_to_spark) {
+				this.sparkNewRow(index, total_count)
+			}
+		}
 
-	saveTerm = (term) => { 
-	    const { createItem, updateItem, index, item, association } = this.props;
-	    if(item == null && term !== null) {
-	        if (term.length > 0) {
-	            createItem(index, { name: 'target', prop: term })
-	            return;
-	        }
-	    }
-	    if(item !== null && item.target !== undefined) {
-	        if(item.target == null || 
-	        (item.target !== null 
-	        && item.target.toLowerCase().trim() !== term.toLowerCase().trim()
-	        && item.finalized == null)) {
-	            updateItem(item, { name: 'target', prop: term })
-	            return;
-	    }
-	    if(item.target !== null 
-	        && item.target.toLowerCase().trim() !== term.toLowerCase().trim()
-	        && item.finalized) { 
-	            createItem(index, {name: 'child', prop: item}, { name: 'target', prop: term })
-	        }
-	    }
-	}
+		componentWillReceiveProps(nextProps) {
+			if(document.activeElement == document.body) this.setState({ active_row: false })
+		}
 
-	saveDefinition = (def) => { 
-	    const { createItem, updateItem, index, item, association } = this.props;
-	    if(item == null && def !== null) {
-	        if (def.length > 0 && def !== null) {
-	            createItem(index, { name: 'cue', prop: def })
-	            return;
-	        }
-	    }
-	    if(item !== null && item.cue !== undefined) {
-	        if(item.cue == null || 
-	        (item.cue !== null 
-	        && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
-	        && item.finalized == null )) {
-	            updateItem(item, { name: 'cue', prop: def })
-	            return;
-	        }
-	        if(item.cue !== null 
-	        && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
-	        && item.finalized) { 
-	            createItem(index, {name: 'child', prop: item}, { name: 'cue', prop: def })
-	        }
-	    }
-	}
+		saveTerm = (term) => { 
+		    const { createItem, updateItem, index, item } = this.props;
+		    if(item == null && !this.state.locked_in) {
+		    	createItem(index, { name: 'target', prop: term })
+		    	this.setState({
+		    		locked_in: true
+		    	})
+		    	return;
+		    }
+		    if(item == null && this.state.locked_in) {
+		    	setTimeout(() => {
+		    		this.saveTerm(term)
+		    	}, 500)
+		    	return;
+		    }
+		    if(item !== null 
+		    	&& (item.target == null || item.target.toLowerCase().trim() !== term.toLowerCase().trim() )
+		    	&& item.finalized == null) {
+		    	updateItem(item, {name: 'target', prop: term})
+		    	return;
+		    }
+		    if(item !== null
+		    	&& item.target.toLowerCase().trim() !== term.toLowerCase().trim()
+		    	&& item.finalized) {
+		    	createItem(index, {name: 'child', prop: item}, {name: 'target', prop: term})
+		    }
+		}
+
+		saveDefinition = (def) => { 
+		    const { createItem, updateItem, index, item } = this.props;
+		    if(item == null && !this.state.locked_in) {
+		    	createItem(index, { name: 'cue', prop: def })
+		    	this.setState({
+		    		locked_in: true
+		    	})
+		    	return;
+		    }
+		    if(item == null && this.state.locked_in) {
+		    	setTimeout(() => {
+		    		this.saveDefinition(def)
+		    	}, 500)
+		    	return;
+		    }
+		    if(item !== null 
+		    	&& (item.cue == null || item.cue.toLowerCase().trim() !== def.toLowerCase().trim())
+		    	&& item.finalized == null) {
+		    	updateItem(item, {name: 'cue', prop: def})
+		    	return;
+		    }
+		    if(item !== null
+		    	&& item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
+		    	&& item.finalized) {
+		    	createItem(index, {name: 'child', prop: item}, {name: 'cue', prop: def})
+		    }
+		}
 
 	handleDelete = () => {
  		this.props.deleteRow(this.props.index, this.props.association)
@@ -103,6 +114,7 @@ export default class TermRow extends Component {
 				</a>
 				<TermContent className="TermRow-content"
 							 item={this.props.item}
+							 association={this.props.association}
 						     index={this.props.index}
 						     total_count={this.props.total_count}
 						     active_row={this.state.active_row}

@@ -60,14 +60,14 @@ export default class TermRows extends Component {
 							? associations[id]
 							: null,
 
-							item = association !== null && items !== undefined
+							item = association !== null && association !== undefined && items !== undefined
 							? items[association.item_id]
 							: null
 
 							return (
 								<TermRow
 									asc_id={id}
-									ref={`row${i}`}                    
+									ref={`row${i}`}  
 									total_count={this.props.associations_length}
 									index={i}
 									key={`row${i}`}

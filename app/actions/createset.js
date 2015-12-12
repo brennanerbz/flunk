@@ -787,17 +787,17 @@ export function addRow() {
 export const DELETE_ROW = 'DELETE_ROW'
 export const DELETE_ROW_SUCCESS = 'DELETE_ROW_SUCCESS'
 export const DELETE_ROW_FAILURE = 'DELETE_ROW_FAILURE'
-export function deleteRow(index, asc) {
+export function deleteRow(index, asc, ref) {
 	return async(dispatch, getState) => {
 		dispatch({type: DELETE_ROW})
 		try {
-			if(asc !== null && asc !== undefined) {
+			if(asc.id !== undefined) {
 				await axios.delete(`${api_url}/associations/${asc.id}`).then(() => {
-					dispatch({type: DELETE_ROW_SUCCESS, index, asc})
+					dispatch({type: DELETE_ROW_SUCCESS, index, asc, ref})
 				})
 			}
 			else {
-				dispatch({type: DELETE_ROW_SUCCESS, index, asc})
+				dispatch({type: DELETE_ROW_SUCCESS, index, asc, ref})
 			}
 		} catch(err) {
 			dispatch({

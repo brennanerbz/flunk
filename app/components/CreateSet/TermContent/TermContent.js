@@ -39,8 +39,6 @@ export default class TermContent extends Component {
         setTimeout(() => {
             this.trigger(term_node, def_node)
             if(index == total_count - 1) { 
-                console.log(index)
-                console.log(total_count)
                 this.props.finishedRendering() 
             }
         }, 1)
@@ -58,24 +56,34 @@ export default class TermContent extends Component {
            this.trigger(term_node, def_node)
            this.setState({triggered: true}); 
         }
-        if(this.props.association.id !== nextProps.association.id) {
-            if(nextProps.association !== null && nextProps.association.item.target !== null) {
+        if(this.state.term == null && this.state.definition == null) {
+            if(nextProps.association.id == undefined) {
+                this.setState({
+                    term: '',
+                    definition: ''
+                })
+            }
+            if(nextProps.association.id !== undefined) {
                 this.setState({
                     term: nextProps.association.item.target,
-                });
-            } else {
-                this.setState({
-                    term: ''
+                    definition: nextProps.association.item.cue
                 });
             }
-            if(nextProps.association !== null && nextProps.association.item.cue !== null) {
+        }
+        if(this.state.term !== null || this.state.definition !== null) {
+            if(this.props.association.id !== undefined && nextProps.association.id !== undefined) {
+                if(this.props.association.id !== nextProps.association.id) {
+                    this.setState({
+                        term: nextProps.association.item.target,
+                        definition: nextProps.association.item.cue
+                    })
+                }
+            }
+            if(this.props.association.id !== undefined && nextProps.association.id == undefined) {
                 this.setState({
-                    definition: nextProps.association.item.cue,
-                });
-            } else {
-                this.setState({
+                    term: '',
                     definition: ''
-                });
+                })
             }
         }
     }

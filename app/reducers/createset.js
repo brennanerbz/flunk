@@ -91,7 +91,7 @@ export var createState = {
   creator_id: null,
   creator_username: '',
   count: 1,
-
+  next_rank: 2,
   associations: {
     asc_0: {
       order: 0
@@ -345,18 +345,19 @@ export function createset(state = createState, action) {
     case ADD_ROW:
       let asc_order = state.associations_order,
           ascs = Object.assign({}, state.associations),
-          last_asc_index = state.associations_length,
-          new_asc = 'asc_' + last_asc_index
+          new_order = state.next_rank,
+          new_asc = 'asc_' + new_order
       asc_order.push(new_asc)
       ascs[new_asc] = {
-        order: last_asc_index,
+        order: new_asc,
       }
       return {
         ...state,
-        activeRow: last_asc_index,
+        activeRow: asc_order.indexOf(new_asc),
+        next_rank: state.next_rank + 1,
         associations: ascs,
         associations_order: asc_order,
-        associations_length: last_asc_index,
+        associations_length: asc_order.length,
         able_to_spark: true
       }
     case SET_FLAG: 
@@ -373,9 +374,9 @@ export function createset(state = createState, action) {
       let deleted_asc = action.asc,
           u_associations = Object.assign({}, state.associations),
           u_order = state.associations_order,
-          delete_ref = action.ref;
-      delete u_associations[delete_ref]
-      u_order = u_order.filter(asc => asc !== delete_ref)
+          _ref = action.ref;
+      delete u_associations[_ref]
+      u_order = u_order.filter((asc, i) => i !== action.index)
       return {
         ...state,
         associations: u_associations,

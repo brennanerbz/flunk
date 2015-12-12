@@ -47,6 +47,7 @@ import Modal from '../../components/Modal/modal';
 	creator_username: state.createset.creator_username,
 	associations: state.createset.associations,
 	associations_order: state.createset.associations_order,
+	associations_length: state.createset.associations_length,
 	items: state.createset.items,
 	current_item: state.createset.current_item,
 	current_association: state.createset.current_association,
@@ -57,7 +58,6 @@ import Modal from '../../components/Modal/modal';
 	title_flag: state.createset.title_flag,
 	resizing: state.createset.resizing,
 	/* New state */
-	associations_length: state.createset.associations_length,
 	rendered: state.createset.rendered,
 	able_to_spark: state.createset.able_to_spark
 	}),

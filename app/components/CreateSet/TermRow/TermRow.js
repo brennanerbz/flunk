@@ -101,10 +101,11 @@ export default class TermRow extends Component {
 	}
 
 	handleDelete = () => {
- 		this.props.deleteRow(this.props.index, this.props.association)
+ 		this.props.deleteRow(this.props.index, this.props.association, this.props.asc_id)
 	}	
 
 	render() {
+		console.log(this.props.total_count)
 		return (
 			<div className="TermRow" 
 				 onMouseOver={() => this.setState({is_mouse_over: true})}
@@ -132,7 +133,8 @@ export default class TermRow extends Component {
 				<div className="TermRow-operations">	
 					{	
 						this.state.is_mouse_over 
-						&& this.props.total_count > 2 &&
+						&& this.props.total_count > 2 
+						&&
 						<a className="TermRow-control material-icons"
 					   		onClick={this.handleDelete}>
 							clear

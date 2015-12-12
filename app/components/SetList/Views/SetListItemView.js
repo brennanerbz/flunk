@@ -46,7 +46,8 @@ export default class SetListItemView extends Component {
 					<div className="set_list_item_actions">
 						<div className="inner">
 							{
-								mouseIsOver
+								mouseIsOver 
+								&& assignment.set.finalized
 								&&
 								<button 
 									className="button outline"

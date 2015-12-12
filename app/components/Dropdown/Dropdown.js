@@ -45,7 +45,9 @@ export default class BubbleDropdown extends Component {
 			this.setState({
 				dropdown_style: {
 					top: parent_pos.height + 10 + 'px',
-					left: parent_pos.right - bubble_pos.right + 'px'
+					left: parent_pos.right - bubble_pos.right + 'px',
+					paddingTop: '0',
+					paddingBottom: '0'
 				}
 			})
 			return;
@@ -53,7 +55,8 @@ export default class BubbleDropdown extends Component {
 		this.setState({
 			dropdown_style: {
 				top: parent_pos.height + 'px',
-				left: parent_pos.right - bubble_pos.right + 'px'
+				left: parent_pos.right - bubble_pos.right + 'px',
+				paddingBottom: '10px'
 			}
 		})
 	}
@@ -88,19 +91,35 @@ class BubbleDropdownContents extends Component {
 	}
 
 	renderSetDropdown() {
-		let actions = ['Learn', 'Open', 'Edit', 'Delete']
+		let finalized_actions = ['Learn', 'Edit', 'Divider', 'Delete'],
+			draft_actions = ['Finish', 'Divider', 'Delete'],
+			actions;
+		if(this.props.assignment.set.finalized) {
+			actions = finalized_actions
+		} else {
+			actions = draft_actions
+		}
 		return(
 			<ul className="set_actions_list">
 				{
 					actions.map(action => {
 						return (
 							<li className="set_action" key={action}>
-								<a className="">
-									<SpriteDiv
-										name={action.toLowerCase()}
-										text={action}
-									/>
-								</a>	
+								{
+									action == 'Divider'
+									&&
+									<div className="divider"></div>
+								}
+								{
+									action !== 'Divider'
+									&&
+									<a className="">
+										<SpriteDiv
+											name={action.toLowerCase()}
+											text={action}
+										/>
+									</a>	
+								}
 							</li>
 						)
 					})

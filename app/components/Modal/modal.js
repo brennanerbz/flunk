@@ -69,9 +69,50 @@ export default class Modal extends Component {
 	}
 
 	renderShareBody() {
+		let { set } = this.props,
+			globe = require('../../assets/globe.png'),
+			lock = require('../../assets/lock.png'),
+			icon;
+		if(set.visibility == 'public') {
+			icon = globe
+		} else {
+			icon = lock
+		}
 		return (
-			<div className="modal-body">
-				<input id="share_link" ref="share_link" type="text" defaultValue="https://ace.com/987389/cog-sci" />
+			<div className="modal-body share_link">
+				<a id="shared_link" className="remove_link">Remove link</a>
+				<h2>Link to set</h2>
+				<div className="copy_link_input_container"
+					 onClick={() => this.refs.share_link.select()}>
+					<div className="text_input inline">
+						<div className="text_input_wrapper">
+							<input readOnly={true} 
+								   ref="share_link"
+								   type="text" id="share_link" 
+								   value={`http://127.0.0.1:8080/set/${set.id}`} />
+							<label style={{display: 'none'}} htmlFor="share_link"></label>
+							<small className="secondary_label"></small>
+						</div>
+					</div>
+				</div>
+				<div className="permissions_policy">
+					<img className="sprite" src={icon}/>
+					<div className="permissions_text">
+						<div className="policy_text">
+							{
+								set.visibility == 'public'
+								&&" Anyone with the link can see it "
+							}
+							{
+								set.visibility == 'private'
+								&& "Only you can see it "
+							}
+							<a className="change_permission_link">
+								Change permissions
+							</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 	}
@@ -167,7 +208,7 @@ export default class Modal extends Component {
 	}
 
 	renderTextAreaBody() {
-		const { set } = this.props;
+		const { set } = this.props
 		return (
 			<div className="modal-body">
 			<p>
@@ -209,7 +250,7 @@ export default class Modal extends Component {
 	}
 
 	render() {
-		const { type, assignment, pushState, deleteAssignment } = this.props;
+		const { type, assignment, pushState, deleteAssignment, set } = this.props;
 		return(
 			<div ref="modal" 
 				 className="modal fade" 
@@ -249,7 +290,7 @@ export default class Modal extends Component {
 						<h3 className={classnames("modal-title")} id="myModalLabel">
 							{
 								type == 'share'
-								? 'Share this study study set'
+								? `Share link to '${set.title}'`
 								: null
 							}
 							{

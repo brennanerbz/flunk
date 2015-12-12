@@ -3,7 +3,7 @@
 	.sprite_frame {
 		display: table-cell;
 		vertical-align: middle;
-		&.small {
+		&.small, img {
 			width: 19px;
 		}
 		&.icon_left {
@@ -13,5 +13,7 @@
 	.sprite_text {
 		display: table-cell;
 		vertical-align: middle;
+		color: #006FC8;
+		padding-left: 10px;
 	}
 }

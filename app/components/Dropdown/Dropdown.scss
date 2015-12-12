@@ -93,7 +93,7 @@
 			position: relative;
 			cursor: pointer;
 			&:hover {
-				background: #fafafa;
+				background: #F2F9FC;
 			}
 			&.divider {
 				border-top: 1px solid #edf1f5;
@@ -115,6 +115,11 @@
 			li { 
 				&.set_action {
 					margin: 0 -15px;
+				}
+				.divider {
+					border-top: 1px solid #edf1f5;
+					margin-top: 0px;
+					padding-top: 0px;
 				}
 				a {
 					display: block;

@@ -20,8 +20,8 @@ export default class TermRows extends Component {
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
-		const { row_length } = this.props;
-		if(prevProps.row_length < row_length) this.scrollToBottom()
+		const { asssociations_length } = this.props;
+		if(prevProps.asssociations_length < asssociations_length) this.scrollToBottom()
 	}
 
 	handleResize = () => {
@@ -34,7 +34,7 @@ export default class TermRows extends Component {
 	} 
 
 	render() {
-	  const { rows, associations, items } = this.props;
+	  const { associations_order, associations, items } = this.props;
 	  return(
 				<div className="TermRows"
 					 ref="term_rows">
@@ -53,10 +53,10 @@ export default class TermRows extends Component {
 				        </div>
 				      </div>
 						{     
-						rows.map((id, i) => {
+						associations_order.map((id, i) => {
 							let association, item;
 
-							association = id !== null && associations !== undefined 
+							association = id !== null 
 							? associations[id]
 							: null,
 
@@ -68,7 +68,7 @@ export default class TermRows extends Component {
 								<TermRow
 									asc_id={id}
 									ref={`row${i}`}                    
-									total_count={this.props.row_length}
+									total_count={this.props.associations_length}
 									index={i}
 									key={`row${i}`}
 									id={this.props.id}

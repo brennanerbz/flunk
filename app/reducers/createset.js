@@ -91,15 +91,26 @@ export var createState = {
   creator_id: null,
   creator_username: '',
   count: 1,
-  associations: null,
-  items: null,
+
+  associations: {
+    asc_0: {
+      order: 0
+    },
+    asc_1: {
+      order: 1
+    }
+  },
+  items: {},
+  associations_order: [
+    'asc_0', 'asc_1'
+  ],
+  associations_length: 2,
+
   current_item: null,
   current_association: null,
   current_order_index: null,
   term_choices: null,
   def_choices: null,
-  rows: [null, null],
-  row_length: 2,
   flag: false,
   title_flag: false,
   /* Old State */
@@ -246,44 +257,57 @@ export function createset(state = createState, action) {
     case CREATE_ITEM_SUCCESS: 
       let items = Object.assign({}, state.items) || {},
           item = action.item,
-          id = item.id;
+          i = action.index,
+          id = item.id,
+          _ascs = state.associations;
+      _ascs[`asc_${i}`].item = item;
+      _ascs[`asc_${i}`].item_id = item.id;
       items[id] = item;
       return {
         ...state,
         isCreatingItem: false,
+        associations: _ascs,
         items: items,
         term_choices: null,
         check_subjects: true
       }
     case CREATE_ASSOCIATION_SUCCESS:
       if(state.cleared) return { ...state }
-      let rows = state.rows, 
+      let associations_order = state.associations_order, 
           index = action.index,
-          associations = Object.assign({}, state.associations) || {},
+          rank = state.count - 1,
+          associations = Object.assign({}, state.associations),
           association = action.association,
-          association_id = association.id;
-      associations[association_id] = association;
-      rows[index] = association_id;
+          association_id = association.id,
+          ref = `asc_${rank}`
+      associations[ref].id = association_id;
+      associations[ref].association = association;
+      if(associations_order.indexOf(ref) !== -1) {
+        associations_order[associations_order.indexOf(ref)] = null
+      }
+      associations_order[index] = ref;
       return {
         ...state,
         associations: associations,
         count: state.count + 1,
-        rows: rows
+        associations_order: associations_order,
+        associations_length: associations_order.length
       }
     case UPDATE_ITEM_SUCCESS:
       if(state.cleared) return { ...state }
       let updated_items = Object.assign({}, state.items),
-          _associations = state.associations,
-          newitem = action.item,
-          newitem_id = newitem.id;
-      updated_items[newitem_id] = newitem
+          _associations = Object.assign({}, state.associations),
+          updated_item = action.item,
+          item_id = updated_item.id;
+      updated_items[item_id] = updated_item
       for(var prop in _associations) {
         let p = _associations[prop];
         for(var key in p) {
+          if(key == 'item_id') {
+            p[key] = item_id
+          }
           if(key == 'item') {
-            if(p[key].id == newitem_id) {
-              p[key] = newitem
-            }
+            p[key] = updated_item
           }
         }
       }
@@ -296,28 +320,12 @@ export function createset(state = createState, action) {
     case UPDATE_ASSOCIATION_SUCCESS:
       if(state.cleared) return { ...state }
       let updated_associations = Object.assign({}, state.associations),
-          new_association = action.association,
-          naid = new_association.id, /* new association id */
-          _items_ = Object.assign({}, state.items),
-          oid = updated_associations[naid].item_id, /* old item id */
-          old_item = _items_[oid],
-          new_item = new_association.item,
-          nid = new_association.item_id, /* new item id */
-          i = action.index;
-      /* updating the associations */
-      updated_associations[naid] = new_association;
-      /* check if adopting same item */
-      if(_items_[nid] == _items_[oid]) console.log("good")
-      else {
-        /* deleting old item, replacing it with new */
-        _items_[nid] = new_item;
-        _items_[oid] = _items_[nid];
-        delete _items_[oid];
-      }
+          updated_association = action.association,
+          asc_ref = action.ref;
+          updated_associations[asc_ref].association = updated_association;
       return {
         ...state,
-        associations: updated_associations,
-        items: _items_
+        associations: updated_associations
       }
     case TERM_SUGGESTIONS_SUCCESS:
       return {
@@ -335,15 +343,20 @@ export function createset(state = createState, action) {
         def_choices: null
       }
     case ADD_ROW:
-      let new_rows = state.rows,
-          last_index;
-      new_rows.push(null);
-      last_index = new_rows.length;
+      let asc_order = state.associations_order,
+          ascs = Object.assign({}, state.associations),
+          last_asc_index = state.associations_length,
+          new_asc = 'asc_' + last_asc_index
+      asc_order.push(new_asc)
+      ascs[new_asc] = {
+        order: last_asc_index,
+      }
       return {
         ...state,
-        activeRow: last_index,
-        rows: new_rows,
-        row_length: new_rows.length,
+        activeRow: last_asc_index,
+        associations: ascs,
+        associations_order: asc_order,
+        associations_length: last_asc_index,
         able_to_spark: true
       }
     case SET_FLAG: 
@@ -357,27 +370,17 @@ export function createset(state = createState, action) {
         title_flag: action.flag
       }
     case DELETE_ROW_SUCCESS:
-      let o_rows = state.rows,
-          n_rows,
-          o_associations = state.associations,
-          o_items = state.items,
-          new_count = state.count;
-      if(action.asc !== null && action.asc !== undefined) {
-        n_rows = o_rows.filter((x, i) => x !== action.asc.id)
-        let delete_asc = action.asc.id;
-        delete o_items[delete_asc.item_id]
-        delete o_associations[delete_asc]
-        new_count--;
-      } else {
-        n_rows = o_rows.filter((x, i) => i !== action.index)
-      }
+      let deleted_asc = action.asc,
+          u_associations = Object.assign({}, state.associations),
+          u_order = state.associations_order,
+          delete_ref = action.ref;
+      delete u_associations[delete_ref]
+      u_order = u_order.filter(asc => asc !== delete_ref)
       return {
         ...state,
-        rows: n_rows,
-        count: new_count,
-        row_length: n_rows.length,
-        associations: o_associations,
-        items: o_items
+        associations: u_associations,
+        associations_order: u_order,
+        associations_length: u_order.length
       }
     case SAVE_TITLE:
       return {

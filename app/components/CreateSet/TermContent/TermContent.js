@@ -58,19 +58,19 @@ export default class TermContent extends Component {
            this.trigger(term_node, def_node)
            this.setState({triggered: true}); 
         }
-        if(this.props.item !== nextProps.item) {
-            if(nextProps.item !== null && nextProps.item.target !== null) {
+        if(this.props.association.id !== nextProps.association.id) {
+            if(nextProps.association !== null && nextProps.association.item.target !== null) {
                 this.setState({
-                    term: nextProps.item.target,
+                    term: nextProps.association.item.target,
                 });
             } else {
                 this.setState({
                     term: ''
                 });
             }
-            if(nextProps.item !== null && nextProps.item.cue !== null) {
+            if(nextProps.association !== null && nextProps.association.item.cue !== null) {
                 this.setState({
-                    definition: nextProps.item.cue,
+                    definition: nextProps.association.item.cue,
                 });
             } else {
                 this.setState({

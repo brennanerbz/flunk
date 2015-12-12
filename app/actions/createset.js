@@ -543,9 +543,10 @@ export function createItem(index, ...args) {
 			await axios.post(`${api_url}/items/`, item)
 			.then(res => item = res.data)
 			if(association == undefined) {
-				await dispatch({type: CREATE_ITEM_SUCCESS, item})
+				await dispatch({type: CREATE_ITEM_SUCCESS, item, index})
 				await dispatch(createAssociation(item.id, index))
 			} else {
+				await dispatch({type: CREATE_ITEM_SUCCESS, item, index})
 				await dispatch(updateAssociation(association, 
 												{name: 'item', prop: item}, 
 												{name: 'item_id', prop: item.id}))
@@ -713,12 +714,13 @@ export function reorder() {
 	return async(dispatch, getState) => {
 		dispatch({type: REORDER})
 		try {
-			let acs = { associations: [] }
-			let rows = getState().createset.rows.filter(row => row !== null),
+			let acs = { associations: [] },
+				current_associations = getState().createset.associations,
+				associations_order = getState().createset.associations_order.filter(asc => asc !== null),
 				set_id = getState().createset.id
-			for(var i = 0; i < rows.length; i++) {
+			for(var i = 0; i < associations_order.length; i++) {
 				acs.associations.push({
-					id: rows[i],
+					id: current_associations[associations_order[i]],
 					order: i + 1
 				})
 			}

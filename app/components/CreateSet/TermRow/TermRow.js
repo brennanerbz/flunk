@@ -14,7 +14,8 @@ export default class TermRow extends Component {
 		total_count: 2,
 		terms: null,	
 		definitions: null,
-		index: null
+		index: null,
+		locked_in: false
 	}
 
 	sparkNewRow(index, total_count) {
@@ -30,7 +31,9 @@ export default class TermRow extends Component {
 		const { association, item, index, total_count, able_to_spark } = this.props;
 		this.setState({
 			index: index,
-			total_count: total_count
+			total_count: total_count,
+			association: association,
+			item: item !== undefined ? item : null
 		});
 		if(total_count > 2 && able_to_spark) {
 			this.sparkNewRow(index, total_count)
@@ -42,50 +45,58 @@ export default class TermRow extends Component {
 	}
 
 	saveTerm = (term) => { 
-	    const { createItem, updateItem, index, item, association } = this.props;
-	    if(item == null && term !== null) {
-	        if (term.length > 0) {
-	            createItem(index, { name: 'target', prop: term })
-	            return;
-	        }
+	    const { createItem, updateItem, index, item } = this.props;
+	    if(item == null && !this.state.locked_in) {
+	    	createItem(index, { name: 'target', prop: term })
+	    	this.setState({
+	    		locked_in: true
+	    	})
+	    	return;
 	    }
-	    if(item !== null && item.target !== undefined) {
-	        if(item.target == null || 
-	        (item.target !== null 
-	        && item.target.toLowerCase().trim() !== term.toLowerCase().trim()
-	        && item.finalized == null)) {
-	            updateItem(item, { name: 'target', prop: term })
-	            return;
+	    if(item == null && this.state.locked_in) {
+	    	setTimeout(() => {
+	    		this.saveTerm(term)
+	    	}, 500)
+	    	return;
 	    }
-	    if(item.target !== null 
-	        && item.target.toLowerCase().trim() !== term.toLowerCase().trim()
-	        && item.finalized) { 
-	            createItem(index, {name: 'child', prop: item}, { name: 'target', prop: term })
-	        }
+	    if(item !== null 
+	    	&& (item.target == null || item.target.toLowerCase().trim() !== term.toLowerCase().trim() )
+	    	&& item.finalized == null) {
+	    	updateItem(item, {name: 'target', prop: term})
+	    	return;
+	    }
+	    if(item !== null
+	    	&& item.target.toLowerCase().trim() !== term.toLowerCase().trim()
+	    	&& item.finalized) {
+	    	createItem(index, {name: 'child', prop: item}, {name: 'target', prop: term})
 	    }
 	}
 
 	saveDefinition = (def) => { 
-	    const { createItem, updateItem, index, item, association } = this.props;
-	    if(item == null && def !== null) {
-	        if (def.length > 0 && def !== null) {
-	            createItem(index, { name: 'cue', prop: def })
-	            return;
-	        }
+	    const { createItem, updateItem, index, item } = this.props;
+	    if(item == null && !this.state.locked_in) {
+	    	createItem(index, { name: 'cue', prop: def })
+	    	this.setState({
+	    		locked_in: true
+	    	})
+	    	return;
 	    }
-	    if(item !== null && item.cue !== undefined) {
-	        if(item.cue == null || 
-	        (item.cue !== null 
-	        && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
-	        && item.finalized == null )) {
-	            updateItem(item, { name: 'cue', prop: def })
-	            return;
-	        }
-	        if(item.cue !== null 
-	        && item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
-	        && item.finalized) { 
-	            createItem(index, {name: 'child', prop: item}, { name: 'cue', prop: def })
-	        }
+	    if(item == null && this.state.locked_in) {
+	    	setTimeout(() => {
+	    		this.saveDefinition(def)
+	    	}, 500)
+	    	return;
+	    }
+	    if(item !== null 
+	    	&& (item.cue == null || item.cue.toLowerCase().trim() !== def.toLowerCase().trim())
+	    	&& item.finalized == null) {
+	    	updateItem(item, {name: 'cue', prop: def})
+	    	return;
+	    }
+	    if(item !== null
+	    	&& item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
+	    	&& item.finalized) {
+	    	createItem(index, {name: 'child', prop: item}, {name: 'cue', prop: def})
 	    }
 	}
 
@@ -103,6 +114,7 @@ export default class TermRow extends Component {
 				</a>
 				<TermContent className="TermRow-content"
 							 item={this.props.item}
+							 association={this.props.association}
 						     index={this.props.index}
 						     total_count={this.props.total_count}
 						     active_row={this.state.active_row}
@@ -115,7 +127,7 @@ export default class TermRow extends Component {
 						     addRow={this.props.addRow}	
 						     resizing={this.props.resizing}	
 						     rendered={this.props.rendered}
-						     finishedRendering={this.props.finishedRendering}	
+						     finishedRendering={this.props.finishedRendering}
 				/>
 				<div className="TermRow-operations">	
 					{	

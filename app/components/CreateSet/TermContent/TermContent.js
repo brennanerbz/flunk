@@ -58,13 +58,6 @@ export default class TermContent extends Component {
            this.trigger(term_node, def_node)
            this.setState({triggered: true}); 
         }
-        if(this.props.association !== null && nextProps.association == null) {
-            this.setState({
-                term: '',
-                definition: ''
-            })
-            return;
-        }
         if(this.props.association == null && nextProps.association == null) {
             if(this.state.term !== null || this.state.definition !== null) return
             else {
@@ -73,11 +66,19 @@ export default class TermContent extends Component {
                     definition: ''
                 });
             }
+            return;
         }
         if(this.props.association !== null && nextProps.association !== null) {
             this.setState({
                 term: nextProps.association.item.target,
                 definition: nextProps.association.item.cue
+            })
+            return;
+        }
+        if(this.props.association !== null && nextProps.association == null) {
+            this.setState({
+                term: '',
+                definition: ''
             })
             return;
         }

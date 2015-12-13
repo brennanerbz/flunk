@@ -160,15 +160,7 @@ export function createset(state = createState, action) {
         unmounting: false,
         able_to_spark: false
       }
-    case LOAD_EDITING_SUCCESS:
-      let load_rows = [null, null],
-          length = action.rows.length;
-      if(length > 0) {
-        if(length === 1) load_rows.splice(0, 1, action.rows[0])
-        if(length > 1) load_rows = action.rows.sort((a, b) => {
-          return action.associations[a].order - action.associations[b].order
-        })
-      } 
+    case LOAD_EDITING_SUCCESS:     
       let _subjects = [];
       if(action.set.subjects !== undefined) {
         action.set.subjects.forEach(sub => _subjects.push("#" + sub.name.toLowerCase().replace(" ", "")))
@@ -187,10 +179,10 @@ export function createset(state = createState, action) {
         assignment: action.assignment,
         items: action.items,
         associations: action.associations,
-        rows: load_rows,
-        row_length: load_rows.length,
-        count: Object.keys(action.associations).length > 0 
-               ? action.associations[action.rows.slice(-1)[0]].order + 1 
+        associations_order: action.associations_order,
+        associations_length: action.associations_order.length,
+        order: Object.keys(action.associations).length > 0 
+               ? action.associations[action.associations_order.slice(-1)[0]].order + 1 
                : 1,
         deleted: false,
         subjects: _subjects,
@@ -290,11 +282,7 @@ export function createset(state = createState, action) {
             order: order,
             index: index
           }
-      // console.log(__item_id)
-      // console.log(association)
-      console.log(fe_association)
       associations[ref] = fe_association
-      // console.log(associations)
       associations_order.splice(i, ref);
       return {
         ...state,

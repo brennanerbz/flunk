@@ -14,7 +14,7 @@ export function fetchSet(user_id, set_id, pushState) {
 	return async(dispatch, getState) => {
 		dispatch({type: FETCH_CREATE_SET})
 		try {
-			let set = {}, items = {}, associations = {}, rows = [],
+			let set = {}, items = {}, associations = {}, associations_order = [],
 			assignment = await getState().sets.assignments.filter(assign => assign.set_id == set_id)[0]
 			await axios.get(`${api_url}/sets/${set_id}`).then(res => { 
 				set = res.data 
@@ -22,16 +22,24 @@ export function fetchSet(user_id, set_id, pushState) {
 			await axios.get(`${api_url}/assignments/${assignment.id}`).then((res) => {
 				assignment = res.data
 			}) 
-			assignment.set.associations.associations.forEach(asc => {
+			let root_asc_name = 'asc_'
+			assignment.set.associations.associations.forEach((asc, i) => {
+				root_asc_name = root_asc_name + i
 				items[asc.item_id] = asc.item
-				associations[asc.id] = asc
-				rows.push(asc.id)
+				associations[root_asc_name] = {
+					association: asc,
+					item: asc.item,
+					item_id: asc.item_id,
+					order: i + 1,
+					index: i
+				}
+				associations_order.push(root_asc_name)
 			})
 			if(set.editability == 'creator' && set.creator_id !== user_id) {
 				pushState(null, '/')
 				return;
 			}
-			dispatch({type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows})
+			dispatch({type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, associations_order})
 		} catch(err) {
 			if(err.status == 404) pushState(null, '/error')
 			dispatch({
@@ -56,7 +64,7 @@ export function loadEditing(set_id, pushState) {
 		try {
 			let transferState = getState().transfer,
 				user = getState().user.user,
-				set, assignment, items = {}, associations = {}, rows = [];
+				set, assignment, items = {}, associations = {}, associations_order = [];
 			if(Object.keys(user).length == 0) { setTimeout(() => { 
 				dispatch(loadEditing(set_id, pushState))
 				return;
@@ -65,17 +73,25 @@ export function loadEditing(set_id, pushState) {
 				if(transferState.set.id == set_id) {
 					set = transferState.set
 					assignment = transferState.assignment
+					let root_asc_name = 'asc_';
 					transferState.associations.forEach(asc => {
+						root_asc_name = root_asc_name += i
 						items[asc.item_id] = asc.item
-						associations[asc.id] = asc
-						rows.push(asc.id)
+						associations[root_asc_name] = {
+							association: asc,
+							item: asc.item,
+							item_id: asc.item_id,
+							order: i + 1,
+							index: i
+						}
+						associations_order.push(root_asc_name)
 					})
 					if(set.editability == 'creator' && set.creator_id !== user.id) {
 						pushState(null, '/error')
 						return;
 					}
 					setTimeout(() => {
-						dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows })
+						dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, associations_order })
 					}, 50)
 				}
 			} else {

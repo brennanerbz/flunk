@@ -168,6 +168,24 @@ export function createset(state = createState, action) {
       } else {
         _subjects = state.subs
       }
+      let incoming_associations = action.associations,
+          incoming_asc_order = action.associations_order,
+          next_order = incoming_associations[incoming_asc_order.slice(-1)[0]].order + 1 
+
+      if(incoming_asc_order.length == 0) {
+        incoming_associations = state.associations
+        incoming_asc_order = state.associations_order
+        next_order = 1
+      }
+      if(incoming_asc_order.length == 1) {
+        incoming_associations['asc_1'] = { 
+          index: 1,
+          order: 1
+        }
+        incoming_asc_order.push('asc_1')
+        next_order = 2
+      }
+
       return {
         ...state,
         editing: true,
@@ -178,12 +196,10 @@ export function createset(state = createState, action) {
         creator_username: action.set.creator.username,
         assignment: action.assignment,
         items: action.items,
-        associations: action.associations,
-        associations_order: action.associations_order,
-        associations_length: action.associations_order.length,
-        order: Object.keys(action.associations).length > 0 
-               ? action.associations[action.associations_order.slice(-1)[0]].order + 1 
-               : 1,
+        associations: incoming_associations,
+        associations_order: incoming_asc_order,
+        associations_length: incoming_asc_order.length,
+        order: next_order,
         deleted: false,
         subjects: _subjects,
         isLoadingSet: false

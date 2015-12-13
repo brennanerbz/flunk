@@ -101,7 +101,7 @@ export function fetchAssignment(set_id) {
 				}
 			})
 		} else {
-			dispatch(createAssignment(set_id))
+			dispatch({type: RECEIVE_ASSOCIATIONS_FAILURE})
 		}
 	}
 }

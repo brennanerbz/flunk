@@ -95,8 +95,8 @@ export default function setView(state = initial_setstate, action) {
 				...state,
 				associations: action.associations,
 				items: items,
-				item_count: items.length
-				// isFetchingSet: false
+				item_count: items.length,
+				isFetchingSet: false
 			}
 		case RECEIVE_ASSIGNMENT_SUCCESS:
 			let assignment = action.assignment,

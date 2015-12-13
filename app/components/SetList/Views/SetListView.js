@@ -16,7 +16,8 @@ export default class SetListView extends Component {
 								pushState={this.props.pushState} 
 								section={this.props.section}
 								key={i} 
-								assignment={assignment}/>
+								assignment={assignment}
+								deleteAssignment={this.props.deleteAssignment}/>
 					})
 				}
 			</ul>

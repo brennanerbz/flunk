@@ -21,14 +21,14 @@ export default class ProfileTabs extends Component {
 						onClick={() => { 
 							this.props.changeTabs('')
 						}}>
-						<a>Studied</a>
+						<a>Created</a>
 					</li>
 					<li className={classnames("tab_item concepts_tab right_most", 
 								   			 {"active":this.props.tab == 'studied'})}
 						onClick={() => { 
 							this.props.changeTabs('studied')
 						}}>
-						<a>Created</a>
+						<a>Studied</a>
 					</li>
 				</ul>
 			</div>

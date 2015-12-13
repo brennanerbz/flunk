@@ -124,6 +124,7 @@ class SetListSections extends Component {
 							}</h1>
 							<SetListView 
 								pushState={this.props.pushState}
+								deleteAssignment={this.props.deleteAssignment}
 								section={section_name} 
 								assignments={sections[prop]} />
 						</li>

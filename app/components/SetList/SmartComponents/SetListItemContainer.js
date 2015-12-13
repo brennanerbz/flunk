@@ -13,8 +13,6 @@ export default class SetListItemContainer extends Component {
 		modal_is_open: false
 	}
 
-	// handle methods
-
 	render() {
 		let root_route;
 		return(
@@ -46,19 +44,27 @@ export default class SetListItemContainer extends Component {
 						})
 					}}
 					handleLearn={() => {
-
+						this.props.pushState(null, `/learn/${this.props.assignment.set.id}`)
 					}}
 					handleOpen={() => {
 						
 					}}
 					handleEdit={() => {
-						
+						this.props.pushState(null, `/createset/${this.props.assignment.set.id}`)
+					}}
+					handleFinish={() => {
+						this.props.pushState(null, `/createset/${this.props.assignment.set.id}`)
 					}}
 					handleDelete={() => {
-						
+						this.setState({
+							modal_type: 'confirm',
+							modal_is_open: true
+						})
 					}}
 				/>
 				<Modal 
+					assignment={this.props.assignment}
+					deleteAssignment={this.props.deleteAssignment}
 					open={this.state.modal_is_open}
 					closeModal={() => {this.setState({modal_is_open: false})}}
 					type={this.state.modal_type}

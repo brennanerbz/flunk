@@ -104,7 +104,14 @@ class BubbleDropdownContents extends Component {
 				{
 					actions.map(action => {
 						return (
-							<li className="set_action" key={action}>
+							<li className="set_action" 
+								key={action}
+								onClick={() => {
+									if(action !== 'Divider') {
+										this.props[`handle${action}`]()
+									}
+									this.props.hideDropdown()
+								}}>
 								{
 									action == 'Divider'
 									&&

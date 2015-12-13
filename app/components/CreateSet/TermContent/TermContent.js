@@ -65,22 +65,20 @@ export default class TermContent extends Component {
             this.setState({
                 asc_id: nextProps.asc_id
             })
-            if(nextProps.association.id == undefined) {
+            if(nextProps.association.item_id == undefined) {
                 this.setState({
                     term: '',
                     definition: ''
                 })
             }
-            if(nextProps.association.id !== undefined) {
+            if(nextProps.association.item_id !== undefined) {
                 this.setState({
                     term: nextProps.association.item.target,
                     definition: nextProps.association.item.cue
                 });
             }
-            return;
         }
-    }
- 
+    } 
     render() {
         const { active_row, index } = this.props;
       	return (

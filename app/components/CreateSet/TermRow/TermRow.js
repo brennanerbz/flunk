@@ -47,7 +47,7 @@ export default class TermRow extends Component {
 	}
 
 	saveTerm = (term) => { 
-	    const { createItem, updateItem, index, item, asc_id } = this.props;
+	    const { createItem, updateItem, index, item, association, asc_id } = this.props;
 	    if(item == undefined && true) {
 	    	createItem(index, { name: 'target', prop: term }, {name: 'association_ref', prop: asc_id})
 	    	this.setState({
@@ -55,12 +55,6 @@ export default class TermRow extends Component {
 	    	})
 	    	return;
 	    }
-	    // if(item == undefined && true) {
-	    // 	setTimeout(() => {
-	    // 		this.saveTerm(term)
-	    // 	}, 500)
-	    // 	return;
-	    // }
 	    if(item !== undefined 
 	    	&& (item.target == null || item.target.toLowerCase().trim() !== term.toLowerCase().trim() )
 	    	&& item.finalized == null) {
@@ -70,12 +64,16 @@ export default class TermRow extends Component {
 	    if(item !== undefined
 	    	&& item.target.toLowerCase().trim() !== term.toLowerCase().trim()
 	    	&& item.finalized) {
-	    	createItem(index, {name: 'child', prop: item}, {name: 'target', prop: term}, {name: 'association', prop: association})
+	    	createItem(index, 
+	    		{name: 'child', prop: item}, 
+	    		{name: 'target', prop: term}, 
+	    		{name: 'association', prop: association}, 
+	    		{name: 'association_ref', prop: asc_id})
 	    }
 	}
 
 	saveDefinition = (def) => { 
-	    const { createItem, updateItem, index, item } = this.props;
+	    const { createItem, updateItem, index, item, asssociation, asc_id } = this.props;
 	    if(item == undefined && true) {
 	    	createItem(index, { name: 'cue', prop: def }, {name: 'association_ref', prop: asc_id})
 	    	this.setState({
@@ -83,12 +81,6 @@ export default class TermRow extends Component {
 	    	})
 	    	return;
 	    }
-	    // if(item == undefined && true) {
-	    // 	setTimeout(() => {
-	    // 		this.saveDefinition(def)
-	    // 	}, 500)
-	    // 	return;
-	    // }
 	    if(item !== undefined 
 	    	&& (item.cue == null || item.cue.toLowerCase().trim() !== def.toLowerCase().trim())
 	    	&& item.finalized == null) {
@@ -98,7 +90,12 @@ export default class TermRow extends Component {
 	    if(item !== undefined
 	    	&& item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
 	    	&& item.finalized) {
-	    	createItem(index, {name: 'child', prop: item}, {name: 'cue', prop: def}, {name: 'association', prop: association})
+	    	createItem(index, 
+	    		{name: 'child', prop: item}, 
+	    		{name: 'cue', prop: def}, 
+	    		{name: 'association', prop: association},
+	    		{name: 'association_ref', prop: asc_id}
+	    	)
 	    }
 	}
 

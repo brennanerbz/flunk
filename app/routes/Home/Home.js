@@ -9,6 +9,7 @@ require('./Home.scss');
 
 import * as actionCreators from '../../actions/usersets';
 import * as transferActions from '../../actions/transfer';
+import * as setActions from '../../actions/createset';
 
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import SetList from '../../components/SetList/SetList';
@@ -26,6 +27,7 @@ import SetListContainer from '../../components/SetList/SmartComponents/SetListCo
 		...bindActionCreators({
 			...actionCreators,
 			...transferActions,
+			...setActions,
 			pushState,
 		}, dispatch)
 	})
@@ -40,8 +42,14 @@ export default class Home extends Component {
 	}
 
 	componentWillMount() {
-		const { user_id, clearTransferState, fetchAssignments, pollAssignments} = this.props;
+		const { user_id, clearTransferState, assignments, fetchAssignments, pollAssignments} = this.props;
 		clearTransferState()
+		let poll = this.checkChangedAssignments(this.state.assignments, assignments)
+		setTimeout(() => {
+			if(!poll) {
+				pollAssignments(Number(document.cookie.split(';')[0].substr(6)))
+			}
+		}, 150)
 	}	
 
 	checkChangedAssignments(arr1, arr2) {
@@ -56,15 +64,9 @@ export default class Home extends Component {
 
 	componentDidMount() {
 		const { user_id, pollAssignments, assignments } = this.props;
-		let poll = this.checkChangedAssignments(this.state.assignments, assignments)
 		this.setState({
 			assignments: assignments
 		})
-		setTimeout(() => {
-			if(poll) {
-				pollAssignments(Number(document.cookie.split(';')[0].substr(6)))
-			}
-		}, 1000)
 	}
 
 	render() {	

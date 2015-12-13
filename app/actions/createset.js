@@ -22,9 +22,9 @@ export function fetchSet(user_id, set_id, pushState) {
 			await axios.get(`${api_url}/assignments/${assignment.id}`).then((res) => {
 				assignment = res.data
 			}) 
-			let root_asc_name = 'asc_'
+			
 			assignment.set.associations.associations.forEach((asc, i) => {
-				root_asc_name = root_asc_name + i
+				let root_asc_name = 'asc_' + i
 				items[asc.item_id] = asc.item
 				associations[root_asc_name] = {
 					association: asc,
@@ -73,9 +73,8 @@ export function loadEditing(set_id, pushState) {
 				if(transferState.set.id == set_id) {
 					set = transferState.set
 					assignment = transferState.assignment
-					let root_asc_name = 'asc_';
 					transferState.associations.forEach(asc => {
-						root_asc_name = root_asc_name += i
+						let root_asc_name = 'asc_' + i
 						items[asc.item_id] = asc.item
 						associations[root_asc_name] = {
 							association: asc,
@@ -568,7 +567,8 @@ export function createItem(index, ...args) {
 				await dispatch(createAssociation(item.id, index, ref))
 			} else {
 				await dispatch({type: CREATE_ITEM_SUCCESS, item, index})
-				await dispatch(updateAssociation(association, 
+				await dispatch(updateAssociation(association.association, 
+												ref,
 												{name: 'item', prop: item}, 
 												{name: 'item_id', prop: item.id}))
 			}
@@ -689,7 +689,7 @@ export function createAssociation(item_id, index, ref) {
 export const UPDATE_ASSOCIATION = 'UPDATE_ASSOCIATION';
 export const UPDATE_ASSOCIATION_SUCCESS = 'UPDATE_ASSOCIATION_SUCCESS';
 export const UPDATE_ASSOCIATION_FAILURE = 'UPDATE_ASSOCIATION_FAILURE';
-export function updateAssociation(asc, ...args) {
+export function updateAssociation(asc, ref, ...args) {
 	return async(dispatch, getState) => {
 		try {
 			let association = Object.assign({}, asc),
@@ -709,7 +709,7 @@ export function updateAssociation(asc, ...args) {
 			}
 			await axios.put(`${api_url}/associations/${association.id}`, association)
 			.then(res => association = res.data)
-			dispatch({type: UPDATE_ASSOCIATION_SUCCESS, association, adopted})
+			dispatch({type: UPDATE_ASSOCIATION_SUCCESS, association, adopted, ref})
 		} catch(err) {
 			dispatch({
 				type: UPDATE_ASSOCIATION_FAILURE,
@@ -718,6 +718,35 @@ export function updateAssociation(asc, ...args) {
 		}
 	}
 }
+
+
+// /associations/<int: association_id>	
+export const DELETE_ROW = 'DELETE_ROW'
+export const DELETE_ROW_SUCCESS = 'DELETE_ROW_SUCCESS'
+export const DELETE_ROW_FAILURE = 'DELETE_ROW_FAILURE'
+export function deleteRow(index, asc, ref) {
+	return async(dispatch, getState) => {
+		dispatch({type: DELETE_ROW})
+		try {
+			if(asc.association !== undefined) {
+				await axios.delete(`${api_url}/associations/${asc.association.id}`).then(() => {
+					dispatch({type: DELETE_ROW_SUCCESS, index, asc, ref})
+				})
+				dispatch(reorder())
+			}
+			else {
+				dispatch({type: DELETE_ROW_SUCCESS, index, asc, ref})
+			}
+		} catch(err) {
+			dispatch({
+				type: DELETE_ROW_FAILURE,
+				error: Error(err)
+			})
+		}
+	}
+}
+
+
 
 /*/sets/<int: set_id>/associations/reorder	
 { 	
@@ -741,9 +770,9 @@ export function reorder() {
 				associations_order = getState().createset.associations_order,
 				set_id = getState().createset.id
 			for(var i = 0; i < associations_order.length; i++) {
-				if(current_associations[associations_order[i]].id !== undefined) {
+				if(current_associations[associations_order[i]].item_id !== undefined) {
 					acs.associations.push({
-						id: current_associations[associations_order[i]].id,
+						id: current_associations[associations_order[i]].association.id,
 						order: i + 1
 					})
 				}
@@ -808,31 +837,6 @@ export function addRow() {
   };
 }
 
-// /associations/<int: association_id>	
-export const DELETE_ROW = 'DELETE_ROW'
-export const DELETE_ROW_SUCCESS = 'DELETE_ROW_SUCCESS'
-export const DELETE_ROW_FAILURE = 'DELETE_ROW_FAILURE'
-export function deleteRow(index, asc, ref) {
-	return async(dispatch, getState) => {
-		dispatch({type: DELETE_ROW})
-		try {
-			if(asc.id !== undefined) {
-				await axios.delete(`${api_url}/associations/${asc.id}`).then(() => {
-					dispatch({type: DELETE_ROW_SUCCESS, index, asc, ref})
-				})
-				dispatch(reorder())
-			}
-			else {
-				dispatch({type: DELETE_ROW_SUCCESS, index, asc, ref})
-			}
-		} catch(err) {
-			dispatch({
-				type: DELETE_ROW_FAILURE,
-				error: Error(err)
-			})
-		}
-	}
-}
 
 export const FINISHED_RENDERING = 'FINISHED_RENDERING';
 export function finishedRendering() {

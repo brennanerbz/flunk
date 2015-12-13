@@ -173,7 +173,7 @@ export function signUp(user_info, pushState) {
 				new_user = {}
 				new_user = Object.assign({...res.body}, {password: null})
 				dispatch({type: CREATE_USER_SUCCESS, new_user})
-				getToken(user_info.email, user_info.password, new_user.id)
+				dispatch(getToken(user_info.email, user_info.password, new_user.id))
 				pushState(null, '/')
 			} else {
 				dispatch({

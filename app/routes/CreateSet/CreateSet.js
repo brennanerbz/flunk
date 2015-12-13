@@ -46,18 +46,18 @@ import Modal from '../../components/Modal/modal';
 	creator_id: state.createset.creator_id,
 	creator_username: state.createset.creator_username,
 	associations: state.createset.associations,
+	associations_order: state.createset.associations_order,
+	associations_length: state.createset.associations_length,
 	items: state.createset.items,
 	current_item: state.createset.current_item,
 	current_association: state.createset.current_association,
 	current_order_index: state.createset.current_order_index,
 	term_choices: state.createset.term_choices,
 	def_choices: state.createset.def_choices,
-	rows: state.createset.rows,
 	flag: state.createset.flag,
 	title_flag: state.createset.title_flag,
 	resizing: state.createset.resizing,
 	/* New state */
-	row_length: state.createset.row_length,
 	rendered: state.createset.rendered,
 	able_to_spark: state.createset.able_to_spark
 	}),
@@ -239,8 +239,8 @@ export default class CreateSetPage extends Component {
 										items={this.props.items}
 										resize={this.props.resize}
 										resizing={this.props.resizing}
-										rows={this.props.rows}
-										row_length={this.props.row_length}
+										associations_order={this.props.associations_order}
+										associations_length={this.props.associations_length}
 										editing={this.props.editing}
 										able_to_spark={this.props.able_to_spark}
 										rendered={rendered}

@@ -14,7 +14,7 @@ export function fetchSet(user_id, set_id, pushState) {
 	return async(dispatch, getState) => {
 		dispatch({type: FETCH_CREATE_SET})
 		try {
-			let set = {}, items = {}, associations = {}, rows = [],
+			let set = {}, items = {}, associations = {}, associations_order = [],
 			assignment = await getState().sets.assignments.filter(assign => assign.set_id == set_id)[0]
 			await axios.get(`${api_url}/sets/${set_id}`).then(res => { 
 				set = res.data 
@@ -22,16 +22,24 @@ export function fetchSet(user_id, set_id, pushState) {
 			await axios.get(`${api_url}/assignments/${assignment.id}`).then((res) => {
 				assignment = res.data
 			}) 
-			assignment.set.associations.associations.forEach(asc => {
+			let root_asc_name = 'asc_'
+			assignment.set.associations.associations.forEach((asc, i) => {
+				root_asc_name = root_asc_name + i
 				items[asc.item_id] = asc.item
-				associations[asc.id] = asc
-				rows.push(asc.id)
+				associations[root_asc_name] = {
+					association: asc,
+					item: asc.item,
+					item_id: asc.item_id,
+					order: i + 1,
+					index: i
+				}
+				associations_order.push(root_asc_name)
 			})
 			if(set.editability == 'creator' && set.creator_id !== user_id) {
 				pushState(null, '/')
 				return;
 			}
-			dispatch({type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows})
+			dispatch({type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, associations_order})
 		} catch(err) {
 			if(err.status == 404) pushState(null, '/error')
 			dispatch({
@@ -56,7 +64,7 @@ export function loadEditing(set_id, pushState) {
 		try {
 			let transferState = getState().transfer,
 				user = getState().user.user,
-				set, assignment, items = {}, associations = {}, rows = [];
+				set, assignment, items = {}, associations = {}, associations_order = [];
 			if(Object.keys(user).length == 0) { setTimeout(() => { 
 				dispatch(loadEditing(set_id, pushState))
 				return;
@@ -65,17 +73,25 @@ export function loadEditing(set_id, pushState) {
 				if(transferState.set.id == set_id) {
 					set = transferState.set
 					assignment = transferState.assignment
+					let root_asc_name = 'asc_';
 					transferState.associations.forEach(asc => {
+						root_asc_name = root_asc_name += i
 						items[asc.item_id] = asc.item
-						associations[asc.id] = asc
-						rows.push(asc.id)
+						associations[root_asc_name] = {
+							association: asc,
+							item: asc.item,
+							item_id: asc.item_id,
+							order: i + 1,
+							index: i
+						}
+						associations_order.push(root_asc_name)
 					})
 					if(set.editability == 'creator' && set.creator_id !== user.id) {
 						pushState(null, '/error')
 						return;
 					}
 					setTimeout(() => {
-						dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, rows })
+						dispatch({ type: LOAD_EDITING_SUCCESS, set, assignment, items, associations, associations_order })
 					}, 50)
 				}
 			} else {
@@ -505,9 +521,9 @@ export function createItem(index, ...args) {
 			let item = Object.assign({}, _itemtemplate),
 				user = getState().user.user,
 				set  = getState().createset.set,
-				rows = getState().createset.rows,
 				id,
-				association;
+				association = {},
+				ref;
 
 			if(set == undefined) {
 				await dispatch(createSet())
@@ -523,7 +539,6 @@ export function createItem(index, ...args) {
 						name = arg.name,
 						prop = arg.prop;
 					if(name == 'child') {
-						association = getState().createset.associations[rows[index]]
 						item = Object.assign({...item}, {
 							parent_id: prop.id,
 							target: prop.target,
@@ -537,15 +552,22 @@ export function createItem(index, ...args) {
 					if(item.hasOwnProperty(name)) {
 						item[name] = prop
 					}
+					if(name == 'association') {
+						association = prop
+					}
+					if(name == 'association_ref') {
+						ref = prop
+					}
 				}
 			}
 			item.creator_id = user.id
 			await axios.post(`${api_url}/items/`, item)
 			.then(res => item = res.data)
-			if(association == undefined) {
-				await dispatch({type: CREATE_ITEM_SUCCESS, item})
-				await dispatch(createAssociation(item.id, index))
+			if(Object.keys(association).length == 0) {
+				await dispatch({type: CREATE_ITEM_SUCCESS, item, index})
+				await dispatch(createAssociation(item.id, index, ref))
 			} else {
+				await dispatch({type: CREATE_ITEM_SUCCESS, item, index})
 				await dispatch(updateAssociation(association, 
 												{name: 'item', prop: item}, 
 												{name: 'item_id', prop: item.id}))
@@ -629,21 +651,22 @@ var _associationtemplate = {
 export const CREATE_ASSOCIATION = 'CREATE_ASSOCIATION';
 export const CREATE_ASSOCIATION_SUCCESS = 'CREATE_ASSOCIATION_SUCCESS';
 export const CREATE_ASSOCIATION_FAILURE = 'CREATE_ASSOCIATION_FAILURE';
-export function createAssociation(item_id, index) {
+export function createAssociation(item_id, index, ref) {
 	return async(dispatch, getState) => {
 		try {
 			let set_id = getState().createset.set.id,
-				count = getState().createset.count,
+				order = getState().createset.order,
 				association;
+			
 			association = Object.assign({..._associationtemplate}, {
 				item_id: item_id,
 				set_id: set_id,
-				order: count
+				order: order
 			})
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => { 
 				association = res.data
-				dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index})
+				dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index, ref})
 			})
 		} catch(err) {
 			dispatch({
@@ -713,15 +736,19 @@ export function reorder() {
 	return async(dispatch, getState) => {
 		dispatch({type: REORDER})
 		try {
-			let acs = { associations: [] }
-			let rows = getState().createset.rows.filter(row => row !== null),
+			let acs = { associations: [] },
+				current_associations = getState().createset.associations,
+				associations_order = getState().createset.associations_order,
 				set_id = getState().createset.id
-			for(var i = 0; i < rows.length; i++) {
-				acs.associations.push({
-					id: rows[i],
-					order: i + 1
-				})
+			for(var i = 0; i < associations_order.length; i++) {
+				if(current_associations[associations_order[i]].id !== undefined) {
+					acs.associations.push({
+						id: current_associations[associations_order[i]].id,
+						order: i + 1
+					})
+				}
 			}
+			if(acs.associations.length == 0) return;
 			await axios.put(`${api_url}/sets/${set_id}/associations/reorder`, acs)
 		} catch(err) {
 			dispatch({
@@ -785,17 +812,18 @@ export function addRow() {
 export const DELETE_ROW = 'DELETE_ROW'
 export const DELETE_ROW_SUCCESS = 'DELETE_ROW_SUCCESS'
 export const DELETE_ROW_FAILURE = 'DELETE_ROW_FAILURE'
-export function deleteRow(index, asc) {
+export function deleteRow(index, asc, ref) {
 	return async(dispatch, getState) => {
 		dispatch({type: DELETE_ROW})
 		try {
-			if(asc !== null && asc !== undefined) {
+			if(asc.id !== undefined) {
 				await axios.delete(`${api_url}/associations/${asc.id}`).then(() => {
-					dispatch({type: DELETE_ROW_SUCCESS, index, asc})
+					dispatch({type: DELETE_ROW_SUCCESS, index, asc, ref})
 				})
+				dispatch(reorder())
 			}
 			else {
-				dispatch({type: DELETE_ROW_SUCCESS, index, asc})
+				dispatch({type: DELETE_ROW_SUCCESS, index, asc, ref})
 			}
 		} catch(err) {
 			dispatch({

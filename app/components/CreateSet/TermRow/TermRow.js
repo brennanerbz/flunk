@@ -8,6 +8,7 @@ export default class TermRow extends Component {
 	}
 
 	state = {
+<<<<<<< HEAD
 			is_mouse_over: false, 
 			active_row: false,
 			active_side: 0, /* 0 = 'term' & 1 = 'definition' */
@@ -17,6 +18,17 @@ export default class TermRow extends Component {
 			index: null,
 			locked_in: false
 		}
+=======
+		is_mouse_over: false, 
+		active_row: false,
+		active_side: 0, /* 0 = 'term' & 1 = 'definition' */
+		total_count: 2,
+		terms: null,	
+		definitions: null,
+		index: null,
+		locked_in: false
+	}
+>>>>>>> create-v4
 
 		sparkNewRow(index, total_count) {
 			if(this.state.total_count !== total_count && index == total_count - 1) {
@@ -27,6 +39,7 @@ export default class TermRow extends Component {
 			}
 		}
 
+<<<<<<< HEAD
 		componentWillMount() {
 			const { association, item, index, total_count, able_to_spark } = this.props;
 			this.setState({
@@ -38,8 +51,21 @@ export default class TermRow extends Component {
 			if(total_count > 2 && able_to_spark) {
 				this.sparkNewRow(index, total_count)
 			}
+=======
+	componentWillMount() {
+		const { association, item, index, total_count, able_to_spark } = this.props;
+		this.setState({
+			index: index,
+			total_count: total_count,
+			association: association,
+			item: item !== undefined ? item : null
+		});
+		if(total_count > 2 && able_to_spark) {
+			this.sparkNewRow(index, total_count)
+>>>>>>> create-v4
 		}
 
+<<<<<<< HEAD
 		componentWillReceiveProps(nextProps) {
 			if(document.activeElement == document.body) this.setState({ active_row: false })
 		}
@@ -99,9 +125,72 @@ export default class TermRow extends Component {
 		    	createItem(index, {name: 'child', prop: item}, {name: 'cue', prop: def})
 		    }
 		}
+=======
+	componentWillReceiveProps(nextProps) {
+		this.setState({total_count: nextProps.total_count})
+		if(document.activeElement == document.body) this.setState({ active_row: false })
+		if(this.props.item !== nextProps.item) this.setState({locked_in: false});
+	}
+
+	saveTerm = (term) => { 
+	    const { createItem, updateItem, index, item, asc_id } = this.props;
+	    if(item == undefined && true) {
+	    	createItem(index, { name: 'target', prop: term }, {name: 'association_ref', prop: asc_id})
+	    	this.setState({
+	    		locked_in: true
+	    	})
+	    	return;
+	    }
+	    // if(item == undefined && true) {
+	    // 	setTimeout(() => {
+	    // 		this.saveTerm(term)
+	    // 	}, 500)
+	    // 	return;
+	    // }
+	    if(item !== undefined 
+	    	&& (item.target == null || item.target.toLowerCase().trim() !== term.toLowerCase().trim() )
+	    	&& item.finalized == null) {
+	    	updateItem(item, {name: 'target', prop: term})
+	    	return;
+	    }
+	    if(item !== undefined
+	    	&& item.target.toLowerCase().trim() !== term.toLowerCase().trim()
+	    	&& item.finalized) {
+	    	createItem(index, {name: 'child', prop: item}, {name: 'target', prop: term}, {name: 'association', prop: association})
+	    }
+	}
+
+	saveDefinition = (def) => { 
+	    const { createItem, updateItem, index, item } = this.props;
+	    if(item == undefined && true) {
+	    	createItem(index, { name: 'cue', prop: def }, {name: 'association_ref', prop: asc_id})
+	    	this.setState({
+	    		locked_in: true
+	    	})
+	    	return;
+	    }
+	    // if(item == undefined && true) {
+	    // 	setTimeout(() => {
+	    // 		this.saveDefinition(def)
+	    // 	}, 500)
+	    // 	return;
+	    // }
+	    if(item !== undefined 
+	    	&& (item.cue == null || item.cue.toLowerCase().trim() !== def.toLowerCase().trim())
+	    	&& item.finalized == null) {
+	    	updateItem(item, {name: 'cue', prop: def})
+	    	return;
+	    }
+	    if(item !== undefined
+	    	&& item.cue.toLowerCase().trim() !== def.toLowerCase().trim()
+	    	&& item.finalized) {
+	    	createItem(index, {name: 'child', prop: item}, {name: 'cue', prop: def}, {name: 'association', prop: association})
+	    }
+	}
+>>>>>>> create-v4
 
 	handleDelete = () => {
- 		this.props.deleteRow(this.props.index, this.props.association)
+ 		this.props.deleteRow(this.props.index, this.props.association, this.props.asc_id)
 	}	
 
 	render() {
@@ -114,6 +203,10 @@ export default class TermRow extends Component {
 				</a>
 				<TermContent className="TermRow-content"
 							 item={this.props.item}
+<<<<<<< HEAD
+=======
+							 asc_id={this.props.asc_id}
+>>>>>>> create-v4
 							 association={this.props.association}
 						     index={this.props.index}
 						     total_count={this.props.total_count}
@@ -127,12 +220,13 @@ export default class TermRow extends Component {
 						     addRow={this.props.addRow}	
 						     resizing={this.props.resizing}	
 						     rendered={this.props.rendered}
-						     finishedRendering={this.props.finishedRendering}	
+						     finishedRendering={this.props.finishedRendering}
 				/>
 				<div className="TermRow-operations">	
 					{	
 						this.state.is_mouse_over 
-						&& this.props.total_count > 2 &&
+						&& this.props.total_count > 2 
+						&&
 						<a className="TermRow-control material-icons"
 					   		onClick={this.handleDelete}>
 							clear

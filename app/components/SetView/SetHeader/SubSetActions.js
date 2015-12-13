@@ -34,9 +34,9 @@ var _icon = {
 var _smallicon = {
 	position: 'absolute',
 	display: 'inline-block',
-	height: '5px',
+	height: '5.5px',
 	top: '13px',
-	left: '8px',
+	left: '7px',
 	opacity: '0.8'
 }
 var member_count_container = {
@@ -98,7 +98,7 @@ export default class SubSetActions extends Component {
 		const { set, createset } = this.props,
 			member_icon = require('../../../assets/profile_icon.png'),
 			share_icon = require('../../../assets/share.png'),
-			more_icon = require('../../../assets/more_icon.png');
+			more = require('../../../assets/elipses.png');
 		let dir;
 		if(this.props.right) {
 			dir = 'right'
@@ -108,16 +108,21 @@ export default class SubSetActions extends Component {
 		}
 		return(
 			<div style={secondary_actions} className="secondary_actions">
-				<button className={classnames('toggle_btn')}
-					    onClick={() => ::this.toggleModal('share')}
-				   		ref="share"				   
-				   		title="Share"
-				   		data-toggle="tooltip" 
-				  		data-placement="bottom">
-					<i className="">
-						<img style={_icon} className="share_icon" src={share_icon}/>
-					</i>					
-				</button>
+				{
+					this.props.assignment !== null
+					&&
+					<button className={classnames('button outline')}
+						    onClick={() => ::this.toggleModal('share')}
+						    style={{
+						    	marginLeft: '5px'
+						    }}
+					   		ref="share"				   
+					   		title="Share"
+					   		data-toggle="tooltip" 
+					  		data-placement="bottom">
+						Share					
+					</button>
+				}
 
 				<Modal  open={this.state.modal_open} 
 						closeModal={() => this.setState({ modal_open: false })}
@@ -132,7 +137,7 @@ export default class SubSetActions extends Component {
 						data-toggle="tooltip" 
 						data-placement="bottom" >
 					<i className="">
-						<img style={_smallicon} className="share_icon" src={more_icon}/>
+						<img style={_smallicon} className="share_icon" src={more}/>
 					</i>					
 				</button>
 
@@ -146,7 +151,6 @@ export default class SubSetActions extends Component {
 							let type,
 								choice = _choice.toLowerCase().trim()
 							if(choice.indexOf('settings') !== -1) type = 'settings'
-							// else if(choice.indexOf('edit') !== -1) type = 'settings'
 							else if(choice.indexOf('delete') !== -1) type = 'confirm'
 							else if(choice.indexOf('purpose') !== -1) type = 'textarea'
 							this.setState({

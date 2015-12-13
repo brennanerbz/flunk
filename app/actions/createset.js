@@ -505,9 +505,9 @@ export function createItem(index, ...args) {
 			let item = Object.assign({}, _itemtemplate),
 				user = getState().user.user,
 				set  = getState().createset.set,
-				rows = getState().createset.rows,
 				id,
-				association;
+				association = {},
+				ref;
 
 			if(set == undefined) {
 				await dispatch(createSet())
@@ -523,7 +523,6 @@ export function createItem(index, ...args) {
 						name = arg.name,
 						prop = arg.prop;
 					if(name == 'child') {
-						association = getState().createset.associations[rows[index]]
 						item = Object.assign({...item}, {
 							parent_id: prop.id,
 							target: prop.target,
@@ -537,14 +536,20 @@ export function createItem(index, ...args) {
 					if(item.hasOwnProperty(name)) {
 						item[name] = prop
 					}
+					if(name == 'association') {
+						association = prop
+					}
+					if(name == 'association_ref') {
+						ref = prop
+					}
 				}
 			}
 			item.creator_id = user.id
 			await axios.post(`${api_url}/items/`, item)
 			.then(res => item = res.data)
-			if(association == undefined) {
+			if(Object.keys(association).length == 0) {
 				await dispatch({type: CREATE_ITEM_SUCCESS, item, index})
-				await dispatch(createAssociation(item.id, index))
+				await dispatch(createAssociation(item.id, index, ref))
 			} else {
 				await dispatch({type: CREATE_ITEM_SUCCESS, item, index})
 				await dispatch(updateAssociation(association, 
@@ -630,21 +635,22 @@ var _associationtemplate = {
 export const CREATE_ASSOCIATION = 'CREATE_ASSOCIATION';
 export const CREATE_ASSOCIATION_SUCCESS = 'CREATE_ASSOCIATION_SUCCESS';
 export const CREATE_ASSOCIATION_FAILURE = 'CREATE_ASSOCIATION_FAILURE';
-export function createAssociation(item_id, index) {
+export function createAssociation(item_id, index, ref) {
 	return async(dispatch, getState) => {
 		try {
 			let set_id = getState().createset.set.id,
-				count = getState().createset.count,
+				order = getState().createset.order,
 				association;
+			
 			association = Object.assign({..._associationtemplate}, {
 				item_id: item_id,
 				set_id: set_id,
-				order: count
+				order: order
 			})
 			await axios.post(`${api_url}/associations/`, association)
 			.then(res => { 
 				association = res.data
-				dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index})
+				dispatch({type: CREATE_ASSOCIATION_SUCCESS, association, index, ref})
 			})
 		} catch(err) {
 			dispatch({
@@ -716,14 +722,17 @@ export function reorder() {
 		try {
 			let acs = { associations: [] },
 				current_associations = getState().createset.associations,
-				associations_order = getState().createset.associations_order.filter(asc => asc !== null),
+				associations_order = getState().createset.associations_order,
 				set_id = getState().createset.id
 			for(var i = 0; i < associations_order.length; i++) {
-				acs.associations.push({
-					id: current_associations[associations_order[i]],
-					order: i + 1
-				})
+				if(current_associations[associations_order[i]].id !== undefined) {
+					acs.associations.push({
+						id: current_associations[associations_order[i]].id,
+						order: i + 1
+					})
+				}
 			}
+			if(acs.associations.length == 0) return;
 			await axios.put(`${api_url}/sets/${set_id}/associations/reorder`, acs)
 		} catch(err) {
 			dispatch({
@@ -795,6 +804,7 @@ export function deleteRow(index, asc, ref) {
 				await axios.delete(`${api_url}/associations/${asc.id}`).then(() => {
 					dispatch({type: DELETE_ROW_SUCCESS, index, asc, ref})
 				})
+				dispatch(reorder())
 			}
 			else {
 				dispatch({type: DELETE_ROW_SUCCESS, index, asc, ref})

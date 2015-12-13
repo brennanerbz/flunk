@@ -90,14 +90,17 @@ export var createState = {
   subjects: [],
   creator_id: null,
   creator_username: '',
-  count: 1,
-  next_rank: 2,
+
+  order: 1,
+  last_index: 1,
   associations: {
     asc_0: {
-      order: 0
+      order: 1,
+      index: 0
     },
     asc_1: {
-      order: 1
+      order: 2,
+      index: 1
     }
   },
   items: {},
@@ -258,38 +261,45 @@ export function createset(state = createState, action) {
       let items = Object.assign({}, state.items) || {},
           item = action.item,
           i = action.index,
-          id = item.id,
-          _ascs = state.associations;
-      _ascs[`asc_${i}`].item = item;
-      _ascs[`asc_${i}`].item_id = item.id;
+          id = item.id;
       items[id] = item;
       return {
         ...state,
         isCreatingItem: false,
-        associations: _ascs,
         items: items,
         term_choices: null,
         check_subjects: true
       }
     case CREATE_ASSOCIATION_SUCCESS:
       if(state.cleared) return { ...state }
-      let associations_order = state.associations_order, 
-          index = action.index,
-          rank = state.count - 1,
-          associations = Object.assign({}, state.associations),
+      let associations = state.associations,
+          associations_order = state.associations_order, 
+          order = state.order,
           association = action.association,
+          index = action.index,
           association_id = association.id,
-          ref = `asc_${rank}`
-      associations[ref].id = association_id;
-      associations[ref].association = association;
-      if(associations_order.indexOf(ref) !== -1) {
-        associations_order[associations_order.indexOf(ref)] = null
-      }
-      associations_order[index] = ref;
+          ref = action.ref,
+          __id = association.id,
+          __item = state.items[association.item_id],
+          __item_id = __item.id,
+          fe_association = {
+            id: __id,
+            association: association,
+            item: __item,
+            item_id: __item_id,
+            order: order,
+            index: index
+          }
+      // console.log(__item_id)
+      // console.log(association)
+      console.log(fe_association)
+      associations[ref] = fe_association
+      // console.log(associations)
+      associations_order.splice(i, ref);
       return {
         ...state,
         associations: associations,
-        count: state.count + 1,
+        order: state.order + 1,
         associations_order: associations_order,
         associations_length: associations_order.length
       }
@@ -302,13 +312,8 @@ export function createset(state = createState, action) {
       updated_items[item_id] = updated_item
       for(var prop in _associations) {
         let p = _associations[prop];
-        for(var key in p) {
-          if(key == 'item_id') {
-            p[key] = item_id
-          }
-          if(key == 'item') {
-            p[key] = updated_item
-          }
+        if(p['item_id'] == item_id) {
+          p['item'] = updated_item
         }
       }
       return {
@@ -345,16 +350,15 @@ export function createset(state = createState, action) {
     case ADD_ROW:
       let asc_order = state.associations_order,
           ascs = Object.assign({}, state.associations),
-          new_order = state.next_rank,
-          new_asc = 'asc_' + new_order
+          new_asc = 'asc_' + Number(state.last_index + 1) 
       asc_order.push(new_asc)
       ascs[new_asc] = {
-        order: new_asc,
+        index: state.last_index + 1,
       }
       return {
         ...state,
         activeRow: asc_order.indexOf(new_asc),
-        next_rank: state.next_rank + 1,
+        last_index: Number(state.last_index + 1),
         associations: ascs,
         associations_order: asc_order,
         associations_length: asc_order.length,
@@ -381,7 +385,8 @@ export function createset(state = createState, action) {
         ...state,
         associations: u_associations,
         associations_order: u_order,
-        associations_length: u_order.length
+        associations_length: u_order.length,
+        order: state.order - 1
       }
     case SAVE_TITLE:
       return {

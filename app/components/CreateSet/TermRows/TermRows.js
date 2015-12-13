@@ -64,6 +64,8 @@ export default class TermRows extends Component {
 							? items[association.item_id]
 							: null
 
+							// console.log(' ----', '\n', 'association', association, '\n', 'item', item, '\n', '----')
+
 							return (
 								<TermRow
 									asc_id={id}

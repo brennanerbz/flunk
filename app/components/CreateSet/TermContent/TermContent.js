@@ -9,7 +9,8 @@ export default class TermContent extends Component {
     state = {
         term: null,
         definition: null,
-        triggered: false
+        triggered: false,
+        asc_id: null
     }
 
     loadItem(item) {
@@ -42,10 +43,13 @@ export default class TermContent extends Component {
                 this.props.finishedRendering() 
             }
         }, 1)
+        this.setState({
+            asc_id: this.props.asc_id
+        });
     }
 
     componentWillReceiveProps(nextProps) {
-        const { index } = this.props;
+        const { index, item, total_count } = this.props;
         let term_node = this.refs[`autocomplete_term_${index}`],
             def_node = this.refs[`autocomplete_def_${index}`]
         if(nextProps.resizing) {
@@ -56,7 +60,11 @@ export default class TermContent extends Component {
            this.trigger(term_node, def_node)
            this.setState({triggered: true}); 
         }
-        if(this.state.term == null && this.state.definition == null) {
+
+        if(this.state.asc_id !== nextProps.asc_id) {
+            this.setState({
+                asc_id: nextProps.asc_id
+            })
             if(nextProps.association.id == undefined) {
                 this.setState({
                     term: '',
@@ -68,22 +76,6 @@ export default class TermContent extends Component {
                     term: nextProps.association.item.target,
                     definition: nextProps.association.item.cue
                 });
-            }
-        }
-        if(this.state.term !== null || this.state.definition !== null) {
-            if(this.props.association.id !== undefined && nextProps.association.id !== undefined) {
-                if(this.props.association.id !== nextProps.association.id) {
-                    this.setState({
-                        term: nextProps.association.item.target,
-                        definition: nextProps.association.item.cue
-                    })
-                }
-            }
-            if(this.props.association.id !== undefined && nextProps.association.id == undefined) {
-                this.setState({
-                    term: '',
-                    definition: ''
-                })
             }
         }
     }

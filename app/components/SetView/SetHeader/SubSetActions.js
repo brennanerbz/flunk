@@ -56,10 +56,10 @@ export default class SubSetActions extends Component {
 	}	
 
 	componentDidMount() {
-		$('[data-toggle="tooltip"]').tooltip({
-			delay: { show: 500, hide: 50},
-			template: '<div class="tooltip bottom_tool" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
-		})
+		// $('[data-toggle="tooltip"]').tooltip({
+		// 	delay: { show: 500, hide: 50},
+		// 	template: '<div class="tooltip bottom_tool" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
+		// })
 	}
 
 	toggleModal(value) {
@@ -75,13 +75,6 @@ export default class SubSetActions extends Component {
 			member_icon = require('../../../assets/profile_icon.png'),
 			share_icon = require('../../../assets/share.png'),
 			more = require('../../../assets/elipses.png');
-		let dir;
-		if(this.props.right) {
-			dir = 'right'
-		}
-		if(this.props.left) {
-			dir = 'left'
-		}
 		return(
 			<div style={secondary_actions} className="secondary_actions">
 				{
@@ -94,7 +87,7 @@ export default class SubSetActions extends Component {
 						    }}
 					   		ref="share"				   
 					   		title="Share"
-					   		data-toggle="tooltip" 
+					   		// data-toggle="tooltip" 
 					  		data-placement="bottom">
 						Share					
 					</button>
@@ -106,13 +99,13 @@ export default class SubSetActions extends Component {
 						{...this.props} />
 
 				<button onClick={() => { 
-							$('[data-toggle="tooltip"]').tooltip('hide')
+							// $('[data-toggle="tooltip"]').tooltip('hide')
 							this.setState({more_is_open: true})
 						}} 
 						className={classnames('toggle_btn', {'active': this.state.more_is_open})}
 						ref="more"				   
 						title="More actions"
-						data-toggle="tooltip" 
+						// data-toggle="tooltip" 
 						data-placement="bottom" >
 					<i className="">
 						<img style={_smallicon} className="share_icon" src={more}/>
@@ -124,10 +117,11 @@ export default class SubSetActions extends Component {
 					&&
 					<BubbleDropdown 
 						single_set_actions={true}
+						set_header={this.props.set_header}
 						target_node={this.refs.more}
 						pushState={this.props.pushState}
 						hideDropdown={() => {
-							$('[data-toggle="tooltip"]').tooltip('hide')
+							// $('[data-toggle="tooltip"]').tooltip('hide')
 							this.setState({
 								more_is_open: false
 							})

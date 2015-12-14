@@ -41,6 +41,17 @@ export default class BubbleDropdown extends Component {
 		const node = this.props.target_node;
 		let parent_pos = node.getBoundingClientRect(),
 			bubble_pos = this.refs.bubble.getBoundingClientRect()
+		if(this.props.set_header && this.props.single_set_actions) {
+			this.setState({
+				dropdown_style: {
+					top: parent_pos.height + 10 + 'px',
+					left: bubble_pos.right - parent_pos.right + 'px',
+					paddingTop: '0',
+					paddingBottom: '0'
+				}
+			})
+			return;
+		}
 		if(this.props.set_list_item || this.props.single_set_actions) {
 			this.setState({
 				dropdown_style: {
@@ -64,13 +75,12 @@ export default class BubbleDropdown extends Component {
 	render() {
 		return(
 			<div ref="bubble" style={this.state.dropdown_style} 
-				className={classnames("bubble_dropdown", 
+				className={classnames("bubble_dropdown top", 
 					{ 'header_menu': this.props.header_menu },
-					{ 'top_right': this.props.header_menu 
+					{ 'left': this.props.set_header },
+					{ 'right': this.props.header_menu 
 								|| this.props.set_list_item
-								|| this.props.single_set_actions },
-					{ 'far_right': this.props.set_list_item 
-					|| this.props.single_set_actions  }
+								|| ( this.props.single_set_actions && !this.props.set_header) }
 				)}>
 				<BubbleDropdownContents 
 					anchor_bottom={false}

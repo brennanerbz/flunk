@@ -32,8 +32,7 @@ export default class SetHeader extends Component {
 						<button className="button primary">
 						Learn</button>
 					</Link>
-					<SubSetActions set={true} 
-								   left={true}  
+					<SubSetActions set_header={true}
 								   ref="subactions"
 								   {...this.props}/>
 				</div>

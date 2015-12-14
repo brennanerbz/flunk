@@ -300,7 +300,7 @@ export default class Modal extends Component {
 							}
 							{
 								type == 'textarea'
-								? 'Set purpose'
+								? 'Edit purpose'
 								: null
 							}
 							{

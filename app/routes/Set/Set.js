@@ -100,9 +100,10 @@ export default class Set extends Component {
 		return(
 			<DocumentTitle title={this.props.set.title !== undefined ? `${this.props.set.title} | Ace` : 'Loading...'}>
 				<div className="set_view main_content">
-					{
-						!isFetching
-						? <div className="">
+					<div className={classnames('set_page', {'rendered': !isFetching})}>
+						{
+							!isFetching
+							?
 							<div className="">
 								<SetHeader 
 									assignment={this.props.assignment}
@@ -124,10 +125,10 @@ export default class Set extends Component {
 								{ setChildrenWithProps }		
 
 							</div>
-						</div>
-						: 
-						<LoadingSpinner/>
-					}
+							: 
+							<LoadingSpinner/>
+						}
+					</div>
 				</div>
 			</DocumentTitle>
 		);

@@ -222,6 +222,16 @@ a {
 	float: right;
 }
 
+/* Radio Button */
+
+.radio input[type="radio"], .radio-inline input[type="radio"], .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"] {
+    position: absolute;
+    margin-top: -0.25rem;
+    margin-left: -1.25rem;
+}
+
+/* ----------- */
+
 
 // Loading spinner 
 .sk-fading-circle {

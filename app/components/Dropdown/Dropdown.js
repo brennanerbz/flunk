@@ -41,7 +41,7 @@ export default class BubbleDropdown extends Component {
 		const node = this.props.target_node;
 		let parent_pos = node.getBoundingClientRect(),
 			bubble_pos = this.refs.bubble.getBoundingClientRect()
-		if(this.props.set_list_item) {
+		if(this.props.set_list_item || this.props.single_set_actions) {
 			this.setState({
 				dropdown_style: {
 					top: parent_pos.height + 10 + 'px',
@@ -66,8 +66,11 @@ export default class BubbleDropdown extends Component {
 			<div ref="bubble" style={this.state.dropdown_style} 
 				className={classnames("bubble_dropdown", 
 					{ 'header_menu': this.props.header_menu },
-					{ 'top_right': this.props.header_menu || this.props.set_list_item },
-					{ 'far_right': this.props.set_list_item }
+					{ 'top_right': this.props.header_menu 
+								|| this.props.set_list_item
+								|| this.props.single_set_actions },
+					{ 'far_right': this.props.set_list_item 
+					|| this.props.single_set_actions  }
 				)}>
 				<BubbleDropdownContents 
 					anchor_bottom={false}
@@ -93,22 +96,37 @@ class BubbleDropdownContents extends Component {
 	renderSetDropdown() {
 		let finalized_actions = ['Learn', 'Edit', 'Divider', 'Delete'],
 			draft_actions = ['Finish', 'Divider', 'Delete'],
+			create_actions = ['Edit purpose', 'Privacy settings', 'Divider', 'Delete'],
 			actions;
-		if(this.props.assignment.set.finalized) {
-			actions = finalized_actions
+		if(this.props.assignment !== undefined) {
+			if(this.props.assignment.set.finalized) {
+				actions = finalized_actions
+			} else  {
+				actions = draft_actions
+			}
 		} else {
-			actions = draft_actions
+			if(this.props.single_set_actions) {
+				actions = create_actions
+			}		
 		}
 		return(
 			<ul className="set_actions_list">
 				{
 					actions.map(action => {
+						let words = action.split(' '),
+							handler;
+						if(words.length > 1) {
+							words = words.map((word, i) =>  {
+								return word.charAt(0).toUpperCase() + word.slice(1) 
+							})
+						}
+						handler = words.join("")
 						return (
 							<li className="set_action" 
 								key={action}
 								onClick={() => {
 									if(action !== 'Divider') {
-										this.props[`handle${action}`]()
+										this.props[`handle${handler}`]()
 									}
 									this.props.hideDropdown()
 								}}>
@@ -191,7 +209,7 @@ class BubbleDropdownContents extends Component {
 					&& ::this.renderAccountDropdown()
 				}
 				{
-					this.props.set_list_item
+					(this.props.set_list_item || this.props.single_set_actions)
 					&& ::this.renderSetDropdown()
 				}
 				{

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Menu from '../../Menu/Menu';
+// import Menu from '../../Menu/Menu';
 import classnames from 'classnames';
 import Modal from '../../Modal/modal';
 
@@ -43,6 +43,8 @@ var member_count_container = {
 	paddingTop: '5px'
 }
 
+import BubbleDropdown from '../../Dropdown/Dropdown';
+
 export default class SubSetActions extends Component {
 	static propTypes = {
 	}
@@ -50,40 +52,14 @@ export default class SubSetActions extends Component {
 	state = {
 		modal_open: false,
 		modal_type: null,
-		more_is_open: false,
-		set_choices: ['Edit', 'Copy', 'Change privacy'],
-		create_choices: ['Edit purpose', 'Settings', '|', 'Delete set']
+		more_is_open: false
 	}	
 
 	componentDidMount() {
 		$('[data-toggle="tooltip"]').tooltip({
-			delay: { show: 1000, hide: 50},
+			delay: { show: 500, hide: 50},
 			template: '<div class="tooltip bottom_tool" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'
 		})
-	}
-
-	findPos() {
-		let node = this.refs.more
-		const rect = window.getComputedStyle(node)
-		return rect;
-	}
-
-	openMenu() {
-		$('[data-toggle="tooltip"]').tooltip('hide')
-		if (this.state.more_is_open) {
-			this.setState({
-				more_is_open: false
-			});
-			return;
-		}
-		this.setState({
-			more_is_open: true
-		});
-	}
-	closeMenu() {
-		this.setState({
-			more_is_open: false
-		});
 	}
 
 	toggleModal(value) {
@@ -129,8 +105,10 @@ export default class SubSetActions extends Component {
 						type={this.state.modal_type}
 						{...this.props} />
 
-				<button onClick={::this.openMenu} 
-						onBlur={() => setTimeout(() => { ::this.closeMenu() }, 150)} 
+				<button onClick={() => { 
+							$('[data-toggle="tooltip"]').tooltip('hide')
+							this.setState({more_is_open: true})
+						}} 
 						className={classnames('toggle_btn', {'active': this.state.more_is_open})}
 						ref="more"				   
 						title="More actions"
@@ -141,24 +119,39 @@ export default class SubSetActions extends Component {
 					</i>					
 				</button>
 
-				<Menu 	set={this.props.set}
-					  	isOpen={this.state.more_is_open}
-					  	side={dir}
-					  	rect={::this.findPos}
-					  	ref="more_actions"
-					  	choices={createset ? this.state.create_choices : this.state.set_choices}
-						onSelect={(_choice) => {
-							let type,
-								choice = _choice.toLowerCase().trim()
-							if(choice.indexOf('settings') !== -1) type = 'settings'
-							else if(choice.indexOf('delete') !== -1) type = 'confirm'
-							else if(choice.indexOf('purpose') !== -1) type = 'textarea'
+				{
+					this.state.more_is_open
+					&&
+					<BubbleDropdown 
+						single_set_actions={true}
+						target_node={this.refs.more}
+						pushState={this.props.pushState}
+						hideDropdown={() => {
+							$('[data-toggle="tooltip"]').tooltip('hide')
+							this.setState({
+								more_is_open: false
+							})
+						}}
+						handleEditPurpose={() => {
 							this.setState({
 								modal_open: true,
-								modal_type: type
-							})
-						}
-				  }/>			
+								modal_type: 'textarea'
+							});
+						}}
+						handlePrivacySettings={() => {
+							this.setState({
+								modal_open: true,
+								modal_type: 'settings'
+							});
+						}}
+						handleDelete={() => {
+							this.setState({
+								modal_open: true,
+								modal_type: 'confirm'
+							});
+						}}
+					/>
+				}
 			</div>
 		);
 	}

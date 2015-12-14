@@ -8,9 +8,10 @@
 	border-radius: 3px;
 	box-shadow: 0px 1px 2px rgba(0,0,0,0.1);
 	position: absolute;
+	min-width: 195px;
 	&.header_menu {
 		padding: 20px;
-	    min-width: 165px;
+	    min-width: 195px;
 	    max-width: 195px;
 	}
 	&.top_right {
@@ -127,6 +128,7 @@
 					text-decoration: none;
 					color: black;
 					white-space: nowrap;
+					line-height: 23px;
 				}
 			}
 		}

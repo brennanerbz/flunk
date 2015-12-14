@@ -71,7 +71,7 @@ export default class BubbleDropdown extends Component {
 			}
 		})
 	}
-
+	
 	render() {
 		return(
 			<div ref="bubble" style={this.state.dropdown_style} 

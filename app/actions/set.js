@@ -181,6 +181,7 @@ export function fetchCases(assignment_id) {
 		.end((err, res) => {
 			cases = res.body.instances
 			dispatch({type: FETCH_CASES_SUCCESS, cases })
+			console.log(cases)
 		})
 	}
 }	

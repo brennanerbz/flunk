@@ -7,6 +7,9 @@ import { pushState } from 'react-redux';
 import * as useractions from '../../actions/user';
 require('./SignUpForm.scss');
 
+// import validator from 'validator';
+import Validation from 'react-validation';
+
 @connect(state => ({
 		user: state.user.user
 	}),
@@ -27,6 +30,7 @@ export default class SignUpForm extends Component {
 		last_name: null,
 		password: null,
 		email: null,
+		email_error: false,
 		username: null // temp
 	}
 
@@ -130,7 +134,13 @@ export default class SignUpForm extends Component {
 		)
 	}
 
-	handleBetaSubmit() {
+	validateEmail(email) {
+	    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	    return re.test(email);
+	}
+
+	handleBetaSubmit(e) {
+		e.preventDefault()
 		const { signUp, pushState } = this.props;
 		let user_info = {}
 		for(var prop in this.state) {
@@ -138,19 +148,52 @@ export default class SignUpForm extends Component {
 				user_info[prop] = this.state[prop]
 			}
 		}
-		signUp(user_info, pushState)
-		this.setState({email: null})
+		if(user_info.email == null || user_info.email.length === 0) return;
+		let validated = this.validateEmail(user_info.email)
+		if(validated) {
+			signUp(user_info, pushState)
+			this.setState({
+				email: null,
+				email_error: false
+			})
+		} else {
+			this.setState({
+				email_error: true
+			});
+		}
+		
 	}
 
 	renderBetaForm() {
+		const error_icon = require('../../assets/error_icon.png')
 		return(
-			<form 
+			<form
 				className="sign_up_form"
-				onSubmit={(e) => {
-				  	e.preventDefault()
-				  	::this.handleBetaSubmit()
-				}}>
-				<input 
+				onSubmit={::this.handleBetaSubmit}>
+				{
+					this.state.email_error
+					&&
+					<div className="error"
+						 style={{
+						 	position: 'absolute',
+						 	left: '-30px',
+						 	top: '6.5px'
+
+						 }}>
+						<img src={error_icon} 
+							style={
+								{
+									height: '14.5px',
+									marginTop: '0'
+								}
+							}
+							/>
+					</div>
+				}
+				<input
+					blocking="input"
+					className={classnames({'error': this.state.email_error})}
+					name="email"
 					placeholder="Email address"
 					autoFocus={this.props.shouldAutoFocus}
 					type="text"
@@ -160,18 +203,23 @@ export default class SignUpForm extends Component {
 					id="beta_email"
 					value={this.state.email}
 					onChange={(e) => {
-						this.setState({email: e.target.value})
+						this.setState({
+							email: e.target.value,
+							email_error: false
+						})
 					}}/>
-				<button style={{
-					fontSize: '16px',
-					fontWeight: '600',
-					background: '#1C93F4',
-					borderColor: '#007BE8',
-					height: '42px',
-					marginTop: '5px'
-				}}className="button primary"
-					    onClick={::this.handleBetaSubmit}>
-					   	Join Waitlist
+				<button
+					style={{
+						fontSize: '17px',
+						fontWeight: '600',
+						background: '#1C93F4',
+						borderColor: '#007BE8',
+						height: '42px',
+						marginTop: '5px'
+					}}
+					className="button primary"
+				    onClick={::this.handleBetaSubmit}>
+				    Join Waitlist
 				</button>
 			</form>
 		)
@@ -182,7 +230,7 @@ export default class SignUpForm extends Component {
 			  f_icon = require('../../assets/facebook_logo.png');
 		return(
 			<div className={classnames("sign_up_container", {'beta': this.props.beta})}>
-				<div className={classnames({'beta': this.props.beta}, 'card')}>
+				<div className={classnames({'beta': this.props.beta}, {'last_call': this.props.last_call}, 'card')}>
 					{
 						!this.state.modal_version && !this.props.beta
 						&&
@@ -230,6 +278,13 @@ export default class SignUpForm extends Component {
 									color: '#777777'
 								}}>We'll let you know when an early version is ready for you.</p>
 							</div>
+					}
+					{
+						this.state.email_error
+						&&
+						<div className="error">
+							<p className="err_msg">Oops! That looks like an invalid email address!</p>
+						</div>
 					}
 				</div>
 			</div>

@@ -7,6 +7,11 @@
 			padding-left: 0;
 			padding-top: 1em;
 		}
+		&.last_call {
+			padding-left: 1em;
+			padding-top: 1em;
+			padding-right: 1em;
+		}
 		.message {
 			h4 {
 				font-family: "Open Sans";
@@ -34,6 +39,7 @@
 		}
 		.sign_up_form {
 			width: 100%;
+			position: relative;
 			::-webkit-input-placeholder {
 			   color: #47525D;
 			}
@@ -68,7 +74,7 @@
 					float: left;
 					margin-right: 4px;
 				}
-				&:nth-child(2) {
+				&:nth-child(2):not(#beta_email) {
 					margin-left: 0;
 					width: calc(50% - 3px);
 					float: left;
@@ -80,6 +86,10 @@
 				&:last-child {
 					margin-bottom: 10px;
 				}
+				&.error {
+					border-color: #e82110 !important;
+					color: #e82110 !important;
+				}
 			}
 			p {
 				color: #ccc;
@@ -89,6 +99,10 @@
 			button {
 				width: 100%;
 			}
+		}
+		.error {
+			padding-top: 5px;
+			color: #e82110 !important;
 		}
 		.day_divider {
 			margin: 1.2rem 0;

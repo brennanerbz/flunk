@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 require('./LandingPage.scss')
 import SignUpForm from './SignUpForm';
+// import { validator } from 'validator';
+import { Validation } from 'react-validation';
 
 export default class LandingPage extends Component {
 	constructor(props, context) {
@@ -57,17 +59,17 @@ export default class LandingPage extends Component {
 									Drag, drop and transform
 								</h1>
 								<p className="product_description">
-									Not just your class notes, but <b>all your files</b>, videos, PDFs, and documents can be stored, and transformed in Ace. <br/> <br/>  If you use services like YouTube or Wikipedia, just paste the link and the content will be <b>immediately transformable</b> too.
+									Not just your class notes, but <b>all your files</b>, videos, PDFs, and documents can be stored, and transformed to study material in Ace. <br/> <br/>  If you use services like YouTube or Wikipedia, just paste the link and the content will be <b>immediately transformable</b> too.
 								</p>
 							</section>
 						</li>
 						<li className="slide" id="share">
 							<section>
 								<h1 className="header">
-									Choose your favorite study format
+									Choose your favorite mode
 								</h1>
 								<p className="product_description"> 
-									Everything in Ace is automatically parsed so that <b>you can turn it into your favorite interactive format</b>— test, outline, flashcards— whenever you want. 
+									Everything in Ace is automatically parsed so that <b>you can study it in your favorite interactive mode</b>— test, outline, flashcards— whenever you want. 
 								</p>
 								<img src={study_formats}/>
 							</section>

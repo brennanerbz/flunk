@@ -61,14 +61,112 @@ export default class SignUpForm extends Component {
 		})
 	}
 
+	renderRegularForm() {
+		return(
+			<form 
+				className="sign_up_form"
+				onSubmit={(e) => {
+				  	e.preventDefault()
+				  	::this.handleSubmit()
+				}}>
+				<input 
+					ref="first_name" 
+					placeholder="First name" 
+					type="text"
+					autoFocus={this.props.shouldAutoFocus}
+					value={this.state.first_name}
+					onChange={(e) => {
+						this.setState({first_name: e.target.value})
+					}}/>
+				<input 
+					placeholder="Last name"
+					type="text"
+					value={this.state.last_name}
+					onChange={(e) => {
+						this.setState({last_name: e.target.value})
+					}}/>
+				<input 
+					placeholder="Email"
+					type="text"
+					value={this.state.email}
+					onChange={(e) => {
+						this.setState({email: e.target.value})
+					}}/>
+				<input 
+					placeholder="Username"
+					value={this.state.username}
+					onChange={(e) => {
+						this.setState({username: e.target.value})
+					}}/>
+				<input 
+					type="password" 
+					placeholder="Password"
+					value={this.state.password}
+					onChange={(e) => {
+						this.setState({password: e.target.value})
+					}}
+					onInput={(e) => {
+						if(e.which == 13) {
+							::this.handleSubmit()
+						}
+					}}
+					/>
+				<p className="">
+					By clicking Sign Up, you agree to our 
+					<a>Terms of Service</a> and <a>Data Policy</a>
+				</p>
+				<button style={{
+					fontSize: '16px',
+					fontWeight: '600',
+					background: '#1C93F4',
+					borderColor: '#007BE8',
+					height: '36px'
+				}}className="button primary"
+					    onClick={::this.handleSubmit}>
+					   	Sign up for Beta
+				</button>
+			</form>
+		)
+	}
+
+	renderBetaForm() {
+		return(
+			<form 
+				className="sign_up_form"
+				onSubmit={(e) => {
+				  	e.preventDefault()
+				  	::this.handleSubmit()
+				}}>
+				<input 
+					placeholder="Email address"
+					type="text"
+					id="beta_email"
+					value={this.state.email}
+					onChange={(e) => {
+						this.setState({email: e.target.value})
+					}}/>
+				<button style={{
+					fontSize: '16px',
+					fontWeight: '600',
+					background: '#1C93F4',
+					borderColor: '#007BE8',
+					height: '36px'
+				}}className="button primary"
+					    onClick={::this.handleSubmit}>
+					   	Sign up for Beta
+				</button>
+			</form>
+		)
+	}
+
 	render() {
 		const g_icon = require('../../assets/google_logo.png'),
 			  f_icon = require('../../assets/facebook_logo.png');
 		return(
-			<div className="sign_up_container">
+			<div className={classnames("sign_up_container", {'beta': this.props.beta})}>
 				<div className="card">
 					{
-						!this.state.modal_version
+						!this.state.modal_version && !this.props.beta
 						&&
 						<div className="message">
 							{
@@ -80,75 +178,35 @@ export default class SignUpForm extends Component {
 								</div>
 								:
 								<div>
-									<h4 className="start_now">Get started now</h4>
+									<h4 className="start_now">Ready to give it a try?</h4>
 								</div>
 							}
 						</div>
 					}
-					
-					<form 
-						className="sign_up_form"
-						onSubmit={(e) => {
-						  	e.preventDefault()
-						  	::this.handleSubmit()
-						}}>
-						<input 
-							ref="first_name" 
-							placeholder="First name" 
-							type="text"
-							autoFocus={this.props.shouldAutoFocus}
-							value={this.state.first_name}
-							onChange={(e) => {
-								this.setState({first_name: e.target.value})
-							}}/>
-						<input 
-							placeholder="Last name"
-							type="text"
-							value={this.state.last_name}
-							onChange={(e) => {
-								this.setState({last_name: e.target.value})
-							}}/>
-						<input 
-							placeholder="Email"
-							type="text"
-							value={this.state.email}
-							onChange={(e) => {
-								this.setState({email: e.target.value})
-							}}/>
-						<input 
-							placeholder="Username"
-							value={this.state.username}
-							onChange={(e) => {
-								this.setState({username: e.target.value})
-							}}/>
-						<input 
-							type="password" 
-							placeholder="Password"
-							value={this.state.password}
-							onChange={(e) => {
-								this.setState({password: e.target.value})
-							}}
-							onInput={(e) => {
-								if(e.which == 13) {
-									::this.handleSubmit()
-								}
-							}}
-							/>
-						<p className="">
-							By clicking Sign Up, you agree to our 
-							<a>Terms of Service</a> and <a>Data Policy</a>
-						</p>
-						<button style={{
-							fontSize: '16px',
-							fontWeight: '600',
-							background: '#1C93F4',
-							borderColor: '#007BE8',
-							height: '36px'
-						}}className="button primary"
-							    onClick={::this.handleSubmit}>
-							   	Sign up for Beta
-						</button>
-					</form>
+					{
+						this.props.beta 
+						&&
+						<div className="message">
+							{
+								!this.props.last_call
+								?
+								<div>
+									<p style={{fontSize: '18.5px'}}>Sign up below and we'll let you know when an early version is ready for you.</p>
+								</div>
+								:
+								<div>
+									<h4 className="start_now">Ready to give it a try?</h4>
+									<p></p>
+								</div>
+							}
+						</div>
+					}
+					{
+						this.props.beta && ::this.renderBetaForm()
+					}
+					{
+						!this.props.beta && ::this.renderRegularForm()
+					}
 				</div>
 			</div>
 		);

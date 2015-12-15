@@ -15,6 +15,10 @@
     &.no_border {
         border: none!important;
     }
+    &.beta {
+        border-bottom: 1px solid #d0d4d9;
+        box-shadow: 0px 1px 1px #d0d4d9;
+    }
     .header_container {
         z-index: 300;
         background: #fff;
@@ -24,6 +28,11 @@
         padding-bottom: 10px;
         padding-top: 7px;
         position: relative;
+        &.beta {
+            .header_logo {
+                float: none;
+            }
+        }
         &.landing {
             .header {
                 .header_logo {
@@ -39,39 +48,27 @@
                     .create-set-button {
                         color: #007ee5;
                     }
-                    .landing_links {
-                        position: absolute;
-                        right: 50px;
-                        margin-top: 10px;
-                        li {
-                            cursor: pointer;
-                            display: inline;
-                            margin-left: 25px;
-                            position: relative;
-                            &:nth-child(2) {
-                               &:not(.sign_in_button) {
-                                margin-right: 70px;
-                               } 
-                            }
-                            button {
-                                &.sign_in {
-                                    position: absolute;
-                                    margin-top: -5px;
-                                    right: -5px;
-                                    font-size: 15.5px;
-                                    border: 1px solid #fff;
-                                    border-width: 1px;
-                                    border-color: #2895F1;
-                                    color: #2895F1;
-                                    &:hover {
-                                        border-color: #0B57CD;
-                                    }
-                                    a {
-                                       text-decoration: none; 
-                                       &:hover {
-                                            color: #0B57CD;
-                                       }
-                                    }
+                    .sign_in_wrapper {
+                        float: right;
+                        width: 87%;
+                        padding-top: 9px;
+                        padding-bottom: 18px;
+                        button {
+                            &.sign_in {
+                                font-size: 15.5px;
+                                float: right;
+                                border: 1px solid #fff;
+                                border-width: 1px;
+                                border-color: #2895F1;
+                                color: #2895F1;
+                                &:hover {
+                                    border-color: #0B57CD;
+                                }
+                                a {
+                                   text-decoration: none; 
+                                   &:hover {
+                                        color: #0B57CD;
+                                   }
                                 }
                             }
                         }

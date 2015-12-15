@@ -19,6 +19,17 @@
 		max-width: 1015px;
 		padding-left: 0.1rem;
 		padding-right: 0.1rem;
+		&.landing_beta {
+			padding-bottom: 15.5em;
+			.marketing_copy {
+				top: 12.5em;
+				p {
+					&.product_description {
+						max-width: 450px;
+					}
+				}
+			}
+		}
 		.marketing_copy {
 			position: absolute;
 			max-width: 550px;
@@ -72,6 +83,9 @@
 			padding-left: 605px;
 			.sign_up_container {
 				margin-top: 4.5em;
+				&.beta {
+					margin-top: 9.5em;
+				}
 			}
 		}
 	}
@@ -83,6 +97,17 @@
 		border-top: 1px solid #E5E5E5;
 		text-align: center;
 		background: #0084ff;
+		&.beta {
+			padding: 1.25em;
+		}
+		.leading_question {
+			display: block;
+			font-size: 19px;
+			font-family: "Open Sans";
+		}
+		img {
+			height: 15.5px;
+		}
 		p {
 			color: #fff;
 		}

@@ -92,11 +92,11 @@ export default class Header extends Component {
 				root_path == 'login' || root_path == 'signup'
 				? null
 				:
-				<div className={classnames("header_positioner", 
-					{'no_border': root_path == 'createset' 
+				<div className={classnames("header_positioner beta", 
+					{'no_border': (root_path == 'createset' 
 					|| root_path == 'import'
-					|| root_path == '/' && !logged_in  })}>
-					<div className={classnames("header_container", {"landing": root_path == '/' && !logged_in})}>				
+					|| root_path == '/' && !logged_in) && false  })}>
+					<div className={classnames("header_container", {"landing": root_path == '/' && !logged_in}, {'beta': true})}>				
 						<div className='header'>
 							{ 
 								isFetching || fetchingLearn
@@ -230,23 +230,25 @@ class LandingLinks extends Component {
 
 	}
 
+	/*
+	<li onClick={() => pushState(null, '/createset')}>
+		<a>Create study set</a>
+	</li>
+	<li onClick={() => pushState(null, '/import')}>
+		<a>Import</a>
+	</li>
+	*/
+
 	render() {
 		const { pushState } = this.props;
 		return(
-			<ul className="landing_links">
-				<li onClick={() => pushState(null, '/createset')}>
-					<a>Create study set</a>
-				</li>
-				<li onClick={() => pushState(null, '/import')}>
-					<a>Import</a>
-				</li>
-				<li className="sign_in_button"
-					onClick={this.props.popout}>
-					<button className="button sign_in">
+			<div className="wrapper sign_in_wrapper">
+				<div className="sign_in">
+					<button className="button sign_in" onClick={this.props.popout}>
 						<a>Sign in</a>
 					</button>
-				</li>
-			</ul>
+				</div>
+			</div>
 		);
 	}
 }

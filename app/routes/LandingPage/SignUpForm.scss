@@ -48,7 +48,10 @@
 					border: 1px solid #D0D4D9!important;
 				}
 				box-shadow: none;
-				&:first-child {
+				&#beta_email {
+					margin-bottom: 6px;
+				}
+				&:first-child:not(#beta_email) {
 					width: calc(50% - 2px);
 					display: absolute!important;
 					float: left;

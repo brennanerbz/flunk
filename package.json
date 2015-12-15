@@ -1,13 +1,16 @@
 {
   "name": "FlunkApp",
   "version": "0.0.1",
-  "description": "Attempting to get nav working",
-  "main": "index.js",
+  "description": "First launch of landing page for beta",
+  "main": "app/index.js",
   "scripts": {
     "start": "node server.js",
+    "build": "webpack",
+    "dev": "webpack-dev-server --optimize-minimize --optimize-occurence-order --devtool eval --progress --colors --hot --content-base build",
+    "deploy": "NODE_ENV=production webpack --optimize-minimize --optimize-occurence-order -p --config webpack.production.config.js",
     "lint": "eslint app"
   },
-  "author": "",
+  "author": "Brennan Erbeznik & Nathan Lomeli",
   "license": "ISC",
   "dependencies": {
     "autosize": "^3.0.13",

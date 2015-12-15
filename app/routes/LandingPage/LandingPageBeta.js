@@ -34,7 +34,7 @@ export default class LandingPage extends Component {
 				<div style={{maxWidth: '405px'}} className="landing_page_container landing_beta">
 					<div className="marketing_copy">
 						<h1>Join the Ace beta</h1>
-						<p className="product_description">An app that automatically turns your files and links into interactive <span className="">study material.</span> </p>
+						<p className="product_description">An app that automatically turns your files, text and links into interactive <span className="">study material.</span> </p>
 						<SignUpForm beta={true} shouldAutoFocus={true} />
 					</div>
 					<div style={{
@@ -59,7 +59,7 @@ export default class LandingPage extends Component {
 									Drag, drop and transform
 								</h1>
 								<p className="product_description">
-									Not just your notes, or your problem set, but <b>all your files</b>, videos, PDFs, and documents can be stored, and transformed into study material. <br/> <br/>  If you use services like YouTube or Wikipedia, just paste the link and the content will be <b>instantly available</b> too.
+									Not just your notes, or your problem set, but <b>all your files</b>, videos, PDFs, and documents can be stored, and transformed. <br/> <br/>  If you use services like YouTube or Wikipedia, just paste the link and the content will be <b>instantly transformable</b> too.
 								</p>
 							</section>
 						</li>

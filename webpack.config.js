@@ -8,20 +8,20 @@ var devFlagPlugin = new webpack.DefinePlugin({
 module.exports = {	
 	devtool: 'eval',
 	entry: [
-		'webpack-dev-server/client?http://127.0.0.1:8080',
+		'webpack-dev-server/client?http://localhost:8080',
 		'webpack/hot/only-dev-server',
-		'./app/index'
+		path.resolve(__dirname, 'app/index.js')
 	],
 	output: {
-		path: path.join(__dirname, 'public'),
-		filename: 'bundle.js',	
-		publicPath: '/static/'
+		path: path.join(__dirname, 'build'),
+		filename: 'bundle.js',
 	},
 	plugins: [
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),
-		devFlagPlugin
+		devFlagPlugin,
+		new webpack.optimize.UglifyJsPlugin({minimize: true})
 	],
 	module: {
 		loaders: [

@@ -19,7 +19,7 @@ export default class LandingPage extends Component {
 			  upload = require('../../assets/upload.png'),
 			  desk = require('../../assets/desk_drawing.png'),
 			  file_formats = require('../../assets/file_formats.png'),
-			  sample_share = require('../../assets/sample_share.png'),
+			  transfer = require('../../assets/transfer.png'),
 			  sample_learn = require('../../assets/sample_learn.png'),
 			  school_logos = require('../../assets/sample_schools.png'),
 			  chat = require('../../assets/chat_icon.png'),
@@ -34,7 +34,7 @@ export default class LandingPage extends Component {
 				<div style={{maxWidth: '405px'}} className="landing_page_container landing_beta">
 					<div className="marketing_copy">
 						<h1>Join the Ace beta</h1>
-						<p className="product_description">A new productivity tool that automatically turns your files and links into interactive <span className="">study material.</span> </p>
+						<p className="product_description">An app that automatically turns your files and links into interactive <span className="">study material.</span> </p>
 						<SignUpForm beta={true} shouldAutoFocus={true} />
 					</div>
 					<div style={{
@@ -59,19 +59,24 @@ export default class LandingPage extends Component {
 									Drag, drop and transform
 								</h1>
 								<p className="product_description">
-									Not just your class notes, or your problem set, but <b>all your files</b>, videos, PDFs, and documents can be stored, and transformed to study material in Ace. <br/> <br/>  If you use services like YouTube or Wikipedia, just paste the link and the content will be <b>immediately transformable</b> too.
+									Not just your notes, or your problem set, but <b>all your files</b>, videos, PDFs, and documents can be stored, and transformed into study material. <br/> <br/>  If you use services like YouTube or Wikipedia, just paste the link and the content will be <b>instantly available</b> too.
 								</p>
 							</section>
 						</li>
 						<li className="slide" id="share">
 							<section>
 								<h1 className="header">
-									Choose your favorite format
+									Eliminate wasted time
 								</h1>
 								<p className="product_description"> 
-									Everything you upload in Ace is automatically parsed so that <b>you can turn it in your favorite interactive format</b>--from study sets, outlines, and flashcards to practice tests and mini-tutorials--whenever you want. 
+									Sometimes you don't have the time to type it all out. When you're on the go <b>you can instantly turn your documents into any interactive format you need</b>--from outlines, flashcards and tutorials to practice tests. 
 								</p>
-								<img src={study_formats}/>
+								<img style={{
+									top: '58px',
+								    right: '4.39rem',
+								    height: '250px',
+								    width: '250px'
+								}}  src={transfer}/>
 							</section>
 						</li>
 						<li className="slide" id="learn">
@@ -81,7 +86,7 @@ export default class LandingPage extends Component {
 									Never fail again
 								</h1>
 								<p className="product_description">
-									 Bombed the last assignment? Your future is safe. Just sign up for Ace and <b>get grilled on your material with more examples, hints and step-by-step feedback</b>. Your progress will be tracked, stored and waiting for you once you’re done.
+									 Bombed the last assignment? Your future is safe. Sign up for Ace and <b>get grilled on your material with more examples, hints and step-by-step feedback</b>. Your progress will be stored, so you can learn about your mistakes and avoid them next time.
 								</p>
 							</section>
 						</li>

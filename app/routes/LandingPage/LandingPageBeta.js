@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 require('./LandingPage.scss')
 import SignUpForm from './SignUpForm';
 // import { validator } from 'validator';
-import { Validation } from 'react-validation';
+
 
 export default class LandingPage extends Component {
 	constructor(props, context) {
@@ -34,7 +34,7 @@ export default class LandingPage extends Component {
 				<div style={{maxWidth: '405px'}} className="landing_page_container landing_beta">
 					<div className="marketing_copy">
 						<h1>Join the Ace beta</h1>
-						<p className="product_description">We're working on a new productivity tool that automatically turns your files and links into interactive <span className="">study material.</span> </p>
+						<p className="product_description">A new productivity tool that automatically turns your files and links into interactive <span className="">study material.</span> </p>
 						<SignUpForm beta={true} shouldAutoFocus={true} />
 					</div>
 					<div style={{
@@ -59,17 +59,17 @@ export default class LandingPage extends Component {
 									Drag, drop and transform
 								</h1>
 								<p className="product_description">
-									Not just your class notes, but <b>all your files</b>, videos, PDFs, and documents can be stored, and transformed to study material in Ace. <br/> <br/>  If you use services like YouTube or Wikipedia, just paste the link and the content will be <b>immediately transformable</b> too.
+									Not just your class notes, or your problem set, but <b>all your files</b>, videos, PDFs, and documents can be stored, and transformed to study material in Ace. <br/> <br/>  If you use services like YouTube or Wikipedia, just paste the link and the content will be <b>immediately transformable</b> too.
 								</p>
 							</section>
 						</li>
 						<li className="slide" id="share">
 							<section>
 								<h1 className="header">
-									Choose your favorite mode
+									Choose your favorite format
 								</h1>
 								<p className="product_description"> 
-									Everything in Ace is automatically parsed so that <b>you can study it in your favorite interactive mode</b>— test, outline, flashcards— whenever you want. 
+									Everything you upload in Ace is automatically parsed so that <b>you can turn it in your favorite interactive format</b>--from study sets, outlines, and flashcards to practice tests and mini-tutorials--whenever you want. 
 								</p>
 								<img src={study_formats}/>
 							</section>
@@ -81,7 +81,7 @@ export default class LandingPage extends Component {
 									Never fail again
 								</h1>
 								<p className="product_description">
-									 Bombed the last test or assignment? Your future is safe. Just sign up for Ace and <b>get grilled on the material you specify with more examples, hints and step-by-step feedback</b>. Your progress will be tracked, stored and waiting for you once you’re done.
+									 Bombed the last assignment? Your future is safe. Just sign up for Ace and <b>get grilled on your material with more examples, hints and step-by-step feedback</b>. Your progress will be tracked, stored and waiting for you once you’re done.
 								</p>
 							</section>
 						</li>

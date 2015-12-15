@@ -185,6 +185,29 @@ export function signUp(user_info, pushState) {
 	}
 }
 
+export const WAIT_LIST = 'WAIT_LIST'
+export const WAIT_LIST_SUCCESS = 'WAIT_LIST_SUCCESS'
+export const WAIT_LIST_FAILURE = 'WAIT_LIST_FAILURE'
+export function signUpWaitList(user_info, pushState) {
+	return (dispatch, getState) => {
+		dispatch({type: CREATE_USER})
+		let new_user;
+		request
+		.post(`${api_url}/users/waitlist`)
+		.send(user_info)
+		.end((err, res) => {
+			if(res.ok) {
+				dispatch({type: WAIT_LIST_SUCCESS})
+			} else {
+				dispatch({
+					type: WAIT_LIST_FAILURE,
+					error: Error(err)
+				})
+			}
+		})
+	}
+}
+
 
 
 

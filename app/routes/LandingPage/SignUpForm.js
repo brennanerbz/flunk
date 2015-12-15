@@ -141,7 +141,7 @@ export default class SignUpForm extends Component {
 
 	handleBetaSubmit(e) {
 		e.preventDefault()
-		const { signUp, pushState } = this.props;
+		const { signUpWaitList, pushState } = this.props;
 		let user_info = {}
 		for(var prop in this.state) {
 			if(prop == 'email') {
@@ -151,7 +151,7 @@ export default class SignUpForm extends Component {
 		if(user_info.email == null || user_info.email.length === 0) return;
 		let validated = this.validateEmail(user_info.email)
 		if(validated) {
-			signUp(user_info, pushState)
+			signUpWaitList(user_info, pushState)
 			this.setState({
 				email: null,
 				email_error: false

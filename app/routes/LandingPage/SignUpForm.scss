@@ -3,6 +3,10 @@
 		padding: 2.5em;
 		max-width: 450px;
 		font-family: "Lato";
+		&.beta {
+			padding-left: 0;
+			padding-top: 1em;
+		}
 		.message {
 			h4 {
 				font-family: "Open Sans";
@@ -12,8 +16,15 @@
 				&.start_now {
 					text-align: center;
 					font-weight: 400;
-					margin-bottom: 55px;
+					margin-bottom: 20px;
 				}
+			}
+			.access {
+				font-size: 15.5px;
+				font-family: "Lato";
+				color: #777777;
+				font-weight: 400;
+				text-align: center;
 			}
 			p {
 				font-family: "Open Sans";

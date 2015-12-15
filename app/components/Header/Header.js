@@ -95,7 +95,7 @@ export default class Header extends Component {
 				<div className={classnames("header_positioner beta", 
 					{'no_border': (root_path == 'createset' 
 					|| root_path == 'import'
-					|| root_path == '/' && !logged_in) && false  })}>
+					|| root_path == '/' && !logged_in)  })}>
 					<div className={classnames("header_container", {"landing": root_path == '/' && !logged_in}, {'beta': true})}>				
 						<div className='header'>
 							{ 

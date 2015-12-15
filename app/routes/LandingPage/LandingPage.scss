@@ -7,7 +7,7 @@
 		-webkit-font-smoothing: antialiased;
 	}
 	.landing_page_container {
-		min-width: 905px!important;
+		max-width: 1020px !important;
 		width: 100%;
 		font-family: "Lato";
 		padding-top: 0.5em;
@@ -20,12 +20,13 @@
 		padding-left: 0.1rem;
 		padding-right: 0.1rem;
 		&.landing_beta {
-			padding-bottom: 15.5em;
+			padding-bottom: 7em;
 			.marketing_copy {
 				top: 12.5em;
 				p {
 					&.product_description {
-						max-width: 450px;
+						font-size: 18.5px;
+						max-width: 385px;
 					}
 				}
 			}
@@ -177,16 +178,16 @@
 				}
 				&#drag_drop {
 					h1 {
-						padding-top: 130px;
+						padding-top: 115px;
 					}
 				}
 				&#share {
 					height: 435px;
 					h1 {
-						padding-top: 95px;
+						padding-top: 115px;
 					}
 					img {
-						top: 115px;
+						top: 135px;
 						right: 1.59rem;
 					}
 				}
@@ -228,7 +229,7 @@
 			font-weight: 300!important;
 		}
 		.sign_up_form {
-			max-width: 320px;
+			// max-width: 320px;
 		}
 	}
 	.footer {

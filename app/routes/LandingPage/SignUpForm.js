@@ -61,6 +61,7 @@ export default class SignUpForm extends Component {
 		})
 	}
 
+
 	renderRegularForm() {
 		return(
 			<form 
@@ -129,17 +130,33 @@ export default class SignUpForm extends Component {
 		)
 	}
 
+	handleBetaSubmit() {
+		const { signUp, pushState } = this.props;
+		let user_info = {}
+		for(var prop in this.state) {
+			if(prop == 'email') {
+				user_info[prop] = this.state[prop]
+			}
+		}
+		signUp(user_info, pushState)
+		this.setState({email: null})
+	}
+
 	renderBetaForm() {
 		return(
 			<form 
 				className="sign_up_form"
 				onSubmit={(e) => {
 				  	e.preventDefault()
-				  	::this.handleSubmit()
+				  	::this.handleBetaSubmit()
 				}}>
 				<input 
 					placeholder="Email address"
+					autoFocus={this.props.shouldAutoFocus}
 					type="text"
+					style={{
+						height: '42px'
+					}}
 					id="beta_email"
 					value={this.state.email}
 					onChange={(e) => {
@@ -150,10 +167,11 @@ export default class SignUpForm extends Component {
 					fontWeight: '600',
 					background: '#1C93F4',
 					borderColor: '#007BE8',
-					height: '36px'
+					height: '42px',
+					marginTop: '5px'
 				}}className="button primary"
-					    onClick={::this.handleSubmit}>
-					   	Sign up for Beta
+					    onClick={::this.handleBetaSubmit}>
+					   	Join Waitlist
 				</button>
 			</form>
 		)
@@ -164,7 +182,7 @@ export default class SignUpForm extends Component {
 			  f_icon = require('../../assets/facebook_logo.png');
 		return(
 			<div className={classnames("sign_up_container", {'beta': this.props.beta})}>
-				<div className="card">
+				<div className={classnames({'beta': this.props.beta}, 'card')}>
 					{
 						!this.state.modal_version && !this.props.beta
 						&&
@@ -188,15 +206,11 @@ export default class SignUpForm extends Component {
 						&&
 						<div className="message">
 							{
-								!this.props.last_call
-								?
-								<div>
-									<p style={{fontSize: '18.5px'}}>Sign up below and we'll let you know when an early version is ready for you.</p>
-								</div>
-								:
+								this.props.last_call
+								&&
 								<div>
 									<h4 className="start_now">Ready to give it a try?</h4>
-									<p></p>
+									<p className="access">Ace is currently in private beta. Sign up below and we'll send you an email when access is available.</p>
 								</div>
 							}
 						</div>
@@ -206,6 +220,16 @@ export default class SignUpForm extends Component {
 					}
 					{
 						!this.props.beta && ::this.renderRegularForm()
+					}
+					{
+						this.props.beta && !this.props.last_call
+						&&	<div>
+								<p style={{
+									paddingTop: '5px',
+									fontSize: '14.5px',
+									color: '#777777'
+								}}>We'll let you know when an early version is ready for you.</p>
+							</div>
 					}
 				</div>
 			</div>

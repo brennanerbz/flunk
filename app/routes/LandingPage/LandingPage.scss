@@ -7,7 +7,7 @@
 		-webkit-font-smoothing: antialiased;
 	}
 	.landing_page_container {
-		min-width: 905px!important;
+		max-width: 1020px !important;
 		width: 100%;
 		font-family: "Lato";
 		padding-top: 0.5em;
@@ -19,6 +19,18 @@
 		max-width: 1015px;
 		padding-left: 0.1rem;
 		padding-right: 0.1rem;
+		&.landing_beta {
+			padding-bottom: 7em;
+			.marketing_copy {
+				top: 12.5em;
+				p {
+					&.product_description {
+						font-size: 18.5px;
+						max-width: 385px;
+					}
+				}
+			}
+		}
 		.marketing_copy {
 			position: absolute;
 			max-width: 550px;
@@ -72,6 +84,9 @@
 			padding-left: 605px;
 			.sign_up_container {
 				margin-top: 4.5em;
+				&.beta {
+					margin-top: 9.5em;
+				}
 			}
 		}
 	}
@@ -83,6 +98,17 @@
 		border-top: 1px solid #E5E5E5;
 		text-align: center;
 		background: #0084ff;
+		&.beta {
+			padding: 1.25em;
+		}
+		.leading_question {
+			display: block;
+			font-size: 19px;
+			font-family: "Open Sans";
+		}
+		img {
+			height: 15.5px;
+		}
 		p {
 			color: #fff;
 		}
@@ -152,16 +178,16 @@
 				}
 				&#drag_drop {
 					h1 {
-						padding-top: 130px;
+						padding-top: 115px;
 					}
 				}
 				&#share {
 					height: 435px;
 					h1 {
-						padding-top: 95px;
+						padding-top: 115px;
 					}
 					img {
-						top: 115px;
+						top: 135px;
 						right: 1.59rem;
 					}
 				}
@@ -203,7 +229,38 @@
 			font-weight: 300!important;
 		}
 		.sign_up_form {
-			max-width: 320px;
+			// max-width: 320px;
+		}
+	}
+	.notify_wrapper {
+		width: 100%;
+		height: 0px;
+		left: 0;
+		top: 0;
+		text-align: center;
+		position: fixed;
+		z-index: 1001;
+		#notify {
+			border-radius: 3px;
+		    margin: 12px;
+		    padding: 8px 18px;
+		    font-size: 14px;
+		    display: inline-block;
+		    opacity: 1;
+	       transition: opacity .5s ease-in-out;
+	       -moz-transition: opacity .5s ease-in-out;
+	       -webkit-transition: opacity .5s ease-in-out;
+		    &.hide {
+		    	opacity: 0;
+		    }
+		}
+		.success {
+			background-color: #e8f7ed;
+			border: 1px solid #30b661;
+			color: #1BA84E;
+			.notify_msg {
+
+			}
 		}
 	}
 	.footer {

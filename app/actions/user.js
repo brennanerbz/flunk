@@ -12,6 +12,7 @@ const server = require('./api'),
 export function checkCookies() {
 	let user = {}
 	if(document.cookie.length > 0) {
+		if(document.cookie.slice(0, 5) == 'email') return;
 		const cookies = document.cookie.split(";")
 		user['id'] = Number(cookies[0].substr(6))
 		user['token'] = cookies[1].substr(7)
@@ -178,6 +179,29 @@ export function signUp(user_info, pushState) {
 			} else {
 				dispatch({
 					type: CREATE_USER_FAILURE,
+					error: Error(err)
+				})
+			}
+		})
+	}
+}
+
+export const WAIT_LIST = 'WAIT_LIST'
+export const WAIT_LIST_SUCCESS = 'WAIT_LIST_SUCCESS'
+export const WAIT_LIST_FAILURE = 'WAIT_LIST_FAILURE'
+export function signUpWaitList(user_info, pushState) {
+	return (dispatch, getState) => {
+		dispatch({type: CREATE_USER})
+		let new_user;
+		request
+		.post(`${api_url}/users/waitlist`)
+		.send(user_info)
+		.end((err, res) => {
+			if(res.ok) {
+				dispatch({type: WAIT_LIST_SUCCESS})
+			} else {
+				dispatch({
+					type: WAIT_LIST_FAILURE,
 					error: Error(err)
 				})
 			}

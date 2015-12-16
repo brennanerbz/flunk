@@ -245,6 +245,21 @@ export default class Modal extends Component {
 		)
 	}
 
+	renderThankYou() {
+		const { email } = this.props;
+ 		return (
+			<div style={{
+					padding: '2rem'
+				}} 
+				className="modal-body">
+				<p className="greetings">
+				You're more important than you'll ever know. 
+				You've been added to the Ace waitlist using your<b>{email}</b> email.
+				</p>
+			</div>
+		)
+	}
+
 	componentWillUnmount() {
 		$(this.refs.modal).modal('hide')
 	}
@@ -316,6 +331,10 @@ export default class Modal extends Component {
 								type == 'log_in' && this.props.import
 								&& 'Sign up for free to transform documents'
 							}
+							{
+								type == 'thank_you'
+								&& 'Thank you for signing up!'
+							}
 						</h3>
 					</div>
 					{
@@ -342,7 +361,11 @@ export default class Modal extends Component {
 						&& ::this.renderLogIn()
 					}
 					{
-						type !== 'settings' && type !== 'log_in'
+						type == 'thank_you'
+						&& ::this.renderThankYou()
+					}
+					{
+						type !== 'settings' && type !== 'log_in' && type !== 'thank_you'
 						?
 						<div className="modal-footer">
 							<button type="button" 

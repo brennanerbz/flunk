@@ -10,7 +10,13 @@ var config = {
 	},
 	plugins: [
 		new webpack.optimize.OccurenceOrderPlugin(),
-		new webpack.optimize.UglifyJsPlugin({minimize: true})
+		new webpack.optimize.UglifyJsPlugin(
+			{
+				minimize: true,
+				compress: {
+				        warnings: false
+		      	}
+			})
 	],
 	module: {
 		loaders: [

@@ -20,8 +20,7 @@ module.exports = {
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),
-		devFlagPlugin,
-		new webpack.optimize.UglifyJsPlugin({minimize: true})
+		devFlagPlugin
 	],
 	module: {
 		loaders: [

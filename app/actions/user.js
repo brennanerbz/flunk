@@ -12,6 +12,7 @@ const server = require('./api'),
 export function checkCookies() {
 	let user = {}
 	if(document.cookie.length > 0) {
+		if(document.cookie.slice(0, 5) == 'email') return;
 		const cookies = document.cookie.split(";")
 		user['id'] = Number(cookies[0].substr(6))
 		user['token'] = cookies[1].substr(7)

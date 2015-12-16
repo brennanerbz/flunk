@@ -149,9 +149,11 @@ export default class SignUpForm extends Component {
 			}
 		}
 		if(user_info.email == null || user_info.email.length === 0) return;
+		if(this.props.onWaitlist) return;
 		let validated = this.validateEmail(user_info.email)
 		if(validated) {
 			signUpWaitList(user_info, pushState)
+			this.props.notify(user_info.email)
 			this.setState({
 				email: null,
 				email_error: false
@@ -191,10 +193,10 @@ export default class SignUpForm extends Component {
 					</div>
 				}
 				<input
-					blocking="input"
-					className={classnames({'error': this.state.email_error})}
+					readOnly={this.props.onWaitlist}
+					className={classnames({'error': this.state.email_error}, {'disabled': this.props.onWaitlist})}
 					name="email"
-					placeholder="Email address"
+					placeholder={this.props.onWaitlist ? 'Thank you!' : 'Email address'}
 					autoFocus={this.props.shouldAutoFocus}
 					type="text"
 					style={{
@@ -217,9 +219,13 @@ export default class SignUpForm extends Component {
 						height: '42px',
 						marginTop: '5px'
 					}}
-					className="button primary"
+					className={classnames("button primary", {"disabled": this.props.onWaitlist})}
 				    onClick={::this.handleBetaSubmit}>
-				    Join Waitlist
+				    {
+				    	this.props.onWaitlist
+				    	? "On waitlist"
+				    	: "Join Waitlist"
+				    }
 				</button>
 			</form>
 		)
@@ -276,7 +282,12 @@ export default class SignUpForm extends Component {
 									paddingTop: '5px',
 									fontSize: '14.5px',
 									color: '#777777'
-								}}>We'll let you know when an early version is ready for you.</p>
+								}}>
+								{
+									!this.props.onWaitlist
+									? 'We\'ll let you know when an early version is ready for you.'
+									: 'You\'re on the waitlist! We\'ll contact you shortly.'
+								}</p>
 							</div>
 					}
 					{

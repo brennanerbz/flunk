@@ -90,6 +90,12 @@
 					border-color: #e82110 !important;
 					color: #e82110 !important;
 				}
+				&.disabled {
+					background-color: #e8e8e8;
+					color: #7b8994;
+					cursor: default;
+					border: 1px solid #e5e5e5!important;
+				}
 			}
 			p {
 				color: #ccc;
@@ -98,6 +104,9 @@
 			}
 			button {
 				width: 100%;
+				&.disabled {
+					opacity: 0.5!important;
+				}
 			}
 		}
 		.error {
